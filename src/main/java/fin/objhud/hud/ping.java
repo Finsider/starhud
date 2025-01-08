@@ -1,5 +1,6 @@
 package fin.objhud.hud;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import fin.objhud.Helper;
 import fin.objhud.Main;
 import fin.objhud.config.Settings;
@@ -53,7 +54,7 @@ public class ping {
         int step = Math.min((int) currentPing / 150, 3);
         int color = getPingColor(step) | 0xFF000000;
 
-        context.drawTexture(RenderLayer::getGuiTextured, PING_TEXTURE, x, y, 0.0F, step * 13, 47, 13, 47, 52, color);
+        Helper.drawTextureAlphaColor(context, PING_TEXTURE, x, y, 0.0F, step * 13, 47, 13, 47, 52, color);
         context.drawText(client.textRenderer, pingStr, x + 19, y + 3, color, false);
     }
 

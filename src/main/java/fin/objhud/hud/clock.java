@@ -1,5 +1,6 @@
 package fin.objhud.hud;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import fin.objhud.Main;
 import fin.objhud.config.Settings;
 import fin.objhud.Helper;
@@ -45,7 +46,7 @@ public class clock {
         int icon = getWeatherOrTime(world);
         int color = getIconColor(icon) | 0xFF000000;
 
-        context.drawTexture(RenderLayer::getGuiTextured, CLOCK_INGAME, x, y, 0.0F, icon * 13, 49, 13, 49, 52, color);
+        Helper.drawTextureAlphaColor(context, CLOCK_INGAME, x, y, 0.0F, icon * 13, 49, 13, 49, 52, color);
         context.drawText(mc.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
     }
 
@@ -96,7 +97,9 @@ public class clock {
         int y = Helper.defaultHUDLocationY(clock_system.defY, context) + clock_system.y;
         int color = clock_system.color | 0xFF000000;
 
-        context.drawTexture(RenderLayer::getGuiTextured, CLOCK_SYSTEM, x, y, 0.0F, 0.0F, 49, 13, 49, 13, color);
+
+        Helper.drawTextureAlphaColor(context, CLOCK_SYSTEM, x, y, 0.0F, 0.0F, 49, 13, 49, 13, color);
+
         context.drawText(mc.textRenderer, systemTimeStr, x + 19, y + 3, color, false);
     }
 

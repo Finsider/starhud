@@ -1,5 +1,6 @@
 package fin.objhud.hud;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import fin.objhud.Helper;
 import fin.objhud.Main;
 import fin.objhud.config.Settings;
@@ -25,7 +26,7 @@ public class fps {
 
         int color = fps.color | 0xFF000000;
 
-        context.drawTexture(RenderLayer::getGuiTextured, FPS_TEXTURE, x, y, 0.0F, 0.0F, 56, 13, 56, 13, color);
+        Helper.drawTextureAlphaColor(context, FPS_TEXTURE, x, y, 0.0F, 0.0F, 56, 13, 56, 13, color);
         context.drawText(client.textRenderer, fpsStr, x + 28, y + 3, color, false);
     }
 }

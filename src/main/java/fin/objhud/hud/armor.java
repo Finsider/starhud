@@ -1,11 +1,11 @@
 package fin.objhud.hud;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import fin.objhud.Main;
 import fin.objhud.Helper;
 import fin.objhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -34,13 +34,14 @@ public class armor {
         }
     }
 
+    //TODO: FIX THIS BULLCASHIFOAISHFAIGHOAGHSIAGHS AARRHHGHGH
     public static void renderArmorPieces(DrawContext context, ItemStack armor, int x, int y, int gap) {
         int step = getItemBarStep(armor);
         int color = getItemBarColor(step);
         // draw the background
-        context.drawTexture(RenderLayer::getGuiTextured, ARMOR_BACKGROUND_TEXTURE, x, y + gap, 0, gap, 63, 13, 63 ,55);
+        Helper.drawTextureAlpha(context, ARMOR_BACKGROUND_TEXTURE, x, y + gap, 0, gap, 63, 13, 63 ,55);
         // draw the information
-        context.drawTexture(RenderLayer::getGuiTextured, ARMOR_ICONS_TEXTURE, x + 19, y + 3 + gap, 0, 0, (4 * step), 7, 40, 7, color | 0xFF000000);
+        Helper.drawTextureAlphaColor(context, ARMOR_ICONS_TEXTURE, x + 19, y + 3 + gap, 0, 0, (4 * step), 7, 40, 7, color);
     }
 
     // get the durability "steps" or progress.

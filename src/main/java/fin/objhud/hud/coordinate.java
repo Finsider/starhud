@@ -1,5 +1,6 @@
 package fin.objhud.hud;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import fin.objhud.Helper;
 import fin.objhud.Main;
 import fin.objhud.config.Settings;
@@ -39,7 +40,7 @@ public class coordinate {
         renderEachCoordinate(context, textRenderer, coordZ, x, y + 28, 28.0F, colorZ);
     }
     public static void renderEachCoordinate(DrawContext context, TextRenderer textRenderer, String str, int x, int y, float v, int color) {
-        context.drawTexture(RenderLayer::getGuiTextured, HUD_TEXTURE, x, y, 0.0F, v, 65, 14, 65, 41, color);
+        Helper.drawTextureAlphaColor(context, HUD_TEXTURE, x, y, 0.0F, v, 65, 14, 65, 41, color);
         context.drawText(textRenderer, str, x + 19, y + 3, color, false);
     }
 }
