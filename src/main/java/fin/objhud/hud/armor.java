@@ -1,7 +1,8 @@
 package fin.objhud.hud;
 
-import fin.objhud.Main;
+import com.mojang.blaze3d.systems.RenderSystem;
 import fin.objhud.Helper;
+import fin.objhud.Main;
 import fin.objhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -25,46 +26,24 @@ public class armor {
         int y = Helper.defaultHUDLocationY(armor.defY, context) + armor.y;
 
         int i = 3;
+        RenderSystem.enableBlend();
         // for each armor pieces
         for (ItemStack armor : client.player.getArmorItems()) {
-            if (armor.isItemBarVisible()) {
-                int gap = i * 14;
-                Helper.drawTextureAlpha(context, ARMOR_BACKGROUND_TEXTURE, x, y + gap, 0, gap, 63, 13, 63 ,55);
-            }
+            if (armor.isItemBarVisible())
+                renderArmorPieces(context, armor, x, y, 14 * i);
             --i;
         }
+        RenderSystem.disableBlend();
     }
 
-    public static void renderArmorDurabilityBar(DrawContext context) {
-        if (!armor.renderArmorHUD) return;
-
-        MinecraftClient client = MinecraftClient.getInstance();
-
-        int x = Helper.defaultHUDLocationX(armor.defX, context) + armor.x;
-        int y = Helper.defaultHUDLocationY(armor.defY, context) + armor.y;
-
-        int i = 3;
-        // for each armor pieces
-        for (ItemStack armor : client.player.getArmorItems()) {
-            if (armor.isItemBarVisible()) {
-                int gap = i * 14;
-                int step = getItemBarStep(armor);
-                int color = getItemBarColor(step);
-                Helper.drawTextureColor(context, ARMOR_ICONS_TEXTURE, x + 19, y + 3 + gap, 0, 0, (4 * step), 7, 40, 7, color);
-            }
-
-            --i;
-        }
-    }
-
-    //TODO: FIX THIS BULLCASHIFOAISHFAIGHOAGHSIAGHS AARRHHGHGH
+    // oh.
     public static void renderArmorPieces(DrawContext context, ItemStack armor, int x, int y, int gap) {
         int step = getItemBarStep(armor);
-        int color = getItemBarColor(step);
+        int color = getItemBarColor(step) | 0xFF000000;
         // draw the background
-        //Helper.drawTextureAlpha(context, ARMOR_BACKGROUND_TEXTURE, x, y + gap, 0, gap, 63, 13, 63 ,55);
+        context.drawTexture(ARMOR_BACKGROUND_TEXTURE, x, y + gap, 0, gap, 63, 13, 63 ,55);
         // draw the information
-//        Helper.drawTextureColor(context, ARMOR_ICONS_TEXTURE, x + 19, y + 3 + gap, 0, 0, (4 * step), 7, 40, 7, color);
+        Helper.drawTextureColor(context, ARMOR_ICONS_TEXTURE, x + 19, y + 3 + gap, 0, 0, (4 * step), 7, 40, 7, color);
     }
 
     // get the durability "steps" or progress.

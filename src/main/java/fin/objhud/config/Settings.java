@@ -1,10 +1,10 @@
 package fin.objhud.config;
 
+import fin.objhud.Helper;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
-import fin.objhud.Helper;
 
 @Config.Gui.Background("cloth-config2:transparent")
 @Config(name = "objective-hud")

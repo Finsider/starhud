@@ -64,6 +64,4 @@ public class Helper {
         context.drawTexture(identifier, x, y, u, v, width, height, textureWidth, textureHeight);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
-
-
 }

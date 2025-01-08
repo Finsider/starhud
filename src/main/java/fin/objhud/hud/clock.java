@@ -1,8 +1,8 @@
 package fin.objhud.hud;
 
+import fin.objhud.Helper;
 import fin.objhud.Main;
 import fin.objhud.config.Settings;
-import fin.objhud.Helper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.world.ClientWorld;
