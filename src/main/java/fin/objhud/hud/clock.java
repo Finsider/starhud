@@ -29,7 +29,7 @@ public class clock {
         ClientWorld world = mc.world;
 
         // update each tick
-        long time = world.getTimeOfDay();
+        long time = world.getTimeOfDay() % 24000;
 
         int minutes = (int) ((time % 1000) * 3 / 50);
         if (minutes != cachedMinecraftMinute) {
@@ -44,7 +44,7 @@ public class clock {
         int icon = getWeatherOrTime(world, time);
         int color = getIconColor(icon) | 0xFF000000;
 
-        Helper.drawTextureAlphaColor(context, CLOCK_INGAME, x, y, 0.0F, icon * 13, 49, 13, 49, 52, color    );
+        Helper.drawTextureColor(context, CLOCK_INGAME, x, y, 0.0F, icon * 13, 49, 13, 49, 52, color    );
         context.drawText(mc.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
     }
 
@@ -61,7 +61,7 @@ public class clock {
     private static int getWeatherOrTime(ClientWorld clientWorld, long time) {
         if (clientWorld.isThundering()) return 3;
         else if (clientWorld.isRaining()) return 2;
-        else if (12542 < time && time < 23460) return 1;
+        else if ((12542 < time && time < 23460) || clientWorld.isNight()) return 1;
         else return 0;
     }
 
@@ -79,6 +79,7 @@ public class clock {
 
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
     private static String systemTimeStr = buildSystemTimeString(System.currentTimeMillis());
+    private static long cachedSystemMinute = -1;
 
     public static void renderSystemTimeHUD(DrawContext context) {
         if (!clock_system.shouldRender) return;
@@ -87,7 +88,9 @@ public class clock {
 
         // update each minute
         long currentTime = System.currentTimeMillis();
-        if (currentTime % 60000 == 0) {
+        long currentSystemMinute = currentTime / 60000;
+        if (currentSystemMinute != cachedSystemMinute) {
+            cachedSystemMinute = currentSystemMinute;
             systemTimeStr = buildSystemTimeString(currentTime);
         }
 
@@ -95,9 +98,7 @@ public class clock {
         int y = Helper.defaultHUDLocationY(clock_system.defY, context) + clock_system.y;
         int color = clock_system.color | 0xFF000000;
 
-
-        Helper.drawTextureAlphaColor(context, CLOCK_SYSTEM, x, y, 0.0F, 0.0F, 49, 13, 49, 13, color);
-
+        Helper.drawTextureColor(context, CLOCK_SYSTEM, x, y, 0.0F, 0.0F, 49, 13, 49, 13, color);
         context.drawText(mc.textRenderer, systemTimeStr, x + 19, y + 3, color, false);
     }
 

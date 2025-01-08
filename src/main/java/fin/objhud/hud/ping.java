@@ -51,7 +51,7 @@ public class ping {
         int step = Math.min((int) currentPing / 150, 3);
         int color = getPingColor(step) | 0xFF000000;
 
-        Helper.drawTextureAlphaColor(context, PING_TEXTURE, x, y, 0.0F, step * 13, 47, 13, 47, 52, color);
+        Helper.drawTextureColor(context, PING_TEXTURE, x, y, 0.0F, step * 13, 47, 13, 47, 52, color);
         context.drawText(client.textRenderer, pingStr, x + 19, y + 3, color, false);
     }
 

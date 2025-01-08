@@ -1,6 +1,5 @@
 package fin.objhud.hud;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import fin.objhud.Helper;
 import fin.objhud.Main;
 import fin.objhud.config.Settings;
@@ -26,14 +25,12 @@ public class armor {
         int y = Helper.defaultHUDLocationY(armor.defY, context) + armor.y;
 
         int i = 3;
-        RenderSystem.enableBlend();
         // for each armor pieces
         for (ItemStack armor : client.player.getArmorItems()) {
             if (armor.isItemBarVisible())
                 renderArmorPieces(context, armor, x, y, 14 * i);
             --i;
         }
-        RenderSystem.disableBlend();
     }
 
     // oh.

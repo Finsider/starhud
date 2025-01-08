@@ -24,7 +24,7 @@ public class fps {
 
         int color = fps.color | 0xFF000000;
 
-        Helper.drawTextureAlphaColor(context, FPS_TEXTURE, x, y, 0.0F, 0.0F, 56, 13, 56, 13, color);
+        Helper.drawTextureColor(context, FPS_TEXTURE, x, y, 0.0F, 0.0F, 56, 13, 56, 13, color);
         context.drawText(client.textRenderer, fpsStr, x + 28, y + 3, color, false);
     }
 }
