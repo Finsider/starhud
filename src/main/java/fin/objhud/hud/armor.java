@@ -1,6 +1,5 @@
 package fin.objhud.hud;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import fin.objhud.Main;
 import fin.objhud.Helper;
 import fin.objhud.config.Settings;
@@ -28,8 +27,32 @@ public class armor {
         int i = 3;
         // for each armor pieces
         for (ItemStack armor : client.player.getArmorItems()) {
-            if (armor.isItemBarVisible())
-                renderArmorPieces(context, armor, x, y, 14 * i);
+            if (armor.isItemBarVisible()) {
+                int gap = i * 14;
+                Helper.drawTextureAlpha(context, ARMOR_BACKGROUND_TEXTURE, x, y + gap, 0, gap, 63, 13, 63 ,55);
+            }
+            --i;
+        }
+    }
+
+    public static void renderArmorDurabilityBar(DrawContext context) {
+        if (!armor.renderArmorHUD) return;
+
+        MinecraftClient client = MinecraftClient.getInstance();
+
+        int x = Helper.defaultHUDLocationX(armor.defX, context) + armor.x;
+        int y = Helper.defaultHUDLocationY(armor.defY, context) + armor.y;
+
+        int i = 3;
+        // for each armor pieces
+        for (ItemStack armor : client.player.getArmorItems()) {
+            if (armor.isItemBarVisible()) {
+                int gap = i * 14;
+                int step = getItemBarStep(armor);
+                int color = getItemBarColor(step);
+                Helper.drawTextureColor(context, ARMOR_ICONS_TEXTURE, x + 19, y + 3 + gap, 0, 0, (4 * step), 7, 40, 7, color);
+            }
+
             --i;
         }
     }
@@ -39,9 +62,9 @@ public class armor {
         int step = getItemBarStep(armor);
         int color = getItemBarColor(step);
         // draw the background
-        Helper.drawTextureAlpha(context, ARMOR_BACKGROUND_TEXTURE, x, y + gap, 0, gap, 63, 13, 63 ,55);
+        //Helper.drawTextureAlpha(context, ARMOR_BACKGROUND_TEXTURE, x, y + gap, 0, gap, 63, 13, 63 ,55);
         // draw the information
-        Helper.drawTextureAlphaColor(context, ARMOR_ICONS_TEXTURE, x + 19, y + 3 + gap, 0, 0, (4 * step), 7, 40, 7, color);
+//        Helper.drawTextureColor(context, ARMOR_ICONS_TEXTURE, x + 19, y + 3 + gap, 0, 0, (4 * step), 7, 40, 7, color);
     }
 
     // get the durability "steps" or progress.

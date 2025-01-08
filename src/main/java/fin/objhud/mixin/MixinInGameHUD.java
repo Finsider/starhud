@@ -18,11 +18,17 @@ public class MixinInGameHUD {
 
     @Inject(at = @At("TAIL"), method = "renderHotbar")
     private void renderHotbar(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        armor.renderArmorHUD(context);
         coordinate.renderCoordinateHUD(context);
         fps.renderFPSHUD(context);
         ping.renderPingHUD(context);
         clock.renderInGameTimeHUD(context);
         clock.renderSystemTimeHUD(context);
+        armor.renderArmorHUD(context);
     }
+
+    @Inject(at = @At("TAIL"), method = "render")
+    private void renderMainHud(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+        armor.renderArmorDurabilityBar(context);
+    }
+
 }

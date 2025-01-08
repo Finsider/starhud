@@ -1,12 +1,10 @@
 package fin.objhud.hud;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import fin.objhud.Main;
 import fin.objhud.config.Settings;
 import fin.objhud.Helper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 
@@ -63,7 +61,7 @@ public class clock {
     private static int getWeatherOrTime(ClientWorld clientWorld, long time) {
         if (clientWorld.isThundering()) return 3;
         else if (clientWorld.isRaining()) return 2;
-        else if (time >= 13000 || time < 1000) return 1;
+        else if (12542 < time && time < 23460) return 1;
         else return 0;
     }
 
