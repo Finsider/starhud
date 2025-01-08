@@ -22,7 +22,7 @@ public class clock {
     private static final Identifier CLOCK_INGAME = Identifier.of("objhud", "hud/clock_ingame.png");
 
     private static String minecraftTimeStr = "";
-    private static int cachedMinecraftMinute = -1;
+    private static int cachedMinecraftMinute = -23;
 
     public static void renderInGameTimeHUD(DrawContext context) {
         if (!clock_ingame.shouldRender) return;
@@ -43,10 +43,10 @@ public class clock {
         int x = Helper.defaultHUDLocationX(clock_ingame.defX, context) + clock_ingame.x;
         int y = Helper.defaultHUDLocationY(clock_ingame.defY, context) + clock_ingame.y;
 
-        int icon = getWeatherOrTime(world);
+        int icon = getWeatherOrTime(world, time);
         int color = getIconColor(icon) | 0xFF000000;
 
-        Helper.drawTextureAlphaColor(context, CLOCK_INGAME, x, y, 0.0F, icon * 13, 49, 13, 49, 52, color);
+        Helper.drawTextureAlphaColor(context, CLOCK_INGAME, x, y, 0.0F, icon * 13, 49, 13, 49, 52, color    );
         context.drawText(mc.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
     }
 
@@ -60,10 +60,10 @@ public class clock {
         };
     }
 
-    private static int getWeatherOrTime(ClientWorld clientWorld) {
+    private static int getWeatherOrTime(ClientWorld clientWorld, long time) {
         if (clientWorld.isThundering()) return 3;
         else if (clientWorld.isRaining()) return 2;
-        else if (clientWorld.isNight()) return 1;
+        else if (time >= 13000 || time < 1000) return 1;
         else return 0;
     }
 
