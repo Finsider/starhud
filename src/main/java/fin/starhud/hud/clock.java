@@ -43,10 +43,10 @@ public class clock {
         int x = Helper.defaultHUDLocationX(clock_ingame.originX, context, width) + clock_ingame.x;
         int y = Helper.defaultHUDLocationY(clock_ingame.originY, context, height) + clock_ingame.y;
 
-        int icon = getWeatherOrTime(world);
+        int icon = getWeatherOrTime(world, time);
         int color = getIconColor(icon) | 0xFF000000;
 
-        context.drawTexture(RenderLayer::getGuiTextured, CLOCK_INGAME, x, y, 0.0F, icon * 13, width, height, width, height * 4, color);
+        Helper.drawTextureColor(context, CLOCK_INGAME, x, y, 0.0F, icon * 13, width, height, width, height * 4, color);
         context.drawText(mc.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
     }
 
@@ -60,10 +60,10 @@ public class clock {
         };
     }
 
-    private static int getWeatherOrTime(ClientWorld clientWorld) {
+    private static int getWeatherOrTime(ClientWorld clientWorld, long time) {
         if (clientWorld.isThundering()) return 3;
         else if (clientWorld.isRaining()) return 2;
-        else if (clientWorld.isNight()) return 1;
+        else if ((12542 < time && time < 23460) || clientWorld.isNight()) return 1;
         else return 0;
     }
 
@@ -103,7 +103,7 @@ public class clock {
         int y = Helper.defaultHUDLocationY(clock_system.originY, context, height) + clock_system.y;
         int color = clock_system.color | 0xFF000000;
 
-        context.drawTexture(RenderLayer::getGuiTextured, CLOCK_SYSTEM, x, y, 0.0F, 0.0F, width, height, width, height, color);
+        Helper.drawTextureColor(context, CLOCK_SYSTEM, x, y, 0.0F, 0.0F, width, height, width, height, color);
         context.drawText(mc.textRenderer, systemTimeStr, x + 19, y + 3, color, false);
     }
 

@@ -46,9 +46,9 @@ public class armor {
         int step = getItemBarStep(armor);
         int color = getItemBarColor(step) | 0xFF000000;
         // draw the background
-        context.drawTexture(RenderLayer::getGuiTextured, ARMOR_BACKGROUND_TEXTURE, x, y, 0, gap, width, height, width ,55);
+        context.drawTexture(ARMOR_BACKGROUND_TEXTURE, x, y, 0, gap, width, height, width ,55);
         // draw the information
-        context.drawTexture(RenderLayer::getGuiTextured, ARMOR_DURABILITY_TEXTURE, x + 19, y + 3, 0, 0, (4 * step), 7, 40, 7, color);
+        Helper.drawTextureColor(context, ARMOR_DURABILITY_TEXTURE, x + 19, y + 3, 0, 0, (4 * step), 7, 40, 7, color);
     }
 
     // get the durability "steps" or progress.

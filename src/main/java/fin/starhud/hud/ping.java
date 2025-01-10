@@ -53,7 +53,7 @@ public class ping {
         int step = Math.min((int) currentPing / 150, 3);
         int color = getPingColor(step) | 0xFF000000;
 
-        context.drawTexture(RenderLayer::getGuiTextured, PING_TEXTURE, x, y, 0.0F, step * 13, width, height, width, height * 4, color);
+        Helper.drawTextureColor(context, PING_TEXTURE, x, y, 0.0F, step * 13, width, height, width, height * 4, color);
         context.drawText(client.textRenderer, pingStr, x + 19, y + 3, color, false);
     }
 

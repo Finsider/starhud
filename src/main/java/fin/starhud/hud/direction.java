@@ -32,7 +32,7 @@ public class direction {
         int x = Helper.defaultHUDLocationX(direction.originX, context, width) + direction.x;
         int y = Helper.defaultHUDLocationY(direction.originY, context, height) + direction.y;
 
-        context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_TEXTURE, x, y, 0.0F, icon * 13, width, height, width, height * 8, color);
+        Helper.drawTextureColor(context, DIRECTION_TEXTURE, x, y, 0.0F, icon * 13, width, height, width, height * 8, color);
         context.drawText(mc.textRenderer, Float.toString(yaw), x + 25, y + 3, color, false);
     }
 

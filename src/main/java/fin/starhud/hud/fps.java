@@ -26,7 +26,7 @@ public class fps {
 
         int color = fps.color | 0xFF000000;
 
-        context.drawTexture(RenderLayer::getGuiTextured, FPS_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height, color);
+        Helper.drawTextureColor(context, FPS_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height, color);
         context.drawText(client.textRenderer, fpsStr, x + 31, y + 3, color, false);
     }
 }
