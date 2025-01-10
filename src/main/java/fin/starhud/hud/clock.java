@@ -5,7 +5,6 @@ import fin.starhud.Main;
 import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 
@@ -46,7 +45,7 @@ public class clock {
         int icon = getWeatherOrTime(world, time);
         int color = getIconColor(icon) | 0xFF000000;
 
-        Helper.drawTextureColor(context, CLOCK_INGAME, x, y, 0.0F, icon * 13, width, height, width, height * 4, color);
+        Helper.drawTextureAlphaColor(context, CLOCK_INGAME, x, y, 0.0F, icon * 13, width, height, width, height * 4, color);
         context.drawText(mc.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
     }
 
@@ -103,7 +102,7 @@ public class clock {
         int y = Helper.defaultHUDLocationY(clock_system.originY, context, height) + clock_system.y;
         int color = clock_system.color | 0xFF000000;
 
-        Helper.drawTextureColor(context, CLOCK_SYSTEM, x, y, 0.0F, 0.0F, width, height, width, height, color);
+        Helper.drawTextureAlphaColor(context, CLOCK_SYSTEM, x, y, 0.0F, 0.0F, width, height, width, height, color);
         context.drawText(mc.textRenderer, systemTimeStr, x + 19, y + 3, color, false);
     }
 

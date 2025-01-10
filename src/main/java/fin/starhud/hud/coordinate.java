@@ -47,7 +47,7 @@ public class coordinate {
     }
 
     public static void renderEachCoordinate(DrawContext context, TextRenderer textRenderer, String str, int x, int y, float v, int width, int height, int color) {
-        Helper.drawTextureColor(context, COORD_TEXTURE, x, y, 0.0F, v, width, height, width, 41, color);
+        Helper.drawTextureAlphaColor(context, COORD_TEXTURE, x, y, 0.0F, v, width, height, width, 41, color);
         context.drawText(textRenderer, str, x + 19, y + 3, color, false);
     }
 

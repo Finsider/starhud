@@ -7,7 +7,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config.Gui.Background("cloth-config2:transparent")
-@Config(name = "objective-hud")
+@Config(name = "starhud")
 public class Settings implements ConfigData {
 
     @ConfigEntry.Category("armor")
@@ -26,7 +26,7 @@ public class Settings implements ConfigData {
         public Helper.ScreenLocationY originY = Helper.ScreenLocationY.MIDDLE;
 
         public int x = 10;
-        public int y = -20;
+        public int y = -24;
 
         @ConfigEntry.Gui.CollapsibleObject
         public HelmetSettings helmet = new HelmetSettings();

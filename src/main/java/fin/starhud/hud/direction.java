@@ -5,7 +5,6 @@ import fin.starhud.Main;
 import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -32,7 +31,7 @@ public class direction {
         int x = Helper.defaultHUDLocationX(direction.originX, context, width) + direction.x;
         int y = Helper.defaultHUDLocationY(direction.originY, context, height) + direction.y;
 
-        Helper.drawTextureColor(context, DIRECTION_TEXTURE, x, y, 0.0F, icon * 13, width, height, width, height * 8, color);
+        Helper.drawTextureAlphaColor(context, DIRECTION_TEXTURE, x, y, 0.0F, icon * 13, width, height, width, height * 8, color);
         context.drawText(mc.textRenderer, Float.toString(yaw), x + 25, y + 3, color, false);
     }
 

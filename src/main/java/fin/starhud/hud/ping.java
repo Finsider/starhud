@@ -6,7 +6,6 @@ import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.PingMeasurer;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.MultiValueDebugSampleLogImpl;
 import net.minecraft.world.World;
@@ -53,7 +52,7 @@ public class ping {
         int step = Math.min((int) currentPing / 150, 3);
         int color = getPingColor(step) | 0xFF000000;
 
-        Helper.drawTextureColor(context, PING_TEXTURE, x, y, 0.0F, step * 13, width, height, width, height * 4, color);
+        Helper.drawTextureAlphaColor(context, PING_TEXTURE, x, y, 0.0F, step * 13, width, height, width, height * 4, color);
         context.drawText(client.textRenderer, pingStr, x + 19, y + 3, color, false);
     }
 

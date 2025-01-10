@@ -5,7 +5,6 @@ import fin.starhud.Main;
 import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 public class fps {
@@ -26,7 +25,7 @@ public class fps {
 
         int color = fps.color | 0xFF000000;
 
-        Helper.drawTextureColor(context, FPS_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height, color);
+        Helper.drawTextureAlphaColor(context, FPS_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height, color);
         context.drawText(client.textRenderer, fpsStr, x + 31, y + 3, color, false);
     }
 }

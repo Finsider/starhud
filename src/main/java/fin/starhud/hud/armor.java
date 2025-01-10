@@ -5,7 +5,6 @@ import fin.starhud.Main;
 import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -46,7 +45,7 @@ public class armor {
         int step = getItemBarStep(armor);
         int color = getItemBarColor(step) | 0xFF000000;
         // draw the background
-        context.drawTexture(ARMOR_BACKGROUND_TEXTURE, x, y, 0, gap, width, height, width ,55);
+        Helper.drawTextureAlpha(context, ARMOR_BACKGROUND_TEXTURE, x, y, 0, gap, width, height, width ,55);
         // draw the information
         Helper.drawTextureColor(context, ARMOR_DURABILITY_TEXTURE, x + 19, y + 3, 0, 0, (4 * step), 7, 40, 7, color);
     }

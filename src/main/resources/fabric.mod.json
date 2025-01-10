@@ -3,7 +3,7 @@
 	"id": "starhud",
 	"version": "${version}",
 	"name": "StarHUD",
-	"description": "HUD mod provides fancy and fresh information displays.",
+	"description": "a Mod that provides fancy and fresh HUDs.",
 	"authors": [
 		"Finside"
 	],
@@ -30,5 +30,8 @@
 		"java": ">=21",
 		"fabric-api": "*",
 		"cloth-config": "*"
+	},
+	"recommends": {
+		"immediatelyfast": "*"
 	}
 }
