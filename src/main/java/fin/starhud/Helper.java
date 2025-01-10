@@ -1,4 +1,4 @@
-package fin.objhud;
+package fin.starhud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
@@ -13,24 +13,24 @@ public class Helper {
     }
 
     public enum ScreenLocationY {
-        UPPER,
+        TOP,
         MIDDLE,
-        UNDER,
+        BOTTOM,
     }
 
-    public static int defaultHUDLocationX(ScreenLocationX locationX, DrawContext context) {
+    public static int defaultHUDLocationX(ScreenLocationX locationX, DrawContext context, int width) {
         return switch (locationX) {
             case LEFT -> 0;
-            case MIDDLE -> context.getScaledWindowWidth() / 2;
-            case RIGHT -> context.getScaledWindowWidth();
+            case MIDDLE -> (context.getScaledWindowWidth() - width) / 2;
+            case RIGHT -> context.getScaledWindowWidth() - width;
         };
     }
 
-    public static int defaultHUDLocationY(ScreenLocationY locationY, DrawContext context) {
+    public static int defaultHUDLocationY(ScreenLocationY locationY, DrawContext context, int height) {
         return switch (locationY) {
-            case UPPER -> 0;
-            case MIDDLE -> context.getScaledWindowHeight() / 2;
-            case UNDER -> context.getScaledWindowHeight();
+            case TOP -> 0;
+            case MIDDLE -> (context.getScaledWindowHeight() - height) / 2;
+            case BOTTOM -> context.getScaledWindowHeight() - height;
         };
     }
 

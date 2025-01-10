@@ -1,37 +1,34 @@
 {
 	"schemaVersion": 1,
-	"id": "objhud",
+	"id": "starhud",
 	"version": "${version}",
-	"name": "ObjHUD",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "StarHUD",
+	"description": "HUD mod provides fancy and fresh information displays.",
 	"authors": [
-		"Me!"
+		"Finside"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Finsider/objhud"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/objhud/icon.png",
+	"license": "MIT",
+	"icon": "assets/starhud/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"client": [
-			"fin.objhud.Main"
+			"fin.starhud.Main"
 		],
 		"modmenu" : [
-			"fin.objhud.config.ModMenuIntegration"
+			"fin.starhud.config.ModMenuIntegration"
 		]
 	},
 	"mixins": [
-		"objhud.mixins.json"
+		"starhud.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.9",
-		"minecraft": "<=1.21.1",
+		"minecraft": ">=1.21.3",
 		"java": ">=21",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
+		"fabric-api": "*",
+		"cloth-config": "*"
 	}
 }
