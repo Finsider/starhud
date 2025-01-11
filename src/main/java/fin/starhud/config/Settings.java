@@ -194,7 +194,7 @@ public class Settings implements ConfigData {
         public Helper.ScreenLocationY originY = Helper.ScreenLocationY.BOTTOM;
 
         public int x = -57;
-        public int y = 5;
+        public int y = -5;
 
         @Comment("Ping update interval, in seconds.")
         public double updateInterval = 5.0;
