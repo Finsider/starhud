@@ -8,7 +8,7 @@
 		"Finside"
 	],
 	"contact": {
-		"sources": "https://github.com/Finsider/objhud"
+		"sources": "https://github.com/Finsider/starhud"
 	},
 	"license": "MIT",
 	"icon": "assets/starhud/icon.png",

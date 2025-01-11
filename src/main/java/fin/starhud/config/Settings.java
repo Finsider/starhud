@@ -25,7 +25,7 @@ public class Settings implements ConfigData {
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         public Helper.ScreenLocationY originY = Helper.ScreenLocationY.MIDDLE;
 
-        public int x = 10;
+        public int x = 5;
         public int y = -24;
 
         @ConfigEntry.Gui.CollapsibleObject
@@ -76,8 +76,8 @@ public class Settings implements ConfigData {
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         public Helper.ScreenLocationY originY = Helper.ScreenLocationY.TOP;
 
-        public int x = 10;
-        public int y = 10;
+        public int x = 5;
+        public int y = 5;
 
         @ConfigEntry.Gui.CollapsibleObject
         public CoordXSettings coordXSettings = new CoordXSettings();
@@ -125,14 +125,14 @@ public class Settings implements ConfigData {
 
         @Comment("Direction HUD default Horizontal location")
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        public Helper.ScreenLocationX originX = Helper.ScreenLocationX.LEFT;
+        public Helper.ScreenLocationX originX = Helper.ScreenLocationX.MIDDLE;
 
         @Comment("Direction HUD default Vertical location")
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         public Helper.ScreenLocationY originY = Helper.ScreenLocationY.TOP;
 
-        public int x = 80;
-        public int y = 10;
+        public int x = 29;
+        public int y = 19;
 
         @ConfigEntry.Gui.CollapsibleObject
         public DirectionColorSettings directionColor = new DirectionColorSettings();
@@ -169,10 +169,10 @@ public class Settings implements ConfigData {
 
         @Comment("FPS HUD default Vertical location")
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        public Helper.ScreenLocationY originY = Helper.ScreenLocationY.TOP;
+        public Helper.ScreenLocationY originY = Helper.ScreenLocationY.BOTTOM;
 
-        public int x = 80;
-        public int y = 24;
+        public int x = 5;
+        public int y = -5;
 
         @ConfigEntry.ColorPicker
         public int color = 0xE5ECf8;
@@ -187,14 +187,14 @@ public class Settings implements ConfigData {
 
         @Comment("Ping HUD default Horizontal location")
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        public Helper.ScreenLocationX originX = Helper.ScreenLocationX.LEFT;
+        public Helper.ScreenLocationX originX = Helper.ScreenLocationX.RIGHT;
 
         @Comment("Ping HUD default Vertical location")
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        public Helper.ScreenLocationY originY = Helper.ScreenLocationY.TOP;
+        public Helper.ScreenLocationY originY = Helper.ScreenLocationY.BOTTOM;
 
-        public int x = 80;
-        public int y = 38;
+        public int x = -57;
+        public int y = 5;
 
         @Comment("Ping update interval, in seconds.")
         public double updateInterval = 5.0;
@@ -223,13 +223,13 @@ public class Settings implements ConfigData {
             public boolean shouldRender = true;
 
             @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-            public Helper.ScreenLocationX originX = Helper.ScreenLocationX.LEFT;
+            public Helper.ScreenLocationX originX = Helper.ScreenLocationX.RIGHT;
 
             @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
             public Helper.ScreenLocationY originY = Helper.ScreenLocationY.BOTTOM;
 
-            public int x = 10;
-            public int y = -10;
+            public int x = -5;
+            public int y = -5;
 
             @ConfigEntry.ColorPicker
             public int color = 0xFFFFFF;
@@ -241,13 +241,13 @@ public class Settings implements ConfigData {
             public boolean shouldRender = true;
 
             @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-            public Helper.ScreenLocationX originX = Helper.ScreenLocationX.LEFT;
+            public Helper.ScreenLocationX originX = Helper.ScreenLocationX.MIDDLE;
 
             @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-            public Helper.ScreenLocationY originY = Helper.ScreenLocationY.BOTTOM;
+            public Helper.ScreenLocationY originY = Helper.ScreenLocationY.TOP;
 
-            public int x = 64;
-            public int y = -10;
+            public int x = -29;
+            public int y = 19;
 
             @ConfigEntry.Gui.CollapsibleObject
             public ClockInGameColorSettings color = new ClockInGameColorSettings();
