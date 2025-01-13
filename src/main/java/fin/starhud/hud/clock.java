@@ -24,9 +24,10 @@ public class clock {
     private static String minecraftTimeStr = "";
     private static int cachedMinecraftMinute = -1;
 
-    private static boolean LAST_UPDATED_use12Hour_ingame = clock_ingame.use12Hour;
     private static int width_ingame;
     private static Identifier texture_ingame;
+
+    private static Boolean LAST_UPDATED_use12Hour_ingame;
 
     public static void renderInGameTimeHUD(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
@@ -45,7 +46,7 @@ public class clock {
                     buildMinecraftMilitaryTimeString(hours, minutes);
         }
 
-        if (LAST_UPDATED_use12Hour_ingame != use12Hour) {
+        if (LAST_UPDATED_use12Hour_ingame == null || LAST_UPDATED_use12Hour_ingame != use12Hour) {
             LAST_UPDATED_use12Hour_ingame = use12Hour;
             if (use12Hour) {
                 width_ingame = 65;
@@ -115,7 +116,7 @@ public class clock {
     private static String systemTimeStr = buildSystemMilitaryTimeString(System.currentTimeMillis());
     private static long cachedSystemMinute = -1;
 
-    private static boolean LAST_UPDATED_use12Hour_system = clock_system.use12Hour;
+    private static Boolean LAST_UPDATED_use12Hour_system;
 
     private static int width_system;
     private static Identifier texture_system;
@@ -137,7 +138,7 @@ public class clock {
                     buildSystemMilitaryTimeString(currentTime);
         }
 
-        if (LAST_UPDATED_use12Hour_system != use12Hour) {
+        if (LAST_UPDATED_use12Hour_system == null || LAST_UPDATED_use12Hour_system != use12Hour) {
             LAST_UPDATED_use12Hour_system = use12Hour;
             if (use12Hour) {
                 width_system = 65;

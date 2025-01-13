@@ -41,7 +41,7 @@ public class biome {
         int y = Helper.defaultHUDAlignmentY(biome.originY, context.getScaledWindowHeight(), 13) + biome.y;
         int color = getTextColorFromDimension(dimensionIcon) | 0xFF000000;
 
-        context.drawTexture(DIMENSION_TEXTURE, x, y, 0.0F, dimensionIcon * 13, 13, 13, 13 ,52);
+        Helper.drawTextureAlpha(context, DIMENSION_TEXTURE, x, y, 0.0F, dimensionIcon * 13, 13, 13, 13 ,52);
         Helper.fillRoundedRightSide(context, x + 14, y, x + 14 + cachedTextWidth + 9, y + 13, 0x80000000);
         context.drawText(client.textRenderer, cachedFormattedBiomeStr, x + 19, y + 3, color, false);
     }

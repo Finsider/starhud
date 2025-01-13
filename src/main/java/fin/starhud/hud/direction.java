@@ -25,7 +25,7 @@ public class direction {
     private static int textX;
     private static Identifier texture;
 
-    private static boolean LAST_UPDATED_includeOrdinal = direction.includeOrdinal;
+    private static Boolean LAST_UPDATED_includeOrdinal;
 
     public static void renderDirectionHUD(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
@@ -37,7 +37,7 @@ public class direction {
         boolean includeOrdinal = direction.includeOrdinal;
 
         // silly way to cache all the variables
-        if (LAST_UPDATED_includeOrdinal != includeOrdinal) {
+        if (LAST_UPDATED_includeOrdinal == null || LAST_UPDATED_includeOrdinal != includeOrdinal) {
             LAST_UPDATED_includeOrdinal = includeOrdinal;
             if (includeOrdinal) {
                 texture = DIRECTION_INCLUDE_ORDINAL_TEXTURE;
