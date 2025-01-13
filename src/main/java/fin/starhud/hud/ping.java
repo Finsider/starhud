@@ -20,6 +20,9 @@ public class ping {
     private static PingMeasurer pingMeasurer;
     private static World lastWorld = null;
 
+    private static final int width = 63;
+    private static final int height = 13;
+
     public static void renderPingHUD(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.isInSingleplayer()) return;
@@ -40,13 +43,10 @@ public class ping {
 
         // get the latest updated ping through the last element.
         long currentPing = pingLog.get(pingLogLen - 1);
-        String pingStr = Long.toString(currentPing);
+        String pingStr = currentPing + " ms";
 
-        int width = 47;
-        int height = 13;
-
-        int x = Helper.defaultHUDLocationX(ping.originX, context, width) + ping.x;
-        int y = Helper.defaultHUDLocationY(ping.originY, context, height) + ping.y;
+        int x = Helper.defaultHUDAlignmentX(ping.originX, context.getScaledWindowWidth(), width) + ping.x;
+        int y = Helper.defaultHUDAlignmentY(ping.originY, context.getScaledWindowHeight(), height) + ping.y;
 
         // 0, 150, 300, 450
         int step = Math.min((int) currentPing / 150, 3);

@@ -16,57 +16,74 @@ public class clock {
     private static Settings.ClockSettings.ClockSystemSettings clock_system = Main.settings.clockSettings.systemSettings;
     private static Settings.ClockSettings.ClockInGameSettings clock_ingame = Main.settings.clockSettings.inGameSettings;
 
-    private static final Identifier CLOCK_SYSTEM = Identifier.of("starhud", "hud/clock_system.png");
-    private static final Identifier CLOCK_INGAME = Identifier.of("starhud", "hud/clock_ingame.png");
+    private static final Identifier CLOCK_12 = Identifier.of("starhud", "hud/clock_12.png");
+    private static final Identifier CLOCK_24 = Identifier.of("starhud", "hud/clock_24.png");
+
+    private static final int height = 13;
 
     private static String minecraftTimeStr = "";
     private static int cachedMinecraftMinute = -1;
 
+    private static boolean LAST_UPDATED_use12Hour_ingame = clock_ingame.use12Hour;
+    private static int width_ingame;
+    private static Identifier texture_ingame;
+
     public static void renderInGameTimeHUD(DrawContext context) {
-        MinecraftClient mc = MinecraftClient.getInstance();
-        ClientWorld world = mc.world;
+        MinecraftClient client = MinecraftClient.getInstance();
+        ClientWorld world = client.world;
 
-        // update each tick
+        boolean use12Hour = clock_ingame.use12Hour;
+
         long time = world.getTimeOfDay() % 24000;
-
         int minutes = (int) ((time % 1000) * 3 / 50);
         if (minutes != cachedMinecraftMinute) {
             cachedMinecraftMinute = minutes;
+
             int hours = (int) ((time / 1000) + 6) % 24;
-            minecraftTimeStr = buildMinecraftTimeString(hours, minutes);
+            minecraftTimeStr = use12Hour ?
+                    buildMinecraftCivilianTimeString(hours, minutes):
+                    buildMinecraftMilitaryTimeString(hours, minutes);
         }
 
-        int width = 49;
-        int height = 13;
+        if (LAST_UPDATED_use12Hour_ingame != use12Hour) {
+            LAST_UPDATED_use12Hour_ingame = use12Hour;
+            if (use12Hour) {
+                width_ingame = 65;
+                texture_ingame = CLOCK_12;
+            } else {
+                width_ingame = 49;
+                texture_ingame = CLOCK_24;
+            }
+        }
 
-        int x = Helper.defaultHUDLocationX(clock_ingame.originX, context, width) + clock_ingame.x;
-        int y = Helper.defaultHUDLocationY(clock_ingame.originY, context, height) + clock_ingame.y;
+        int x = Helper.defaultHUDAlignmentX(clock_ingame.originX, context.getScaledWindowWidth(), width_ingame) + clock_ingame.x;
+        int y = Helper.defaultHUDAlignmentY(clock_ingame.originY, context.getScaledWindowHeight(), height) + clock_ingame.y;
 
-        int icon = getWeatherOrTime(world, time);
+        int icon = getWeatherOrTime(world);
         int color = getIconColor(icon) | 0xFF000000;
 
-        Helper.drawTextureAlphaColor(context, CLOCK_INGAME, x, y, 0.0F, icon * 13, width, height, width, height * 4, color);
-        context.drawText(mc.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
+        Helper.drawTextureAlphaColor(context, texture_ingame, x, y, 0.0F, icon * 13, width_ingame, height, width_ingame, height * 5, color);
+        context.drawText(client.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
     }
 
     private static int getIconColor(int icon) {
         return switch (icon) {
-            case 0 -> clock_ingame.color.day;
-            case 1 -> clock_ingame.color.night;
-            case 2 -> clock_ingame.color.rain;
-            case 3 -> clock_ingame.color.thunder;
+            case 1 -> clock_ingame.color.day;
+            case 2 -> clock_ingame.color.night;
+            case 3 -> clock_ingame.color.rain;
+            case 4 -> clock_ingame.color.thunder;
             default -> 0xFFFFFF;
         };
     }
 
-    private static int getWeatherOrTime(ClientWorld clientWorld, long time) {
-        if (clientWorld.isThundering()) return 3;
-        else if (clientWorld.isRaining()) return 2;
-        else if ((12542 < time && time < 23460) || clientWorld.isNight()) return 1;
-        else return 0;
+    private static int getWeatherOrTime(ClientWorld clientWorld) {
+        if (clientWorld.isThundering()) return 4;
+        else if (clientWorld.isRaining()) return 3;
+        else if (clientWorld.isNight()) return 2;
+        else return 1;
     }
 
-    private static String buildMinecraftTimeString(int hours, int minutes) {
+    private static String buildMinecraftMilitaryTimeString(int hours, int minutes) {
         StringBuilder timeBuilder = new StringBuilder();
 
         if (hours < 10) timeBuilder.append('0');
@@ -78,35 +95,71 @@ public class clock {
         return timeBuilder.toString();
     }
 
-    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-    private static String systemTimeStr = buildSystemTimeString(System.currentTimeMillis());
+    private static String buildMinecraftCivilianTimeString(int hours, int minutes) {
+        StringBuilder timeBuilder = new StringBuilder();
+
+        String period = hours >= 12 ? " PM" : " AM";
+
+        // 01.00 until 12.59 AM / PM
+        hours %= 12;
+        if (hours == 0) hours = 12;
+
+        timeBuilder.append(buildMinecraftMilitaryTimeString(hours, minutes)).append(period);
+
+        return timeBuilder.toString();
+    }
+
+    private static final SimpleDateFormat militaryTimeFormat = new SimpleDateFormat("HH:mm");
+    private static final SimpleDateFormat civilianTimeFormat = new SimpleDateFormat("hh:mm a");
+
+    private static String systemTimeStr = buildSystemMilitaryTimeString(System.currentTimeMillis());
     private static long cachedSystemMinute = -1;
+
+    private static boolean LAST_UPDATED_use12Hour_system = clock_system.use12Hour;
+
+    private static int width_system;
+    private static Identifier texture_system;
 
     public static void renderSystemTimeHUD(DrawContext context) {
         if (!clock_system.shouldRender) return;
 
-        MinecraftClient mc = MinecraftClient.getInstance();
+        MinecraftClient client = MinecraftClient.getInstance();
+
+        boolean use12Hour = clock_system.use12Hour;
 
         // update each minute
         long currentTime = System.currentTimeMillis();
         long minute = currentTime / 60000;
         if (minute != cachedSystemMinute) {
             cachedSystemMinute = minute;
-            systemTimeStr = buildSystemTimeString(currentTime);
+            systemTimeStr = use12Hour ?
+                    buildSystemCivilianTimeString(currentTime):
+                    buildSystemMilitaryTimeString(currentTime);
         }
 
-        int width = 49;
-        int height = 13;
+        if (LAST_UPDATED_use12Hour_system != use12Hour) {
+            LAST_UPDATED_use12Hour_system = use12Hour;
+            if (use12Hour) {
+                width_system = 65;
+                texture_system = CLOCK_12;
+            } else {
+                width_system = 49;
+                texture_system = CLOCK_24;
+            }
+        }
 
-        int x = Helper.defaultHUDLocationX(clock_system.originX, context, width) + clock_system.x;
-        int y = Helper.defaultHUDLocationY(clock_system.originY, context, height) + clock_system.y;
+        int x = Helper.defaultHUDAlignmentX(clock_system.originX, context.getScaledWindowWidth(), width_system) + clock_system.x;
+        int y = Helper.defaultHUDAlignmentY(clock_system.originY, context.getScaledWindowHeight(), height) + clock_system.y;
         int color = clock_system.color | 0xFF000000;
 
-        Helper.drawTextureAlphaColor(context, CLOCK_SYSTEM, x, y, 0.0F, 0.0F, width, height, width, height, color);
-        context.drawText(mc.textRenderer, systemTimeStr, x + 19, y + 3, color, false);
+        Helper.drawTextureAlphaColor(context, texture_system, x, y, 0.0F, 0.0F, width_system, height, width_system, height * 5, color);
+        context.drawText(client.textRenderer, systemTimeStr, x + 19, y + 3, color, false);
     }
 
-    private static String buildSystemTimeString(long time) {
-        return timeFormat.format(new Date(time));
+    private static String buildSystemMilitaryTimeString(long time) {
+        return militaryTimeFormat.format(new Date(time));
+    }
+    private static String buildSystemCivilianTimeString(long time) {
+        return civilianTimeFormat.format(new Date(time));
     }
 }

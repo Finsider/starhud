@@ -22,5 +22,6 @@ public class MixinInGameHUD {
         if (Main.settings.clockSettings.inGameSettings.shouldRender) clock.renderInGameTimeHUD(context);
         if (Main.settings.clockSettings.systemSettings.shouldRender) clock.renderSystemTimeHUD(context);
         if (Main.settings.directionSettings.shouldRender) direction.renderDirectionHUD(context);
+        if (Main.settings.biomeSettings.shouldRender) biome.renderBiomeIndicatorHUD(context);
     }
 }

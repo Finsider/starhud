@@ -13,19 +13,19 @@ public class fps {
 
     private static final Identifier FPS_TEXTURE = Identifier.of("starhud", "hud/fps.png");
 
+    private static final int width = 69;
+    private static final int height = 13;
+
     public static void renderFPSHUD(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
-        String fpsStr = Integer.toString(client.getCurrentFps());
+        String fpsStr = client.getCurrentFps() + " FPS";
 
-        int width = 59;
-        int height = 13;
-
-        int x = Helper.defaultHUDLocationX(fps.originX, context, width) + fps.x;
-        int y = Helper.defaultHUDLocationY(fps.originY, context, height) + fps.y;
+        int x = Helper.defaultHUDAlignmentX(fps.originX, context.getScaledWindowWidth(), width) + fps.x;
+        int y = Helper.defaultHUDAlignmentY(fps.originY, context.getScaledWindowHeight(), height) + fps.y;
 
         int color = fps.color | 0xFF000000;
 
         Helper.drawTextureAlphaColor(context, FPS_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height, color);
-        context.drawText(client.textRenderer, fpsStr, x + 31, y + 3, color, false);
+        context.drawText(client.textRenderer, fpsStr, x + 19, y + 3, color, false);
     }
 }

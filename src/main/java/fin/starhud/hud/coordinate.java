@@ -6,7 +6,6 @@ import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
@@ -18,6 +17,9 @@ public class coordinate {
     private static final int[] X_OFFSETS = new int[3];
     private static final int[] Y_OFFSETS = new int[3];
     private static final boolean[] SHOULD_RENDER = new boolean[3];
+
+    private static final int width = 65;
+    private static final int height = 13;
 
     public static void renderCoordinateHUD(DrawContext context) {
         initCoordinateConfiguration();
@@ -31,11 +33,8 @@ public class coordinate {
         String coordY = Integer.toString((int) vec3d.y);
         String coordZ = Integer.toString((int) vec3d.z);
 
-        int width = 65;
-        int height = 13;
-
-        int x = Helper.defaultHUDLocationX(coord.originX, context, width) + coord.x;
-        int y = Helper.defaultHUDLocationY(coord.originY, context, height) + coord.y;
+        int x = Helper.defaultHUDAlignmentX(coord.originX, context.getScaledWindowWidth(), width) + coord.x;
+        int y = Helper.defaultHUDAlignmentY(coord.originY, context.getScaledWindowHeight(), height) + coord.y;
 
         int colorX = coord.coordXSettings.color | 0xFF000000;
         int colorY = coord.coordYSettings.color | 0xFF000000;
