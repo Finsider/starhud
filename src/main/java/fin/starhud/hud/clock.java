@@ -55,7 +55,7 @@ public class clock {
         int x = Helper.defaultHUDAlignmentX(clock_ingame.originX, context.getScaledWindowWidth(), width_ingame) + clock_ingame.x;
         int y = Helper.defaultHUDAlignmentY(clock_ingame.originY, context.getScaledWindowHeight(), height) + clock_ingame.y;
 
-        int icon = getWeatherOrTime(world);
+        int icon = getWeatherOrTime(world, time);
         int color = getIconColor(icon) | 0xFF000000;
 
         Helper.drawTextureAlphaColor(context, texture_ingame, x, y, 0.0F, icon * 13, width_ingame, height, width_ingame, height * 5, color);
@@ -72,10 +72,10 @@ public class clock {
         };
     }
 
-    private static int getWeatherOrTime(ClientWorld clientWorld) {
+    private static int getWeatherOrTime(ClientWorld clientWorld, long time) {
         if (clientWorld.isThundering()) return 4;
         else if (clientWorld.isRaining()) return 3;
-        else if (clientWorld.isNight()) return 2;
+        else if ((12542 < time && time < 23460) || clientWorld.isNight()) return 2;
         else return 1;
     }
 
