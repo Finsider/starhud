@@ -285,8 +285,9 @@ public class Settings implements ConfigData {
         public int x = 0;
         public int y = 5;
 
-        @Comment("Best to use when Horizontal Alignment is set to center / left")
-        public boolean shouldTextWidthAffectPosition = true;
+        @Comment("Which way should the HUD goes as the text increases?")
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        public Helper.TextGrowthDirection textGrowth = Helper.TextGrowthDirection.CENTER;
 
         @ConfigEntry.Gui.CollapsibleObject
         public DimensionColorSettings color = new DimensionColorSettings();

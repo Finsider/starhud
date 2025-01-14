@@ -37,8 +37,10 @@ public class biome {
 
         int dimensionIcon = getDimensionIcon(client.world.getRegistryKey());
 
-        int x = Helper.defaultHUDAlignmentX(biome.originX, context.getScaledWindowWidth(), 14 + 10 + (biome.shouldTextWidthAffectPosition ? cachedTextWidth : 0)) + biome.x;
+        int x = Helper.defaultHUDAlignmentX(biome.originX, context.getScaledWindowWidth(), 14 + 10) + biome.x
+                - Helper.getTextGrowthDirection(biome.textGrowth, cachedTextWidth);
         int y = Helper.defaultHUDAlignmentY(biome.originY, context.getScaledWindowHeight(), 13) + biome.y;
+
         int color = getTextColorFromDimension(dimensionIcon) | 0xFF000000;
 
         Helper.drawTextureAlpha(context, DIMENSION_TEXTURE, x, y, 0.0F, dimensionIcon * 13, 13, 13, 13 ,52);

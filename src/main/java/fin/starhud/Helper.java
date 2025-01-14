@@ -18,6 +18,12 @@ public class Helper {
         BOTTOM,
     }
 
+    public enum TextGrowthDirection {
+        LEFT,
+        CENTER,
+        RIGHT,
+    }
+
     public static int defaultHUDAlignmentX(ScreenAlignmentX alignmentX, int scaledWidth, int HUDWidth) {
         return switch (alignmentX) {
             case LEFT -> 0;
@@ -31,6 +37,14 @@ public class Helper {
             case TOP -> 0;
             case MIDDLE -> (scaledHeight - HUDHeight) / 2;
             case BOTTOM -> scaledHeight - HUDHeight;
+        };
+    }
+
+    public static int getTextGrowthDirection(TextGrowthDirection textGrowthDirection, int textWidth) {
+        return switch (textGrowthDirection) {
+            case LEFT -> textWidth;
+            case CENTER -> textWidth / 2;
+            case RIGHT -> 0;
         };
     }
 

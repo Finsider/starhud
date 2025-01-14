@@ -5,6 +5,7 @@ import fin.starhud.Main;
 import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -16,16 +17,14 @@ public class direction {
     private static final Identifier DIRECTION_TEXTURE = Identifier.of("starhud", "hud/direction.png");
     private static final Identifier DIRECTION_INCLUDE_ORDINAL_TEXTURE = Identifier.of("starhud", "hud/direction_ordinal.png");
 
-    private static int width;
     private static final int height = 13;
 
-    private static int icon;
-    private static int color;
-    private static int iconAmount;
-    private static int textX;
-    private static Identifier texture;
+    private static boolean LAST_UPDATED_includeOrdinal = direction.includeOrdinal;
 
-    private static Boolean LAST_UPDATED_includeOrdinal;
+    private static int width = LAST_UPDATED_includeOrdinal ? 61 : 55;
+    private static int iconAmount = LAST_UPDATED_includeOrdinal ? 8 : 4;
+    private static int textX = LAST_UPDATED_includeOrdinal ? 25 : 19;
+    private static Identifier texture = LAST_UPDATED_includeOrdinal ? DIRECTION_INCLUDE_ORDINAL_TEXTURE : DIRECTION_TEXTURE;
 
     public static void renderDirectionHUD(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
@@ -36,22 +35,13 @@ public class direction {
 
         boolean includeOrdinal = direction.includeOrdinal;
 
-        // silly way to cache all the variables
-        if (LAST_UPDATED_includeOrdinal == null || LAST_UPDATED_includeOrdinal != includeOrdinal) {
+        // check if user changed this setting
+        if (LAST_UPDATED_includeOrdinal != includeOrdinal) {
             LAST_UPDATED_includeOrdinal = includeOrdinal;
-            if (includeOrdinal) {
-                texture = DIRECTION_INCLUDE_ORDINAL_TEXTURE;
-                width = 61;
-                iconAmount = 8;
-                textX = 25;
-            } else {
-                texture = DIRECTION_TEXTURE;
-                width = 55;
-                iconAmount = 4;
-                textX = 19;
-            }
+            modifyDirectionVariables();
         }
 
+        int icon, color;
         if (includeOrdinal) {
             icon = getOrdinalDirectionIcon(yaw);
             color = getDirectionColor(icon) | 0xFF000000;
@@ -99,5 +89,19 @@ public class direction {
             case 7 -> direction.directionColor.se;
             default -> 0xFFFFFF;
         };
+    }
+
+    private static void modifyDirectionVariables() {
+        if (LAST_UPDATED_includeOrdinal) {
+            texture = DIRECTION_INCLUDE_ORDINAL_TEXTURE;
+            width = 61;
+            iconAmount = 8;
+            textX = 25;
+        } else {
+            texture = DIRECTION_TEXTURE;
+            width = 55;
+            iconAmount = 4;
+            textX = 19;
+        }
     }
 }

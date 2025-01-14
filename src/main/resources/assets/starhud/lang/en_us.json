@@ -59,6 +59,7 @@
   "text.autoconfig.starhud.option.directionSettings.originY": "Vertical Alignment",
   "text.autoconfig.starhud.option.directionSettings.x": "X Offset",
   "text.autoconfig.starhud.option.directionSettings.y": "Y Offset",
+  "text.autoconfig.starhud.option.directionSettings.includeOrdinal": "Include Ordinal Directions",
 
   "text.autoconfig.starhud.option.directionSettings.directionColor": "Direction Colors",
   "text.autoconfig.starhud.option.directionSettings.directionColor.s": "South",
@@ -99,6 +100,7 @@
   "text.autoconfig.starhud.option.clockSettings.systemSettings.originY": "Vertical Alignment",
   "text.autoconfig.starhud.option.clockSettings.systemSettings.x": "X Offset",
   "text.autoconfig.starhud.option.clockSettings.systemSettings.y": "Y Offset",
+  "text.autoconfig.starhud.option.clockSettings.systemSettings.use12Hour": "Use 12 Hour Format",
   "text.autoconfig.starhud.option.clockSettings.systemSettings.color": "System Clock Color",
 
   "text.autoconfig.starhud.option.clockSettings.inGameSettings": "In-Game",
@@ -107,10 +109,25 @@
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.originY": "Vertical Alignment",
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.x": "X Offset",
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.y": "Y Offset",
+  "text.autoconfig.starhud.option.clockSettings.inGameSettings.use12Hour": "Use 12 Hour Format",
 
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.color": "In-Game Clock Colors",
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.color.day": "Daytime Color",
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.color.night": "Nighttime Color",
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.color.rain": "Rain Color",
-  "text.autoconfig.starhud.option.clockSettings.inGameSettings.color.thunder": "Thunderstorm Color"
+  "text.autoconfig.starhud.option.clockSettings.inGameSettings.color.thunder": "Thunderstorm Color",
+
+  "text.autoconfig.starhud.category.biome": "Biome",
+  "text.autoconfig.starhud.option.biomeSettings.shouldRender": "Show Biome Indicator HUD",
+  "text.autoconfig.starhud.option.biomeSettings.originX": "Horizontal Alignment",
+  "text.autoconfig.starhud.option.biomeSettings.originY": "Vertical Alignment",
+  "text.autoconfig.starhud.option.biomeSettings.x": "X Offset",
+  "text.autoconfig.starhud.option.biomeSettings.y": "Y Offset",
+  "text.autoconfig.starhud.option.biomeSettings.textGrowth": "Text Growth Direction",
+
+  "text.autoconfig.starhud.option.biomeSettings.color": "Dimension Colors",
+  "text.autoconfig.starhud.option.biomeSettings.color.overworld": "Overworld",
+  "text.autoconfig.starhud.option.biomeSettings.color.nether": "Nether",
+  "text.autoconfig.starhud.option.biomeSettings.color.end": "End",
+  "text.autoconfig.starhud.option.biomeSettings.color.custom": "Custom"
 }

@@ -5,6 +5,7 @@ import fin.starhud.Main;
 import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 
@@ -13,7 +14,6 @@ import java.util.Date;
 
 public class clock {
 
-    private static Settings.ClockSettings.ClockSystemSettings clock_system = Main.settings.clockSettings.systemSettings;
     private static Settings.ClockSettings.ClockInGameSettings clock_ingame = Main.settings.clockSettings.inGameSettings;
 
     private static final Identifier CLOCK_12 = Identifier.of("starhud", "hud/clock_12.png");
@@ -24,37 +24,32 @@ public class clock {
     private static String minecraftTimeStr = "";
     private static int cachedMinecraftMinute = -1;
 
-    private static int width_ingame;
-    private static Identifier texture_ingame;
+    private static boolean LAST_UPDATED_use12Hour_ingame = clock_ingame.use12Hour;
 
-    private static Boolean LAST_UPDATED_use12Hour_ingame;
+    private static int width_ingame = LAST_UPDATED_use12Hour_ingame ? 65 : 49;
+    private static Identifier texture_ingame = LAST_UPDATED_use12Hour_ingame ? CLOCK_12 : CLOCK_24;
 
     public static void renderInGameTimeHUD(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         ClientWorld world = client.world;
 
+        long time = world.getTimeOfDay() % 24000;
+
         boolean use12Hour = clock_ingame.use12Hour;
 
-        long time = world.getTimeOfDay() % 24000;
         int minutes = (int) ((time % 1000) * 3 / 50);
+        int hours = (int) ((time / 1000) + 6) % 24;
         if (minutes != cachedMinecraftMinute) {
             cachedMinecraftMinute = minutes;
 
-            int hours = (int) ((time / 1000) + 6) % 24;
             minecraftTimeStr = use12Hour ?
                     buildMinecraftCivilianTimeString(hours, minutes):
                     buildMinecraftMilitaryTimeString(hours, minutes);
         }
 
-        if (LAST_UPDATED_use12Hour_ingame == null || LAST_UPDATED_use12Hour_ingame != use12Hour) {
+        if (LAST_UPDATED_use12Hour_ingame != use12Hour) {
             LAST_UPDATED_use12Hour_ingame = use12Hour;
-            if (use12Hour) {
-                width_ingame = 65;
-                texture_ingame = CLOCK_12;
-            } else {
-                width_ingame = 49;
-                texture_ingame = CLOCK_24;
-            }
+            modifyInGameClockVariables(hours, minutes);
         }
 
         int x = Helper.defaultHUDAlignmentX(clock_ingame.originX, context.getScaledWindowWidth(), width_ingame) + clock_ingame.x;
@@ -110,16 +105,30 @@ public class clock {
         return timeBuilder.toString();
     }
 
+    private static void modifyInGameClockVariables(int hours, int minutes) {
+        if (LAST_UPDATED_use12Hour_ingame) {
+            width_ingame = 65;
+            texture_ingame = CLOCK_12;
+            minecraftTimeStr = buildMinecraftCivilianTimeString(hours, minutes);
+        } else {
+            width_ingame = 49;
+            texture_ingame = CLOCK_24;
+            minecraftTimeStr = buildMinecraftMilitaryTimeString(hours, minutes);
+        }
+    }
+
+    private static Settings.ClockSettings.ClockSystemSettings clock_system = Main.settings.clockSettings.systemSettings;
+
     private static final SimpleDateFormat militaryTimeFormat = new SimpleDateFormat("HH:mm");
     private static final SimpleDateFormat civilianTimeFormat = new SimpleDateFormat("hh:mm a");
 
     private static String systemTimeStr = buildSystemMilitaryTimeString(System.currentTimeMillis());
     private static long cachedSystemMinute = -1;
 
-    private static Boolean LAST_UPDATED_use12Hour_system;
+    private static Boolean LAST_UPDATED_use12Hour_system = clock_system.use12Hour;
 
-    private static int width_system;
-    private static Identifier texture_system;
+    private static int width_system = LAST_UPDATED_use12Hour_system ? 65 : 49;
+    private static Identifier texture_system = LAST_UPDATED_use12Hour_system ? CLOCK_12 : CLOCK_24;
 
     public static void renderSystemTimeHUD(DrawContext context) {
         if (!clock_system.shouldRender) return;
@@ -138,15 +147,9 @@ public class clock {
                     buildSystemMilitaryTimeString(currentTime);
         }
 
-        if (LAST_UPDATED_use12Hour_system == null || LAST_UPDATED_use12Hour_system != use12Hour) {
+        if (LAST_UPDATED_use12Hour_system != use12Hour) {
             LAST_UPDATED_use12Hour_system = use12Hour;
-            if (use12Hour) {
-                width_system = 65;
-                texture_system = CLOCK_12;
-            } else {
-                width_system = 49;
-                texture_system = CLOCK_24;
-            }
+            modifySystemClockVariables(currentTime);
         }
 
         int x = Helper.defaultHUDAlignmentX(clock_system.originX, context.getScaledWindowWidth(), width_system) + clock_system.x;
@@ -162,5 +165,17 @@ public class clock {
     }
     private static String buildSystemCivilianTimeString(long time) {
         return civilianTimeFormat.format(new Date(time));
+    }
+
+    private static void modifySystemClockVariables(long time) {
+        if (LAST_UPDATED_use12Hour_system) {
+            width_system = 65;
+            texture_system = CLOCK_12;
+            systemTimeStr = buildSystemCivilianTimeString(time);
+        } else {
+            width_system = 49;
+            texture_system = CLOCK_24;
+            systemTimeStr = buildSystemMilitaryTimeString(time);
+        }
     }
 }
