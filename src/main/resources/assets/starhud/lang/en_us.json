@@ -85,7 +85,6 @@
   "text.autoconfig.starhud.option.pingSettings.originY": "Vertical Alignment",
   "text.autoconfig.starhud.option.pingSettings.x": "X Offset",
   "text.autoconfig.starhud.option.pingSettings.y": "Y Offset",
-  "text.autoconfig.starhud.option.pingSettings.updateInterval": "Update Interval (seconds)",
 
   "text.autoconfig.starhud.option.pingSettings.pingColor": "Ping Colors",
   "text.autoconfig.starhud.option.pingSettings.pingColor.first": "Excellent Ping Color",

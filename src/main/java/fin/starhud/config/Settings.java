@@ -198,9 +198,6 @@ public class Settings implements ConfigData {
         public int x = -57;
         public int y = -5;
 
-        @Comment("Ping update interval, in seconds.")
-        public double updateInterval = 5.0;
-
         @ConfigEntry.Gui.CollapsibleObject
         public PingColorSettings pingColor = new PingColorSettings();
         public static class PingColorSettings {
