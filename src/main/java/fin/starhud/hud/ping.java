@@ -6,13 +6,14 @@ import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.PingMeasurer;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.MultiValueDebugSampleLogImpl;
 import net.minecraft.world.World;
 
 public class ping {
 
-    public static Settings.PingSettings ping = Main.settings.pingSettings;
+    private static final Settings.PingSettings ping = Main.settings.pingSettings;
 
     private static final Identifier PING_TEXTURE = Identifier.of("starhud", "hud/ping.png");
 
@@ -23,8 +24,10 @@ public class ping {
     private static final int width = 63;
     private static final int height = 13;
 
+    private static final MinecraftClient client = MinecraftClient.getInstance();
+
     public static void renderPingHUD(DrawContext context) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        if ((ping.hideOn.f3 && Helper.isDebugHUDOpen()) || (ping.hideOn.chat && Helper.isChatFocused())) return;
         if (client.isInSingleplayer()) return;
 
         MultiValueDebugSampleLogImpl pingLog = client.getDebugHud().getPingLog();
@@ -45,15 +48,20 @@ public class ping {
         long currentPing = pingLog.get(pingLogLen - 1);
         String pingStr = currentPing + " ms";
 
-        int x = Helper.defaultHUDAlignmentX(ping.originX, context.getScaledWindowWidth(), width) + ping.x;
-        int y = Helper.defaultHUDAlignmentY(ping.originY, context.getScaledWindowHeight(), height) + ping.y;
+        int x = Helper.calculatePositionX(ping.x, ping.originX, width, ping.scale);
+        int y = Helper.calculatePositionY(ping.y, ping.originY, height, ping.scale);
 
         // 0, 150, 300, 450
         int step = Math.min((int) currentPing / 150, 3);
         int color = getPingColor(step) | 0xFF000000;
 
-        Helper.drawTextureAlphaColor(context, PING_TEXTURE, x, y, 0.0F, step * 13, width, height, width, height * 4, color);
+        context.getMatrices().push();
+        Helper.setHUDScale(context, ping.scale);
+
+        context.drawTexture(RenderLayer::getGuiTextured, PING_TEXTURE, x, y, 0.0F, step * 13, width, height, width, height * 4, color);
         context.drawText(client.textRenderer, pingStr, x + 19, y + 3, color, false);
+
+        context.getMatrices().pop();
     }
 
     public static int getPingColor(int step) {

@@ -26,7 +26,11 @@ public class Settings implements ConfigData {
         public Helper.ScreenAlignmentY originY = Helper.ScreenAlignmentY.MIDDLE;
 
         public int x = 5;
-        public int y = -24;
+        public int y = -20;
+
+        @ConfigEntry.BoundedDiscrete(max = 6)
+        @Comment("Set to 0 for default GUI Scale")
+        public int scale = 0;
 
         @ConfigEntry.Gui.CollapsibleObject
         public HelmetSettings helmet = new HelmetSettings();
@@ -59,6 +63,13 @@ public class Settings implements ConfigData {
             public int xOffset = 0;
             public int yOffset = 42;
         }
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public ArmorHideSettings hideOn = new ArmorHideSettings();
+        public static class ArmorHideSettings {
+            public boolean f3 = false;
+            public boolean chat = false;
+        }
     }
 
     @ConfigEntry.Category("coord")
@@ -78,6 +89,10 @@ public class Settings implements ConfigData {
 
         public int x = 5;
         public int y = 5;
+
+        @ConfigEntry.BoundedDiscrete(max = 6)
+        @Comment("Set to 0 for default GUI Scale")
+        public int scale = 0;
 
         @ConfigEntry.Gui.CollapsibleObject
         public CoordXSettings coordXSettings = new CoordXSettings();
@@ -114,6 +129,13 @@ public class Settings implements ConfigData {
             @ConfigEntry.ColorPicker
             public int color = 0x6CE1FC;
         }
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public CoordHideSettings hideOn = new CoordHideSettings();
+        public static class CoordHideSettings {
+            public boolean f3 = false;
+            public boolean chat = false;
+        }
     }
 
     @ConfigEntry.Category("direction")
@@ -133,6 +155,10 @@ public class Settings implements ConfigData {
 
         public int x = 26;
         public int y = 19;
+
+        @ConfigEntry.BoundedDiscrete(max = 6)
+        @Comment("Set to 0 for default GUI Scale")
+        public int scale = 0;
 
         public boolean includeOrdinal = false;
 
@@ -156,6 +182,13 @@ public class Settings implements ConfigData {
             @ConfigEntry.ColorPicker
             public int se = 0xffd0c4;
         }
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public DirectionHideSettings hideOn = new DirectionHideSettings();
+        public static class DirectionHideSettings {
+            public boolean f3 = false;
+            public boolean chat = false;
+        }
     }
 
     @ConfigEntry.Category("fps")
@@ -176,8 +209,19 @@ public class Settings implements ConfigData {
         public int x = 5;
         public int y = -5;
 
+        @ConfigEntry.BoundedDiscrete(max = 6)
+        @Comment("Set to 0 for default GUI Scale")
+        public int scale = 0;
+
         @ConfigEntry.ColorPicker
         public int color = 0xE5ECf8;
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public FPSHideSettings hideOn = new FPSHideSettings();
+        public static class FPSHideSettings {
+            public boolean f3 = false;
+            public boolean chat = false;
+        }
     }
 
     @ConfigEntry.Category("ping")
@@ -198,6 +242,10 @@ public class Settings implements ConfigData {
         public int x = -57;
         public int y = -5;
 
+        @ConfigEntry.BoundedDiscrete(max = 6)
+        @Comment("Set to 0 for default GUI Scale")
+        public int scale = 0;
+
         @Comment("Ping update interval, in seconds.")
         public double updateInterval = 5.0;
 
@@ -213,6 +261,14 @@ public class Settings implements ConfigData {
             @ConfigEntry.ColorPicker
             public int fourth = 0xFF5C71;
         }
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public PingHideSettings hideOn = new PingHideSettings();
+        public static class PingHideSettings {
+            public boolean f3 = false;
+            public boolean chat = false;
+        }
+
     }
 
     @ConfigEntry.Category("clock")
@@ -233,10 +289,21 @@ public class Settings implements ConfigData {
             public int x = -5;
             public int y = -5;
 
+            @ConfigEntry.BoundedDiscrete(max = 6)
+            @Comment("Set to 0 for default GUI Scale")
+            public int scale = 0;
+
             public boolean use12Hour = false;
 
             @ConfigEntry.ColorPicker
             public int color = 0xFFFFFF;
+
+            @ConfigEntry.Gui.CollapsibleObject
+            public ClockSystemHideSettings hideOn = new ClockSystemHideSettings();
+            public static class ClockSystemHideSettings {
+                public boolean f3 = false;
+                public boolean chat = false;
+            }
         }
 
         @ConfigEntry.Gui.CollapsibleObject
@@ -253,6 +320,10 @@ public class Settings implements ConfigData {
             public int x = -29;
             public int y = 19;
 
+            @ConfigEntry.BoundedDiscrete(max = 6)
+            @Comment("Set to 0 for default GUI Scale")
+            public int scale = 0;
+
             public boolean use12Hour = false;
 
             @ConfigEntry.Gui.CollapsibleObject
@@ -266,6 +337,13 @@ public class Settings implements ConfigData {
                 public int rain = 0xb5d0e8;
                 @ConfigEntry.ColorPicker
                 public int thunder = 0x8faecb;
+            }
+
+            @ConfigEntry.Gui.CollapsibleObject
+            public ClockInGameHideSettings hideOn = new ClockInGameHideSettings();
+            public static class ClockInGameHideSettings {
+                public boolean f3 = false;
+                public boolean chat = false;
             }
         }
     }
@@ -285,9 +363,13 @@ public class Settings implements ConfigData {
         public int x = 0;
         public int y = 5;
 
+        @ConfigEntry.BoundedDiscrete(max = 6)
+        @Comment("Set to 0 for default GUI Scale")
+        public int scale = 0;
+
         @Comment("Which way should the HUD goes as the text increases?")
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        public Helper.TextGrowthDirection textGrowth = Helper.TextGrowthDirection.CENTER;
+        public Helper.GrowthDirection textGrowth = Helper.GrowthDirection.CENTER;
 
         @ConfigEntry.Gui.CollapsibleObject
         public DimensionColorSettings color = new DimensionColorSettings();
@@ -300,6 +382,117 @@ public class Settings implements ConfigData {
             public int end = 0xc9c7e3;
             @ConfigEntry.ColorPicker
             public int custom = 0xFFFFFF;
+        }
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public BiomeHideSettings hideOn = new BiomeHideSettings();
+        public static class BiomeHideSettings {
+            public boolean f3 = false;
+            public boolean chat = false;
+        }
+    }
+
+    @ConfigEntry.Category("inventory")
+    @ConfigEntry.Gui.TransitiveObject
+    public InventorySettings inventorySettings = new InventorySettings();
+    public static class InventorySettings {
+        public boolean shouldRender = false;
+
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        public Helper.ScreenAlignmentX originX = Helper.ScreenAlignmentX.RIGHT;
+
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        public Helper.ScreenAlignmentY originY = Helper.ScreenAlignmentY.MIDDLE;
+
+        public int x = -5;
+        public int y = 0;
+
+        @ConfigEntry.BoundedDiscrete(max = 6)
+        @Comment("Set to 0 for default GUI Scale")
+        public int scale = 1;
+
+        public boolean drawVertical = true;
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public InventoryHideSettings hideOn = new InventoryHideSettings();
+        public static class InventoryHideSettings {
+            public boolean f3 = false;
+            public boolean chat = false;
+        }
+    }
+
+    @ConfigEntry.Category("hand")
+    @ConfigEntry.Gui.TransitiveObject
+    public HandSettings handSettings = new HandSettings();
+    public static class HandSettings {
+        @ConfigEntry.Gui.CollapsibleObject
+        public LeftHandSettings leftHandSettings = new LeftHandSettings();
+        public static class LeftHandSettings {
+            public boolean shouldRender = true;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+            public Helper.ScreenAlignmentX originX = Helper.ScreenAlignmentX.CENTER;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+            public Helper.ScreenAlignmentY originY = Helper.ScreenAlignmentY.BOTTOM;
+
+            public int x = -108;
+            public int y = -25;
+
+            @ConfigEntry.BoundedDiscrete(max = 6)
+            @Comment("Set to 0 for default GUI Scale")
+            public int scale = 0;
+
+            @Comment("Which way should the HUD goes when a the texture increases?")
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+            public Helper.GrowthDirection textureGrowth = Helper.GrowthDirection.LEFT;
+
+            public boolean showCountOnly = false;
+
+            @ConfigEntry.ColorPicker
+            public int color = 0xffb3b3;
+
+            @ConfigEntry.Gui.CollapsibleObject
+            public LeftHandHideSettings hideOn = new LeftHandHideSettings();
+            public static class LeftHandHideSettings {
+                public boolean f3 = false;
+                public boolean chat = false;
+            }
+        }
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public RightHandSettings rightHandSettings = new RightHandSettings();
+        public static class RightHandSettings {
+            public boolean shouldRender = true;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+            public Helper.ScreenAlignmentX originX = Helper.ScreenAlignmentX.CENTER;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+            public Helper.ScreenAlignmentY originY = Helper.ScreenAlignmentY.BOTTOM;
+
+            public int x = 108;
+            public int y = -25;
+
+            @ConfigEntry.BoundedDiscrete(max = 6)
+            @Comment("Set to 0 for default GUI Scale")
+            public int scale = 0;
+
+            @Comment("Which way should the HUD goes when a the texture increases?")
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+            public Helper.GrowthDirection textureGrowth = Helper.GrowthDirection.RIGHT;
+
+            public boolean showCountOnly = false;
+
+            @ConfigEntry.ColorPicker
+            public int color = 0x87ceeb;
+
+            @ConfigEntry.Gui.CollapsibleObject
+            public RightHandHideSettings hideOn = new RightHandHideSettings();
+            public static class RightHandHideSettings {
+                public boolean f3 = false;
+                public boolean chat = false;
+            }
         }
     }
 }

@@ -12,49 +12,55 @@ import net.minecraft.util.math.MathHelper;
 
 public class direction {
 
-    private static Settings.DirectionSettings direction = Main.settings.directionSettings;
+    private static final Settings.DirectionSettings direction = Main.settings.directionSettings;
 
     private static final Identifier DIRECTION_TEXTURE = Identifier.of("starhud", "hud/direction.png");
     private static final Identifier DIRECTION_INCLUDE_ORDINAL_TEXTURE = Identifier.of("starhud", "hud/direction_ordinal.png");
 
     private static final int height = 13;
 
-    private static boolean LAST_UPDATED_includeOrdinal = direction.includeOrdinal;
+    private static final int width_cardinal = 55;
+    private static final int width_ordinal = 61;
 
-    private static int width = LAST_UPDATED_includeOrdinal ? 61 : 55;
-    private static int iconAmount = LAST_UPDATED_includeOrdinal ? 8 : 4;
-    private static int textX = LAST_UPDATED_includeOrdinal ? 25 : 19;
-    private static Identifier texture = LAST_UPDATED_includeOrdinal ? DIRECTION_INCLUDE_ORDINAL_TEXTURE : DIRECTION_TEXTURE;
+    private static final int iconAmount_cardinal = 4;
+    private static final int iconAmount_ordinal = 8;
+
+    private static final int textX_cardinal = 19;
+    private static final int textX_ordinal = 25;
+
+    private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static void renderDirectionHUD(DrawContext context) {
-        MinecraftClient client = MinecraftClient.getInstance();
+        if ((direction.hideOn.f3 && Helper.isDebugHUDOpen()) || (direction.hideOn.chat && Helper.isChatFocused())) return;
 
         Entity playerCamera = client.cameraEntity;
 
         float yaw = Math.round(MathHelper.wrapDegrees(playerCamera.getYaw()) * 10.0F) / 10.0F;
 
-        boolean includeOrdinal = direction.includeOrdinal;
+        context.getMatrices().push();
+        Helper.setHUDScale(context, direction.scale);
 
-        // check if user changed this setting
-        if (LAST_UPDATED_includeOrdinal != includeOrdinal) {
-            LAST_UPDATED_includeOrdinal = includeOrdinal;
-            modifyDirectionVariables();
-        }
+        if (direction.includeOrdinal) {
+            int icon = getOrdinalDirectionIcon(yaw);
+            int color = getDirectionColor(icon) | 0xFF000000;
 
-        int icon, color;
-        if (includeOrdinal) {
-            icon = getOrdinalDirectionIcon(yaw);
-            color = getDirectionColor(icon) | 0xFF000000;
+            int x = Helper.calculatePositionX(direction.x, direction.originX, width_ordinal, direction.scale);
+            int y = Helper.calculatePositionY(direction.y, direction.originY, height, direction.scale);
+
+            context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_INCLUDE_ORDINAL_TEXTURE, x, y, 0.0F, icon * 13, width_ordinal, height, width_ordinal, height * iconAmount_ordinal, color);
+            context.drawText(client.textRenderer, Float.toString(yaw), x + textX_ordinal, y + 3, color, false);
         } else {
-            icon = getCardinalDirectionIcon(yaw);
-            color = getDirectionColor(icon * 2) | 0xFF000000;
+            int icon = getCardinalDirectionIcon(yaw);
+            int color = getDirectionColor(icon * 2) | 0xFF000000;
+
+            int x = Helper.calculatePositionX(direction.x, direction.originX, width_cardinal, direction.scale);
+            int y = Helper.calculatePositionY(direction.y, direction.originY, height, direction.scale);
+
+            context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_TEXTURE, x, y, 0.0F, icon * 13, width_cardinal, height, width_cardinal, height * iconAmount_cardinal, color);
+            context.drawText(client.textRenderer, Float.toString(yaw), x + textX_cardinal, y + 3, color, false);
         }
 
-        int x = Helper.defaultHUDAlignmentX(direction.originX, context.getScaledWindowWidth(), width) + direction.x;
-        int y = Helper.defaultHUDAlignmentY(direction.originY, context.getScaledWindowHeight(), height) + direction.y;
-
-        Helper.drawTextureAlphaColor(context, texture, x, y, 0.0F, icon * 13, width, height, width, height * iconAmount, color);
-        context.drawText(client.textRenderer, Float.toString(yaw), x + textX, y + 3, color, false);
+        context.getMatrices().pop();
     }
 
     private static int getOrdinalDirectionIcon(float yaw) {
@@ -89,19 +95,5 @@ public class direction {
             case 7 -> direction.directionColor.se;
             default -> 0xFFFFFF;
         };
-    }
-
-    private static void modifyDirectionVariables() {
-        if (LAST_UPDATED_includeOrdinal) {
-            texture = DIRECTION_INCLUDE_ORDINAL_TEXTURE;
-            width = 61;
-            iconAmount = 8;
-            textX = 25;
-        } else {
-            texture = DIRECTION_TEXTURE;
-            width = 55;
-            iconAmount = 4;
-            textX = 19;
-        }
     }
 }
