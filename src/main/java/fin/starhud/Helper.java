@@ -3,6 +3,7 @@ package fin.starhud;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.util.Window;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -157,10 +158,9 @@ public class Helper {
     }
 
     public static boolean isChatFocused() {
-        return client.inGameHud.getChatHud().isChatFocused();
+        return client.currentScreen instanceof ChatScreen;
     }
-
     public static boolean isDebugHUDOpen() {
-        return client.getDebugHud().shouldShowDebugHud();
+        return client.options.debugEnabled;
     }
 }

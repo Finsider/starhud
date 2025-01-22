@@ -7,9 +7,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 public class biome {
 
@@ -18,7 +20,7 @@ public class biome {
     private static final Identifier DIMENSION_TEXTURE = Identifier.of("starhud", "hud/biome.png");
 
     private static String cachedFormattedBiomeStr = "";
-    private static String cachedBiomeStr = "";
+    private static RegistryEntry<Biome> cachedBiome;
     private static int cachedTextWidth;
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
@@ -29,11 +31,11 @@ public class biome {
         TextRenderer textRenderer = client.textRenderer;
 
         BlockPos blockPos = client.player.getBlockPos();
-        String currentBiomeStr = client.world.getBiome(blockPos).getIdAsString();
+        RegistryEntry<Biome> currentBiome = client.world.getBiome(blockPos);
 
-        if (!cachedBiomeStr.equals(currentBiomeStr)) {
-            cachedFormattedBiomeStr = biomeNameFormatter(currentBiomeStr);
-            cachedBiomeStr = currentBiomeStr;
+        if (cachedBiome != currentBiome) {
+            cachedFormattedBiomeStr = biomeNameFormatter(getBiomeString(currentBiome));
+            cachedBiome = currentBiome;
             cachedTextWidth = textRenderer.getWidth(cachedFormattedBiomeStr);
         }
 
@@ -68,6 +70,10 @@ public class biome {
           case 2 -> biome.color.end;
           default -> biome.color.custom;
         };
+    }
+
+    private static String getBiomeString(RegistryEntry<Biome> biome) {
+        return biome.getKeyOrValue().map((biomeKey) -> biomeKey.getValue().toString(), (biome_) -> "[unregistered " + biome_ + "]");
     }
 
     private static String biomeNameFormatter(String oldString) {

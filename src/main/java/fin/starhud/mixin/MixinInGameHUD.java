@@ -4,7 +4,6 @@ import fin.starhud.Main;
 import fin.starhud.hud.*;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinInGameHUD {
 
     @Inject(at = @At("TAIL"), method = "renderHotbar")
-    private void renderHotbar(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+    private void renderHotbar(float tickDelta, DrawContext context, CallbackInfo ci) {
         if (Main.settings.handSettings.leftHandSettings.shouldRender) hand.renderLeftHandHUD(context);
         if (Main.settings.handSettings.rightHandSettings.shouldRender) hand.renderRightHandHUD(context);
         if (Main.settings.armorSettings.shouldRender) armor.renderArmorHUD(context);
