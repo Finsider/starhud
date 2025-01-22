@@ -7,46 +7,51 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 
 public class biome {
 
-    private static Settings.BiomeSettings biome = Main.settings.biomeSettings;
+    private static final Settings.BiomeSettings biome = Main.settings.biomeSettings;
 
     private static final Identifier DIMENSION_TEXTURE = Identifier.of("starhud", "hud/biome.png");
 
     private static String cachedFormattedBiomeStr = "";
-    private static RegistryEntry<Biome> cachedBiome;
+    private static String cachedBiomeStr = "";
     private static int cachedTextWidth;
 
-    public static void renderBiomeIndicatorHUD(DrawContext context) {
-        MinecraftClient client = MinecraftClient.getInstance();
+    private static final MinecraftClient client = MinecraftClient.getInstance();
 
-        BlockPos blockPos = client.player.getBlockPos();
-        RegistryEntry<Biome> currentBiome = client.world.getBiome(blockPos);
+    public static void renderBiomeIndicatorHUD(DrawContext context) {
+        if ((biome.hideOn.f3 && Helper.isDebugHUDOpen()) || (biome.hideOn.chat && Helper.isChatFocused())) return;
 
         TextRenderer textRenderer = client.textRenderer;
 
-        if (cachedBiome != currentBiome) {
-            cachedFormattedBiomeStr = biomeNameFormatter(getBiomeString(currentBiome));
-            cachedBiome = currentBiome;
+        BlockPos blockPos = client.player.getBlockPos();
+        String currentBiomeStr = client.world.getBiome(blockPos).getIdAsString();
+
+        if (!cachedBiomeStr.equals(currentBiomeStr)) {
+            cachedFormattedBiomeStr = biomeNameFormatter(currentBiomeStr);
+            cachedBiomeStr = currentBiomeStr;
             cachedTextWidth = textRenderer.getWidth(cachedFormattedBiomeStr);
         }
 
-        int x = Helper.defaultHUDAlignmentX(biome.originX, context.getScaledWindowWidth(), 14 + 10) + biome.x
-                - Helper.getTextGrowthDirection(biome.textGrowth, cachedTextWidth);
-        int y = Helper.defaultHUDAlignmentY(biome.originY, context.getScaledWindowHeight(), 13) + biome.y;
+        int x = Helper.calculatePositionX(biome.x, biome.originX, 24, biome.scale)
+                - Helper.getGrowthDirection(biome.textGrowth, cachedTextWidth);
+        int y = Helper.calculatePositionY(biome.y, biome.originY, 13, biome.scale);
 
         int dimensionIcon = getDimensionIcon(client.world.getRegistryKey());
         int color = getTextColorFromDimension(dimensionIcon) | 0xFF000000;
 
+        context.getMatrices().push();
+        Helper.setHUDScale(context, biome.scale);
+
         Helper.drawTextureAlpha(context, DIMENSION_TEXTURE, x, y, 0.0F, dimensionIcon * 13, 13, 13, 13 ,52);
         Helper.fillRoundedRightSide(context, x + 14, y, x + 14 + cachedTextWidth + 9, y + 13, 0x80000000);
         context.drawText(client.textRenderer, cachedFormattedBiomeStr, x + 19, y + 3, color, false);
+
+        context.getMatrices().pop();
     }
 
     private static int getDimensionIcon(RegistryKey<World> registryKey) {
@@ -63,10 +68,6 @@ public class biome {
           case 2 -> biome.color.end;
           default -> biome.color.custom;
         };
-    }
-
-    private static String getBiomeString(RegistryEntry<Biome> biome) {
-        return biome.getKeyOrValue().map((biomeKey) -> biomeKey.getValue().toString(), (biome_) -> "[unregistered " + biome_ + "]");
     }
 
     private static String biomeNameFormatter(String oldString) {
