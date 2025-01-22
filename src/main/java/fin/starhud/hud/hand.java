@@ -6,7 +6,6 @@ import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
@@ -101,7 +100,7 @@ public class hand {
     private static void renderItemCountHUD(DrawContext context, TextRenderer textRenderer, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
         int stackAmount = getItemCount(playerInventory, stack);
 
-        context.drawTexture(RenderLayer::getGuiTextured, HAND_TEXTURE, x, y, 0.0F, v, width_count + width, height, width_count + width, 27, color);
+        Helper.drawTextureAlphaColor(context, HAND_TEXTURE, x, y, 0.0F, v, width_count + width, height, width_count + width, 27, color);
         context.drawText(textRenderer, Integer.toString(stackAmount), x + 19, y + 3, color, false);
     }
 

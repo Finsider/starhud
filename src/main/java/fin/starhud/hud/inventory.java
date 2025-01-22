@@ -6,7 +6,6 @@ import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -66,14 +65,14 @@ public class inventory {
 
                 if (!foundItem) {
                     foundItem = true;
-                    context.drawTexture(RenderLayer::getGuiTextured, INVENTORY_TEXTURE_VERTICAL, x, y, 0.0F, 0.0F, height, width, height, width);
+                    Helper.drawTextureAlpha(context, INVENTORY_TEXTURE_VERTICAL, x, y, 0.0F, 0.0F, height, width, height, width);
                 }
 
                 int x1 = x + SLOT_X_VERTICAL[i];
                 int y1 = y + SLOT_Y_VERTICAL[i];
 
                 context.drawItem(stack, x1, y1);
-                context.drawStackOverlay(textRenderer, stack, x1, y1);
+                context.drawItemInSlot(textRenderer, stack, x1, y1);
             }
         }
     }
@@ -88,14 +87,14 @@ public class inventory {
 
                 if (!foundItem) {
                     foundItem = true;
-                    context.drawTexture(RenderLayer::getGuiTextured, INVENTORY_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height);
+                    Helper.drawTextureAlpha(context, INVENTORY_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height);
                 }
 
                 int x1 = x + SLOT_X_HORIZONTAL[i];
                 int y1 = y + SLOT_Y_HORIZONTAL[i];
 
                 context.drawItem(stack, x1, y1);
-                context.drawStackOverlay(textRenderer, stack, x1, y1);
+                context.drawItemInSlot(textRenderer, stack, x1, y1);
             }
         }
     }

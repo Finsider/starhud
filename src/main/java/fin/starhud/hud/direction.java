@@ -5,7 +5,6 @@ import fin.starhud.Main;
 import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -47,7 +46,7 @@ public class direction {
             int x = Helper.calculatePositionX(direction.x, direction.originX, width_ordinal, direction.scale);
             int y = Helper.calculatePositionY(direction.y, direction.originY, height, direction.scale);
 
-            context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_INCLUDE_ORDINAL_TEXTURE, x, y, 0.0F, icon * 13, width_ordinal, height, width_ordinal, height * iconAmount_ordinal, color);
+            Helper.drawTextureAlphaColor(context, DIRECTION_INCLUDE_ORDINAL_TEXTURE, x, y, 0.0F, icon * 13, width_ordinal, height, width_ordinal, height * iconAmount_ordinal, color);
             context.drawText(client.textRenderer, Float.toString(yaw), x + textX_ordinal, y + 3, color, false);
         } else {
             int icon = getCardinalDirectionIcon(yaw);
@@ -56,7 +55,7 @@ public class direction {
             int x = Helper.calculatePositionX(direction.x, direction.originX, width_cardinal, direction.scale);
             int y = Helper.calculatePositionY(direction.y, direction.originY, height, direction.scale);
 
-            context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_TEXTURE, x, y, 0.0F, icon * 13, width_cardinal, height, width_cardinal, height * iconAmount_cardinal, color);
+            Helper.drawTextureAlphaColor(context, DIRECTION_TEXTURE, x, y, 0.0F, icon * 13, width_cardinal, height, width_cardinal, height * iconAmount_cardinal, color);
             context.drawText(client.textRenderer, Float.toString(yaw), x + textX_cardinal, y + 3, color, false);
         }
 

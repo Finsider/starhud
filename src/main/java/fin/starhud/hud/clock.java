@@ -5,7 +5,6 @@ import fin.starhud.Main;
 import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 
@@ -51,7 +50,7 @@ public class clock {
                     buildMinecraftMilitaryTimeString(hours, minutes);
         }
 
-        int icon = getWeatherOrTime(world);
+        int icon = getWeatherOrTime(world, time);
         int color = getIconColor(icon) | 0xFF000000;
 
         context.getMatrices().push();
@@ -61,13 +60,13 @@ public class clock {
             int x = Helper.calculatePositionX(clock_ingame.x, clock_ingame.originX, width_ingame_use12, clock_ingame.scale);
             int y = Helper.calculatePositionY(clock_ingame.y, clock_ingame.originY, height, clock_ingame.scale);
 
-            context.drawTexture(RenderLayer::getGuiTextured, CLOCK_12, x, y, 0.0F, icon * 13, width_ingame_use12, height, width_ingame_use12, height * 5, color);
+            Helper.drawTextureAlphaColor(context, CLOCK_12, x, y, 0.0F, icon * 13, width_ingame_use12, height, width_ingame_use12, height * 5, color);
             context.drawText(client.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
         } else {
             int x = Helper.calculatePositionX(clock_ingame.x, clock_ingame.originX, width_ingame_use24, clock_ingame.scale);
             int y = Helper.calculatePositionY(clock_ingame.y, clock_ingame.originY, height, clock_ingame.scale);
 
-            context.drawTexture(RenderLayer::getGuiTextured, CLOCK_24, x, y, 0.0F, icon * 13, width_ingame_use24, height, width_ingame_use24, height * 5, color);
+            Helper.drawTextureAlphaColor(context, CLOCK_24, x, y, 0.0F, icon * 13, width_ingame_use24, height, width_ingame_use24, height * 5, color);
             context.drawText(client.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
         }
         context.getMatrices().pop();
@@ -83,10 +82,10 @@ public class clock {
         };
     }
 
-    private static int getWeatherOrTime(ClientWorld clientWorld) {
+    private static int getWeatherOrTime(ClientWorld clientWorld, long time) {
         if (clientWorld.isThundering()) return 4;
         else if (clientWorld.isRaining()) return 3;
-        else if (clientWorld.isNight()) return 2;
+        else if ((12542 < time && time < 23460) || clientWorld.isNight()) return 2;
         else return 1;
     }
 
@@ -157,13 +156,13 @@ public class clock {
             int x = Helper.calculatePositionX(clock_system.x, clock_system.originX, width_system_use12, clock_system.scale);
             int y = Helper.calculatePositionY(clock_system.y, clock_system.originY, height, clock_system.scale);
 
-            context.drawTexture(RenderLayer::getGuiTextured, CLOCK_12, x, y, 0.0F, 0.0F, width_system_use12, height, width_system_use12, height * 5, color);
+            Helper.drawTextureAlphaColor(context, CLOCK_12, x, y, 0.0F, 0.0F, width_system_use12, height, width_system_use12, height * 5, color);
             context.drawText(client.textRenderer, systemTimeStr, x + 19, y + 3, color, false);
         } else {
             int x = Helper.calculatePositionX(clock_system.x, clock_system.originX, width_system_use24, clock_system.scale);
             int y = Helper.calculatePositionY(clock_system.y, clock_system.originY, height, clock_system.scale);
 
-            context.drawTexture(RenderLayer::getGuiTextured, CLOCK_24, x, y, 0.0F, 0.0F, width_system_use24, height, width_system_use24, height * 5, color);
+            Helper.drawTextureAlphaColor(context, CLOCK_24, x, y, 0.0F, 0.0F, width_system_use24, height, width_system_use24, height * 5, color);
             context.drawText(client.textRenderer, systemTimeStr, x + 19, y + 3, color, false);
         }
 

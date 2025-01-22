@@ -6,7 +6,6 @@ import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
@@ -54,7 +53,7 @@ public class coordinate {
     }
 
     public static void renderEachCoordinate(DrawContext context, TextRenderer textRenderer, String str, int x, int y, float v, int width, int height, int color) {
-        context.drawTexture(RenderLayer::getGuiTextured, COORD_TEXTURE, x, y, 0.0F, v, width, height, width, 41, color);
+        Helper.drawTextureAlphaColor(context, COORD_TEXTURE, x, y, 0.0F, v, width, height, width, 41, color);
         context.drawText(textRenderer, str, x + 19, y + 3, color, false);
     }
 
