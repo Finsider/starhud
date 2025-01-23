@@ -110,14 +110,17 @@ public class hand {
         int stackAmount = 0;
 
         ItemStack offhand = inventory.offHand.get(0);
-
-        if (ItemStack.areItemsAndComponentsEqual(offhand, stack)) stackAmount += offhand.getCount();
+        if (areItemsAndComponentsEqual(offhand, stack)) stackAmount += offhand.getCount();
         for (ItemStack item : inventory.main) {
-            if (!item.isEmpty() && ItemStack.areItemsAndComponentsEqual(item, stack)) {
+            if (!item.isEmpty() && areItemsAndComponentsEqual(item, stack)) {
                 stackAmount += item.getCount();
             }
         }
 
         return stackAmount;
+    }
+
+    private static boolean areItemsAndComponentsEqual(ItemStack x, ItemStack y) {
+        return x.isOf(y.getItem()) && Objects.equals(x.getNbt(), y.getNbt());
     }
 }
