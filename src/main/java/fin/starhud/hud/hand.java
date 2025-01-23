@@ -11,6 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
 
+import java.util.Objects;
+
 public class hand {
 
     private static final Identifier HAND_TEXTURE = Identifier.of("starhud", "hud/hand.png");
@@ -47,13 +49,13 @@ public class hand {
         Helper.setHUDScale(context, leftHand.scale);
 
         // either draw the durability or the amount of item in the inventory.
-        if (!leftHand.showCountOnly && item.isDamageable()) {
+        if (leftHand.showDurability && item.isDamageable()) {
             int x = Helper.calculatePositionX(leftHand.x, leftHand.originX, width, leftHand.scale)
                     - Helper.getGrowthDirection(leftHand.textureGrowth, width_durability);
             int y = Helper.calculatePositionY(leftHand.y, leftHand.originY, height, leftHand.scale);
             // Use width_count + width because we are using the same texture used in Count HUD, We don't have the texture for durability.
             Helper.renderItemDurabilityHUD(context, HAND_TEXTURE, item, x, y, 0, width_count + width, 27, leftHand.color | 0xFF000000);
-        } else {
+        } else if (leftHand.showCount) {
             int x = Helper.calculatePositionX(leftHand.x, leftHand.originX, width, leftHand.scale)
                     - Helper.getGrowthDirection(leftHand.textureGrowth, width_count);
             int y = Helper.calculatePositionY(leftHand.y, leftHand.originY, height, leftHand.scale);
@@ -82,12 +84,12 @@ public class hand {
         Helper.setHUDScale(context, rightHand.scale);
 
         // either draw the durability or the amount of item in the inventory.
-        if (!rightHand.showCountOnly && item.isDamageable()) {
+        if (rightHand.showDurability && item.isDamageable()) {
             int x = Helper.calculatePositionX(rightHand.x, rightHand.originX, width, rightHand.scale)
                     - Helper.getGrowthDirection(rightHand.textureGrowth, width_durability);
             int y = Helper.calculatePositionY(rightHand.y, rightHand.originY, height, rightHand.scale);
             Helper.renderItemDurabilityHUD(context, HAND_TEXTURE, item, x, y, 14, width_count + width, 27, rightHand.color | 0xFF000000);
-        } else {
+        } else if (rightHand.showCount) {
             int x = Helper.calculatePositionX(rightHand.x, rightHand.originX, width, rightHand.scale)
                     - Helper.getGrowthDirection(rightHand.textureGrowth, width_count);
             int y = Helper.calculatePositionY(rightHand.y, rightHand.originY, height, rightHand.scale);
@@ -109,9 +111,9 @@ public class hand {
 
         ItemStack offhand = inventory.offHand.get(0);
 
-        if (offhand.isOf(stack.getItem())) stackAmount += offhand.getCount();
+        if (ItemStack.areItemsAndComponentsEqual(offhand, stack)) stackAmount += offhand.getCount();
         for (ItemStack item : inventory.main) {
-            if (!item.isEmpty() && item.isOf(stack.getItem())) {
+            if (!item.isEmpty() && ItemStack.areItemsAndComponentsEqual(item, stack)) {
                 stackAmount += item.getCount();
             }
         }

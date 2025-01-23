@@ -193,7 +193,8 @@
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.y": "Y Offset",
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.scale": "HUD Scale",
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.textureGrowth": "HUD Growth Direction",
-  "text.autoconfig.starhud.option.handSettings.leftHandSettings.showCountOnly": "Show Item Count Only",
+  "text.autoconfig.starhud.option.handSettings.leftHandSettings.showCount": "Show Item Count",
+  "text.autoconfig.starhud.option.handSettings.leftHandSettings.showDurability": "Show Item Durability",
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.color": "HUD Color",
 
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.hideOn": "Hide The HUD On",
@@ -208,7 +209,8 @@
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.y": "Y Offset",
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.scale": "HUD Scale",
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.textureGrowth": "HUD Growth Direction",
-  "text.autoconfig.starhud.option.handSettings.rightHandSettings.showCountOnly": "Show Item Count Only",
+  "text.autoconfig.starhud.option.handSettings.rightHandSettings.showCount": "Show Item Count",
+  "text.autoconfig.starhud.option.handSettings.rightHandSettings.showDurability": "Show Item Durability",
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.color": "HUD Color",
 
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.hideOn": "Hide The HUD On",

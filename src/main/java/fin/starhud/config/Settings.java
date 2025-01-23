@@ -447,7 +447,8 @@ public class Settings implements ConfigData {
             @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
             public Helper.GrowthDirection textureGrowth = Helper.GrowthDirection.LEFT;
 
-            public boolean showCountOnly = false;
+            public boolean showCount = true;
+            public boolean showDurability = true;
 
             @ConfigEntry.ColorPicker
             public int color = 0xffb3b3;
@@ -482,7 +483,8 @@ public class Settings implements ConfigData {
             @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
             public Helper.GrowthDirection textureGrowth = Helper.GrowthDirection.RIGHT;
 
-            public boolean showCountOnly = false;
+            public boolean showCount = true;
+            public boolean showDurability = true;
 
             @ConfigEntry.ColorPicker
             public int color = 0x87ceeb;
