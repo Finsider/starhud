@@ -13,6 +13,7 @@ import net.minecraft.util.math.MathHelper;
 public class direction {
 
     private static final Settings.DirectionSettings direction = Main.settings.directionSettings;
+    private static final Settings.BaseSettings base = direction.base;
 
     private static final Identifier DIRECTION_TEXTURE = Identifier.of("starhud", "hud/direction.png");
     private static final Identifier DIRECTION_INCLUDE_ORDINAL_TEXTURE = Identifier.of("starhud", "hud/direction_ordinal.png");
@@ -31,21 +32,21 @@ public class direction {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static void renderDirectionHUD(DrawContext context) {
-        if ((direction.hideOn.f3 && Helper.isDebugHUDOpen()) || (direction.hideOn.chat && Helper.isChatFocused())) return;
+        if (Helper.IsHideOn(base.hideOn)) return;
 
         Entity playerCamera = client.cameraEntity;
 
         float yaw = Math.round(MathHelper.wrapDegrees(playerCamera.getYaw()) * 10.0F) / 10.0F;
 
         context.getMatrices().push();
-        Helper.setHUDScale(context, direction.scale);
+        Helper.setHUDScale(context, base.scale);
 
         if (direction.includeOrdinal) {
             int icon = getOrdinalDirectionIcon(yaw);
             int color = getDirectionColor(icon) | 0xFF000000;
 
-            int x = Helper.calculatePositionX(direction.x, direction.originX, width_ordinal, direction.scale);
-            int y = Helper.calculatePositionY(direction.y, direction.originY, height, direction.scale);
+            int x = Helper.calculatePositionX(base, width_ordinal);
+            int y = Helper.calculatePositionY(base, height);
 
             context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_INCLUDE_ORDINAL_TEXTURE, x, y, 0.0F, icon * 13, width_ordinal, height, width_ordinal, height * iconAmount_ordinal, color);
             context.drawText(client.textRenderer, Float.toString(yaw), x + textX_ordinal, y + 3, color, false);
@@ -53,8 +54,8 @@ public class direction {
             int icon = getCardinalDirectionIcon(yaw);
             int color = getDirectionColor(icon * 2) | 0xFF000000;
 
-            int x = Helper.calculatePositionX(direction.x, direction.originX, width_cardinal, direction.scale);
-            int y = Helper.calculatePositionY(direction.y, direction.originY, height, direction.scale);
+            int x = Helper.calculatePositionX(base, width_cardinal);
+            int y = Helper.calculatePositionY(base, height);
 
             context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_TEXTURE, x, y, 0.0F, icon * 13, width_cardinal, height, width_cardinal, height * iconAmount_cardinal, color);
             context.drawText(client.textRenderer, Float.toString(yaw), x + textX_cardinal, y + 3, color, false);

@@ -15,6 +15,7 @@ import java.util.Date;
 public class clock {
 
     private static final Settings.ClockSettings.ClockInGameSettings clock_ingame = Main.settings.clockSettings.inGameSettings;
+    private static final Settings.BaseSettings base_clock_ingame = clock_ingame.base;
 
     private static final Identifier CLOCK_12 = Identifier.of("starhud", "hud/clock_12.png");
     private static final Identifier CLOCK_24 = Identifier.of("starhud", "hud/clock_24.png");
@@ -32,7 +33,7 @@ public class clock {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static void renderInGameTimeHUD(DrawContext context) {
-        if ((clock_ingame.hideOn.f3 && Helper.isDebugHUDOpen()) || (clock_ingame.hideOn.chat && Helper.isChatFocused())) return;
+        if (Helper.IsHideOn(base_clock_ingame.hideOn)) return;
 
         ClientWorld world = client.world;
 
@@ -55,17 +56,17 @@ public class clock {
         int color = getIconColor(icon) | 0xFF000000;
 
         context.getMatrices().push();
-        Helper.setHUDScale(context, clock_ingame.scale);
+        Helper.setHUDScale(context, base_clock_ingame.scale);
 
         if (use12Hour) {
-            int x = Helper.calculatePositionX(clock_ingame.x, clock_ingame.originX, width_ingame_use12, clock_ingame.scale);
-            int y = Helper.calculatePositionY(clock_ingame.y, clock_ingame.originY, height, clock_ingame.scale);
+            int x = Helper.calculatePositionX(base_clock_ingame, width_ingame_use12);
+            int y = Helper.calculatePositionY(base_clock_ingame, height);
 
             context.drawTexture(RenderLayer::getGuiTextured, CLOCK_12, x, y, 0.0F, icon * 13, width_ingame_use12, height, width_ingame_use12, height * 5, color);
             context.drawText(client.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
         } else {
-            int x = Helper.calculatePositionX(clock_ingame.x, clock_ingame.originX, width_ingame_use24, clock_ingame.scale);
-            int y = Helper.calculatePositionY(clock_ingame.y, clock_ingame.originY, height, clock_ingame.scale);
+            int x = Helper.calculatePositionX(base_clock_ingame, width_ingame_use24);
+            int y = Helper.calculatePositionY(base_clock_ingame, height);
 
             context.drawTexture(RenderLayer::getGuiTextured, CLOCK_24, x, y, 0.0F, icon * 13, width_ingame_use24, height, width_ingame_use24, height * 5, color);
             context.drawText(client.textRenderer, minecraftTimeStr, x + 19, y + 3, color, false);
@@ -117,6 +118,7 @@ public class clock {
     }
 
     private static final Settings.ClockSettings.ClockSystemSettings clock_system = Main.settings.clockSettings.systemSettings;
+    private static final Settings.BaseSettings base_clock_system = clock_system.base;
 
     private static final SimpleDateFormat militaryTimeFormat = new SimpleDateFormat("HH:mm");
     private static final SimpleDateFormat civilianTimeFormat = new SimpleDateFormat("hh:mm a");
@@ -130,7 +132,7 @@ public class clock {
     private static boolean LAST_UPDATED_SYSTEM_USE12 = clock_system.use12Hour;
 
     public static void renderSystemTimeHUD(DrawContext context) {
-        if ((clock_system.hideOn.f3 && Helper.isDebugHUDOpen()) || (clock_system.hideOn.chat && Helper.isChatFocused())) return;
+        if (Helper.IsHideOn(base_clock_system.hideOn)) return;
 
         // update each minute
         long currentTime = System.currentTimeMillis();
@@ -151,17 +153,17 @@ public class clock {
         int color = clock_system.color | 0xFF000000;
 
         context.getMatrices().push();
-        Helper.setHUDScale(context, clock_system.scale);
+        Helper.setHUDScale(context, base_clock_system.scale);
 
         if (use12Hour) {
-            int x = Helper.calculatePositionX(clock_system.x, clock_system.originX, width_system_use12, clock_system.scale);
-            int y = Helper.calculatePositionY(clock_system.y, clock_system.originY, height, clock_system.scale);
+            int x = Helper.calculatePositionX(base_clock_system, width_system_use12);
+            int y = Helper.calculatePositionY(base_clock_system, height);
 
             context.drawTexture(RenderLayer::getGuiTextured, CLOCK_12, x, y, 0.0F, 0.0F, width_system_use12, height, width_system_use12, height * 5, color);
             context.drawText(client.textRenderer, systemTimeStr, x + 19, y + 3, color, false);
         } else {
-            int x = Helper.calculatePositionX(clock_system.x, clock_system.originX, width_system_use24, clock_system.scale);
-            int y = Helper.calculatePositionY(clock_system.y, clock_system.originY, height, clock_system.scale);
+            int x = Helper.calculatePositionX(base_clock_system, width_system_use24);
+            int y = Helper.calculatePositionY(base_clock_system, height);
 
             context.drawTexture(RenderLayer::getGuiTextured, CLOCK_24, x, y, 0.0F, 0.0F, width_system_use24, height, width_system_use24, height * 5, color);
             context.drawText(client.textRenderer, systemTimeStr, x + 19, y + 3, color, false);

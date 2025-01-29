@@ -28,11 +28,12 @@ public class hand {
     private static final int height = 13;
 
     private static final Settings.HandSettings.LeftHandSettings leftHand = Main.settings.handSettings.leftHandSettings;
+    private static final Settings.BaseSettings base_leftHand = leftHand.base;
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static void renderLeftHandHUD(DrawContext context) {
-        if ((leftHand.hideOn.f3 && Helper.isDebugHUDOpen()) || (leftHand.hideOn.chat && Helper.isChatFocused())) return;
+        if (Helper.IsHideOn(base_leftHand.hideOn)) return;
 
         PlayerInventory playerInventory = client.player.getInventory();
 
@@ -45,19 +46,19 @@ public class hand {
         if (item.isEmpty()) return;
 
         context.getMatrices().push();
-        Helper.setHUDScale(context, leftHand.scale);
+        Helper.setHUDScale(context, base_leftHand.scale);
 
         // either draw the durability or the amount of item in the inventory.
         if (leftHand.showDurability && item.isDamageable()) {
-            int x = Helper.calculatePositionX(leftHand.x, leftHand.originX, width, leftHand.scale)
+            int x = Helper.calculatePositionX(base_leftHand, width)
                     - Helper.getGrowthDirection(leftHand.textureGrowth, width_durability);
-            int y = Helper.calculatePositionY(leftHand.y, leftHand.originY, height, leftHand.scale);
+            int y = Helper.calculatePositionY(base_leftHand, height);
             // Use width_count + width because we are using the same texture used in Count HUD, We don't have the texture for durability.
             Helper.renderItemDurabilityHUD(context, HAND_TEXTURE, item, x, y, 0, width_count + width, 27, leftHand.color | 0xFF000000);
         } else if (leftHand.showCount) {
-            int x = Helper.calculatePositionX(leftHand.x, leftHand.originX, width, leftHand.scale)
+            int x = Helper.calculatePositionX(base_leftHand, width)
                     - Helper.getGrowthDirection(leftHand.textureGrowth, width_count);
-            int y = Helper.calculatePositionY(leftHand.y, leftHand.originY, height, leftHand.scale);
+            int y = Helper.calculatePositionY(base_leftHand, height);
             renderItemCountHUD(context, client.textRenderer, playerInventory, item, x, y, 0, leftHand.color | 0xFF000000);
         }
 
@@ -65,9 +66,10 @@ public class hand {
     }
 
     private static final Settings.HandSettings.RightHandSettings rightHand = Main.settings.handSettings.rightHandSettings;
+    private static final Settings.BaseSettings base_rightHand = rightHand.base;
 
     public static void renderRightHandHUD(DrawContext context) {
-        if ((rightHand.hideOn.f3 && Helper.isDebugHUDOpen()) || (rightHand.hideOn.chat && Helper.isChatFocused())) return;
+        if (Helper.IsHideOn(base_rightHand.hideOn)) return;
 
         PlayerInventory playerInventory = client.player.getInventory();
 
@@ -80,18 +82,18 @@ public class hand {
         if (item.isEmpty()) return;
 
         context.getMatrices().push();
-        Helper.setHUDScale(context, rightHand.scale);
+        Helper.setHUDScale(context, base_rightHand.scale);
 
         // either draw the durability or the amount of item in the inventory.
         if (rightHand.showDurability && item.isDamageable()) {
-            int x = Helper.calculatePositionX(rightHand.x, rightHand.originX, width, rightHand.scale)
+            int x = Helper.calculatePositionX(base_rightHand, width)
                     - Helper.getGrowthDirection(rightHand.textureGrowth, width_durability);
-            int y = Helper.calculatePositionY(rightHand.y, rightHand.originY, height, rightHand.scale);
+            int y = Helper.calculatePositionY(base_rightHand, height);
             Helper.renderItemDurabilityHUD(context, HAND_TEXTURE, item, x, y, 14, width_count + width, 27, rightHand.color | 0xFF000000);
         } else if (rightHand.showCount) {
-            int x = Helper.calculatePositionX(rightHand.x, rightHand.originX, width, rightHand.scale)
+            int x = Helper.calculatePositionX(base_rightHand, width)
                     - Helper.getGrowthDirection(rightHand.textureGrowth, width_count);
-            int y = Helper.calculatePositionY(rightHand.y, rightHand.originY, height, rightHand.scale);
+            int y = Helper.calculatePositionY(base_rightHand, height);
             renderItemCountHUD(context, client.textRenderer, playerInventory, item, x, y, 14, rightHand.color | 0xFF000000);
         }
 

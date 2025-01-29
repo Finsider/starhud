@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 public class armor {
 
     private static final Settings.ArmorSettings armor = Main.settings.armorSettings;
+    private static final Settings.BaseSettings base = armor.base;
 
     private static final Identifier ARMOR_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/armor.png");
 
@@ -24,17 +25,17 @@ public class armor {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static void renderArmorHUD(DrawContext context) {
-        if ((armor.hideOn.f3 && Helper.isDebugHUDOpen()) || (armor.hideOn.chat && Helper.isChatFocused())) return;
+        if (Helper.IsHideOn(base.hideOn)) return;
 
         initArmorConfiguration();
 
-        int x = Helper.calculatePositionX(armor.x, armor.originX, width, armor.scale);
-        int y = Helper.calculatePositionY(armor.y, armor.originY, height, armor.scale);
+        int x = Helper.calculatePositionX(base, width);
+        int y = Helper.calculatePositionY(base, height);
         
         int i = 3;
 
         context.getMatrices().push();
-        Helper.setHUDScale(context, armor.scale);
+        Helper.setHUDScale(context, base.scale);
 
         // for each armor pieces
         for (ItemStack armor : client.player.getArmorItems()) {

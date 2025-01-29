@@ -23,6 +23,7 @@ public class inventory {
     private static final int[] SLOT_Y_VERTICAL = new int[27];
 
     private static final Settings.InventorySettings inventory = Main.settings.inventorySettings;
+    private static final Settings.BaseSettings base = inventory.base;
 
     private static final int width = 206;
     private static final int height = 68;
@@ -35,20 +36,20 @@ public class inventory {
     }
 
     public static void renderInventoryHUD(DrawContext context) {
-        if ((inventory.hideOn.f3 && Helper.isDebugHUDOpen()) || (inventory.hideOn.chat && Helper.isChatFocused())) return;
+        if (Helper.IsHideOn(base.hideOn)) return;
 
         PlayerInventory playerInventory = client.player.getInventory();
 
         context.getMatrices().push();
-        Helper.setHUDScale(context, inventory.scale);
+        Helper.setHUDScale(context, base.scale);
 
         if (inventory.drawVertical) {
-            int x = Helper.calculatePositionX(inventory.x, inventory.originX, height, inventory.scale);
-            int y = Helper.calculatePositionY(inventory.y, inventory.originY, width, inventory.scale);
+            int x = Helper.calculatePositionX(base, height);
+            int y = Helper.calculatePositionY(base, width);
             drawInventoryVertical(playerInventory, client.textRenderer, context, x, y);
         } else {
-            int x = Helper.calculatePositionX(inventory.x, inventory.originX, width, inventory.scale);
-            int y = Helper.calculatePositionY(inventory.y, inventory.originY, height, inventory.scale);
+            int x = Helper.calculatePositionX(base, width);
+            int y = Helper.calculatePositionY(base, height);
             drawInventoryHorizontal(playerInventory, client.textRenderer, context, x, y);
         }
 

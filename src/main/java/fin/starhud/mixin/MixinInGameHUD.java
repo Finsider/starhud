@@ -15,16 +15,16 @@ public class MixinInGameHUD {
 
     @Inject(at = @At("TAIL"), method = "renderHotbar")
     private void renderHotbar(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        if (Main.settings.handSettings.leftHandSettings.shouldRender) hand.renderLeftHandHUD(context);
-        if (Main.settings.handSettings.rightHandSettings.shouldRender) hand.renderRightHandHUD(context);
-        if (Main.settings.armorSettings.shouldRender) armor.renderArmorHUD(context);
-        if (Main.settings.coordSettings.shouldRender) coordinate.renderCoordinateHUD(context);
-        if (Main.settings.fpsSettings.shouldRender) fps.renderFPSHUD(context);
-        if (Main.settings.pingSettings.shouldRender) ping.renderPingHUD(context);
-        if (Main.settings.clockSettings.inGameSettings.shouldRender) clock.renderInGameTimeHUD(context);
-        if (Main.settings.clockSettings.systemSettings.shouldRender) clock.renderSystemTimeHUD(context);
-        if (Main.settings.directionSettings.shouldRender) direction.renderDirectionHUD(context);
-        if (Main.settings.biomeSettings.shouldRender) biome.renderBiomeIndicatorHUD(context);
-        if (Main.settings.inventorySettings.shouldRender) inventory.renderInventoryHUD(context);
+        if (Main.settings.handSettings.leftHandSettings.base.shouldRender) hand.renderLeftHandHUD(context);
+        if (Main.settings.handSettings.rightHandSettings.base.shouldRender) hand.renderRightHandHUD(context);
+        if (Main.settings.armorSettings.base.shouldRender) armor.renderArmorHUD(context);
+        if (Main.settings.coordSettings.base.shouldRender) coordinate.renderCoordinateHUD(context);
+        if (Main.settings.fpsSettings.base.shouldRender) fps.renderFPSHUD(context);
+        if (Main.settings.pingSettings.base.shouldRender) ping.renderPingHUD(context);
+        if (Main.settings.clockSettings.inGameSettings.base.shouldRender) clock.renderInGameTimeHUD(context);
+        if (Main.settings.clockSettings.systemSettings.base.shouldRender) clock.renderSystemTimeHUD(context);
+        if (Main.settings.directionSettings.base.shouldRender) direction.renderDirectionHUD(context);
+        if (Main.settings.biomeSettings.base.shouldRender) biome.renderBiomeIndicatorHUD(context);
+        if (Main.settings.inventorySettings.base.shouldRender) inventory.renderInventoryHUD(context);
     }
 }

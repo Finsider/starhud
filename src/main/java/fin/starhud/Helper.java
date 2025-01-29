@@ -1,5 +1,6 @@
 package fin.starhud;
 
+import fin.starhud.config.Settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
@@ -81,12 +82,12 @@ public class Helper {
         return scale == 0 ? 1 : (float) window.getScaleFactor() / scale;
     }
 
-    public static int calculatePositionX(int x, ScreenAlignmentX alignmentX, int HUDWidth, int HUDScale) {
-        return x + (int) (defaultHUDAlignmentX(alignmentX, window.getScaledWidth()) * scaledX(HUDScale)) - calculateTextureOffsetX(alignmentX, HUDWidth);
+    public static int calculatePositionX(Settings.BaseSettings base, int HUDWidth) {
+        return base.x + (int) (defaultHUDAlignmentX(base.originX, window.getScaledWidth()) * scaledX(base.scale)) - calculateTextureOffsetX(base.originX, HUDWidth);
     }
 
-    public static int calculatePositionY(int y, ScreenAlignmentY alignmentY, int HUDHeight, int HUDScale) {
-        return y + (int) (defaultHUDAlignmentY(alignmentY, window.getScaledHeight()) * scaledY(HUDScale)) - calculateTextureOffsetY(alignmentY, HUDHeight);
+    public static int calculatePositionY(Settings.BaseSettings base, int HUDHeight) {
+        return base.y + (int) (defaultHUDAlignmentY(base.originY, window.getScaledHeight()) * scaledY(base.scale)) - calculateTextureOffsetY(base.originY, HUDHeight);
     }
 
     public static void setHUDScale(DrawContext context, int scale) {
@@ -123,6 +124,10 @@ public class Helper {
         // draw the durability background and steps
         context.drawTexture(RenderLayer::getGuiTextured, DURABILITY_BACKGROUND_TEXTURE, x + 14, y, 0.0F, 0.0F, 49, 13, 49, 13);
         context.drawTexture(RenderLayer::getGuiTextured, DURABILITY_TEXTURE, x + 19, y + 3, 0, 0, 4 * step, 7, 40, 7, color_dura);
+    }
+
+    public static boolean IsHideOn(Settings.HideOn hideOn) {
+        return (hideOn.f3 && isDebugHUDOpen()) || (hideOn.chat && isChatFocused());
     }
 
     public static boolean isChatFocused() {

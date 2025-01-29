@@ -17,6 +17,7 @@ import net.minecraft.world.biome.Biome;
 public class biome {
 
     private static final Settings.BiomeSettings biome = Main.settings.biomeSettings;
+    private static final Settings.BaseSettings base = biome.base;
 
     private static final Identifier DIMENSION_TEXTURE = Identifier.of("starhud", "hud/biome.png");
 
@@ -30,7 +31,7 @@ public class biome {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static void renderBiomeIndicatorHUD(DrawContext context) {
-        if ((biome.hideOn.f3 && Helper.isDebugHUDOpen()) || (biome.hideOn.chat && Helper.isChatFocused())) return;
+        if (Helper.IsHideOn(base.hideOn)) return;
 
         TextRenderer textRenderer = client.textRenderer;
 
@@ -43,15 +44,15 @@ public class biome {
             cachedTextWidth = textRenderer.getWidth(cachedFormattedBiomeStr);
         }
 
-        int x = Helper.calculatePositionX(biome.x, biome.originX, width, biome.scale)
+        int x = Helper.calculatePositionX(base, width)
                 - Helper.getGrowthDirection(biome.textGrowth, cachedTextWidth);
-        int y = Helper.calculatePositionY(biome.y, biome.originY, height, biome.scale);
+        int y = Helper.calculatePositionY(base, height);
 
         int dimensionIcon = getDimensionIcon(client.world.getRegistryKey());
         int color = getTextColorFromDimension(dimensionIcon) | 0xFF000000;
 
         context.getMatrices().push();
-        Helper.setHUDScale(context, biome.scale);
+        Helper.setHUDScale(context, base.scale);
 
         context.drawTexture(RenderLayer::getGuiTextured, DIMENSION_TEXTURE, x, y, 0.0F, dimensionIcon * height, 13, height, 13 ,52);
         Helper.fillRoundedRightSide(context, x + 14, y, x + 14 + cachedTextWidth + 9, y + height, 0x80000000);
