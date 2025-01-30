@@ -78,35 +78,29 @@ public class Settings extends PartitioningSerializer.GlobalData {
         public BaseSettings base = new BaseSettings(Helper.ScreenAlignmentX.LEFT, Helper.ScreenAlignmentY.MIDDLE, 5, -20);
 
         @CollapsibleObject
-        public HelmetSettings helmet = new HelmetSettings();
-        public static class HelmetSettings {
-            public boolean shouldRender = true;
-            public int xOffset = 0;
-            public int yOffset = 0;
-        }
+        public BaseArmorSettings helmet = new BaseArmorSettings(true, 0 , 0);
 
         @CollapsibleObject
-        public ChestplateSettings chestplate = new ChestplateSettings();
-        public static class ChestplateSettings {
-            public boolean shouldRender = true;
-            public int xOffset = 0;
-            public int yOffset = 14;
-        }
+        public BaseArmorSettings chestplate = new BaseArmorSettings(true, 0 , 14);
 
         @CollapsibleObject
-        public LeggingsSettings leggings = new LeggingsSettings();
-        public static class LeggingsSettings {
-            public boolean shouldRender = true;
-            public int xOffset = 0;
-            public int yOffset = 28;
-        }
+        public BaseArmorSettings leggings = new BaseArmorSettings(true, 0 , 28);
 
         @CollapsibleObject
-        public BootsSettings boots = new BootsSettings();
-        public static class BootsSettings {
-            public boolean shouldRender = true;
-            public int xOffset = 0;
-            public int yOffset = 42;
+        public BaseArmorSettings boots = new BaseArmorSettings(true, 0 , 42);
+
+        public static class BaseArmorSettings {
+            public boolean shouldRender;
+            @Comment("X Offset to origin X location")
+            public int xOffset;
+            @Comment("Y Offset to origin Y location")
+            public int yOffset;
+
+            public BaseArmorSettings(boolean shouldRender, int xOffset, int yOffset) {
+                this.shouldRender = shouldRender;
+                this.xOffset = xOffset;
+                this.yOffset = yOffset;
+            }
         }
     }
 
