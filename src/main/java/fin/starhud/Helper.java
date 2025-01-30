@@ -9,9 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class Helper {
 
@@ -129,7 +126,7 @@ public class Helper {
         context.drawTexture(RenderLayer::getGuiTextured, DURABILITY_TEXTURE, x + 19, y + 3, 0, 0, 4 * step, 7, 40, 7, color_dura);
     }
 
-    public static boolean IsHideOn(Settings.HideOn hideOn) {
+    public static boolean isHideOn(Settings.HideOn hideOn) {
         return (hideOn.f3 && isDebugHUDOpen()) || (hideOn.chat && isChatFocused());
     }
 

@@ -35,7 +35,7 @@ public class ping {
     }
 
     public static void renderPingHUD(DrawContext context) {
-        if (Helper.IsHideOn(base.hideOn)) return;
+        if (Helper.isHideOn(base.hideOn)) return;
         if (client.isInSingleplayer()) return;
 
         MultiValueDebugSampleLogImpl pingLog = client.getDebugHud().getPingLog();

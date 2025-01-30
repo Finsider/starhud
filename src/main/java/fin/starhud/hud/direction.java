@@ -39,7 +39,7 @@ public class direction {
     }
 
     public static void renderDirectionHUD(DrawContext context) {
-        if (Helper.IsHideOn(base.hideOn)) return;
+        if (Helper.isHideOn(base.hideOn)) return;
 
         Entity playerCamera = client.cameraEntity;
 

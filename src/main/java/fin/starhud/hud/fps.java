@@ -28,16 +28,15 @@ public class fps {
     }
 
     public static void renderFPSHUD(DrawContext context) {
-        if (Helper.IsHideOn(base.hideOn)) return;
+        if (Helper.isHideOn(base.hideOn)) return;
 
         String fpsStr = client.getCurrentFps() + " FPS";
 
         int color = fps.color | 0xFF000000;
 
-
         Helper.renderHUD(context, base.scale, () -> {
             context.drawTexture(RenderLayer::getGuiTextured, FPS_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height, color);
-            context.drawText(client.textRenderer, fpsStr, x + 19, y + 3, color, false);
+            context.drawText(client.textRenderer, fpsStr, x + 19, y + 3, fps.color | 0xFF000000, false);
         });
     }
 

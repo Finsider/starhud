@@ -55,7 +55,7 @@ public class clock {
     }
 
     public static void renderInGameTimeHUD(DrawContext context) {
-        if (Helper.IsHideOn(base_clock_ingame.hideOn)) return;
+        if (Helper.isHideOn(base_clock_ingame.hideOn)) return;
 
         ClientWorld world = client.world;
 
@@ -135,7 +135,7 @@ public class clock {
     private static int y_system;
 
     public static void renderSystemTimeHUD(DrawContext context) {
-        if (Helper.IsHideOn(base_clock_system.hideOn)) return;
+        if (Helper.isHideOn(base_clock_system.hideOn)) return;
 
         // update each minute
         long currentTime = System.currentTimeMillis();

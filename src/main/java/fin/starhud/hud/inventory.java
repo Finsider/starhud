@@ -40,7 +40,7 @@ public class inventory {
     }
 
     public static void renderInventoryHUD(DrawContext context) {
-        if (Helper.IsHideOn(base.hideOn)) return;
+        if (Helper.isHideOn(base.hideOn)) return;
 
         PlayerInventory playerInventory = client.player.getInventory();
 

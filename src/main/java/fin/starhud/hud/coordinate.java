@@ -34,7 +34,7 @@ public class coordinate {
     }
 
     public static void renderCoordinateHUD(DrawContext context) {
-        if (Helper.IsHideOn(base.hideOn)) return;
+        if (Helper.isHideOn(base.hideOn)) return;
 
         TextRenderer textRenderer = client.textRenderer;
 

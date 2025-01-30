@@ -38,7 +38,7 @@ public class biome {
     }
 
     public static void renderBiomeIndicatorHUD(DrawContext context) {
-        if (Helper.IsHideOn(base.hideOn)) return;
+        if (Helper.isHideOn(base.hideOn)) return;
 
         TextRenderer textRenderer = client.textRenderer;
 
@@ -59,7 +59,7 @@ public class biome {
         Helper.renderHUD(context, base.scale, () -> {
             context.drawTexture(RenderLayer::getGuiTextured, DIMENSION_TEXTURE, x1, y, 0.0F, dimensionIcon * height, 13, height, 13 ,52);
             Helper.fillRoundedRightSide(context, x1 + 14, y, x1 + 14 + cachedTextWidth + 9, y + height, 0x80000000);
-            context.drawText(client.textRenderer, cachedFormattedBiomeStr, x1 + 19, y + 3, color, false);
+            context.drawText(textRenderer, cachedFormattedBiomeStr, x1 + 19, y + 3, color, false);
         });
     }
 

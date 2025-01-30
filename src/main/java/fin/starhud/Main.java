@@ -2,7 +2,6 @@ package fin.starhud;
 
 import fin.starhud.config.Settings;
 import fin.starhud.hud.*;
-
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;

@@ -32,7 +32,7 @@ public class armor {
     }
 
     public static void renderArmorHUD(DrawContext context) {
-        if (Helper.IsHideOn(base.hideOn)) return;
+        if (Helper.isHideOn(base.hideOn)) return;
 
         Helper.renderHUD(context, base.scale, () -> {
             int i = 3;

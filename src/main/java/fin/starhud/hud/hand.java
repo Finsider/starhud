@@ -56,16 +56,16 @@ public class hand {
     }
 
     private static void renderHandHUD(DrawContext context, Settings.HandSettings.BaseHandSettings hand, Settings.BaseSettings base, Arm arm, int x, int y) {
-        if (Helper.IsHideOn(base.hideOn)) return;
+        if (Helper.isHideOn(base.hideOn)) return;
 
         PlayerInventory playerInventory = client.player.getInventory();
 
         ItemStack stack = getItemInHand(playerInventory, arm);
         if (stack.isEmpty()) return;
 
-        // either draw the durability or the amount of item in the inventory.
         float v = arm == Arm.RIGHT ? 14 : 0;
 
+        // either draw the durability or the amount of item in the inventory.
         Helper.renderHUD(context, base.scale, () -> {
             if (hand.showDurability && stack.isDamageable()) {
                 int x1 = x - Helper.getGrowthDirection(hand.textureGrowth, width_durability);
