@@ -24,31 +24,29 @@ public class armor {
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
+    private static int x;
+    private static int y;
+
+    static {
+        initArmorConfiguration();
+    }
+
     public static void renderArmorHUD(DrawContext context) {
         if (Helper.IsHideOn(base.hideOn)) return;
 
-        initArmorConfiguration();
-
-        int x = Helper.calculatePositionX(base, width);
-        int y = Helper.calculatePositionY(base, height);
-        
-        int i = 3;
-
-        context.getMatrices().push();
-        Helper.setHUDScale(context, base.scale);
-
-        // for each armor pieces
-        for (ItemStack armor : client.player.getArmorItems()) {
-            if (SHOULD_RENDER[i] && !armor.isEmpty() && armor.isDamageable()) {
-                Helper.renderItemDurabilityHUD(context, ARMOR_BACKGROUND_TEXTURE, armor, x + X_OFFSETS[i], y + Y_OFFSETS[i], 14 * i,13,  55, 0xFFFFFFFF);
+        Helper.renderHUD(context, base.scale, () -> {
+            int i = 3;
+            for (ItemStack armor : client.player.getArmorItems()) {
+                if (SHOULD_RENDER[i] && !armor.isEmpty() && armor.isDamageable()) {
+                    Helper.renderItemDurabilityHUD(context, ARMOR_BACKGROUND_TEXTURE, armor, x + X_OFFSETS[i], y + Y_OFFSETS[i], 14 * i,13,  55, 0xFFFFFFFF);
+                }
+                --i;
             }
-            --i;
-        }
+        });
 
-        context.getMatrices().pop();
     }
 
-    private static void initArmorConfiguration() {
+    public static void initArmorConfiguration() {
         X_OFFSETS[0] = armor.helmet.xOffset;        Y_OFFSETS[0] = armor.helmet.yOffset;
         X_OFFSETS[1] = armor.chestplate.xOffset;    Y_OFFSETS[1] = armor.chestplate.yOffset;
         X_OFFSETS[2] = armor.leggings.xOffset;      Y_OFFSETS[2] = armor.leggings.yOffset;
@@ -58,6 +56,9 @@ public class armor {
         SHOULD_RENDER[1] = armor.chestplate.shouldRender;
         SHOULD_RENDER[2] = armor.leggings.shouldRender;
         SHOULD_RENDER[3] = armor.boots.shouldRender;
+
+        x = Helper.calculatePositionX(base, width);
+        y = Helper.calculatePositionY(base, height);
     }
 
 }

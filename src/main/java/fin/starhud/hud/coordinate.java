@@ -26,10 +26,16 @@ public class coordinate {
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
+    private static int x;
+    private static int y;
+
+    static {
+        initCoordinateConfiguration();
+    }
+
     public static void renderCoordinateHUD(DrawContext context) {
         if (Helper.IsHideOn(base.hideOn)) return;
 
-        initCoordinateConfiguration();
         TextRenderer textRenderer = client.textRenderer;
 
         Vec3d vec3d = client.player.getPos();
@@ -38,21 +44,15 @@ public class coordinate {
         String coordY = Integer.toString((int) vec3d.y);
         String coordZ = Integer.toString((int) vec3d.z);
 
-        int x = Helper.calculatePositionX(base, width);
-        int y = Helper.calculatePositionY(base, height);
-
         int colorX = coord.coordXSettings.color | 0xFF000000;
         int colorY = coord.coordYSettings.color | 0xFF000000;
         int colorZ = coord.coordZSettings.color | 0xFF000000;
 
-        context.getMatrices().push();
-        Helper.setHUDScale(context, base.scale);
-
-        if (SHOULD_RENDER[0]) renderEachCoordinate(context, textRenderer, coordX, x + X_OFFSETS[0], y + Y_OFFSETS[0], 0.0F, width, height, colorX);
-        if (SHOULD_RENDER[1]) renderEachCoordinate(context, textRenderer, coordY, x + X_OFFSETS[1], y + Y_OFFSETS[1], 14.0F, width, height, colorY);
-        if (SHOULD_RENDER[2]) renderEachCoordinate(context, textRenderer, coordZ, x + X_OFFSETS[2], y + Y_OFFSETS[2], 28.0F, width, height, colorZ);
-
-        context.getMatrices().pop();
+        Helper.renderHUD(context, base.scale, () -> {
+            if (SHOULD_RENDER[0]) renderEachCoordinate(context, textRenderer, coordX, x + X_OFFSETS[0], y + Y_OFFSETS[0], 0.0F, width, height, colorX);
+            if (SHOULD_RENDER[1]) renderEachCoordinate(context, textRenderer, coordY, x + X_OFFSETS[1], y + Y_OFFSETS[1], 14.0F, width, height, colorY);
+            if (SHOULD_RENDER[2]) renderEachCoordinate(context, textRenderer, coordZ, x + X_OFFSETS[2], y + Y_OFFSETS[2], 28.0F, width, height, colorZ);
+        });
     }
 
     public static void renderEachCoordinate(DrawContext context, TextRenderer textRenderer, String str, int x, int y, float v, int width, int height, int color) {
@@ -60,7 +60,7 @@ public class coordinate {
         context.drawText(textRenderer, str, x + 19, y + 3, color, false);
     }
 
-    private static void initCoordinateConfiguration() {
+    public static void initCoordinateConfiguration() {
         X_OFFSETS[0] = coord.coordXSettings.xOffset; Y_OFFSETS[0] = coord.coordXSettings.yOffset;
         X_OFFSETS[1] = coord.coordYSettings.xOffset; Y_OFFSETS[1] = coord.coordYSettings.yOffset;
         X_OFFSETS[2] = coord.coordZSettings.xOffset; Y_OFFSETS[2] = coord.coordZSettings.yOffset;
@@ -68,5 +68,8 @@ public class coordinate {
         SHOULD_RENDER[0] = coord.coordXSettings.shouldRender;
         SHOULD_RENDER[1] = coord.coordYSettings.shouldRender;
         SHOULD_RENDER[2] = coord.coordZSettings.shouldRender;
+
+        x = Helper.calculatePositionX(base, width);
+        y = Helper.calculatePositionY(base, height);
     }
 }

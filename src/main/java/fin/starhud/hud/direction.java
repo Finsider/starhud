@@ -31,6 +31,13 @@ public class direction {
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
+    private static int x;
+    private static int y;
+
+    static {
+        initDirectionConfiguration();
+    }
+
     public static void renderDirectionHUD(DrawContext context) {
         if (Helper.IsHideOn(base.hideOn)) return;
 
@@ -38,30 +45,21 @@ public class direction {
 
         float yaw = Math.round(MathHelper.wrapDegrees(playerCamera.getYaw()) * 10.0F) / 10.0F;
 
-        context.getMatrices().push();
-        Helper.setHUDScale(context, base.scale);
+        Helper.renderHUD(context, base.scale, () -> {
+            if (direction.includeOrdinal) {
+                int icon = getOrdinalDirectionIcon(yaw);
+                int color = getDirectionColor(icon) | 0xFF000000;
 
-        if (direction.includeOrdinal) {
-            int icon = getOrdinalDirectionIcon(yaw);
-            int color = getDirectionColor(icon) | 0xFF000000;
+                context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_INCLUDE_ORDINAL_TEXTURE, x, y, 0.0F, icon * 13, width_ordinal, height, width_ordinal, height * iconAmount_ordinal, color);
+                context.drawText(client.textRenderer, Float.toString(yaw), x + textX_ordinal, y + 3, color, false);
+            } else {
+                int icon = getCardinalDirectionIcon(yaw);
+                int color = getDirectionColor(icon * 2) | 0xFF000000;
 
-            int x = Helper.calculatePositionX(base, width_ordinal);
-            int y = Helper.calculatePositionY(base, height);
-
-            context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_INCLUDE_ORDINAL_TEXTURE, x, y, 0.0F, icon * 13, width_ordinal, height, width_ordinal, height * iconAmount_ordinal, color);
-            context.drawText(client.textRenderer, Float.toString(yaw), x + textX_ordinal, y + 3, color, false);
-        } else {
-            int icon = getCardinalDirectionIcon(yaw);
-            int color = getDirectionColor(icon * 2) | 0xFF000000;
-
-            int x = Helper.calculatePositionX(base, width_cardinal);
-            int y = Helper.calculatePositionY(base, height);
-
-            context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_TEXTURE, x, y, 0.0F, icon * 13, width_cardinal, height, width_cardinal, height * iconAmount_cardinal, color);
-            context.drawText(client.textRenderer, Float.toString(yaw), x + textX_cardinal, y + 3, color, false);
-        }
-
-        context.getMatrices().pop();
+                context.drawTexture(RenderLayer::getGuiTextured, DIRECTION_TEXTURE, x, y, 0.0F, icon * 13, width_cardinal, height, width_cardinal, height * iconAmount_cardinal, color);
+                context.drawText(client.textRenderer, Float.toString(yaw), x + textX_cardinal, y + 3, color, false);
+            }
+        });
     }
 
     private static int getOrdinalDirectionIcon(float yaw) {
@@ -96,5 +94,14 @@ public class direction {
             case 7 -> direction.directionColor.se;
             default -> 0xFFFFFF;
         };
+    }
+
+    public static void initDirectionConfiguration() {
+        if (direction.includeOrdinal)
+            x = Helper.calculatePositionX(base, width_ordinal);
+        else
+            x = Helper.calculatePositionX(base, width_cardinal);
+
+        y = Helper.calculatePositionY(base, height);
     }
 }

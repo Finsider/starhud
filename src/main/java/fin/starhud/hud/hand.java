@@ -8,6 +8,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
@@ -27,77 +28,57 @@ public class hand {
     private static final int width_count = 23;
     private static final int height = 13;
 
-    private static final Settings.HandSettings.LeftHandSettings leftHand = Main.settings.handSettings.leftHandSettings;
-    private static final Settings.BaseSettings base_leftHand = leftHand.base;
+    private static final Settings.HandSettings.BaseHandSettings leftHand = Main.settings.handSettings.leftHandSettings.hand;
+    private static final Settings.BaseSettings base_leftHand = Main.settings.handSettings.leftHandSettings.base;
+
+    private static final Settings.HandSettings.BaseHandSettings rightHand = Main.settings.handSettings.rightHandSettings.hand;
+    private static final Settings.BaseSettings base_rightHand = Main.settings.handSettings.rightHandSettings.base;
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
-    public static void renderLeftHandHUD(DrawContext context) {
-        if (Helper.IsHideOn(base_leftHand.hideOn)) return;
+    private static int x_leftHand;
+    private static int y_leftHand;
 
-        PlayerInventory playerInventory = client.player.getInventory();
+    private static int x_rightHand;
+    private static int y_rightHand;
 
-        ItemStack item;
-        if (client.player.getMainArm() == Arm.LEFT)
-            item = playerInventory.getMainHandStack();
-        else
-            item = playerInventory.offHand.get(0);
-
-        if (item.isEmpty()) return;
-
-        context.getMatrices().push();
-        Helper.setHUDScale(context, base_leftHand.scale);
-
-        // either draw the durability or the amount of item in the inventory.
-        if (leftHand.showDurability && item.isDamageable()) {
-            int x = Helper.calculatePositionX(base_leftHand, width)
-                    - Helper.getGrowthDirection(leftHand.textureGrowth, width_durability);
-            int y = Helper.calculatePositionY(base_leftHand, height);
-            // Use width_count + width because we are using the same texture used in Count HUD, We don't have the texture for durability.
-            Helper.renderItemDurabilityHUD(context, HAND_TEXTURE, item, x, y, 0, width_count + width, 27, leftHand.color | 0xFF000000);
-        } else if (leftHand.showCount) {
-            int x = Helper.calculatePositionX(base_leftHand, width)
-                    - Helper.getGrowthDirection(leftHand.textureGrowth, width_count);
-            int y = Helper.calculatePositionY(base_leftHand, height);
-            renderItemCountHUD(context, client.textRenderer, playerInventory, item, x, y, 0, leftHand.color | 0xFF000000);
-        }
-
-        context.getMatrices().pop();
+    static {
+        initLeftHandConfiguration();
+        initRightHandConfiguration();
     }
 
-    private static final Settings.HandSettings.RightHandSettings rightHand = Main.settings.handSettings.rightHandSettings;
-    private static final Settings.BaseSettings base_rightHand = rightHand.base;
+    public static void renderLeftHandHUD(DrawContext context) {
+        renderHandHUD(context, leftHand, base_leftHand, Arm.LEFT, x_leftHand, y_leftHand);
+    }
 
     public static void renderRightHandHUD(DrawContext context) {
-        if (Helper.IsHideOn(base_rightHand.hideOn)) return;
+        renderHandHUD(context, rightHand, base_rightHand, Arm.RIGHT, x_rightHand, y_rightHand);
+    }
+
+    private static void renderHandHUD(DrawContext context, Settings.HandSettings.BaseHandSettings hand, Settings.BaseSettings base, Arm arm, int x, int y) {
+        if (Helper.IsHideOn(base.hideOn)) return;
 
         PlayerInventory playerInventory = client.player.getInventory();
 
-        ItemStack item;
-        if (client.player.getMainArm() == Arm.LEFT)
-            item = playerInventory.offHand.get(0);
-        else
-            item = playerInventory.getMainHandStack();
-
-        if (item.isEmpty()) return;
-
-        context.getMatrices().push();
-        Helper.setHUDScale(context, base_rightHand.scale);
+        ItemStack stack = getItemInHand(playerInventory, arm);
+        if (stack.isEmpty()) return;
 
         // either draw the durability or the amount of item in the inventory.
-        if (rightHand.showDurability && item.isDamageable()) {
-            int x = Helper.calculatePositionX(base_rightHand, width)
-                    - Helper.getGrowthDirection(rightHand.textureGrowth, width_durability);
-            int y = Helper.calculatePositionY(base_rightHand, height);
-            Helper.renderItemDurabilityHUD(context, HAND_TEXTURE, item, x, y, 14, width_count + width, 27, rightHand.color | 0xFF000000);
-        } else if (rightHand.showCount) {
-            int x = Helper.calculatePositionX(base_rightHand, width)
-                    - Helper.getGrowthDirection(rightHand.textureGrowth, width_count);
-            int y = Helper.calculatePositionY(base_rightHand, height);
-            renderItemCountHUD(context, client.textRenderer, playerInventory, item, x, y, 14, rightHand.color | 0xFF000000);
-        }
+        float v = arm == Arm.RIGHT ? 14 : 0;
 
-        context.getMatrices().pop();
+        Helper.renderHUD(context, base.scale, () -> {
+            if (hand.showDurability && stack.isDamageable()) {
+                int x1 = x - Helper.getGrowthDirection(hand.textureGrowth, width_durability);
+                Helper.renderItemDurabilityHUD(context, HAND_TEXTURE, stack, x1, y, v, width_count + width, 27, hand.color | 0xFF000000);
+            } else if (hand.showCount) {
+                int x1 = x - Helper.getGrowthDirection(hand.textureGrowth, width_count);
+                renderItemCountHUD(context, client.textRenderer, playerInventory, stack, x1, y, v, hand.color | 0xFF000000);
+            }
+        });
+    }
+
+    private static ItemStack getItemInHand(PlayerInventory playerInventory, Arm arm) {
+        return client.player.getMainArm() == arm ? playerInventory.getMainHandStack() : playerInventory.offHand.get(0);
     }
 
     private static void renderItemCountHUD(DrawContext context, TextRenderer textRenderer, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
@@ -110,18 +91,30 @@ public class hand {
     private static int getItemCount(PlayerInventory inventory, ItemStack stack) {
         int stackAmount = 0;
 
-        for (ItemStack item : inventory.offHand)
-            if (!item.isEmpty() && ItemStack.areItemsAndComponentsEqual(item, stack))
-                stackAmount += item.getCount();
+        ItemStack offHand = inventory.offHand.get(0);
+        if (!offHand.isEmpty() && ItemStack.areItemsAndComponentsEqual(stack, offHand))
+            stackAmount += offHand.getCount();
 
         for (ItemStack item : inventory.main)
             if (!item.isEmpty() && ItemStack.areItemsAndComponentsEqual(item, stack))
                 stackAmount += item.getCount();
 
+        if (stack.getItem() instanceof ArmorItem) {
         for (ItemStack item : inventory.armor)
             if (!item.isEmpty() && ItemStack.areItemsAndComponentsEqual(item, stack))
                 stackAmount += item.getCount();
+        }
 
         return stackAmount;
+    }
+
+    public static void initLeftHandConfiguration() {
+        x_leftHand = Helper.calculatePositionX(base_leftHand, width);
+        y_leftHand = Helper.calculatePositionY(base_leftHand, height);
+    }
+
+    public static void initRightHandConfiguration() {
+        x_rightHand = Helper.calculatePositionX(base_rightHand, width);
+        y_rightHand = Helper.calculatePositionY(base_rightHand, height);
     }
 }

@@ -27,6 +27,13 @@ public class ping {
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
+    private static int x;
+    private static int y;
+
+    static {
+        initPingConfiguration();
+    }
+
     public static void renderPingHUD(DrawContext context) {
         if (Helper.IsHideOn(base.hideOn)) return;
         if (client.isInSingleplayer()) return;
@@ -49,20 +56,14 @@ public class ping {
         long currentPing = pingLog.get(pingLogLen - 1);
         String pingStr = currentPing + " ms";
 
-        int x = Helper.calculatePositionX(base, width);
-        int y = Helper.calculatePositionY(base, height);
-
         // 0, 150, 300, 450
         int step = Math.min((int) currentPing / 150, 3);
         int color = getPingColor(step) | 0xFF000000;
 
-        context.getMatrices().push();
-        Helper.setHUDScale(context, base.scale);
-
-        context.drawTexture(RenderLayer::getGuiTextured, PING_TEXTURE, x, y, 0.0F, step * 13, width, height, width, height * 4, color);
-        context.drawText(client.textRenderer, pingStr, x + 19, y + 3, color, false);
-
-        context.getMatrices().pop();
+        Helper.renderHUD(context, base.scale, () -> {
+            context.drawTexture(RenderLayer::getGuiTextured, PING_TEXTURE, x, y, 0.0F, step * 13, width, height, width, height * 4, color);
+            context.drawText(client.textRenderer, pingStr, x + 19, y + 3, color, false);
+        });
     }
 
     public static int getPingColor(int step) {
@@ -82,5 +83,10 @@ public class ping {
             LAST_PING_UPDATE = current_time;
             pingMeasurer.ping();
         }
+    }
+
+    public static void initPingConfiguration() {
+        x = Helper.calculatePositionX(base, width);
+        y = Helper.calculatePositionY(base, height);
     }
 }

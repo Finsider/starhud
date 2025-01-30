@@ -10,22 +10,22 @@
   "text.autoconfig.starhud.option.armorSettings.base.scale": "HUD Scale",
 
   "text.autoconfig.starhud.option.armorSettings.helmet": "Helmet",
-  "text.autoconfig.starhud.option.armorSettings.helmet.base.shouldRender": "Show Helmet HUD",
+  "text.autoconfig.starhud.option.armorSettings.helmet.shouldRender": "Show Helmet HUD",
   "text.autoconfig.starhud.option.armorSettings.helmet.xOffset": "X Offset to default X location",
   "text.autoconfig.starhud.option.armorSettings.helmet.yOffset": "Y Offset to default Y location",
 
   "text.autoconfig.starhud.option.armorSettings.chestplate": "Chestplate",
-  "text.autoconfig.starhud.option.armorSettings.chestplate.base.shouldRender": "Show Chestplate HUD",
+  "text.autoconfig.starhud.option.armorSettings.chestplate.shouldRender": "Show Chestplate HUD",
   "text.autoconfig.starhud.option.armorSettings.chestplate.xOffset": "X Offset to default X location",
   "text.autoconfig.starhud.option.armorSettings.chestplate.yOffset": "Y Offset to default Y location",
 
   "text.autoconfig.starhud.option.armorSettings.leggings": "Leggings",
-  "text.autoconfig.starhud.option.armorSettings.leggings.base.shouldRender": "Show Leggings HUD",
+  "text.autoconfig.starhud.option.armorSettings.leggings.shouldRender": "Show Leggings HUD",
   "text.autoconfig.starhud.option.armorSettings.leggings.xOffset": "X Offset to default X location",
   "text.autoconfig.starhud.option.armorSettings.leggings.yOffset": "Y Offset to default Y location",
 
   "text.autoconfig.starhud.option.armorSettings.boots": "Boots",
-  "text.autoconfig.starhud.option.armorSettings.boots.base.shouldRender": "Show Boots HUD",
+  "text.autoconfig.starhud.option.armorSettings.boots.shouldRender": "Show Boots HUD",
   "text.autoconfig.starhud.option.armorSettings.boots.xOffset": "X Offset to default X location",
   "text.autoconfig.starhud.option.armorSettings.boots.yOffset": "Y Offset to default Y location",
 
@@ -42,19 +42,19 @@
   "text.autoconfig.starhud.option.coordSettings.base.scale": "HUD Scale",
 
   "text.autoconfig.starhud.option.coordSettings.coordXSettings": "X Coordinate",
-  "text.autoconfig.starhud.option.coordSettings.coordXSettings.base.shouldRender": "Show X Coordinate HUD",
+  "text.autoconfig.starhud.option.coordSettings.coordXSettings.shouldRender": "Show X Coordinate HUD",
   "text.autoconfig.starhud.option.coordSettings.coordXSettings.xOffset": "X Offset to default X location",
   "text.autoconfig.starhud.option.coordSettings.coordXSettings.yOffset": "Y Offset to default Y location",
   "text.autoconfig.starhud.option.coordSettings.coordXSettings.color": "X Coordinate Color",
 
   "text.autoconfig.starhud.option.coordSettings.coordYSettings": "Y Coordinate",
-  "text.autoconfig.starhud.option.coordSettings.coordYSettings.base.shouldRender": "Show Y Coordinate HUD",
+  "text.autoconfig.starhud.option.coordSettings.coordYSettings.shouldRender": "Show Y Coordinate HUD",
   "text.autoconfig.starhud.option.coordSettings.coordYSettings.xOffset": "X Offset to default X location",
   "text.autoconfig.starhud.option.coordSettings.coordYSettings.yOffset": "Y Offset to default Y location",
   "text.autoconfig.starhud.option.coordSettings.coordYSettings.color": "Y Coordinate Color",
 
   "text.autoconfig.starhud.option.coordSettings.coordZSettings": "Z Coordinate",
-  "text.autoconfig.starhud.option.coordSettings.coordZSettings.base.shouldRender": "Show Z Coordinate HUD",
+  "text.autoconfig.starhud.option.coordSettings.coordZSettings.shouldRender": "Show Z Coordinate HUD",
   "text.autoconfig.starhud.option.coordSettings.coordZSettings.xOffset": "X Offset to default X location",
   "text.autoconfig.starhud.option.coordSettings.coordZSettings.yOffset": "Y Offset to default Y location",
   "text.autoconfig.starhud.option.coordSettings.coordZSettings.color": "Z Coordinate Color",
@@ -126,7 +126,7 @@
   "text.autoconfig.starhud.option.clockSettings.systemSettings.base.x": "X Offset",
   "text.autoconfig.starhud.option.clockSettings.systemSettings.base.y": "Y Offset",
   "text.autoconfig.starhud.option.clockSettings.systemSettings.base.scale": "HUD Scale",
-  "text.autoconfig.starhud.option.clockSettings.systemSettings.use12Hour": "Use 12 Hour Format",
+  "text.autoconfig.starhud.option.clockSettings.systemSettings.clock.use12Hour": "Use 12 Hour Format",
   "text.autoconfig.starhud.option.clockSettings.systemSettings.color": "System Clock Color",
 
   "text.autoconfig.starhud.option.clockSettings.systemSettings.base.hideOn": "Hide The HUD On",
@@ -140,7 +140,7 @@
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.base.x": "X Offset",
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.base.y": "Y Offset",
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.base.scale": "HUD Scale",
-  "text.autoconfig.starhud.option.clockSettings.inGameSettings.use12Hour": "Use 12 Hour Format",
+  "text.autoconfig.starhud.option.clockSettings.inGameSettings.clock.use12Hour": "Use 12 Hour Format",
 
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.color": "In-Game Clock Colors",
   "text.autoconfig.starhud.option.clockSettings.inGameSettings.color.day": "Daytime Color",
@@ -192,10 +192,11 @@
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.base.x": "X Offset",
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.base.y": "Y Offset",
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.base.scale": "HUD Scale",
-  "text.autoconfig.starhud.option.handSettings.leftHandSettings.textureGrowth": "HUD Growth Direction",
-  "text.autoconfig.starhud.option.handSettings.leftHandSettings.showCount": "Show Item Count",
-  "text.autoconfig.starhud.option.handSettings.leftHandSettings.showDurability": "Show Item Durability",
-  "text.autoconfig.starhud.option.handSettings.leftHandSettings.color": "HUD Color",
+
+  "text.autoconfig.starhud.option.handSettings.leftHandSettings.hand.textureGrowth": "HUD Growth Direction",
+  "text.autoconfig.starhud.option.handSettings.leftHandSettings.hand.showCount": "Show Item Count",
+  "text.autoconfig.starhud.option.handSettings.leftHandSettings.hand.showDurability": "Show Item Durability",
+  "text.autoconfig.starhud.option.handSettings.leftHandSettings.hand.color": "HUD Color",
 
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.base.hideOn": "Hide The HUD On",
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.base.hideOn.f3": "Hide on F3",
@@ -208,10 +209,11 @@
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.base.x": "X Offset",
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.base.y": "Y Offset",
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.base.scale": "HUD Scale",
-  "text.autoconfig.starhud.option.handSettings.rightHandSettings.textureGrowth": "HUD Growth Direction",
-  "text.autoconfig.starhud.option.handSettings.rightHandSettings.showCount": "Show Item Count",
-  "text.autoconfig.starhud.option.handSettings.rightHandSettings.showDurability": "Show Item Durability",
-  "text.autoconfig.starhud.option.handSettings.rightHandSettings.color": "HUD Color",
+
+  "text.autoconfig.starhud.option.handSettings.rightHandSettings.hand.textureGrowth": "HUD Growth Direction",
+  "text.autoconfig.starhud.option.handSettings.rightHandSettings.hand.showCount": "Show Item Count",
+  "text.autoconfig.starhud.option.handSettings.rightHandSettings.hand.showDurability": "Show Item Durability",
+  "text.autoconfig.starhud.option.handSettings.rightHandSettings.hand.color": "HUD Color",
 
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.base.hideOn": "Hide The HUD On",
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.base.hideOn.f3": "Hide on F3",

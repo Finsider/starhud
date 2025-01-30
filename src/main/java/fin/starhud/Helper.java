@@ -9,6 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class Helper {
 
@@ -128,6 +131,19 @@ public class Helper {
 
     public static boolean IsHideOn(Settings.HideOn hideOn) {
         return (hideOn.f3 && isDebugHUDOpen()) || (hideOn.chat && isChatFocused());
+    }
+
+    public static void renderHUD(DrawContext context, int scale, Runnable runnable) {
+        if (scale == 0) {
+            runnable.run();
+        } else {
+            context.getMatrices().push();
+            setHUDScale(context, scale);
+
+            runnable.run();
+
+            context.getMatrices().pop();
+        }
     }
 
     public static boolean isChatFocused() {

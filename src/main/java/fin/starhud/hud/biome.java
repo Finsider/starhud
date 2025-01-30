@@ -30,6 +30,13 @@ public class biome {
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
+    private static int x;
+    private static int y;
+
+    static {
+        initBiomeConfiguration();
+    }
+
     public static void renderBiomeIndicatorHUD(DrawContext context) {
         if (Helper.IsHideOn(base.hideOn)) return;
 
@@ -44,21 +51,16 @@ public class biome {
             cachedTextWidth = textRenderer.getWidth(cachedFormattedBiomeStr);
         }
 
-        int x = Helper.calculatePositionX(base, width)
-                - Helper.getGrowthDirection(biome.textGrowth, cachedTextWidth);
-        int y = Helper.calculatePositionY(base, height);
-
         int dimensionIcon = getDimensionIcon(client.world.getRegistryKey());
         int color = getTextColorFromDimension(dimensionIcon) | 0xFF000000;
 
-        context.getMatrices().push();
-        Helper.setHUDScale(context, base.scale);
+        int x1 = x - Helper.getGrowthDirection(biome.textGrowth, cachedTextWidth);
 
-        context.drawTexture(RenderLayer::getGuiTextured, DIMENSION_TEXTURE, x, y, 0.0F, dimensionIcon * height, 13, height, 13 ,52);
-        Helper.fillRoundedRightSide(context, x + 14, y, x + 14 + cachedTextWidth + 9, y + height, 0x80000000);
-        context.drawText(client.textRenderer, cachedFormattedBiomeStr, x + 19, y + 3, color, false);
-
-        context.getMatrices().pop();
+        Helper.renderHUD(context, base.scale, () -> {
+            context.drawTexture(RenderLayer::getGuiTextured, DIMENSION_TEXTURE, x1, y, 0.0F, dimensionIcon * height, 13, height, 13 ,52);
+            Helper.fillRoundedRightSide(context, x1 + 14, y, x1 + 14 + cachedTextWidth + 9, y + height, 0x80000000);
+            context.drawText(client.textRenderer, cachedFormattedBiomeStr, x1 + 19, y + 3, color, false);
+        });
     }
 
     private static int getDimensionIcon(RegistryKey<World> registryKey) {
@@ -99,5 +101,10 @@ public class biome {
         }
 
         return new String(chars);
+    }
+
+    public static void initBiomeConfiguration() {
+        x = Helper.calculatePositionX(base, width);
+        y = Helper.calculatePositionY(base, height);
     }
 }

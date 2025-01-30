@@ -47,16 +47,6 @@ public class Settings extends PartitioningSerializer.GlobalData {
             this.hideOn = new HideOn();
         }
 
-        public BaseSettings(boolean shouldRender, Helper.ScreenAlignmentX originX, Helper.ScreenAlignmentY originY, int x, int y) {
-            this.shouldRender = shouldRender;
-            this.originX = originX;
-            this.originY = originY;
-            this.x = x;
-            this.y = y;
-            this.scale = 0;
-            this.hideOn = new HideOn();
-        }
-
         public BaseSettings(boolean shouldRender, Helper.ScreenAlignmentX originX, Helper.ScreenAlignmentY originY, int x, int y, int scale) {
             this.shouldRender = shouldRender;
             this.originX = originX;
@@ -131,39 +121,30 @@ public class Settings extends PartitioningSerializer.GlobalData {
         public BaseSettings base = new BaseSettings(Helper.ScreenAlignmentX.LEFT, Helper.ScreenAlignmentY.TOP, 5, 5);
 
         @CollapsibleObject
-        public CoordXSettings coordXSettings = new CoordXSettings();
-        public static class CoordXSettings {
-            public boolean shouldRender = true;
-            @Comment("X Offset to origin X location")
-            public int xOffset = 0;
-            @Comment("Y Offset to origin Y location")
-            public int yOffset = 0;
-            @ColorPicker
-            public int color = 0xFC7871;
-        }
+        public BaseCoordSettings coordXSettings = new BaseCoordSettings(true, 0, 0, 0xFC7871);
 
         @CollapsibleObject
-        public CoordYSettings coordYSettings = new CoordYSettings();
-        public static class CoordYSettings {
-            public boolean shouldRender = true;
-            @Comment("X Offset to origin X location")
-            public int xOffset = 0;
-            @Comment("Y Offset to origin Y location")
-            public int yOffset = 14;
-            @ColorPicker
-            public int color = 0xA6F1AF;
-        }
+        public BaseCoordSettings coordYSettings = new BaseCoordSettings(true, 0, 14, 0xA6F1AF);
 
         @CollapsibleObject
-        public CoordZSettings coordZSettings = new CoordZSettings();
-        public static class CoordZSettings {
-            public boolean shouldRender = true;
+        public BaseCoordSettings coordZSettings = new BaseCoordSettings(true, 0, 28, 0x6CE1FC);
+
+        public static class BaseCoordSettings {
+            public boolean shouldRender;
+
             @Comment("X Offset to origin X location")
-            public int xOffset = 0;
+            public int xOffset;
             @Comment("Y Offset to origin Y location")
-            public int yOffset = 28;
+            public int yOffset;
             @ColorPicker
-            public int color = 0x6CE1FC;
+            public int color;
+
+            public BaseCoordSettings(boolean shouldRender, int xOffset, int yOffset, int color) {
+                this.shouldRender = shouldRender;
+                this.xOffset = xOffset;
+                this.yOffset = yOffset;
+                this.color = color;
+            }
         }
     }
 
@@ -253,7 +234,8 @@ public class Settings extends PartitioningSerializer.GlobalData {
             @TransitiveObject
             public BaseSettings base = new BaseSettings(Helper.ScreenAlignmentX.RIGHT, Helper.ScreenAlignmentY.BOTTOM, -5, -5);
 
-            public boolean use12Hour = false;
+            @TransitiveObject
+            public BaseClockSettings clock = new BaseClockSettings();
 
             @ColorPicker
             public int color = 0xFFFFFF;
@@ -266,7 +248,8 @@ public class Settings extends PartitioningSerializer.GlobalData {
             @TransitiveObject
             public BaseSettings base = new BaseSettings(Helper.ScreenAlignmentX.CENTER, Helper.ScreenAlignmentY.TOP, -29, 19);
 
-            public boolean use12Hour = false;
+            @TransitiveObject
+            public BaseClockSettings clock = new BaseClockSettings();
 
             @CollapsibleObject
             public ClockInGameColorSettings color = new ClockInGameColorSettings();
@@ -280,6 +263,10 @@ public class Settings extends PartitioningSerializer.GlobalData {
                 @ColorPicker
                 public int thunder = 0x8faecb;
             }
+        }
+
+        public static class BaseClockSettings {
+            public boolean use12Hour = false;
         }
     }
 
@@ -334,15 +321,9 @@ public class Settings extends PartitioningSerializer.GlobalData {
             @TransitiveObject
             public BaseSettings base = new BaseSettings(Helper.ScreenAlignmentX.CENTER, Helper.ScreenAlignmentY.BOTTOM, -108, -25);
 
-            @Comment("Which way should the HUD goes when a the texture increases?")
-            @EnumHandler(option = EnumHandler.EnumDisplayOption.BUTTON)
-            public Helper.GrowthDirection textureGrowth = Helper.GrowthDirection.LEFT;
+            @TransitiveObject
+            public BaseHandSettings hand = new BaseHandSettings(Helper.GrowthDirection.LEFT, true, true, 0xffb3b3);
 
-            public boolean showCount = true;
-            public boolean showDurability = true;
-
-            @ColorPicker
-            public int color = 0xffb3b3;
         }
 
         @CollapsibleObject
@@ -352,15 +333,27 @@ public class Settings extends PartitioningSerializer.GlobalData {
             @TransitiveObject
             public BaseSettings base = new BaseSettings(Helper.ScreenAlignmentX.CENTER, Helper.ScreenAlignmentY.BOTTOM, 108, -25);
 
+            @TransitiveObject
+            public BaseHandSettings hand = new BaseHandSettings(Helper.GrowthDirection.RIGHT, true, true, 0x87ceeb);
+
+        }
+
+        public static class BaseHandSettings {
             @Comment("Which way should the HUD goes when a the texture increases?")
             @EnumHandler(option = EnumHandler.EnumDisplayOption.BUTTON)
-            public Helper.GrowthDirection textureGrowth = Helper.GrowthDirection.RIGHT;
+            public Helper.GrowthDirection textureGrowth;
 
-            public boolean showCount = true;
-            public boolean showDurability = true;
-
+            public boolean showCount;
+            public boolean showDurability;
             @ColorPicker
-            public int color = 0x87ceeb;
+            public int color;
+
+            public BaseHandSettings(Helper.GrowthDirection textureGrowth, boolean showCount, boolean showDurability, int color) {
+                this.textureGrowth = textureGrowth;
+                this.showCount = showCount;
+                this.showDurability = showDurability;
+                this.color = color;
+            }
         }
     }
 }

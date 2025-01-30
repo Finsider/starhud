@@ -20,22 +20,29 @@ public class fps {
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
+    private static int x;
+    private static int y;
+
+    static {
+        initFPSConfiguration();
+    }
+
     public static void renderFPSHUD(DrawContext context) {
         if (Helper.IsHideOn(base.hideOn)) return;
 
         String fpsStr = client.getCurrentFps() + " FPS";
 
-        int x = Helper.calculatePositionX(base, width);
-        int y = Helper.calculatePositionY(base, height);
-
         int color = fps.color | 0xFF000000;
 
-        context.getMatrices().push();
-        Helper.setHUDScale(context, base.scale);
 
-        context.drawTexture(RenderLayer::getGuiTextured, FPS_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height, color);
-        context.drawText(client.textRenderer, fpsStr, x + 19, y + 3, color, false);
+        Helper.renderHUD(context, base.scale, () -> {
+            context.drawTexture(RenderLayer::getGuiTextured, FPS_TEXTURE, x, y, 0.0F, 0.0F, width, height, width, height, color);
+            context.drawText(client.textRenderer, fpsStr, x + 19, y + 3, color, false);
+        });
+    }
 
-        context.getMatrices().pop();
+    public static void initFPSConfiguration() {
+        x = Helper.calculatePositionX(base, width);
+        y = Helper.calculatePositionY(base, height);
     }
 }

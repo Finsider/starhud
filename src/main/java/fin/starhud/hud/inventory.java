@@ -30,9 +30,13 @@ public class inventory {
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
+    private static int x;
+    private static int y;
+
     static {
         preComputeHorizontal();
         preComputeVertical();
+        initInventoryConfiguration();
     }
 
     public static void renderInventoryHUD(DrawContext context) {
@@ -40,20 +44,12 @@ public class inventory {
 
         PlayerInventory playerInventory = client.player.getInventory();
 
-        context.getMatrices().push();
-        Helper.setHUDScale(context, base.scale);
-
-        if (inventory.drawVertical) {
-            int x = Helper.calculatePositionX(base, height);
-            int y = Helper.calculatePositionY(base, width);
-            drawInventoryVertical(playerInventory, client.textRenderer, context, x, y);
-        } else {
-            int x = Helper.calculatePositionX(base, width);
-            int y = Helper.calculatePositionY(base, height);
-            drawInventoryHorizontal(playerInventory, client.textRenderer, context, x, y);
-        }
-
-        context.getMatrices().pop();
+        Helper.renderHUD(context, base.scale, () -> {
+            if (inventory.drawVertical)
+                drawInventoryVertical(playerInventory, client.textRenderer, context, x, y);
+            else
+                drawInventoryHorizontal(playerInventory, client.textRenderer, context, x, y);
+        });
     }
 
     private static void drawInventoryVertical(PlayerInventory inventory, TextRenderer textRenderer, DrawContext context, int x, int y) {
@@ -132,6 +128,16 @@ public class inventory {
             SLOT_Y_VERTICAL[i] = y1;
 
             y1 += 23;
+        }
+    }
+
+    public static void initInventoryConfiguration() {
+        if (inventory.drawVertical) {
+            x = Helper.calculatePositionX(base, height);
+            y = Helper.calculatePositionY(base, width);
+        } else {
+            x = Helper.calculatePositionX(base, width);
+            y = Helper.calculatePositionY(base, height);
         }
     }
 }
