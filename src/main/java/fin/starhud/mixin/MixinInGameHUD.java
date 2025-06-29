@@ -1,7 +1,6 @@
 package fin.starhud.mixin;
 
-import fin.starhud.Main;
-import fin.starhud.hud.*;
+import fin.starhud.hud.HUDComponent;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,16 +13,14 @@ public class MixinInGameHUD {
 
     @Inject(at = @At("TAIL"), method = "renderHotbar")
     private void renderHotbar(float tickDelta, DrawContext context, CallbackInfo ci) {
-        if (Main.settings.handSettings.leftHandSettings.shouldRender) hand.renderLeftHandHUD(context);
-        if (Main.settings.handSettings.rightHandSettings.shouldRender) hand.renderRightHandHUD(context);
-        if (Main.settings.armorSettings.shouldRender) armor.renderArmorHUD(context);
-        if (Main.settings.coordSettings.shouldRender) coordinate.renderCoordinateHUD(context);
-        if (Main.settings.fpsSettings.shouldRender) fps.renderFPSHUD(context);
-        if (Main.settings.pingSettings.shouldRender) ping.renderPingHUD(context);
-        if (Main.settings.clockSettings.inGameSettings.shouldRender) clock.renderInGameTimeHUD(context);
-        if (Main.settings.clockSettings.systemSettings.shouldRender) clock.renderSystemTimeHUD(context);
-        if (Main.settings.directionSettings.shouldRender) direction.renderDirectionHUD(context);
-        if (Main.settings.biomeSettings.shouldRender) biome.renderBiomeIndicatorHUD(context);
-        if (Main.settings.inventorySettings.shouldRender) inventory.renderInventoryHUD(context);
+        HUDComponent.getInstance().renderAll(context);
+    }
+
+    @Inject(at = @At("HEAD"), method = "renderStatusEffectOverlay", cancellable = true)
+    private void renderStatusEffectOverlay(DrawContext context, CallbackInfo ci) {
+        if (HUDComponent.getInstance().effectHUD.shouldRender()) {
+            HUDComponent.getInstance().effectHUD.render(context);
+            ci.cancel();
+        }
     }
 }
