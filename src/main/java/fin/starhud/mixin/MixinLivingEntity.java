@@ -1,6 +1,7 @@
 package fin.starhud.mixin;
 
 import fin.starhud.helper.StatusEffectAttribute;
+import fin.starhud.hud.HUDComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
@@ -19,6 +20,9 @@ public class MixinLivingEntity {
 
     @Inject(method = "setStatusEffect", at = @At("HEAD"))
     private void onSetStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
+        if (!HUDComponent.getInstance().effectHUD.shouldRender())
+            return;
+
         StatusEffectAttribute statusEffectAttribute = StatusEffectAttribute.getStatusEffectAttribute(effect);
 
         if (StatusEffectAttribute.shouldUpdate(effect, statusEffectAttribute))
