@@ -52,7 +52,7 @@ public class Helper {
         return CLIENT.currentScreen instanceof ChatScreen;
     }
     public static boolean isDebugHUDOpen() {
-        return CLIENT.options.debugEnabled;
+        return CLIENT.getDebugHud().shouldShowDebugHud();
     }
 
     public static boolean isBossBarShown() {
