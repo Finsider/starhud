@@ -3,6 +3,7 @@ package fin.starhud;
 import fin.starhud.mixin.accessor.AccessorBossBarHud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.util.math.MathHelper;
 
@@ -75,5 +76,17 @@ public class Helper {
 
     public static boolean isOffHandOverlayShown() {
         return !CLIENT.player.getEquippedStack(EquipmentSlot.OFFHAND).isEmpty();
+    }
+
+    public static boolean isStatusBarsShown() {
+        return CLIENT.interactionManager.hasStatusBars();
+    }
+
+    public static boolean isArmorBarShown() {
+        return isStatusBarsShown() && CLIENT.player.getArmor() > 0;
+    }
+
+    public static boolean isAirBubbleBarShown() {
+        return isStatusBarsShown() && CLIENT.player.isSubmergedIn(FluidTags.WATER) || CLIENT.player.getAir() < CLIENT.player.getMaxAir();
     }
 }
