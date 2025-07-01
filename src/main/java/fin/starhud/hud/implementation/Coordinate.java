@@ -5,7 +5,6 @@ import fin.starhud.config.hud.CoordSettings;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -27,7 +26,6 @@ public class Coordinate extends AbstractHUD {
 
     @Override
     public void renderHUD(DrawContext context) {
-        TextRenderer textRenderer = CLIENT.textRenderer;
         Vec3d vec3d = CLIENT.player.getPos();
 
         String coordX = Integer.toString((int) vec3d.x);

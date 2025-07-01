@@ -16,6 +16,8 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -117,12 +119,13 @@ public class Effect extends AbstractHUD {
                 );
             }
 
+            int duration = statusEffectInstance.getDuration();
+
             int step, color;
             if (statusEffectInstance.isInfinite()) {
                 step = 7;
                 color = effectSettings.infiniteColor | 0xFF000000;
             } else {
-                int duration = statusEffectInstance.getDuration();
                 int maxDuration = statusEffectAttribute.maxDuration();
 
                 step = Helper.getStep(duration, maxDuration, 7);
@@ -140,6 +143,13 @@ public class Effect extends AbstractHUD {
                     color
             );
 
+            float alpha = 1.0F;
+            if (duration <= 200) { // minecraft's status effect blinking.
+                int n = 10 - duration / 20;
+                alpha = MathHelper.clamp((float)duration / 10.0F / 5.0F * 0.5F, 0.0F, 0.5F) + MathHelper.cos((float)duration * (float)Math.PI / 5.0F) * MathHelper.clamp((float)n / 10.0F * 0.25F, 0.0F, 0.25F);
+                alpha = MathHelper.clamp(alpha, 0.0F, 1.0F);
+            }
+
             // draw effect texture.
             RenderUtils.drawTextureHUD(
                     context,
@@ -147,7 +157,8 @@ public class Effect extends AbstractHUD {
                     x2 + 3, y2 + 3,
                     0,0,
                     18, 18,
-                    18,18
+                    18,18,
+                    ColorHelper.getWhite(alpha)
             );
 
             // draw amplifier text.

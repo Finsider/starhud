@@ -4,7 +4,6 @@ import fin.starhud.Main;
 import fin.starhud.config.hud.ClockSystemSettings;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
@@ -29,8 +28,6 @@ public class ClockSystem extends AbstractHUD {
 
     private static final int TEXTURE_SYSTEM_12_WIDTH = 65;
     private static final int TEXTURE_SYSTEM_24_WIDTH = 49;
-
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     public ClockSystem() {
         super(CLOCK_SYSTEM_SETTINGS.base);

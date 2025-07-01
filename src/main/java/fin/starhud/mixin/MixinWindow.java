@@ -13,7 +13,7 @@ public class MixinWindow {
     // we update our HUD when the scaleWidth / scaleHeight is changed.
     // although quite silly, but This is the best performance we can get.
     @Inject(method = "setScaleFactor", at = @At("TAIL"))
-    public void onScaleChanged(int scaleFactor, CallbackInfo ci) {
+    public void onScaleChanged(double scaleFactor, CallbackInfo ci) {
         HUDComponent.getInstance().updateAll();
     }
 }
