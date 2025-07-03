@@ -5,6 +5,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Style;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -91,6 +93,7 @@ public class RenderUtils {
     }
 
     public static void drawTextHUD(DrawContext context, String str, int x, int y, int color, boolean shadow) {
-        context.drawText(CLIENT.textRenderer, str, x , y, color, shadow);
+        OrderedText orderedText = OrderedText.styledForwardsVisitedString(str, Style.EMPTY);
+        context.drawText(CLIENT.textRenderer, orderedText, x , y, color, shadow);
     }
 }
