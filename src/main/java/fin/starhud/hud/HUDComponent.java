@@ -28,6 +28,7 @@ public class HUDComponent {
         huds.add(new Ping());
         huds.add(new LeftHand());
         huds.add(new RightHand());
+        huds.add(new TargetedCrosshair());
 
         effectHUD = new Effect();
     }
