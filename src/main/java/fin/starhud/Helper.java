@@ -44,6 +44,30 @@ public class Helper {
         return String.valueOf(chars);
     }
 
+    public static String idNameFormatter(String oldString) {
+
+        // trim every character from ':' until first index
+        oldString = oldString.substring(oldString.indexOf(':') + 1);
+
+        char[] chars = oldString.toCharArray();
+
+        if (chars.length == 0) return "-";
+
+        chars[0] = Character.toUpperCase(chars[0]);
+        for (int i = 1; i < chars.length; ++i) {
+            if (chars[i] != '_') continue;
+
+            chars[i] = ' ';
+
+            // capitalize the first character after spaces
+            if (i + 1 < chars.length) {
+                chars[i + 1] = Character.toUpperCase(chars[i + 1]);
+            }
+        }
+
+        return new String(chars);
+    }
+
     public static int getStep(int curr, int max, int maxStep) {
         return MathHelper.clamp(Math.round((float) curr * maxStep / (float) max), 0, maxStep);
     }
