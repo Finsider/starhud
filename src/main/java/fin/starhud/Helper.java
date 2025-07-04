@@ -1,10 +1,13 @@
 package fin.starhud;
 
 import fin.starhud.mixin.accessor.AccessorBossBarHud;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 
@@ -42,6 +45,37 @@ public class Helper {
         }
 
         return String.valueOf(chars);
+    }
+
+    // convert (modname:snake_case) into (Snake Case)
+    public static String idNameFormatter(String id) {
+
+        // trim every character from ':' until first index
+        id = id.substring(id.indexOf(':') + 1);
+
+        char[] chars = id.toCharArray();
+
+        if (chars.length == 0) return "-";
+
+        chars[0] = Character.toUpperCase(chars[0]);
+        for (int i = 1; i < chars.length; ++i) {
+            if (chars[i] != '_') continue;
+
+            chars[i] = ' ';
+
+            // capitalize the first character after spaces
+            if (i + 1 < chars.length) {
+                chars[i + 1] = Character.toUpperCase(chars[i + 1]);
+            }
+        }
+
+        return new String(chars);
+    }
+
+    public static String getModName(Identifier id) {
+        String nameSpace = id.getNamespace();
+        ModContainer container = FabricLoader.getInstance().getModContainer(nameSpace).orElse(null);
+        return container == null ? nameSpace : container.getMetadata().getName();
     }
 
     public static int getStep(int curr, int max, int maxStep) {

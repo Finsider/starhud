@@ -1,5 +1,6 @@
 package fin.starhud.hud.implementation;
 
+import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.hud.BiomeSettings;
 import fin.starhud.helper.RenderUtils;
@@ -40,7 +41,7 @@ public class Biome extends AbstractHUD {
         RegistryEntry<net.minecraft.world.biome.Biome> currentBiome = CLIENT.world.getBiome(blockPos);
 
         if (cachedBiome != currentBiome) {
-            cachedFormattedBiomeStr = biomeNameFormatter(currentBiome.getIdAsString());
+            cachedFormattedBiomeStr = Helper.idNameFormatter(currentBiome.getIdAsString());
             cachedBiome = currentBiome;
             cachedTextWidth = textRenderer.getWidth(cachedFormattedBiomeStr);
         }
@@ -69,30 +70,6 @@ public class Biome extends AbstractHUD {
             case 2 -> BIOME_SETTINGS.color.end;
             default -> BIOME_SETTINGS.color.custom;
         };
-    }
-
-    private static String biomeNameFormatter(String oldString) {
-
-        // trim every character from ':' until first index
-        oldString = oldString.substring(oldString.indexOf(':') + 1);
-
-        char[] chars = oldString.toCharArray();
-
-        if (chars.length == 0) return "-";
-
-        chars[0] = Character.toUpperCase(chars[0]);
-        for (int i = 1; i < chars.length; ++i) {
-            if (chars[i] != '_') continue;
-
-            chars[i] = ' ';
-
-            // capitalize the first character after spaces
-            if (i + 1 < chars.length) {
-                chars[i + 1] = Character.toUpperCase(chars[i + 1]);
-            }
-        }
-
-        return new String(chars);
     }
 
     @Override
