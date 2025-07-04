@@ -96,4 +96,8 @@ public class RenderUtils {
         OrderedText orderedText = OrderedText.styledForwardsVisitedString(str, Style.EMPTY);
         context.drawText(CLIENT.textRenderer, orderedText, x , y, color, shadow);
     }
+
+    public static void drawTextHUD(DrawContext context, OrderedText text, int x, int y, int color, boolean shadow) {
+        context.drawText(CLIENT.textRenderer, text, x, y, color, shadow);
+    }
 }
