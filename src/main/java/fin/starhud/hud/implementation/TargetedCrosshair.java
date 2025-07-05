@@ -6,22 +6,24 @@ import fin.starhud.config.ConditionalSettings;
 import fin.starhud.config.hud.TargetedCrosshairSettings;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.WaterCreatureEntity;
-import net.minecraft.entity.passive.AxolotlEntity;
+import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -87,64 +89,129 @@ public class TargetedCrosshair extends AbstractHUD {
         }
     }
 
+    private BlockState cachedBlockState = null;
+    private OrderedText cachedBlockName = null;
+    private String cachedBlockModName = null;
+    private int cachedBlockMaxWidth = -1;
+
     public void renderBlockInfoHUD(DrawContext context) {
         BlockPos pos = ((BlockHitResult) CLIENT.crosshairTarget).getBlockPos();
         BlockState blockState = CLIENT.world.getBlockState(pos);
 
-        ItemStack blockStack = blockState.getBlock().asItem().getDefaultStack();
+        Block block = blockState.getBlock();
+        Item blockItem = block.asItem();
+        ItemStack blockStack = blockItem.getDefaultStack();
 
-        Text blockName;
-        if (blockState.getBlock().asItem() == Items.AIR) {
-            blockName = Text.translatable(blockState.getBlock().getTranslationKey());
-        } else {
-            blockName = blockStack.getName();
+        if (!blockState.equals(cachedBlockState)) {
+            cachedBlockState = blockState;
+
+            if (blockItem == Items.AIR) cachedBlockName = Text.translatable(block.getTranslationKey()).asOrderedText();
+            else cachedBlockName = blockStack.getName().asOrderedText();
+
+            cachedBlockModName = Helper.getModName(Registries.BLOCK.getId(block));
+
+            int blockNameWidth = CLIENT.textRenderer.getWidth(cachedBlockName);
+            int modNameWidth = CLIENT.textRenderer.getWidth(cachedBlockModName);
+            cachedBlockMaxWidth = Math.max(modNameWidth, blockNameWidth) - 1;
         }
-        String modName = Helper.getModName(Registries.BLOCK.getId(blockState.getBlock()));
 
-        int blockNameWidth = CLIENT.textRenderer.getWidth(blockName);
-        int modNameWidth = CLIENT.textRenderer.getWidth(modName);
+        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.textureGrowth.getGrowthDirection(cachedBlockMaxWidth);
 
-        int maxWidth = Math.max(modNameWidth, blockNameWidth);
-        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.textureGrowth.getGrowthDirection(maxWidth);
-
-        RenderUtils.drawTextureHUD(context, ICON_BACKGROUND_TEXTURE, xTemp, y, 0, 0, ICON_BACKGROUND_WIDTH, ICON_BACKGROUND_HEIGHT, ICON_BACKGROUND_WIDTH, ICON_BACKGROUND_HEIGHT);
-        RenderUtils.fillRoundedRightSide(context, xTemp + 3 + 16 + 3 + 1, y, xTemp + 3 + 16 + 3 + 1 + 5 + maxWidth - 1 + 5, y + ICON_BACKGROUND_HEIGHT, 0x80000000);
+        RenderUtils.drawTextureHUD(
+                context,
+                ICON_BACKGROUND_TEXTURE,
+                xTemp, y,
+                0, 0,
+                ICON_BACKGROUND_WIDTH, ICON_BACKGROUND_HEIGHT,
+                ICON_BACKGROUND_WIDTH, ICON_BACKGROUND_HEIGHT
+        );
+        RenderUtils.fillRoundedRightSide(
+                context,
+                xTemp + ICON_BACKGROUND_WIDTH + 1, y,
+                xTemp + ICON_BACKGROUND_WIDTH + 1 + 5 + cachedBlockMaxWidth + 5, y + ICON_BACKGROUND_HEIGHT,
+                0x80000000
+        );
 
         context.drawItem(blockStack, xTemp + 3, y + 3);
-        RenderUtils.drawTextHUD(context, blockName.asOrderedText(), xTemp + 3 + 16 + 3 + 1 + 5, y + 3, 0xFFFFFFFF, false);
-        RenderUtils.drawTextHUD(context, modName, xTemp + 3 + 16 + 3 + 1 + 5, y + ICON_BACKGROUND_HEIGHT - 3 - 7, TARGETED_CROSSHAIR_SETTINGS.modNameColor | 0xFF000000, false);
+        RenderUtils.drawTextHUD(
+                context,
+                cachedBlockName,
+                xTemp + ICON_BACKGROUND_WIDTH + 1 + 5, y + 3,
+                TARGETED_CROSSHAIR_SETTINGS.targetedNameColor | 0xFF000000,
+                false
+        );
+        RenderUtils.drawTextHUD(
+                context,
+                cachedBlockModName,
+                xTemp + ICON_BACKGROUND_WIDTH + 1 + 5,
+                y + ICON_BACKGROUND_HEIGHT - 3 - 7,
+                TARGETED_CROSSHAIR_SETTINGS.modNameColor | 0xFF000000,
+                false
+        );
     }
+
+    private Entity cachedTargetedEntity = null;
+    private OrderedText cachedEntityName = null;
+    private String cachedEntityModName = null;
+    private int cachedEntityMaxWidth = -1;
+    private int cachedIndex = -1;
 
     public void renderEntityInfoHUD(DrawContext context) {
         Entity targetedEntity = MinecraftClient.getInstance().targetedEntity;
 
-        Text entityName = targetedEntity.getName();
-        String modName = Helper.getModName(Registries.ENTITY_TYPE.getId(targetedEntity.getType()));
+        if (!targetedEntity.equals(cachedTargetedEntity)) {
+            cachedTargetedEntity = targetedEntity;
+            cachedEntityName = targetedEntity.getName().asOrderedText();
+            cachedEntityModName = Helper.getModName(Registries.ENTITY_TYPE.getId(targetedEntity.getType()));
 
-        int entityNameWidth = CLIENT.textRenderer.getWidth(entityName);
-        int modNameWidth = CLIENT.textRenderer.getWidth(modName);
-        int maxWidth = Math.max(entityNameWidth, modNameWidth);
+            int entityNameWidth = CLIENT.textRenderer.getWidth(cachedEntityName);
+            int modNameWidth = CLIENT.textRenderer.getWidth(cachedEntityModName);
+            cachedEntityMaxWidth = Math.max(entityNameWidth, modNameWidth) - 1;
 
-        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.textureGrowth.getGrowthDirection(maxWidth);
+            cachedIndex = getEntityIconIndex(targetedEntity);
+        }
 
-        int index = getEntityIconIndex(targetedEntity);
-        int color = getEntityIconColor(index) | 0xFF000000;
+        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.textureGrowth.getGrowthDirection(cachedEntityMaxWidth);
 
-        RenderUtils.drawTextureHUD(context, ENTITY_ICON_TEXTURE, xTemp, y, 0, 22 * index, ICON_BACKGROUND_WIDTH, ICON_BACKGROUND_HEIGHT, ICON_BACKGROUND_WIDTH, ICON_BACKGROUND_HEIGHT * 5, color);
-        RenderUtils.fillRoundedRightSide(context, xTemp + 3 + 16 + 3 + 1, y, xTemp + 3 + 16 + 3 + 1 + 5 + maxWidth - 1 + 5, y + ICON_BACKGROUND_HEIGHT, 0x80000000);
+        int color = getEntityIconColor(cachedIndex) | 0xFF000000;
 
-        // this is very, very broken, so I decided to give up on drawing the entity directly on the HUD.
-        // InventoryScreen.drawEntity()
+        RenderUtils.drawTextureHUD(
+                context,
+                ENTITY_ICON_TEXTURE,
+                xTemp, y,
+                0, 22 * cachedIndex,
+                ICON_BACKGROUND_WIDTH, ICON_BACKGROUND_HEIGHT,
+                ICON_BACKGROUND_WIDTH, ICON_BACKGROUND_HEIGHT * 5,
+                color
+        );
+        RenderUtils.fillRoundedRightSide(
+                context,
+                xTemp + ICON_BACKGROUND_WIDTH + 1, y,
+                xTemp + ICON_BACKGROUND_WIDTH + 1 + 5 + cachedEntityMaxWidth + 5, y + ICON_BACKGROUND_HEIGHT,
+                0x80000000
+        );
 
-        RenderUtils.drawTextHUD(context, entityName.asOrderedText(), xTemp + 3 + 16 + 3 + 1 + 5, y + 3, color, false);
-        RenderUtils.drawTextHUD(context, modName, xTemp + 3 + 16 + 3 +1 + 5, y + ICON_BACKGROUND_HEIGHT - 3 - 7, TARGETED_CROSSHAIR_SETTINGS.modNameColor | 0xFF000000, false);
+        RenderUtils.drawTextHUD(
+                context,
+                cachedEntityName,
+                xTemp + ICON_BACKGROUND_WIDTH + 1 + 5, y + 3,
+                color,
+                false
+        );
+        RenderUtils.drawTextHUD(
+                context,
+                cachedEntityModName,
+                xTemp + ICON_BACKGROUND_WIDTH + 1 + 5, y + ICON_BACKGROUND_HEIGHT - 3 - 7,
+                TARGETED_CROSSHAIR_SETTINGS.modNameColor | 0xFF000000,
+                false
+        );
     }
 
     private int getEntityIconIndex(Entity e) {
-        if (e instanceof Monster || e.getType() == EntityType.ENDER_DRAGON) return 0;
-        if (e instanceof Angerable) return 1;
-        if (e instanceof PassiveEntity || e instanceof AxolotlEntity || e instanceof WaterCreatureEntity) return 2;
-        if (e instanceof PlayerEntity) return 3;
+        if (isHostileMob(e)) return 0;
+        else if (isAngerableMob(e)) return 1;
+        else if (isPassiveMob(e)) return 2;
+        else if (isPlayerEntity(e)) return 3;
         else return 4;
     }
 
@@ -156,6 +223,32 @@ public class TargetedCrosshair extends AbstractHUD {
             case 3 -> TARGETED_CROSSHAIR_SETTINGS.entityColors.player;
             default -> TARGETED_CROSSHAIR_SETTINGS.entityColors.unknown;
         };
+    }
+
+    private static boolean isHostileMob(Entity e) {
+        return switch (e) {
+            case EnderDragonEntity ignored -> true;
+            case Monster ignored -> true;
+            default -> false;
+        };
+    }
+
+    private static boolean isAngerableMob(Entity e) {
+        return e instanceof Angerable;
+    }
+
+    private static boolean isPassiveMob(Entity e) {
+        return switch (e) {
+            case PassiveEntity ignored -> true;
+            case WaterCreatureEntity ignored -> true;
+            case AllayEntity ignored -> true;
+            case SnowGolemEntity ignored -> true;
+            default -> false;
+        };
+    }
+
+    private static boolean isPlayerEntity(Entity e) {
+        return e instanceof PlayerEntity;
     }
 
     @Override

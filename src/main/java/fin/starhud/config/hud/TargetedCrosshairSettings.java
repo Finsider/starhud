@@ -15,7 +15,10 @@ public class TargetedCrosshairSettings {
     public GrowthDirectionX textureGrowth = GrowthDirectionX.CENTER;
 
     @ConfigEntry.ColorPicker
-    public int modNameColor = 0xCFCFCF;
+    public int modNameColor = 0xddebf5;
+
+    @ConfigEntry.ColorPicker
+    public int targetedNameColor = 0xFFFFFF;
 
     @ConfigEntry.Gui.CollapsibleObject
     public Colors entityColors = new Colors();
@@ -28,7 +31,7 @@ public class TargetedCrosshairSettings {
         public int angerable = 0xF7D6B7;
 
         @ConfigEntry.ColorPicker
-        public int passive = 0xB8E2C8;
+        public int passive = 0xcbf0d8;
 
         @ConfigEntry.ColorPicker
         public int player = 0xA8D8EA;
