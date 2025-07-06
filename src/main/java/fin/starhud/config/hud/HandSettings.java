@@ -21,6 +21,9 @@ public class HandSettings {
 
     public boolean drawBar = true;
 
+    @Comment("Draw The Icon Using the Item instead of the HUD icon. (Warning: LARGE HUD)")
+    public boolean drawItem = false;
+
     @ConfigEntry.ColorPicker
     public int color;
 

@@ -144,7 +144,7 @@ public class Effect extends AbstractHUD {
             );
 
             float alpha = 1.0F;
-            if (duration <= 200) { // minecraft's status effect blinking.
+            if (duration <= 200 && !statusEffectInstance.isInfinite()) { // minecraft's status effect blinking.
                 int n = 10 - duration / 20;
                 alpha = MathHelper.clamp((float)duration / 10.0F / 5.0F * 0.5F, 0.0F, 0.5F) + MathHelper.cos((float)duration * (float)Math.PI / 5.0F) * MathHelper.clamp((float)n / 10.0F * 0.25F, 0.0F, 0.25F);
                 alpha = MathHelper.clamp(alpha, 0.0F, 1.0F);
@@ -187,7 +187,7 @@ public class Effect extends AbstractHUD {
         return effectSettings.drawVertical ? ((isBeneficial ? beneficialSize : harmSize) * effectSettings.sameTypeGap) : STATUS_EFFECT_TEXTURE_HEIGHT;
     }
 
-    public int getBeneficialSize() {
+    public static int getBeneficialSize() {
         int size = 0;
         for (StatusEffectInstance collection : CLIENT.player.getStatusEffects()) {
             if (collection.getEffectType().value().isBeneficial())
