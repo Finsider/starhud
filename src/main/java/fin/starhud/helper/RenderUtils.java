@@ -15,8 +15,12 @@ public class RenderUtils {
     private static final Identifier DURABILITY_TEXTURE = Identifier.of("starhud", "hud/durability_bar.png");
     private static final Identifier DURABILITY_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/durability_background.png");
 
+    private static final Identifier ITEM_DURABILITY_TEXTURE = Identifier.of("starhud", "hud/big_durability_bar.png");
+    private static final Identifier ITEM_DURABILITY_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/big_durability_background.png");
+
     // 10 bars + 9 gaps.
-    private static final int DURABILITY_TEXTURE_WIDTH = (3 * 10) + 9;
+    private static final int DURABILITY_WIDTH = (3 * 10) + 9;
+    private static final int ITEM_DURABILITY_WIDTH = (5 * 10) + (2 * 9);
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
@@ -35,7 +39,23 @@ public class RenderUtils {
         return MathHelper.hsvToRgb(0.35F * stackStep / (float) maxStep, 0.45F, 0.95F);
     }
 
-    public static void renderDurabilityHUD(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, boolean drawBar, GrowthDirectionX textureGrowth) {
+    public static void renderDurabilityHUD(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, boolean drawBar, boolean drawItem, GrowthDirectionX textureGrowth) {
+        if (drawItem) {
+            renderItemDurability(context, stack, x , y, drawBar, textureGrowth);
+        } else {
+            renderDurability(context, ICON, stack, x, y, v, textureWidth, textureHeight, color, drawBar, textureGrowth);
+        }
+    }
+
+    public static void renderItemDurability(DrawContext context, ItemStack stack, int x, int y, boolean drawBar, GrowthDirectionX textureGrowth) {
+        if (drawBar) {
+            renderItemDurabilityBar(context, stack, x, y,textureGrowth);
+        } else {
+            renderItemDurabilityNumber(context, stack, x, y, textureGrowth);
+        }
+    }
+
+    public static void renderDurability(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, boolean drawBar, GrowthDirectionX textureGrowth) {
         if (drawBar) {
             renderDurabilityBar(context, ICON, stack, x, y, v, textureWidth, textureHeight, color, textureGrowth);
         } else {
@@ -43,11 +63,44 @@ public class RenderUtils {
         }
     }
 
+    public static void renderItemDurabilityBar(DrawContext context, ItemStack stack, int x, int y, GrowthDirectionX textureGrowth) {
+        int step = getItemBarStep(stack, 10);
+        int durabilityColor = getItemBarColor(step, 10) | 0xFF000000;
+
+        x -= textureGrowth.getGrowthDirection(ITEM_DURABILITY_WIDTH);
+
+        // draw the durability background and item
+        RenderUtils.drawTextureHUD(context, ITEM_DURABILITY_BACKGROUND_TEXTURE, x, y, 0.0F, 0.0F, 101, 22, 101, 22);
+        context.drawItem(stack, x + 3, y + 3);
+
+        if (step != 0) RenderUtils.drawTextureHUD(context, ITEM_DURABILITY_TEXTURE, x + 28, y + 4, 0, 0, 7 * step, 14, 70, 14, durabilityColor);
+    }
+
+    public static void renderItemDurabilityNumber(DrawContext context, ItemStack stack, int x, int y, GrowthDirectionX textureGrowth) {
+        int damage = stack.getDamage();
+        int maxDamage = stack.getMaxDamage();
+        int remaining = maxDamage - damage;
+
+        String durability = remaining + "/" + maxDamage;
+
+        int durabilityWidth = CLIENT.textRenderer.getWidth(durability) - 1;
+
+        int textColor = getItemBarColor(remaining, maxDamage) | 0xFF000000;
+
+        x -= textureGrowth.getGrowthDirection(durabilityWidth);
+
+        RenderUtils.drawTextureHUD(context,  ITEM_DURABILITY_BACKGROUND_TEXTURE, x, y, 0.0F, 0.0F, 22, 22, 101, 22);
+        context.drawItem(stack, x + 3, y + 3);
+
+        fillRoundedRightSide(context, x + 23,  y, x + 22 + 1 + 5 + durabilityWidth + 5, y + 22, 0x80000000);
+        RenderUtils.drawTextHUD(context, durability, x + 22 + 1 + 5, y + 7, textColor, false);
+    }
+
     public static void renderDurabilityBar(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, GrowthDirectionX textureGrowth) {
         int step = getItemBarStep(stack, 10);
         int durabilityColor = getItemBarColor(step, 10) | 0xFF000000;
 
-        x -= textureGrowth.getGrowthDirection(DURABILITY_TEXTURE_WIDTH);
+        x -= textureGrowth.getGrowthDirection(DURABILITY_WIDTH);
 
         // draw the icon
         RenderUtils.drawTextureHUD(context, ICON, x, y, 0.0F, v, 13, 13, textureWidth, textureHeight, color);

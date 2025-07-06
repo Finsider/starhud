@@ -27,6 +27,9 @@ public abstract class Hand extends AbstractHUD {
     private static final int COUNT_WIDTH = 23;
     private static final int TEXTURE_HEIGHT = 13;
 
+    private static final int ITEM_TEXTURE_WIDTH = 22 + 1 + 5 + 5;
+    private static final int ITEM_TEXTURE_HEIGHT = 3 + 16 + 3;
+
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     private final HandSettings handSettings;
@@ -49,7 +52,7 @@ public abstract class Hand extends AbstractHUD {
 
         // either draw the durability or the amount of item in the inventory.
         if (handSettings.showDurability && item.isDamageable()) {
-            RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.textureGrowth);
+            RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.drawItem, handSettings.textureGrowth);
         } else if (handSettings.showCount) {
             x -= handSettings.textureGrowth.getGrowthDirection(COUNT_WIDTH);
             renderItemCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);
@@ -77,12 +80,12 @@ public abstract class Hand extends AbstractHUD {
 
     @Override
     public int getBaseHUDWidth() {
-        return TEXTURE_WIDTH;
+        return handSettings.drawItem ? ITEM_TEXTURE_WIDTH : TEXTURE_WIDTH;
     }
 
     @Override
     public int getBaseHUDHeight() {
-        return TEXTURE_HEIGHT;
+        return handSettings.drawItem ? ITEM_TEXTURE_HEIGHT :TEXTURE_HEIGHT;
     }
 
     // V as in the texture, where does left texture y point starts?
