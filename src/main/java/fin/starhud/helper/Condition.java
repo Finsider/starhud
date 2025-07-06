@@ -29,7 +29,7 @@ public enum Condition {
             case EXPERIENCE_BAR_SHOWN -> Conditions.isExperienceBarShown();
             case AIR_BUBBLE_BAR_SHOWN -> Conditions.isAirBubbleBarShown();
             case ARMOR_BAR_SHOWN -> Conditions.isArmorBarShown();
-            case TARGETED_HUD_SHOWN -> TargetedCrosshair.shouldHUDRender();
+            case TARGETED_HUD_SHOWN -> Conditions.isTargetedCrosshairHUDShown();
         };
     }
 }

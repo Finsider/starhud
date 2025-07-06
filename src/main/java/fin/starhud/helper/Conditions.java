@@ -1,5 +1,6 @@
 package fin.starhud.helper;
 
+import fin.starhud.hud.implementation.TargetedCrosshair;
 import fin.starhud.mixin.accessor.AccessorBossBarHud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EquipmentSlot;
@@ -54,5 +55,9 @@ public class Conditions {
 
     public static boolean isAirBubbleBarShown() {
         return isHealthBarShown() && CLIENT.player.isSubmergedIn(FluidTags.WATER) || CLIENT.player.getAir() < CLIENT.player.getMaxAir();
+    }
+
+    public static boolean isTargetedCrosshairHUDShown() {
+        return TargetedCrosshair.shouldHUDRender();
     }
 }

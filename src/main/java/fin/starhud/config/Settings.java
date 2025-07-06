@@ -72,7 +72,7 @@ public class Settings implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public EffectSettings effectSettings = new EffectSettings();
 
-    @ConfigEntry.Category("targeted-camera")
+    @ConfigEntry.Category("targeted")
     @ConfigEntry.Gui.TransitiveObject
     public TargetedCrosshairSettings targetedCrosshairSettings = new TargetedCrosshairSettings();
 }
