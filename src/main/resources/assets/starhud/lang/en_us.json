@@ -15,6 +15,7 @@
   "text.autoconfig.starhud.option.armorSettings.helmet.xOffset": "X Offset",
   "text.autoconfig.starhud.option.armorSettings.helmet.yOffset": "Y Offset",
   "text.autoconfig.starhud.option.armorSettings.helmet.drawBar": "Draw Durability Bar",
+  "text.autoconfig.starhud.option.armorSettings.helmet.drawItem": "Draw Item in Icon instead of HUD Icon",
   "text.autoconfig.starhud.option.armorSettings.helmet.textureGrowth": "Growth Direction",
 
   "text.autoconfig.starhud.option.armorSettings.chestplate": "Chestplate Settings",
@@ -22,6 +23,7 @@
   "text.autoconfig.starhud.option.armorSettings.chestplate.xOffset": "X Offset",
   "text.autoconfig.starhud.option.armorSettings.chestplate.yOffset": "Y Offset",
   "text.autoconfig.starhud.option.armorSettings.chestplate.drawBar": "Draw Durability Bar",
+  "text.autoconfig.starhud.option.armorSettings.chestplate.drawItem": "Draw Item in Icon instead of HUD Icon",
   "text.autoconfig.starhud.option.armorSettings.chestplate.textureGrowth": "Growth Direction",
 
   "text.autoconfig.starhud.option.armorSettings.leggings": "Leggings Settings",
@@ -29,6 +31,7 @@
   "text.autoconfig.starhud.option.armorSettings.leggings.xOffset": "X Offset",
   "text.autoconfig.starhud.option.armorSettings.leggings.yOffset": "Y Offset",
   "text.autoconfig.starhud.option.armorSettings.leggings.drawBar": "Draw Durability Bar",
+  "text.autoconfig.starhud.option.armorSettings.leggings.drawItem": "Draw Item in Icon instead of HUD Icon",
   "text.autoconfig.starhud.option.armorSettings.leggings.textureGrowth": "Growth Direction",
 
   "text.autoconfig.starhud.option.armorSettings.boots": "Boots Settings",
@@ -36,6 +39,7 @@
   "text.autoconfig.starhud.option.armorSettings.boots.xOffset": "X Offset",
   "text.autoconfig.starhud.option.armorSettings.boots.yOffset": "Y Offset",
   "text.autoconfig.starhud.option.armorSettings.boots.drawBar": "Draw Durability Bar",
+  "text.autoconfig.starhud.option.armorSettings.boots.drawItem": "Draw Item in Icon instead of HUD Icon",
   "text.autoconfig.starhud.option.armorSettings.boots.textureGrowth": "Growth Direction",
 
   "text.autoconfig.starhud.category.fps": "FPS",
@@ -185,6 +189,7 @@
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.showCount": "Show Item Count",
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.showDurability": "Show Item Durability",
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.drawBar": "Draw Durability Bar",
+  "text.autoconfig.starhud.option.handSettings.leftHandSettings.drawItem": "Draw Item in Icon instead of HUD Icon",
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.color": "HUD Color",
   "text.autoconfig.starhud.option.handSettings.leftHandSettings.base.conditions": "Conditions",
 
@@ -199,6 +204,7 @@
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.showCount": "Show Item Count",
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.showDurability": "Show Item Durability",
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.drawBar": "Draw Durability Bar",
+  "text.autoconfig.starhud.option.handSettings.rightHandSettings.drawItem": "Draw Item in Icon instead of HUD Icon",
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.color": "HUD Color",
   "text.autoconfig.starhud.option.handSettings.rightHandSettings.base.conditions": "Conditions",
 
@@ -222,5 +228,23 @@
   "text.autoconfig.starhud.option.effectSettings.differentTypeGap": "Different Type Gap",
   "text.autoconfig.starhud.option.effectSettings.sameTypeGap": "Same Type Gap",
   "text.autoconfig.starhud.option.effectSettings.ambientColor": "Ambient Effect Color",
-  "text.autoconfig.starhud.option.effectSettings.infiniteColor": "Infinite Duration Color"
+  "text.autoconfig.starhud.option.effectSettings.infiniteColor": "Infinite Duration Color",
+
+  "text.autoconfig.starhud.category.targeted": "Targeted",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.base.shouldRender": "Show HUD",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.base.x": "X Position",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.base.y": "Y Position",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.base.originX": "Horizontal Alignment",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.base.originY": "Vertical Alignment",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.base.scale": "HUD Scale",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.textureGrowth": "Texture Growth Direction",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.modNameColor": "Mod Name Color",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.targetedNameColor": "Targeted Name Color",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.entityColors": "Entity Colors",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.entityColors.hostile": "Hostile Entity Color",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.entityColors.angerable": "Angerable Entity Color",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.entityColors.passive": "Passive Entity Color",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.entityColors.player": "Player Color",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.entityColors.unknown": "Unknown Entity Color"
 }
