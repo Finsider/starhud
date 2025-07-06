@@ -8,7 +8,7 @@ public class ConditionalSettings {
 
     @Comment("Condition.")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-    public Condition condition;
+    public Condition condition = Condition.DEBUG_HUD_OPENED;
 
     @Comment("Enable this HUD To be Rendered")
     public boolean shouldRender = true;
@@ -19,11 +19,12 @@ public class ConditionalSettings {
     @Comment("Shifts this HUD in the Y Axis")
     public int yOffset = 0;
 
-    public ConditionalSettings() {
-        this.condition = Condition.DEBUG_HUD_OPENED;
-    }
-
     public boolean isConditionMet() {
-        return this.condition.isConditionMet();
+        try {
+            return this.condition.isConditionMet();
+        } catch (NullPointerException e) {
+            this.condition = Condition.DEBUG_HUD_OPENED;
+            return this.condition.isConditionMet();
+        }
     }
 }

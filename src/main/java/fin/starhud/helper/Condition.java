@@ -1,6 +1,5 @@
 package fin.starhud.helper;
 
-import fin.starhud.Helper;
 import fin.starhud.hud.implementation.TargetedCrosshair;
 
 public enum Condition {
@@ -11,23 +10,25 @@ public enum Condition {
     BENEFICIAL_EFFECT_SHOWN,
     HARM_EFFECT_SHOWN,
     OFFHAND_SHOWN,
-    STATUS_BARS_SHOWN,
+    HEALTH_BAR_SHOWN,
+    EXPERIENCE_BAR_SHOWN,
     AIR_BUBBLE_BAR_SHOWN,
     ARMOR_BAR_SHOWN,
     TARGETED_HUD_SHOWN;
 
     public boolean isConditionMet() {
         return switch (this) {
-            case DEBUG_HUD_OPENED -> Helper.isDebugHUDOpen();
-            case CHAT_HUD_OPENED -> Helper.isChatFocused();
-            case BOSSBAR_SHOWN -> Helper.isBossBarShown();
-            case SCOREBOARD_SHOWN -> Helper.isScoreBoardShown();
-            case BENEFICIAL_EFFECT_SHOWN -> Helper.isBeneficialEffectOverlayShown();
-            case HARM_EFFECT_SHOWN -> Helper.isHarmEffectOverlayShown();
-            case OFFHAND_SHOWN -> Helper.isOffHandOverlayShown();
-            case STATUS_BARS_SHOWN -> Helper.isStatusBarsShown();
-            case AIR_BUBBLE_BAR_SHOWN -> Helper.isAirBubbleBarShown();
-            case ARMOR_BAR_SHOWN -> Helper.isArmorBarShown();
+            case DEBUG_HUD_OPENED -> Conditions.isDebugHUDOpen();
+            case CHAT_HUD_OPENED -> Conditions.isChatFocused();
+            case BOSSBAR_SHOWN -> Conditions.isBossBarShown();
+            case SCOREBOARD_SHOWN -> Conditions.isScoreBoardShown();
+            case BENEFICIAL_EFFECT_SHOWN -> Conditions.isBeneficialEffectOverlayShown();
+            case HARM_EFFECT_SHOWN -> Conditions.isHarmEffectOverlayShown();
+            case OFFHAND_SHOWN -> Conditions.isOffHandOverlayShown();
+            case HEALTH_BAR_SHOWN -> Conditions.isHealthBarShown();
+            case EXPERIENCE_BAR_SHOWN -> Conditions.isExperienceBarShown();
+            case AIR_BUBBLE_BAR_SHOWN -> Conditions.isAirBubbleBarShown();
+            case ARMOR_BAR_SHOWN -> Conditions.isArmorBarShown();
             case TARGETED_HUD_SHOWN -> TargetedCrosshair.shouldHUDRender();
         };
     }

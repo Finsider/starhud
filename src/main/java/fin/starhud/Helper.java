@@ -1,16 +1,12 @@
 package fin.starhud;
 
-import fin.starhud.mixin.accessor.AccessorBossBarHud;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.registry.tag.FluidTags;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 
 public class Helper {
-
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     private static final char[] superscripts = "⁰¹²³⁴⁵⁶⁷⁸⁹".toCharArray();
     private static final char[] subscripts = "₀₁₂₃₄₅₆₇₈₉".toCharArray();
@@ -44,12 +40,13 @@ public class Helper {
         return String.valueOf(chars);
     }
 
-    public static String idNameFormatter(String oldString) {
+    // convert (modname:snake_case) into (Snake Case)
+    public static String idNameFormatter(String id) {
 
         // trim every character from ':' until first index
-        oldString = oldString.substring(oldString.indexOf(':') + 1);
+        id = id.substring(id.indexOf(':') + 1);
 
-        char[] chars = oldString.toCharArray();
+        char[] chars = id.toCharArray();
 
         if (chars.length == 0) return "-";
 
@@ -68,48 +65,13 @@ public class Helper {
         return new String(chars);
     }
 
+    public static String getModName(Identifier id) {
+        String nameSpace = id.getNamespace();
+        ModContainer container = FabricLoader.getInstance().getModContainer(nameSpace).orElse(null);
+        return container == null ? nameSpace : container.getMetadata().getName();
+    }
+
     public static int getStep(int curr, int max, int maxStep) {
         return MathHelper.clamp(Math.round((float) curr * maxStep / (float) max), 0, maxStep);
-    }
-
-    public static boolean isChatFocused() {
-        return CLIENT.currentScreen instanceof ChatScreen;
-    }
-    public static boolean isDebugHUDOpen() {
-        return CLIENT.options.debugEnabled;
-    }
-
-    public static boolean isBossBarShown() {
-        return !((AccessorBossBarHud) CLIENT.inGameHud.getBossBarHud()).getBossBars().isEmpty();
-    }
-
-    public static boolean isScoreBoardShown() {
-        return !CLIENT.world.getScoreboard().getObjectives().isEmpty();
-    }
-
-    public static boolean isBeneficialEffectOverlayShown() {
-        return CLIENT.player.getStatusEffects().stream()
-                .anyMatch(effect -> effect.getEffectType().isBeneficial());
-    }
-
-    public static boolean isHarmEffectOverlayShown() {
-        return CLIENT.player.getStatusEffects().stream()
-                .anyMatch(effect -> !effect.getEffectType().isBeneficial());
-    }
-
-    public static boolean isOffHandOverlayShown() {
-        return !CLIENT.player.getEquippedStack(EquipmentSlot.OFFHAND).isEmpty();
-    }
-
-    public static boolean isStatusBarsShown() {
-        return CLIENT.interactionManager.hasStatusBars();
-    }
-
-    public static boolean isArmorBarShown() {
-        return isStatusBarsShown() && CLIENT.player.getArmor() > 0;
-    }
-
-    public static boolean isAirBubbleBarShown() {
-        return isStatusBarsShown() && CLIENT.player.isSubmergedIn(FluidTags.WATER) || CLIENT.player.getAir() < CLIENT.player.getMaxAir();
     }
 }

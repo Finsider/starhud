@@ -34,7 +34,7 @@ import net.minecraft.util.math.BlockPos;
 // HUD similar to JADE's. TargetedCrosshairHUD.
 public class TargetedCrosshair extends AbstractHUD {
 
-    private static final Identifier ICON_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/targeted_icon.png");
+    private static final Identifier ICON_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/item.png");
     private static final Identifier ENTITY_ICON_TEXTURE = Identifier.of("starhud", "hud/targeted_icon_entity.png");
 
     // left padding + texture + right padding
@@ -89,21 +89,21 @@ public class TargetedCrosshair extends AbstractHUD {
         }
     }
 
-    private BlockState cachedBlockState = null;
+    private Block cachedBlock = null;
     private OrderedText cachedBlockName = null;
     private String cachedBlockModName = null;
     private int cachedBlockMaxWidth = -1;
 
     public void renderBlockInfoHUD(DrawContext context) {
         BlockPos pos = ((BlockHitResult) CLIENT.crosshairTarget).getBlockPos();
-        BlockState blockState = CLIENT.world.getBlockState(pos);
 
+        BlockState blockState = CLIENT.world.getBlockState(pos);
         Block block = blockState.getBlock();
         Item blockItem = block.asItem();
         ItemStack blockStack = blockItem.getDefaultStack();
 
-        if (!blockState.equals(cachedBlockState)) {
-            cachedBlockState = blockState;
+        if (!block.equals(cachedBlock)) {
+            cachedBlock = block;
 
             if (blockItem == Items.AIR) cachedBlockName = Text.translatable(block.getTranslationKey()).asOrderedText();
             else cachedBlockName = blockStack.getName().asOrderedText();

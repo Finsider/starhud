@@ -37,6 +37,9 @@ public class ArmorSettings {
 
         public boolean drawBar;
 
+        @Comment("Draw The Icon Using the Item instead of the HUD icon. (Warning: LARGE HUD)")
+        public boolean drawItem = false;
+
         @Comment("Which way should the HUD goes when a the texture increases?")
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         public GrowthDirectionX textureGrowth;

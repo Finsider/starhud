@@ -7,6 +7,8 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.component.type.AttributeModifierSlot;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -20,10 +22,14 @@ public class Armor extends AbstractHUD {
     private static final int[] Y_OFFSETS = new int[4];
     private static final boolean[] SHOULD_RENDER = new boolean[4];
     private static final boolean[] DRAW_BAR = new boolean[4];
+    private static final boolean[] DRAW_ITEM = new boolean[4];
     private static final GrowthDirectionX[] TEXTURE_GROWTH = new GrowthDirectionX[4];
 
     private static final int TEXTURE_WIDTH = 13 + 1 + 5 + 5;
     private static final int TEXTURE_HEIGHT = 13;
+
+    private static final int ITEM_TEXTURE_WIDTH = 22 + 1 + 5 + 5;
+    private static final int ITEM_TEXTURE_HEIGHT = 3 + 16 + 3;
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
@@ -33,32 +39,36 @@ public class Armor extends AbstractHUD {
 
     @Override
     public int getBaseHUDWidth() {
-        return TEXTURE_WIDTH;
+        return (DRAW_ITEM[0] || DRAW_ITEM[1] || DRAW_ITEM[2] || DRAW_ITEM[3]) ? ITEM_TEXTURE_WIDTH : TEXTURE_WIDTH;
     }
 
     @Override
     public int getBaseHUDHeight() {
-        return TEXTURE_HEIGHT;
+        return (DRAW_ITEM[0] || DRAW_ITEM[1] || DRAW_ITEM[2] || DRAW_ITEM[3]) ? ITEM_TEXTURE_HEIGHT : TEXTURE_HEIGHT;
     }
 
     @Override
     public void renderHUD(DrawContext context) {
         int armorIndex = 3;
-        for (ItemStack armor: CLIENT.player.getArmorItems()) {
-            if (SHOULD_RENDER[armorIndex] && !armor.isEmpty() && armor.isDamageable()) {
-                RenderUtils.renderDurabilityHUD(
-                        context,
-                        ARMOR_BACKGROUND_TEXTURE,
-                        armor,
-                        x + X_OFFSETS[armorIndex],
-                        y + Y_OFFSETS[armorIndex],
-                        14 * armorIndex,
-                        13,
-                        TEXTURE_HEIGHT * 4 + 3,
-                        0xFFFFFFFF,
-                        DRAW_BAR[armorIndex],
-                        TEXTURE_GROWTH[armorIndex]
-                );
+        for (EquipmentSlot equipmentSlot : AttributeModifierSlot.ARMOR) {
+            if (equipmentSlot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
+                ItemStack armor = CLIENT.player.getEquippedStack(equipmentSlot);
+                if (SHOULD_RENDER[armorIndex] && !armor.isEmpty() && armor.isDamageable()) {
+                    RenderUtils.renderDurabilityHUD(
+                            context,
+                            ARMOR_BACKGROUND_TEXTURE,
+                            armor,
+                            x + X_OFFSETS[armorIndex],
+                            y + Y_OFFSETS[armorIndex],
+                            14 * armorIndex,
+                            13,
+                            TEXTURE_HEIGHT * 4 + 3,
+                            0xFFFFFFFF,
+                            DRAW_BAR[armorIndex],
+                            DRAW_ITEM[armorIndex],
+                            TEXTURE_GROWTH[armorIndex]
+                    );
+                }
             }
             --armorIndex;
         }
@@ -88,6 +98,11 @@ public class Armor extends AbstractHUD {
         DRAW_BAR[1] = ARMOR_SETTINGS.chestplate.drawBar;
         DRAW_BAR[2] = ARMOR_SETTINGS.leggings.drawBar;
         DRAW_BAR[3] = ARMOR_SETTINGS.boots.drawBar;
+
+        DRAW_ITEM[0] = ARMOR_SETTINGS.helmet.drawItem;
+        DRAW_ITEM[1] = ARMOR_SETTINGS.chestplate.drawItem;
+        DRAW_ITEM[2] = ARMOR_SETTINGS.leggings.drawItem;
+        DRAW_ITEM[3] = ARMOR_SETTINGS.boots.drawItem;
 
         TEXTURE_GROWTH[0] = ARMOR_SETTINGS.helmet.textureGrowth;
         TEXTURE_GROWTH[1] = ARMOR_SETTINGS.chestplate.textureGrowth;
