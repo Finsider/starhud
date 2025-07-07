@@ -3,20 +3,19 @@ package fin.starhud.helper;
 import fin.starhud.hud.implementation.TargetedCrosshair;
 import fin.starhud.mixin.accessor.AccessorBossBarHud;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 
 public class Conditions {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     public static boolean isChatFocused() {
-        return CLIENT.inGameHud.getChatHud().isChatFocused();
+        return CLIENT.currentScreen instanceof ChatScreen;
     }
-
     public static boolean isDebugHUDOpen() {
-        return CLIENT.getDebugHud().shouldShowDebugHud();
+        return CLIENT.options.debugEnabled;
     }
 
     public static boolean isBossBarShown() {
@@ -24,17 +23,17 @@ public class Conditions {
     }
 
     public static boolean isScoreBoardShown() {
-        return CLIENT.world.getScoreboard().getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR) != null;
+        return !CLIENT.world.getScoreboard().getObjectives().isEmpty();
     }
 
     public static boolean isBeneficialEffectOverlayShown() {
         return CLIENT.player.getStatusEffects().stream()
-                .anyMatch(effect -> effect.getEffectType().value().isBeneficial());
+                .anyMatch(effect -> effect.getEffectType().isBeneficial());
     }
 
     public static boolean isHarmEffectOverlayShown() {
         return CLIENT.player.getStatusEffects().stream()
-                .anyMatch(effect -> !effect.getEffectType().value().isBeneficial());
+                .anyMatch(effect -> !effect.getEffectType().isBeneficial());
     }
 
     public static boolean isOffHandOverlayShown() {

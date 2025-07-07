@@ -226,11 +226,10 @@ public class TargetedCrosshair extends AbstractHUD {
     }
 
     private static boolean isHostileMob(Entity e) {
-        return switch (e) {
-            case EnderDragonEntity ignored -> true;
-            case Monster ignored -> true;
-            default -> false;
-        };
+        if (e instanceof EnderDragonEntity) return true;
+        else if (e instanceof Monster) return true;
+        else return false;
+
     }
 
     private static boolean isAngerableMob(Entity e) {
@@ -238,13 +237,11 @@ public class TargetedCrosshair extends AbstractHUD {
     }
 
     private static boolean isPassiveMob(Entity e) {
-        return switch (e) {
-            case PassiveEntity ignored -> true;
-            case WaterCreatureEntity ignored -> true;
-            case AllayEntity ignored -> true;
-            case SnowGolemEntity ignored -> true;
-            default -> false;
-        };
+        if (e instanceof PassiveEntity) return true;
+        else if (e instanceof WaterCreatureEntity) return true;
+        else if (e instanceof AllayEntity) return true;
+        else if (e instanceof SnowGolemEntity) return true;
+        else return false;
     }
 
     private static boolean isPlayerEntity(Entity e) {

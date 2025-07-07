@@ -7,8 +7,6 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -50,25 +48,22 @@ public class Armor extends AbstractHUD {
     @Override
     public void renderHUD(DrawContext context) {
         int armorIndex = 3;
-        for (EquipmentSlot equipmentSlot : AttributeModifierSlot.ARMOR) {
-            if (equipmentSlot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
-                ItemStack armor = CLIENT.player.getEquippedStack(equipmentSlot);
-                if (SHOULD_RENDER[armorIndex] && !armor.isEmpty() && armor.isDamageable()) {
-                    RenderUtils.renderDurabilityHUD(
-                            context,
-                            ARMOR_BACKGROUND_TEXTURE,
-                            armor,
-                            x + X_OFFSETS[armorIndex],
-                            y + Y_OFFSETS[armorIndex],
-                            14 * armorIndex,
-                            13,
-                            TEXTURE_HEIGHT * 4 + 3,
-                            0xFFFFFFFF,
-                            DRAW_BAR[armorIndex],
-                            DRAW_ITEM[armorIndex],
-                            TEXTURE_GROWTH[armorIndex]
-                    );
-                }
+        for (ItemStack armor : CLIENT.player.getArmorItems()) {
+            if (SHOULD_RENDER[armorIndex] && !armor.isEmpty() && armor.isDamageable()) {
+                RenderUtils.renderDurabilityHUD(
+                        context,
+                        ARMOR_BACKGROUND_TEXTURE,
+                        armor,
+                        x + X_OFFSETS[armorIndex],
+                        y + Y_OFFSETS[armorIndex],
+                        14 * armorIndex,
+                        13,
+                        TEXTURE_HEIGHT * 4 + 3,
+                        0xFFFFFFFF,
+                        DRAW_BAR[armorIndex],
+                        DRAW_ITEM[armorIndex],
+                        TEXTURE_GROWTH[armorIndex]
+                );
             }
             --armorIndex;
         }
