@@ -2,6 +2,7 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.ClockInGameSettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -32,10 +33,10 @@ public class ClockInGame extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public Box renderHUD(DrawContext context) {
         ClientWorld world = CLIENT.world;
 
-        if (world == null) return;
+        if (world == null) return null;
 
         long time = world.getTimeOfDay() % 24000;
 
@@ -58,9 +59,13 @@ public class ClockInGame extends AbstractHUD {
         if (use12Hour) {
             RenderUtils.drawTextureHUD(context, CLOCK_12_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedMinecraftTimeString, x + 19, y + 3, color, false);
+
+            return new Box(x, y, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT, color);
         } else {
             RenderUtils.drawTextureHUD(context, CLOCK_24_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedMinecraftTimeString, x + 19, y + 3, color, false);
+
+            return new Box(x, y, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT, color);
         }
     }
 

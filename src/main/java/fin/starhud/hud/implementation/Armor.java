@@ -2,6 +2,7 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.ArmorSettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.GrowthDirectionX;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
@@ -31,6 +32,9 @@ public class Armor extends AbstractHUD {
     private static final int ITEM_TEXTURE_WIDTH = 22 + 1 + 5 + 5;
     private static final int ITEM_TEXTURE_HEIGHT = 3 + 16 + 3;
 
+    private static boolean needBoxUpdate = true;
+    private static Box cachedBox = null;
+
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     public Armor() {
@@ -48,13 +52,14 @@ public class Armor extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public Box renderHUD(DrawContext context) {
         int armorIndex = 3;
+
         for (EquipmentSlot equipmentSlot : AttributeModifierSlot.ARMOR) {
             if (equipmentSlot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
                 ItemStack armor = CLIENT.player.getEquippedStack(equipmentSlot);
                 if (SHOULD_RENDER[armorIndex] && !armor.isEmpty() && armor.isDamageable()) {
-                    RenderUtils.renderDurabilityHUD(
+                    Box tempBox = RenderUtils.renderDurabilityHUD(
                             context,
                             ARMOR_BACKGROUND_TEXTURE,
                             armor,
@@ -68,10 +73,22 @@ public class Armor extends AbstractHUD {
                             DRAW_ITEM[armorIndex],
                             TEXTURE_GROWTH[armorIndex]
                     );
+
+                    if (needBoxUpdate) {
+                        if (cachedBox == null) {
+                            cachedBox = tempBox;
+                            cachedBox.setColor(0xFFFFFFFF);
+                        } else {
+                            cachedBox.mergeWith(tempBox);
+                        }
+                    }
                 }
             }
             --armorIndex;
         }
+
+        needBoxUpdate = false;
+        return cachedBox;
     }
 
     @Override
@@ -109,5 +126,7 @@ public class Armor extends AbstractHUD {
         TEXTURE_GROWTH[2] = ARMOR_SETTINGS.leggings.textureGrowth;
         TEXTURE_GROWTH[3] = ARMOR_SETTINGS.boots.textureGrowth;
 
+        needBoxUpdate = true;
+        cachedBox = null;
     }
 }

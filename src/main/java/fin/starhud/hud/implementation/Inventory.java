@@ -2,6 +2,7 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.InventorySettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -41,15 +42,15 @@ public class Inventory extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public Box renderHUD(DrawContext context) {
         if (INVENTORY_SETTINGS.drawVertical) {
-            drawInventoryVertical(context, x, y);
+            return drawInventoryVertical(context, x, y);
         } else {
-            drawInventoryHorizontal(context, x, y);
+            return drawInventoryHorizontal(context, x, y);
         }
     }
 
-    private static void drawInventoryVertical(DrawContext context, int x, int y) {
+    private static Box drawInventoryVertical(DrawContext context, int x, int y) {
         PlayerInventory inventory = CLIENT.player.getInventory();
         boolean foundItem = false;
 
@@ -71,9 +72,11 @@ public class Inventory extends AbstractHUD {
                 context.drawStackOverlay(CLIENT.textRenderer, stack, x1, y1);
             }
         }
+
+        return new Box(x, y, TEXTURE_WIDTH_VERTICAL, TEXTURE_HEIGHT_VERTICAL);
     }
 
-    private static void drawInventoryHorizontal(DrawContext context, int x, int y) {
+    private static Box drawInventoryHorizontal(DrawContext context, int x, int y) {
         PlayerInventory inventory = CLIENT.player.getInventory();
         boolean foundItem = false;
 
@@ -95,6 +98,8 @@ public class Inventory extends AbstractHUD {
                 context.drawStackOverlay(CLIENT.textRenderer, stack, x1, y1);
             }
         }
+
+        return new Box(x, y, TEXTURE_WIDTH_HORIZONTAL, TEXTURE_HEIGHT_HORIZONTAL);
     }
 
     private static void preComputeHorizontal() {

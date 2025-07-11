@@ -9,10 +9,10 @@ public class HUDComponent {
 
     static HUDComponent instance;
 
-    public final ArrayList<HUDInterface> huds = new ArrayList<>();
+    public final ArrayList<AbstractHUD> huds = new ArrayList<>();
 
     // separate status effect hud as they are rendered in a different place.
-    public final HUDInterface effectHUD;
+    public final AbstractHUD effectHUD;
 
     // singleton
     private HUDComponent() {

@@ -1,11 +1,11 @@
 package fin.starhud.hud.implementation;
 
 import fin.starhud.config.hud.HandSettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
@@ -33,37 +33,49 @@ public abstract class Hand extends AbstractHUD {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     private final HandSettings handSettings;
+    private final Arm arm;
 
-    public Hand(HandSettings handSettings) {
+    public Hand(HandSettings handSettings, Arm arm) {
         super(handSettings.base);
         this.handSettings = handSettings;
+        this.arm = arm;
     }
 
-    public void renderHandHUD(DrawContext context, Arm arm, int x, int y) {
+    @Override
+    public boolean shouldRender() {
+        return baseHUDSettings.shouldRender
+                && !CLIENT.player.getStackInArm(arm).isEmpty()
+                && shouldRenderOnCondition();
+    }
+
+    @Override
+    public Box renderHUD(DrawContext context) {
+        return renderHandHUD(context, arm, x, y);
+    }
+
+    public Box renderHandHUD(DrawContext context, Arm arm, int x, int y) {
         PlayerInventory playerInventory = CLIENT.player.getInventory();
 
-        ItemStack item;
-        if (CLIENT.player.getMainArm() == arm)
-            item = CLIENT.player.getEquippedStack(EquipmentSlot.MAINHAND);
-        else
-            item = CLIENT.player.getEquippedStack(EquipmentSlot.OFFHAND);
+        ItemStack item = CLIENT.player.getStackInArm(arm);
 
-        if (item.isEmpty()) return;
+        if (item.isEmpty()) return null;
 
         // either draw the durability or the amount of item in the inventory.
         if (handSettings.showDurability && item.isDamageable()) {
-            RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.drawItem, handSettings.textureGrowth);
+            return RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.drawItem, handSettings.textureGrowth);
         } else if (handSettings.showCount) {
             x -= handSettings.textureGrowth.getGrowthDirection(COUNT_WIDTH);
-            renderItemCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);
-        }
+            return renderItemCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);
+        } else return null;
     }
 
-    private static void renderItemCountHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
+    private static Box renderItemCountHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
         int stackAmount = getItemCount(playerInventory, stack);
 
         RenderUtils.drawTextureHUD(context, HAND_TEXTURE, x, y, 0.0F, v, COUNT_WIDTH + TEXTURE_WIDTH, TEXTURE_HEIGHT, COUNT_WIDTH + TEXTURE_WIDTH, 27, color);
         RenderUtils.drawTextHUD(context, Integer.toString(stackAmount), x + 19, y + 3, color, false);
+
+        return new Box(x, y, COUNT_WIDTH + TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
     }
 
     private static int getItemCount(PlayerInventory inventory, ItemStack stack) {

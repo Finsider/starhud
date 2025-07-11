@@ -2,9 +2,11 @@ package fin.starhud.hud;
 
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.config.ConditionalSettings;
+import fin.starhud.helper.Box;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.Window;
+
 
 public abstract class AbstractHUD implements HUDInterface {
     private static final Window WINDOW = MinecraftClient.getInstance().getWindow();
@@ -19,6 +21,8 @@ public abstract class AbstractHUD implements HUDInterface {
     protected int baseX;
     protected int baseY;
 
+    private Box boundingBox = new Box(0, 0);
+
     public AbstractHUD(BaseHUDSettings baseHUDSettings) {
         this.baseHUDSettings = baseHUDSettings;
     }
@@ -32,8 +36,8 @@ public abstract class AbstractHUD implements HUDInterface {
         modifyXY();
 
         // if the HUD' scale is set to default, don't... change the scale...? whatever, this is faster than the one below.
-        if (baseHUDSettings.scale == 0) {
-            renderHUD(context);
+        if (!isScaled()) {
+            setBoundingBox(renderHUD(context));
             return;
         }
 
@@ -42,14 +46,14 @@ public abstract class AbstractHUD implements HUDInterface {
         setHUDScale(context);
 
         try {
-            renderHUD(context);
+            setBoundingBox(renderHUD(context));
         } finally {
             context.getMatrices().pop();
         }
 
     }
 
-    public abstract void renderHUD(DrawContext context);
+    public abstract Box renderHUD(DrawContext context);
 
     public void setHUDScale(DrawContext context) {
         float scaleFactor = baseHUDSettings.scale / (float) WINDOW.getScaleFactor();
@@ -104,5 +108,32 @@ public abstract class AbstractHUD implements HUDInterface {
     @Override
     public boolean shouldRender() {
         return baseHUDSettings.shouldRender && shouldRenderOnCondition();
+    }
+
+    public BaseHUDSettings getSettings() {
+        return this.baseHUDSettings;
+    }
+
+    public int getBaseX() {
+        return baseX;
+    }
+
+    public int getBaseY() {
+        return baseY;
+    }
+
+    public boolean isScaled() {
+        return this.baseHUDSettings.scale != 0;
+    }
+
+    public Box getBoundingBox() {
+        return boundingBox;
+    }
+
+    public void setBoundingBox(Box boundingBox) {
+        if (boundingBox == null) {
+            boundingBox = new Box(getBaseX(), getBaseY(), 13, 13);
+        }
+        this.boundingBox.copyFrom(boundingBox);
     }
 }

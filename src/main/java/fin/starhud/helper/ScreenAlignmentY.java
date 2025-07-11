@@ -22,4 +22,12 @@ public enum ScreenAlignmentY {
             case BOTTOM -> textureHeight;
         };
     }
+
+    public ScreenAlignmentY next() {
+        return switch (this) {
+            case TOP -> MIDDLE;
+            case MIDDLE -> BOTTOM;
+            case BOTTOM -> TOP;
+        };
+    }
 }

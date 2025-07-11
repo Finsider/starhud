@@ -23,4 +23,12 @@ public enum ScreenAlignmentX {
             case RIGHT -> textureWidth;
         };
     }
+
+    public ScreenAlignmentX next() {
+        return switch (this) {
+            case LEFT -> CENTER;
+            case CENTER -> RIGHT;
+            case RIGHT -> LEFT;
+        };
+    }
 }

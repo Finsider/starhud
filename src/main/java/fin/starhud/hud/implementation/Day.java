@@ -2,6 +2,7 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.DaySettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -28,7 +29,7 @@ public class Day extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public Box renderHUD(DrawContext context) {
 
         long day = CLIENT.world.getTimeOfDay() / 24000L;
 
@@ -46,6 +47,8 @@ public class Day extends AbstractHUD {
         RenderUtils.drawTextureHUD(context, DAY_TEXTURE, xTemp, y, 0.0F, 0, 13, TEXTURE_HEIGHT, 13,  TEXTURE_HEIGHT);
         RenderUtils.fillRoundedRightSide(context, xTemp + 14, y, xTemp + 14 + cachedTextWidth + 9, y + TEXTURE_HEIGHT, 0x80000000);
         RenderUtils.drawTextHUD(context, cachedDayString, xTemp + 19, y + 3, color, false);
+
+        return new Box(xTemp, y, 14 + cachedTextWidth + 9, TEXTURE_HEIGHT, color);
     }
 
     @Override

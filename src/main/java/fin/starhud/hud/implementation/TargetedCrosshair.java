@@ -4,6 +4,7 @@ import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.ConditionalSettings;
 import fin.starhud.config.hud.TargetedCrosshairSettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.block.Block;
@@ -82,11 +83,12 @@ public class TargetedCrosshair extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
-        switch (CLIENT.crosshairTarget.getType()) {
+    public Box renderHUD(DrawContext context) {
+        return switch (CLIENT.crosshairTarget.getType()) {
             case BLOCK -> renderBlockInfoHUD(context);
             case ENTITY -> renderEntityInfoHUD(context);
-        }
+            default -> null;
+        };
     }
 
     private Block cachedBlock = null;
@@ -94,7 +96,7 @@ public class TargetedCrosshair extends AbstractHUD {
     private String cachedBlockModName = null;
     private int cachedBlockMaxWidth = -1;
 
-    public void renderBlockInfoHUD(DrawContext context) {
+    public Box renderBlockInfoHUD(DrawContext context) {
         BlockPos pos = ((BlockHitResult) CLIENT.crosshairTarget).getBlockPos();
 
         BlockState blockState = CLIENT.world.getBlockState(pos);
@@ -148,6 +150,8 @@ public class TargetedCrosshair extends AbstractHUD {
                 TARGETED_CROSSHAIR_SETTINGS.modNameColor | 0xFF000000,
                 false
         );
+
+        return new Box(xTemp, y, ICON_BACKGROUND_WIDTH + 1 + 5 + cachedBlockMaxWidth + 5, ICON_BACKGROUND_HEIGHT);
     }
 
     private Entity cachedTargetedEntity = null;
@@ -156,7 +160,7 @@ public class TargetedCrosshair extends AbstractHUD {
     private int cachedEntityMaxWidth = -1;
     private int cachedIndex = -1;
 
-    public void renderEntityInfoHUD(DrawContext context) {
+    public Box renderEntityInfoHUD(DrawContext context) {
         Entity targetedEntity = MinecraftClient.getInstance().targetedEntity;
 
         if (!targetedEntity.equals(cachedTargetedEntity)) {
@@ -205,6 +209,8 @@ public class TargetedCrosshair extends AbstractHUD {
                 TARGETED_CROSSHAIR_SETTINGS.modNameColor | 0xFF000000,
                 false
         );
+
+        return new Box(xTemp, y, ICON_BACKGROUND_WIDTH + 1 + 5 + cachedEntityMaxWidth + 5, ICON_BACKGROUND_HEIGHT, color);
     }
 
     private int getEntityIconIndex(Entity e) {

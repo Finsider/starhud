@@ -2,6 +2,7 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.PingSettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -36,7 +37,7 @@ public class Ping extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public Box renderHUD(DrawContext context) {
         MultiValueDebugSampleLogImpl pingLog = CLIENT.getDebugHud().getPingLog();
 
         // different world and server checking for PingMeasurer renewal.
@@ -49,7 +50,8 @@ public class Ping extends AbstractHUD {
         updatePingLog();
 
         int pingLogLen = pingLog.getLength();
-        if (pingLogLen <= 0) return;
+        if (pingLogLen <= 0)
+            return null;
 
         // get the latest updated ping through the last element.
         long currentPing = pingLog.get(pingLogLen - 1);
@@ -61,6 +63,8 @@ public class Ping extends AbstractHUD {
 
         RenderUtils.drawTextureHUD(context, PING_TEXTURE, x, y, 0.0F, step * 13, TEXTURE_WIDTH, TEXTURE_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT * 4, color);
         RenderUtils.drawTextHUD(context, pingStr, x + 19, y + 3, color, false);
+
+        return new Box(x, y, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
     }
 
     public static int getPingColor(int step) {

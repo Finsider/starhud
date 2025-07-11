@@ -3,10 +3,7 @@ package fin.starhud.hud.implementation;
 import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.hud.EffectSettings;
-import fin.starhud.helper.RenderUtils;
-import fin.starhud.helper.ScreenAlignmentX;
-import fin.starhud.helper.ScreenAlignmentY;
-import fin.starhud.helper.StatusEffectAttribute;
+import fin.starhud.helper.*;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -46,13 +43,18 @@ public class Effect extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public boolean shouldRender() {
+        return baseHUDSettings.shouldRender
+                && !CLIENT.player.getStatusEffects().isEmpty()
+                && shouldRenderOnCondition();
+    }
+
+    @Override
+    public Box renderHUD(DrawContext context) {
 
         // straight up copied from minecraft's own status effect rendering system.
 
         Collection<StatusEffectInstance> collection = CLIENT.player.getStatusEffects();
-        if (collection.isEmpty())
-            return;
 
         int beneficialIndex = 0;
         int harmIndex = 0;
@@ -64,14 +66,17 @@ public class Effect extends AbstractHUD {
         // if originX = right, invert differentTypeGap
         // if originY = down, invert differentTypeGap
 
+        int effectSize = collection.size();
         int beneficialSize = getBeneficialSize();
-        int harmSize = collection.size() - beneficialSize;
+        int harmSize = effectSize - beneficialSize;
 
         int xBeneficial = x - effectSettings.growthDirectionX.getGrowthDirection(getDynamicWidth(true, beneficialSize, harmSize));
         int yBeneficial = y - effectSettings.growthDirectionY.getGrowthDirection(getDynamicHeight(true, beneficialSize, harmSize));
 
         int xHarm = (beneficialSize == 0 && drawVertical) ? xBeneficial : x - effectSettings.growthDirectionX.getGrowthDirection(getDynamicWidth(false, beneficialSize, harmSize));
         int yHarm = (beneficialSize == 0 && !drawVertical) ? yBeneficial : y - effectSettings.growthDirectionY.getGrowthDirection(getDynamicHeight(false, beneficialSize, harmSize));
+
+        Box cachedBox = null;
 
         for (StatusEffectInstance statusEffectInstance : collection) {
             if (!statusEffectInstance.shouldShowIcon())
@@ -92,6 +97,16 @@ public class Effect extends AbstractHUD {
                 y2 = (yHarm) + (beneficialSize == 0 ? 0 : (drawVertical ? 0 : differentTypeGap)) + ((drawVertical ? sameTypeGap : 0) * harmIndex);
                 ++harmIndex;
             }
+
+
+            Box tempBox = new Box(x2, y2, STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT);
+
+            if (cachedBox == null) {
+                cachedBox = tempBox;
+            } else {
+                cachedBox.mergeWith(tempBox);
+            }
+
 
             if (statusEffectInstance.isAmbient()) {
 
@@ -177,6 +192,8 @@ public class Effect extends AbstractHUD {
             );
 
         }
+
+        return cachedBox;
     }
 
     public int getDynamicWidth(boolean isBeneficial, int beneficialSize, int harmSize) {

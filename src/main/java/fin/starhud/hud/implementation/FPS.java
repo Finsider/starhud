@@ -2,6 +2,7 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.FPSSettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -24,12 +25,14 @@ public class FPS extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public Box renderHUD(DrawContext context) {
         String fpsStr = CLIENT.getCurrentFps() + " FPS";
         int color = FPS_SETTINGS.color | 0xFF000000;
 
         RenderUtils.drawTextureHUD(context, FPS_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
         RenderUtils.drawTextHUD(context, fpsStr, x + 19, y + 3, color, false);
+
+        return new Box(x, y, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
     }
 
     @Override

@@ -3,6 +3,7 @@ package fin.starhud.hud.implementation;
 import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.hud.BiomeSettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -34,7 +35,7 @@ public class Biome extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public Box renderHUD(DrawContext context) {
         TextRenderer textRenderer = CLIENT.textRenderer;
 
         BlockPos blockPos = CLIENT.player.getBlockPos();
@@ -54,6 +55,8 @@ public class Biome extends AbstractHUD {
         RenderUtils.drawTextureHUD(context, DIMENSION_TEXTURE, xTemp, y, 0.0F, dimensionIndex * TEXTURE_HEIGHT, 13, TEXTURE_HEIGHT, 13, 52);
         RenderUtils.fillRoundedRightSide(context, xTemp + 14, y, xTemp + 14 + cachedTextWidth + 9, y + TEXTURE_HEIGHT, 0x80000000);
         RenderUtils.drawTextHUD(context, cachedFormattedBiomeStr, xTemp + 19, y + 3, color, false);
+
+        return new Box(xTemp, y, 14 + cachedTextWidth + 9, TEXTURE_HEIGHT, color);
     }
 
     private static int getDimensionIndex(RegistryKey<World> registryKey) {

@@ -2,6 +2,7 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.DirectionSettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -34,7 +35,7 @@ public class Direction extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public Box renderHUD(DrawContext context) {
         float yaw = Math.round(MathHelper.wrapDegrees(CLIENT.cameraEntity.getYaw()) * 10.0F) / 10.0F;
 
         if (DIRECTION_SETTINGS.includeOrdinal) {
@@ -43,12 +44,16 @@ public class Direction extends AbstractHUD {
 
             RenderUtils.drawTextureHUD(context, DIRECTION_ORDINAL_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_ORDINAL_WIDTH, TEXTURE_HEIGHT, TEXTURE_ORDINAL_WIDTH, TEXTURE_HEIGHT * ORDINAL_ICON_AMOUNT, color);
             RenderUtils.drawTextHUD(context, Float.toString(yaw), x + ORDINAL_TEXT_OFFSET, y + 3, color, false);
+
+            return new Box(x, y, TEXTURE_ORDINAL_WIDTH, TEXTURE_HEIGHT, color);
         } else {
             int icon = getCardinalDirectionIcon(yaw);
             int color = getDirectionColor(icon * 2) | 0xFF000000;
 
             RenderUtils.drawTextureHUD(context, DIRECTION_CARDINAL_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_CARDINAL_WIDTH, TEXTURE_HEIGHT, TEXTURE_CARDINAL_WIDTH, TEXTURE_HEIGHT * CARDINAL_ICON_AMOUNT, color);
             RenderUtils.drawTextHUD(context, Float.toString(yaw), x + CARDINAL_TEXT_OFFSET, y + 3, color, false);
+
+            return new Box(x, y, TEXTURE_CARDINAL_WIDTH, TEXTURE_HEIGHT, color);
         }
     }
 

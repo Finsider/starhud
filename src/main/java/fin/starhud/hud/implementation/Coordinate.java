@@ -2,6 +2,7 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.CoordSettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -20,12 +21,15 @@ public class Coordinate extends AbstractHUD {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
+    private static boolean needBoxUpdate = true;
+    private static Box cachedBox = null;
+
     public Coordinate() {
         super(COORD_SETTINGS.base);
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public Box renderHUD(DrawContext context) {
         Vec3d vec3d = CLIENT.player.getPos();
 
         String coordX = Integer.toString((int) vec3d.x);
@@ -36,12 +40,30 @@ public class Coordinate extends AbstractHUD {
         int colorY = COORD_SETTINGS.Y.color | 0xFF000000;
         int colorZ = COORD_SETTINGS.Z.color | 0xFF000000;
 
-        if (COORD_SETTINGS.X.shouldRender)
-            renderEachCoordinate(context, coordX, x + COORD_SETTINGS.X.xOffset, y + COORD_SETTINGS.X.yOffset, 0.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, colorX);
-        if (COORD_SETTINGS.Y.shouldRender)
-            renderEachCoordinate(context, coordY, x + COORD_SETTINGS.Y.xOffset, y + COORD_SETTINGS.Y.yOffset, 14.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, colorY);
-        if (COORD_SETTINGS.Z.shouldRender)
-            renderEachCoordinate(context, coordZ, x + COORD_SETTINGS.Z.xOffset, y + COORD_SETTINGS.Z.yOffset, 28.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, colorZ);
+        if (COORD_SETTINGS.X.shouldRender) {
+            Box tempBox = renderEachCoordinate(context, coordX, x + COORD_SETTINGS.X.xOffset, y + COORD_SETTINGS.X.yOffset, 0.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, colorX);
+            if (needBoxUpdate) cachedBox = tempBox;
+        }
+
+        if (COORD_SETTINGS.Y.shouldRender) {
+            Box tempBox = renderEachCoordinate(context, coordY, x + COORD_SETTINGS.Y.xOffset, y + COORD_SETTINGS.Y.yOffset, 14.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, colorY);
+            if (needBoxUpdate) cachedBox.mergeWith(tempBox);
+        }
+        if (COORD_SETTINGS.Z.shouldRender) {
+            Box tempBox = renderEachCoordinate(context, coordZ, x + COORD_SETTINGS.Z.xOffset, y + COORD_SETTINGS.Z.yOffset, 28.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, colorZ);
+            if (needBoxUpdate) cachedBox.mergeWith(tempBox);
+        }
+
+        needBoxUpdate = false;
+        return cachedBox;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        needBoxUpdate = true;
+        cachedBox = null;
 
     }
 
@@ -55,8 +77,10 @@ public class Coordinate extends AbstractHUD {
         return TEXTURE_HEIGHT;
     }
 
-    public static void renderEachCoordinate(DrawContext context, String str, int x, int y, float v, int width, int height, int color) {
+    public static Box renderEachCoordinate(DrawContext context, String str, int x, int y, float v, int width, int height, int color) {
         RenderUtils.drawTextureHUD(context, COORD_TEXTURE, x, y, 0.0F, v, width, height, width, 41, color);
         RenderUtils.drawTextHUD(context, str, x + 19, y + 3, color, false);
+
+        return new Box(x, y, width, height);
     }
 }
