@@ -29,7 +29,7 @@ public class Coordinate extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
+    public void renderHUD(DrawContext context) {
         Vec3d vec3d = CLIENT.player.getPos();
 
         String coordX = Integer.toString((int) vec3d.x);
@@ -55,7 +55,7 @@ public class Coordinate extends AbstractHUD {
         }
 
         needBoxUpdate = false;
-        return cachedBox;
+        setBoundingBox(cachedBox);
     }
 
     @Override

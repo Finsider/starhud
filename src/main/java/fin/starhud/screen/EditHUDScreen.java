@@ -32,9 +32,6 @@ public class EditHUDScreen extends Screen {
     // widgets
     private TextFieldWidget xField;
     private TextFieldWidget yField;
-    private ButtonWidget originXButton;
-    private ButtonWidget originYButton;
-    private ButtonWidget scaleButton;
 
     public EditHUDScreen(Text title, Screen parent) {
         super(title);
@@ -59,40 +56,10 @@ public class EditHUDScreen extends Screen {
         BaseHUDSettings settings = selectedHUD.getSettings();
 
         int centerX = this.width / 2;
-        int centerY = this.height;
+        int bottomY = this.height;
         int spacing = 28;
 
-        originXButton = ButtonWidget.builder(
-                Text.of("Origin X: " + settings.originX),
-                btn -> {
-                    settings.originX = settings.originX.next();
-                    originXButton.setMessage(Text.of("Origin X: " + settings.originX));
-                    selectedHUD.update();
-                }
-        ).dimensions(centerX - 120 - 10, centerY - spacing * 2, 120, 20).build();
-        addDrawableChild(originXButton);
-
-        originYButton = ButtonWidget.builder(
-                Text.of("Origin Y: " + settings.originY),
-                btn -> {
-                    settings.originY = settings.originY.next();
-                    originYButton.setMessage(Text.of("Origin Y: " + settings.originY));
-                    selectedHUD.update();
-                }
-        ).dimensions(centerX + 10, centerY - spacing * 2, 120, 20).build();
-        addDrawableChild(originYButton);
-
-        scaleButton = ButtonWidget.builder(
-                Text.of("Scale: " + settings.scale),
-                btn -> {
-                    settings.scale = (settings.scale + 1) % 7;
-                    scaleButton.setMessage(Text.of("Scale: " + settings.scale));
-                    selectedHUD.update();
-                }
-        ).dimensions(centerX - 60, centerY - spacing, 120, 20).build();
-        addDrawableChild(scaleButton);
-
-        xField = new TextFieldWidget(CLIENT.textRenderer, centerX - 40 - 10, centerY - spacing * 3, 40, 20, Text.of("X"));
+        xField = new TextFieldWidget(CLIENT.textRenderer, centerX - 40 - 10, bottomY - 20 - 5, 40, 20, Text.of("X"));
         xField.setText(String.valueOf(settings.x));
         xField.setChangedListener(text -> {
             try {
@@ -102,7 +69,7 @@ public class EditHUDScreen extends Screen {
         });
         addDrawableChild(xField);
 
-        yField = new TextFieldWidget(CLIENT.textRenderer, centerX + 10, centerY - spacing * 3, 40, 20, Text.of("Y"));
+        yField = new TextFieldWidget(CLIENT.textRenderer, centerX + 10, bottomY - 20 - 5, 40, 20, Text.of("Y"));
         yField.setText(String.valueOf(settings.y));
         yField.setChangedListener(text -> {
             try {
@@ -229,29 +196,53 @@ public class EditHUDScreen extends Screen {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (selectedHUD != null) {
 
-            boolean moved = false;
-            boolean isShiftPressed = (modifiers & GLFW.GLFW_MOD_SHIFT) != 0;
+            BaseHUDSettings settings = selectedHUD.getSettings();
 
-            int step = isShiftPressed ? 5 : 1;
+            boolean handled = false;
+            boolean isCtrl = (modifiers & GLFW.GLFW_MOD_CONTROL) != 0;
+            boolean isShift = (modifiers & GLFW.GLFW_MOD_SHIFT) != 0;
+            boolean isAlt = (modifiers & GLFW.GLFW_MOD_ALT) != 0;
 
-            if (keyCode == GLFW.GLFW_KEY_LEFT) {
-                selectedHUD.getSettings().x -= step;
-                moved = true;
-            } else if (keyCode == GLFW.GLFW_KEY_RIGHT) {
-                selectedHUD.getSettings().x += step;
-                moved = true;
-            } else if (keyCode == GLFW.GLFW_KEY_UP) {
-                selectedHUD.getSettings().y -= step;
-                moved = true;
-            } else if (keyCode == GLFW.GLFW_KEY_DOWN) {
-                selectedHUD.getSettings().y += step;
-                moved = true;
+            int step = isShift ? 5 : 1;
+
+            switch (keyCode) {
+                case GLFW.GLFW_KEY_LEFT -> {
+                    if (isCtrl) settings.originX = settings.originX.prev();
+                    else if (isAlt) settings.growthDirectionX = settings.growthDirectionX.prev();
+                    else settings.x -= step;
+
+                    handled = true;
+                }
+
+                case GLFW.GLFW_KEY_RIGHT -> {
+                    if (isCtrl) settings.originX = settings.originX.next();
+                    else if (isAlt) settings.growthDirectionX = settings.growthDirectionX.next();
+                    else settings.x += step;
+
+                    handled = true;
+                }
+
+                case GLFW.GLFW_KEY_UP -> {
+                    if (isCtrl) settings.originY = settings.originY.prev();
+                    else if (isAlt) settings.growthDirectionY = settings.growthDirectionY.prev();
+                    else settings.y -= step;
+
+                    handled = true;
+                }
+
+                case GLFW.GLFW_KEY_DOWN -> {
+                    if (isCtrl) settings.originY = settings.originY.next();
+                    else if (isAlt) settings.growthDirectionY = settings.growthDirectionY.next();
+                    else settings.y += step;
+
+                    handled = true;
+                }
             }
 
-            if (moved) {
+            if (handled) {
                 selectedHUD.update();
-                xField.setText(String.valueOf(selectedHUD.getSettings().x));
-                yField.setText(String.valueOf(selectedHUD.getSettings().y));
+                xField.setText(String.valueOf(settings.x));
+                yField.setText(String.valueOf(settings.y));
                 return true;
             }
         }

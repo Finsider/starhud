@@ -35,7 +35,7 @@ public class ClockSystem extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
+    public void renderHUD(DrawContext context) {
         // update each minute
         long currentTime = System.currentTimeMillis();
         long minute = currentTime / 60000;
@@ -58,12 +58,12 @@ public class ClockSystem extends AbstractHUD {
             RenderUtils.drawTextureHUD(context, CLOCK_12_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedSystemTimeString, x + 19, y + 3, color, false);
 
-            return new Box(x, y, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT, color);
+            setBoundingBox(x, y, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT, color);
         } else {
             RenderUtils.drawTextureHUD(context, CLOCK_24_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedSystemTimeString, x + 19, y + 3, color, false);
 
-            return new Box(x, y, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT, color);
+            setBoundingBox(x, y, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT, color);
         }
     }
 

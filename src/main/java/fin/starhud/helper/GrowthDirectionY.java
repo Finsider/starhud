@@ -12,4 +12,20 @@ public enum GrowthDirectionY {
             case DOWN -> 0;
         };
     }
+
+    public GrowthDirectionY next() {
+        return switch (this) {
+            case UP -> MIDDLE;
+            case MIDDLE -> DOWN;
+            case DOWN -> UP;
+        };
+    }
+
+    public GrowthDirectionY prev() {
+        return switch (this) {
+            case UP -> DOWN;
+            case MIDDLE -> UP;
+            case DOWN -> MIDDLE;
+        };
+    }
 }

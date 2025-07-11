@@ -49,33 +49,31 @@ public abstract class Hand extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
-        return renderHandHUD(context, arm, x, y);
+    public void renderHUD(DrawContext context) {
+        renderHandHUD(context, arm, x, y);
     }
 
-    public Box renderHandHUD(DrawContext context, Arm arm, int x, int y) {
+    public void renderHandHUD(DrawContext context, Arm arm, int x, int y) {
         PlayerInventory playerInventory = CLIENT.player.getInventory();
 
         ItemStack item = CLIENT.player.getStackInArm(arm);
 
-        if (item.isEmpty()) return null;
-
         // either draw the durability or the amount of item in the inventory.
         if (handSettings.showDurability && item.isDamageable()) {
-            return RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.drawItem, handSettings.textureGrowth);
+            RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.drawItem, handSettings.base.growthDirectionX);
         } else if (handSettings.showCount) {
-            x -= handSettings.textureGrowth.getGrowthDirection(COUNT_WIDTH);
-            return renderItemCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);
-        } else return null;
+            x -= handSettings.base.growthDirectionX.getGrowthDirection(COUNT_WIDTH);
+            renderItemCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);
+        }
     }
 
-    private static Box renderItemCountHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
+    private void renderItemCountHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
         int stackAmount = getItemCount(playerInventory, stack);
 
         RenderUtils.drawTextureHUD(context, HAND_TEXTURE, x, y, 0.0F, v, COUNT_WIDTH + TEXTURE_WIDTH, TEXTURE_HEIGHT, COUNT_WIDTH + TEXTURE_WIDTH, 27, color);
         RenderUtils.drawTextHUD(context, Integer.toString(stackAmount), x + 19, y + 3, color, false);
 
-        return new Box(x, y, COUNT_WIDTH + TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
+        setBoundingBox(x, y, COUNT_WIDTH + TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
     }
 
     private static int getItemCount(PlayerInventory inventory, ItemStack stack) {

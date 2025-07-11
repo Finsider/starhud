@@ -29,7 +29,7 @@ public class Day extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
+    public void renderHUD(DrawContext context) {
 
         long day = CLIENT.world.getTimeOfDay() / 24000L;
 
@@ -41,14 +41,14 @@ public class Day extends AbstractHUD {
             cachedTextWidth = CLIENT.textRenderer.getWidth(cachedDayString);
         }
 
-        int xTemp = x - DAY_SETTINGS.textGrowth.getGrowthDirection(cachedTextWidth);
+        int xTemp = x - DAY_SETTINGS.base.growthDirectionX.getGrowthDirection(cachedTextWidth);
         int color = DAY_SETTINGS.color | 0xFF000000;
 
         RenderUtils.drawTextureHUD(context, DAY_TEXTURE, xTemp, y, 0.0F, 0, 13, TEXTURE_HEIGHT, 13,  TEXTURE_HEIGHT);
         RenderUtils.fillRoundedRightSide(context, xTemp + 14, y, xTemp + 14 + cachedTextWidth + 9, y + TEXTURE_HEIGHT, 0x80000000);
         RenderUtils.drawTextHUD(context, cachedDayString, xTemp + 19, y + 3, color, false);
 
-        return new Box(xTemp, y, 14 + cachedTextWidth + 9, TEXTURE_HEIGHT, color);
+        setBoundingBox(xTemp, y, 14 + cachedTextWidth + 9, TEXTURE_HEIGHT, color);
     }
 
     @Override

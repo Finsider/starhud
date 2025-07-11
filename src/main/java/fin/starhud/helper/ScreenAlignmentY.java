@@ -14,20 +14,19 @@ public enum ScreenAlignmentY {
         };
     }
 
-    // IF BOTTOM, prevent HUD from leaving the screen if you set x:0, y:0
-    public int getTextureOffset(int textureHeight) {
-        return switch (this) {
-            case TOP -> 0;
-            case MIDDLE -> textureHeight / 2;
-            case BOTTOM -> textureHeight;
-        };
-    }
-
     public ScreenAlignmentY next() {
         return switch (this) {
             case TOP -> MIDDLE;
             case MIDDLE -> BOTTOM;
             case BOTTOM -> TOP;
+        };
+    }
+
+    public ScreenAlignmentY prev() {
+        return switch (this) {
+            case TOP -> BOTTOM;
+            case MIDDLE -> TOP;
+            case BOTTOM -> MIDDLE;
         };
     }
 }

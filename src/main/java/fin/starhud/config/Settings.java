@@ -2,6 +2,7 @@ package fin.starhud.config;
 
 import fin.starhud.config.hud.*;
 import fin.starhud.helper.GrowthDirectionX;
+import fin.starhud.helper.GrowthDirectionY;
 import fin.starhud.helper.ScreenAlignmentX;
 import fin.starhud.helper.ScreenAlignmentY;
 import me.shedaniel.autoconfig.ConfigData;
@@ -62,10 +63,10 @@ public class Settings implements ConfigData {
 
     public static class HandSettings {
         @ConfigEntry.Gui.CollapsibleObject
-        public fin.starhud.config.hud.HandSettings leftHandSettings = new fin.starhud.config.hud.HandSettings(true, -108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, 0xffb3b3);
+        public fin.starhud.config.hud.HandSettings leftHandSettings = new fin.starhud.config.hud.HandSettings(true, -108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP,0xffb3b3);
 
         @ConfigEntry.Gui.CollapsibleObject
-        public fin.starhud.config.hud.HandSettings rightHandSettings = new fin.starhud.config.hud.HandSettings(true, 108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, 0x87ceeb);
+        public fin.starhud.config.hud.HandSettings rightHandSettings = new fin.starhud.config.hud.HandSettings(true, 108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
     }
 
     @ConfigEntry.Category("effect")

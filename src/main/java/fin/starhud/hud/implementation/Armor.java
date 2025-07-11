@@ -24,7 +24,6 @@ public class Armor extends AbstractHUD {
     private static final boolean[] SHOULD_RENDER = new boolean[4];
     private static final boolean[] DRAW_BAR = new boolean[4];
     private static final boolean[] DRAW_ITEM = new boolean[4];
-    private static final GrowthDirectionX[] TEXTURE_GROWTH = new GrowthDirectionX[4];
 
     private static final int TEXTURE_WIDTH = 13 + 1 + 5 + 5;
     private static final int TEXTURE_HEIGHT = 13;
@@ -52,7 +51,7 @@ public class Armor extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
+    public void renderHUD(DrawContext context) {
         int armorIndex = 3;
 
         for (EquipmentSlot equipmentSlot : AttributeModifierSlot.ARMOR) {
@@ -71,7 +70,7 @@ public class Armor extends AbstractHUD {
                             0xFFFFFFFF,
                             DRAW_BAR[armorIndex],
                             DRAW_ITEM[armorIndex],
-                            TEXTURE_GROWTH[armorIndex]
+                            ARMOR_SETTINGS.base.growthDirectionX
                     );
 
                     if (needBoxUpdate) {
@@ -88,7 +87,7 @@ public class Armor extends AbstractHUD {
         }
 
         needBoxUpdate = false;
-        return cachedBox;
+        setBoundingBox(cachedBox);
     }
 
     @Override
@@ -121,10 +120,6 @@ public class Armor extends AbstractHUD {
         DRAW_ITEM[2] = ARMOR_SETTINGS.leggings.drawItem;
         DRAW_ITEM[3] = ARMOR_SETTINGS.boots.drawItem;
 
-        TEXTURE_GROWTH[0] = ARMOR_SETTINGS.helmet.textureGrowth;
-        TEXTURE_GROWTH[1] = ARMOR_SETTINGS.chestplate.textureGrowth;
-        TEXTURE_GROWTH[2] = ARMOR_SETTINGS.leggings.textureGrowth;
-        TEXTURE_GROWTH[3] = ARMOR_SETTINGS.boots.textureGrowth;
 
         needBoxUpdate = true;
         cachedBox = null;

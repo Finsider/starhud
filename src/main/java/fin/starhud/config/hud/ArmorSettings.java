@@ -2,6 +2,7 @@ package fin.starhud.config.hud;
 
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.helper.GrowthDirectionX;
+import fin.starhud.helper.GrowthDirectionY;
 import fin.starhud.helper.ScreenAlignmentX;
 import fin.starhud.helper.ScreenAlignmentY;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
@@ -10,19 +11,19 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 public class ArmorSettings {
 
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(true, 5, -20, ScreenAlignmentX.LEFT, ScreenAlignmentY.MIDDLE);
+    public BaseHUDSettings base = new BaseHUDSettings(true, 5, -20, ScreenAlignmentX.LEFT, ScreenAlignmentY.MIDDLE, GrowthDirectionX.RIGHT, GrowthDirectionY.MIDDLE);
 
     @ConfigEntry.Gui.CollapsibleObject
-    public ArmorPieceSetting helmet = new ArmorPieceSetting(true, 0, 0, true, GrowthDirectionX.RIGHT);
+    public ArmorPieceSetting helmet = new ArmorPieceSetting(true, 0, 0, true);
 
     @ConfigEntry.Gui.CollapsibleObject
-    public ArmorPieceSetting chestplate = new ArmorPieceSetting(true, 0, 14, true, GrowthDirectionX.RIGHT);
+    public ArmorPieceSetting chestplate = new ArmorPieceSetting(true, 0, 14, true);
 
     @ConfigEntry.Gui.CollapsibleObject
-    public ArmorPieceSetting leggings = new ArmorPieceSetting(true, 0, 28, true, GrowthDirectionX.RIGHT);
+    public ArmorPieceSetting leggings = new ArmorPieceSetting(true, 0, 28, true);
 
     @ConfigEntry.Gui.CollapsibleObject
-    public ArmorPieceSetting boots = new ArmorPieceSetting(true, 0, 42, true, GrowthDirectionX.RIGHT);
+    public ArmorPieceSetting boots = new ArmorPieceSetting(true, 0, 42, true);
 
     public static class ArmorPieceSetting {
 
@@ -40,16 +41,11 @@ public class ArmorSettings {
         @Comment("Draw The Icon Using the Item instead of the HUD icon. (Warning: LARGE HUD)")
         public boolean drawItem = false;
 
-        @Comment("Which way should the HUD goes when a the texture increases?")
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        public GrowthDirectionX textureGrowth;
-
-        public ArmorPieceSetting(boolean shouldRender, int xOffset, int yOffset, boolean drawBar, GrowthDirectionX textureGrowth) {
+        public ArmorPieceSetting(boolean shouldRender, int xOffset, int yOffset, boolean drawBar) {
             this.shouldRender = shouldRender;
             this.xOffset = xOffset;
             this.yOffset = yOffset;
             this.drawBar = drawBar;
-            this.textureGrowth = textureGrowth;
         }
     }
 }

@@ -35,7 +35,7 @@ public class Biome extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
+    public void renderHUD(DrawContext context) {
         TextRenderer textRenderer = CLIENT.textRenderer;
 
         BlockPos blockPos = CLIENT.player.getBlockPos();
@@ -50,13 +50,13 @@ public class Biome extends AbstractHUD {
         int dimensionIndex = getDimensionIndex(CLIENT.world.getRegistryKey());
         int color = getTextColorFromDimension(dimensionIndex) | 0xFF000000;
 
-        int xTemp = x - BIOME_SETTINGS.textGrowth.getGrowthDirection(cachedTextWidth);
+        int xTemp = x - BIOME_SETTINGS.base.growthDirectionX.getGrowthDirection(cachedTextWidth);
 
         RenderUtils.drawTextureHUD(context, DIMENSION_TEXTURE, xTemp, y, 0.0F, dimensionIndex * TEXTURE_HEIGHT, 13, TEXTURE_HEIGHT, 13, 52);
         RenderUtils.fillRoundedRightSide(context, xTemp + 14, y, xTemp + 14 + cachedTextWidth + 9, y + TEXTURE_HEIGHT, 0x80000000);
         RenderUtils.drawTextHUD(context, cachedFormattedBiomeStr, xTemp + 19, y + 3, color, false);
 
-        return new Box(xTemp, y, 14 + cachedTextWidth + 9, TEXTURE_HEIGHT, color);
+        setBoundingBox(xTemp, y, 14 + cachedTextWidth + 9, TEXTURE_HEIGHT, color);
     }
 
     private static int getDimensionIndex(RegistryKey<World> registryKey) {

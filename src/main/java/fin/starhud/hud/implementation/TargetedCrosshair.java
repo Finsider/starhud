@@ -83,12 +83,11 @@ public class TargetedCrosshair extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
-        return switch (CLIENT.crosshairTarget.getType()) {
+    public void renderHUD(DrawContext context) {
+        switch (CLIENT.crosshairTarget.getType()) {
             case BLOCK -> renderBlockInfoHUD(context);
             case ENTITY -> renderEntityInfoHUD(context);
-            default -> null;
-        };
+        }
     }
 
     private Block cachedBlock = null;
@@ -96,7 +95,7 @@ public class TargetedCrosshair extends AbstractHUD {
     private String cachedBlockModName = null;
     private int cachedBlockMaxWidth = -1;
 
-    public Box renderBlockInfoHUD(DrawContext context) {
+    public void renderBlockInfoHUD(DrawContext context) {
         BlockPos pos = ((BlockHitResult) CLIENT.crosshairTarget).getBlockPos();
 
         BlockState blockState = CLIENT.world.getBlockState(pos);
@@ -117,7 +116,7 @@ public class TargetedCrosshair extends AbstractHUD {
             cachedBlockMaxWidth = Math.max(modNameWidth, blockNameWidth) - 1;
         }
 
-        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.textureGrowth.getGrowthDirection(cachedBlockMaxWidth);
+        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.base.growthDirectionX.getGrowthDirection(cachedBlockMaxWidth);
 
         RenderUtils.drawTextureHUD(
                 context,
@@ -151,7 +150,7 @@ public class TargetedCrosshair extends AbstractHUD {
                 false
         );
 
-        return new Box(xTemp, y, ICON_BACKGROUND_WIDTH + 1 + 5 + cachedBlockMaxWidth + 5, ICON_BACKGROUND_HEIGHT);
+        setBoundingBox(xTemp, y, ICON_BACKGROUND_WIDTH + 1 + 5 + cachedBlockMaxWidth + 5, ICON_BACKGROUND_HEIGHT);
     }
 
     private Entity cachedTargetedEntity = null;
@@ -160,7 +159,7 @@ public class TargetedCrosshair extends AbstractHUD {
     private int cachedEntityMaxWidth = -1;
     private int cachedIndex = -1;
 
-    public Box renderEntityInfoHUD(DrawContext context) {
+    public void renderEntityInfoHUD(DrawContext context) {
         Entity targetedEntity = MinecraftClient.getInstance().targetedEntity;
 
         if (!targetedEntity.equals(cachedTargetedEntity)) {
@@ -175,7 +174,7 @@ public class TargetedCrosshair extends AbstractHUD {
             cachedIndex = getEntityIconIndex(targetedEntity);
         }
 
-        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.textureGrowth.getGrowthDirection(cachedEntityMaxWidth);
+        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.base.growthDirectionX.getGrowthDirection(cachedEntityMaxWidth);
 
         int color = getEntityIconColor(cachedIndex) | 0xFF000000;
 
@@ -210,7 +209,7 @@ public class TargetedCrosshair extends AbstractHUD {
                 false
         );
 
-        return new Box(xTemp, y, ICON_BACKGROUND_WIDTH + 1 + 5 + cachedEntityMaxWidth + 5, ICON_BACKGROUND_HEIGHT, color);
+        setBoundingBox(xTemp, y, ICON_BACKGROUND_WIDTH + 1 + 5 + cachedEntityMaxWidth + 5, ICON_BACKGROUND_HEIGHT, color);
     }
 
     private int getEntityIconIndex(Entity e) {

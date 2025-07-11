@@ -37,7 +37,7 @@ public class Ping extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
+    public void renderHUD(DrawContext context) {
         MultiValueDebugSampleLogImpl pingLog = CLIENT.getDebugHud().getPingLog();
 
         // different world and server checking for PingMeasurer renewal.
@@ -51,7 +51,7 @@ public class Ping extends AbstractHUD {
 
         int pingLogLen = pingLog.getLength();
         if (pingLogLen <= 0)
-            return null;
+            return;
 
         // get the latest updated ping through the last element.
         long currentPing = pingLog.get(pingLogLen - 1);
@@ -64,7 +64,7 @@ public class Ping extends AbstractHUD {
         RenderUtils.drawTextureHUD(context, PING_TEXTURE, x, y, 0.0F, step * 13, TEXTURE_WIDTH, TEXTURE_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT * 4, color);
         RenderUtils.drawTextHUD(context, pingStr, x + 19, y + 3, color, false);
 
-        return new Box(x, y, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
+        setBoundingBox(x, y, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
     }
 
     public static int getPingColor(int step) {

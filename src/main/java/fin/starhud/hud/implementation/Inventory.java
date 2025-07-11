@@ -42,15 +42,15 @@ public class Inventory extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
+    public void renderHUD(DrawContext context) {
         if (INVENTORY_SETTINGS.drawVertical) {
-            return drawInventoryVertical(context, x, y);
+            drawInventoryVertical(context, x, y);
         } else {
-            return drawInventoryHorizontal(context, x, y);
+            drawInventoryHorizontal(context, x, y);
         }
     }
 
-    private static Box drawInventoryVertical(DrawContext context, int x, int y) {
+    private void drawInventoryVertical(DrawContext context, int x, int y) {
         PlayerInventory inventory = CLIENT.player.getInventory();
         boolean foundItem = false;
 
@@ -73,10 +73,10 @@ public class Inventory extends AbstractHUD {
             }
         }
 
-        return new Box(x, y, TEXTURE_WIDTH_VERTICAL, TEXTURE_HEIGHT_VERTICAL);
+        setBoundingBox(x, y, TEXTURE_WIDTH_VERTICAL, TEXTURE_HEIGHT_VERTICAL);
     }
 
-    private static Box drawInventoryHorizontal(DrawContext context, int x, int y) {
+    private void drawInventoryHorizontal(DrawContext context, int x, int y) {
         PlayerInventory inventory = CLIENT.player.getInventory();
         boolean foundItem = false;
 
@@ -99,7 +99,7 @@ public class Inventory extends AbstractHUD {
             }
         }
 
-        return new Box(x, y, TEXTURE_WIDTH_HORIZONTAL, TEXTURE_HEIGHT_HORIZONTAL);
+        setBoundingBox(x, y, TEXTURE_WIDTH_HORIZONTAL, TEXTURE_HEIGHT_HORIZONTAL);
     }
 
     private static void preComputeHorizontal() {

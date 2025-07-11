@@ -37,7 +37,7 @@ public abstract class AbstractHUD implements HUDInterface {
 
         // if the HUD' scale is set to default, don't... change the scale...? whatever, this is faster than the one below.
         if (!isScaled()) {
-            setBoundingBox(renderHUD(context));
+            renderHUD(context);
             return;
         }
 
@@ -46,14 +46,14 @@ public abstract class AbstractHUD implements HUDInterface {
         setHUDScale(context);
 
         try {
-            setBoundingBox(renderHUD(context));
+            renderHUD(context);
         } finally {
             context.getMatrices().pop();
         }
 
     }
 
-    public abstract Box renderHUD(DrawContext context);
+    public abstract void renderHUD(DrawContext context);
 
     public void setHUDScale(DrawContext context) {
         float scaleFactor = baseHUDSettings.scale / (float) WINDOW.getScaleFactor();
@@ -81,12 +81,12 @@ public abstract class AbstractHUD implements HUDInterface {
     public abstract int getBaseHUDHeight();
 
     public void updateX() {
-        baseX = baseHUDSettings.getCalculatedPosX(getBaseHUDWidth());
+        baseX = baseHUDSettings.getCalculatedPosX() - baseHUDSettings.growthDirectionX.getGrowthDirection(getBaseHUDWidth());
         x = baseX;
     }
 
     public void updateY() {
-        baseY = baseHUDSettings.getCalculatedPosY(getBaseHUDHeight());
+        baseY = baseHUDSettings.getCalculatedPosY() - baseHUDSettings.growthDirectionY.getGrowthDirection(getBaseHUDHeight());
         y = baseY;
     }
 
@@ -135,5 +135,13 @@ public abstract class AbstractHUD implements HUDInterface {
             boundingBox = new Box(getBaseX(), getBaseY(), 13, 13);
         }
         this.boundingBox.copyFrom(boundingBox);
+    }
+
+    public void setBoundingBox(int x, int y, int width, int height, int color) {
+        this.boundingBox.setBoundingBox(x, y, width, height, color);
+    }
+
+    public void setBoundingBox(int x, int y, int width, int height) {
+        this.boundingBox.setBoundingBox(x, y, width, height);
     }
 }

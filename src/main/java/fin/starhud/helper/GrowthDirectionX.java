@@ -12,4 +12,20 @@ public enum GrowthDirectionX {
             case RIGHT -> 0;
         };
     }
+
+    public GrowthDirectionX next() {
+        return switch (this) {
+            case LEFT -> CENTER;
+            case CENTER -> RIGHT;
+            case RIGHT -> LEFT;
+        };
+    }
+
+    public GrowthDirectionX prev() {
+        return switch (this) {
+            case LEFT -> RIGHT;
+            case CENTER -> LEFT;
+            case RIGHT -> CENTER;
+        };
+    }
 }

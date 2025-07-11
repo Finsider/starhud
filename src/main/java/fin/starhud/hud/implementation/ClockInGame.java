@@ -33,10 +33,8 @@ public class ClockInGame extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
+    public void renderHUD(DrawContext context) {
         ClientWorld world = CLIENT.world;
-
-        if (world == null) return null;
 
         long time = world.getTimeOfDay() % 24000;
 
@@ -60,12 +58,12 @@ public class ClockInGame extends AbstractHUD {
             RenderUtils.drawTextureHUD(context, CLOCK_12_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedMinecraftTimeString, x + 19, y + 3, color, false);
 
-            return new Box(x, y, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT, color);
+            setBoundingBox(x, y, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT, color);
         } else {
             RenderUtils.drawTextureHUD(context, CLOCK_24_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedMinecraftTimeString, x + 19, y + 3, color, false);
 
-            return new Box(x, y, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT, color);
+            setBoundingBox(x, y, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT, color);
         }
     }
 

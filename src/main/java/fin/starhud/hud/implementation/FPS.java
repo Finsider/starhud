@@ -25,14 +25,14 @@ public class FPS extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
+    public void renderHUD(DrawContext context) {
         String fpsStr = CLIENT.getCurrentFps() + " FPS";
         int color = FPS_SETTINGS.color | 0xFF000000;
 
         RenderUtils.drawTextureHUD(context, FPS_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
         RenderUtils.drawTextHUD(context, fpsStr, x + 19, y + 3, color, false);
 
-        return new Box(x, y, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
+        setBoundingBox(x, y, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
     }
 
     @Override

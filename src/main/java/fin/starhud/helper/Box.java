@@ -63,6 +63,18 @@ public class Box {
         this.y = y;
     }
 
+    public void setBoundingBox(int x, int y, int width, int height, int color) {
+        this.setX(x);
+        this.setY(y);
+        this.setWidth(width);
+        this.setHeight(height);
+        this.setColor(color);
+    }
+
+    public void setBoundingBox(int x, int y, int width, int height) {
+        setBoundingBox(x, y, width, height, this.getColor());
+    }
+
     public void copyFrom(Box other) {
         this.x = other.x;
         this.y = other.y;

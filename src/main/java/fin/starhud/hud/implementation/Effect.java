@@ -50,7 +50,7 @@ public class Effect extends AbstractHUD {
     }
 
     @Override
-    public Box renderHUD(DrawContext context) {
+    public void renderHUD(DrawContext context) {
 
         // straight up copied from minecraft's own status effect rendering system.
 
@@ -70,13 +70,14 @@ public class Effect extends AbstractHUD {
         int beneficialSize = getBeneficialSize();
         int harmSize = effectSize - beneficialSize;
 
-        int xBeneficial = x - effectSettings.growthDirectionX.getGrowthDirection(getDynamicWidth(true, beneficialSize, harmSize));
-        int yBeneficial = y - effectSettings.growthDirectionY.getGrowthDirection(getDynamicHeight(true, beneficialSize, harmSize));
+        int xBeneficial = x - effectSettings.base.growthDirectionX.getGrowthDirection(getDynamicWidth(true, beneficialSize, harmSize));
+        int yBeneficial = y - effectSettings.base.growthDirectionY.getGrowthDirection(getDynamicHeight(true, beneficialSize, harmSize));
 
-        int xHarm = (beneficialSize == 0 && drawVertical) ? xBeneficial : x - effectSettings.growthDirectionX.getGrowthDirection(getDynamicWidth(false, beneficialSize, harmSize));
-        int yHarm = (beneficialSize == 0 && !drawVertical) ? yBeneficial : y - effectSettings.growthDirectionY.getGrowthDirection(getDynamicHeight(false, beneficialSize, harmSize));
+        int xHarm = (beneficialSize == 0 && drawVertical) ? xBeneficial : x - effectSettings.base.growthDirectionX.getGrowthDirection(getDynamicWidth(false, beneficialSize, harmSize));
+        int yHarm = (beneficialSize == 0 && !drawVertical) ? yBeneficial : y - effectSettings.base.growthDirectionY.getGrowthDirection(getDynamicHeight(false, beneficialSize, harmSize));
 
         Box cachedBox = null;
+        Box tempBox = new Box(0,0);
 
         for (StatusEffectInstance statusEffectInstance : collection) {
             if (!statusEffectInstance.shouldShowIcon())
@@ -98,15 +99,11 @@ public class Effect extends AbstractHUD {
                 ++harmIndex;
             }
 
-
-            Box tempBox = new Box(x2, y2, STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT);
-
-            if (cachedBox == null) {
-                cachedBox = tempBox;
-            } else {
+            tempBox.setBoundingBox(x2, y2, STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT);
+            if (cachedBox == null)
+                cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
+            else
                 cachedBox.mergeWith(tempBox);
-            }
-
 
             if (statusEffectInstance.isAmbient()) {
 
@@ -193,7 +190,7 @@ public class Effect extends AbstractHUD {
 
         }
 
-        return cachedBox;
+        setBoundingBox(cachedBox);
     }
 
     public int getDynamicWidth(boolean isBeneficial, int beneficialSize, int harmSize) {
