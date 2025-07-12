@@ -13,6 +13,11 @@ public class RightHand extends Hand {
     }
 
     @Override
+    public String getName() {
+        return "Right Hand HUD";
+    }
+
+    @Override
     int getV() {
         return 14;
     }

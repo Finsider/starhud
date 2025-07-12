@@ -23,6 +23,9 @@ public class EffectSettings implements ConfigData {
     @Comment("Gap between the same type Effect HUD. (Recommendation) (if Vertical 34, Horizontal 25)")
     public int sameTypeGap = 25;
 
+    @Comment("Draw the Timer with The Effect Color")
+    public boolean useEffectColor = false;
+
     @ConfigEntry.ColorPicker
     public int ambientColor = 0xd5feef;
 

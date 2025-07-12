@@ -2,7 +2,6 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.ClockInGameSettings;
-import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -30,6 +29,11 @@ public class ClockInGame extends AbstractHUD {
 
     public ClockInGame() {
         super(CLOCK_IN_GAME_SETTINGS.base);
+    }
+
+    @Override
+    public String getName() {
+        return "Clock In-Game HUD";
     }
 
     @Override

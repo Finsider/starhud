@@ -3,7 +3,6 @@ package fin.starhud.hud.implementation;
 import fin.starhud.Main;
 import fin.starhud.config.hud.ArmorSettings;
 import fin.starhud.helper.Box;
-import fin.starhud.helper.GrowthDirectionX;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -41,6 +40,11 @@ public class Armor extends AbstractHUD {
     }
 
     @Override
+    public String getName() {
+        return "Armor HUD";
+    }
+
+    @Override
     public int getBaseHUDWidth() {
         return (DRAW_ITEM[0] || DRAW_ITEM[1] || DRAW_ITEM[2] || DRAW_ITEM[3]) ? ITEM_TEXTURE_WIDTH : TEXTURE_WIDTH;
     }
@@ -75,8 +79,7 @@ public class Armor extends AbstractHUD {
 
                     if (needBoxUpdate) {
                         if (cachedBox == null) {
-                            cachedBox = tempBox;
-                            cachedBox.setColor(0xFFFFFFFF);
+                            cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight());
                         } else {
                             cachedBox.mergeWith(tempBox);
                         }

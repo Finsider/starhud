@@ -27,10 +27,10 @@ public class Main implements ClientModInitializer {
         AutoConfig.getConfigHolder(Settings.class).registerSaveListener(this::onConfigSaved);
 
         openEditHUDKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.starhud.open_edithud", // Translation key
+                "key.starhud.open_edithud",
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT_SHIFT,  // Right Shift key
-                "category.starhud" // Translation category
+                GLFW.GLFW_KEY_RIGHT_SHIFT,
+                "category.starhud"
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

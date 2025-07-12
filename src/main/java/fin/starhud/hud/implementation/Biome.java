@@ -3,7 +3,6 @@ package fin.starhud.hud.implementation;
 import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.hud.BiomeSettings;
-import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -32,6 +31,11 @@ public class Biome extends AbstractHUD {
 
     public Biome() {
         super(BIOME_SETTINGS.base);
+    }
+
+    @Override
+    public String getName() {
+        return "Biome HUD";
     }
 
     @Override

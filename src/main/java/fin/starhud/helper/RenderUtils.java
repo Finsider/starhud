@@ -24,6 +24,8 @@ public class RenderUtils {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
+    private static final Box tempBox = new Box(0,0);
+
     public static void fillRoundedRightSide(DrawContext context, int x1, int y1, int x2, int y2, int color) {
         context.fill(x1, y1, x2 - 1, y2, color);
         context.fill(x2 - 1, y1 + 1, x2, y2 - 1, color);
@@ -75,7 +77,8 @@ public class RenderUtils {
 
         if (step != 0) RenderUtils.drawTextureHUD(context, ITEM_DURABILITY_TEXTURE, x + 28, y + 4, 0, 0, 7 * step, 14, 70, 14, durabilityColor);
 
-        return new Box(x, y, 101, 22, durabilityColor);
+        tempBox.setBoundingBox(x, y, 101, 22, durabilityColor);
+        return tempBox;
     }
 
     public static Box renderItemDurabilityNumber(DrawContext context, ItemStack stack, int x, int y, GrowthDirectionX textureGrowth) {
@@ -97,7 +100,8 @@ public class RenderUtils {
         fillRoundedRightSide(context, x + 23,  y, x + 22 + 1 + 5 + durabilityWidth + 5, y + 22, 0x80000000);
         RenderUtils.drawTextHUD(context, durability, x + 22 + 1 + 5, y + 7, textColor, false);
 
-        return new Box(x, y, 22 + 1 + 5 + durabilityWidth + 5, 22, textColor);
+        tempBox.setBoundingBox(x, y, 22 + 1 + 5 + durabilityWidth + 5, 22, textColor);
+        return tempBox;
     }
 
     public static Box renderDurabilityBar(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, GrowthDirectionX textureGrowth) {
@@ -113,7 +117,8 @@ public class RenderUtils {
         RenderUtils.drawTextureHUD(context, DURABILITY_BACKGROUND_TEXTURE, x + 14, y, 0.0F, 0.0F, 49, 13, 49, 13);
         if (step != 0) RenderUtils.drawTextureHUD(context, DURABILITY_TEXTURE, x + 19, y + 3, 0, 0, 4 * step, 7, 40, 7, durabilityColor);
 
-        return new Box(x, y, 13 + 1 + 49, 13, durabilityColor);
+        tempBox.setBoundingBox(x, y, 13 + 1 + 49, 13, durabilityColor);
+        return tempBox;
     }
 
     // example render: ¹²³⁴/₅₆₇₈
@@ -140,7 +145,8 @@ public class RenderUtils {
         RenderUtils.drawTextHUD(context, remainingStr, x + 14 + 5, y + 3, textColor, false);
         RenderUtils.drawTextHUD(context, maxDamageStr, x + 14 + 5 + remainingTextWidth, y + 3 - 1, textColor, false);
 
-        return new Box(x, y, 14 + remainingTextWidth + maxDamageTextWidth + 10, 13, textColor);
+        tempBox.setBoundingBox(x, y, 14 + remainingTextWidth + maxDamageTextWidth + 10, 13, textColor);
+        return tempBox;
     }
 
     // for easier version porting.

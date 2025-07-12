@@ -43,6 +43,11 @@ public class Effect extends AbstractHUD {
     }
 
     @Override
+    public String getName() {
+        return "Status Effect HUD";
+    }
+
+    @Override
     public boolean shouldRender() {
         return baseHUDSettings.shouldRender
                 && !CLIENT.player.getStatusEffects().isEmpty()
@@ -141,7 +146,7 @@ public class Effect extends AbstractHUD {
                 int maxDuration = statusEffectAttribute.maxDuration();
 
                 step = Helper.getStep(duration, maxDuration, 7);
-                color = RenderUtils.getItemBarColor(step, 7) | 0xFF000000;
+                color = (effectSettings.useEffectColor ? registryEntry.value().getColor() : RenderUtils.getItemBarColor(step, 7)) | 0xFF000000;
             }
 
             // draw timer bar

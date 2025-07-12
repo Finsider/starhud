@@ -2,7 +2,6 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.FPSSettings;
-import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -22,6 +21,11 @@ public class FPS extends AbstractHUD {
 
     public FPS() {
         super(FPS_SETTINGS.base);
+    }
+
+    @Override
+    public String getName() {
+        return "FPS HUD";
     }
 
     @Override

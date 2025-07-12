@@ -29,6 +29,11 @@ public class Coordinate extends AbstractHUD {
     }
 
     @Override
+    public String getName() {
+        return "Coordinate HUD";
+    }
+
+    @Override
     public void renderHUD(DrawContext context) {
         Vec3d vec3d = CLIENT.player.getPos();
 

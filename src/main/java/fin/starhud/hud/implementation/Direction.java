@@ -2,7 +2,6 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.DirectionSettings;
-import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -32,6 +31,11 @@ public class Direction extends AbstractHUD {
 
     public Direction() {
         super(DIRECTION_SETTINGS.base);
+    }
+
+    @Override
+    public String getName() {
+        return "Direction HUD";
     }
 
     @Override

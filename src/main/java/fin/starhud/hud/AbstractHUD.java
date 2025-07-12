@@ -21,7 +21,7 @@ public abstract class AbstractHUD implements HUDInterface {
     protected int baseX;
     protected int baseY;
 
-    private Box boundingBox = new Box(0, 0);
+    private final Box boundingBox = new Box(0, 0);
 
     public AbstractHUD(BaseHUDSettings baseHUDSettings) {
         this.baseHUDSettings = baseHUDSettings;
@@ -54,6 +54,9 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     public abstract void renderHUD(DrawContext context);
+    public abstract int getBaseHUDWidth();
+    public abstract int getBaseHUDHeight();
+    public abstract String getName();
 
     public void setHUDScale(DrawContext context) {
         float scaleFactor = baseHUDSettings.scale / (float) WINDOW.getScaleFactor();
@@ -75,10 +78,6 @@ public abstract class AbstractHUD implements HUDInterface {
         x = baseX + tempX;
         y = baseY + tempY;
     }
-
-    public abstract int getBaseHUDWidth();
-
-    public abstract int getBaseHUDHeight();
 
     public void updateX() {
         baseX = baseHUDSettings.getCalculatedPosX() - baseHUDSettings.growthDirectionX.getGrowthDirection(getBaseHUDWidth());

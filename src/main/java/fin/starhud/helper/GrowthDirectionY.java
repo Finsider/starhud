@@ -28,4 +28,12 @@ public enum GrowthDirectionY {
             case DOWN -> MIDDLE;
         };
     }
+
+    public GrowthDirectionY recommendedScreenAlignment(ScreenAlignmentY screenAlignmentY) {
+        return switch (screenAlignmentY) {
+            case TOP -> DOWN;
+            case MIDDLE -> MIDDLE;
+            case BOTTOM -> UP;
+        };
+    }
 }

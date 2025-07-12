@@ -2,7 +2,6 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.InventorySettings;
-import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -35,6 +34,11 @@ public class Inventory extends AbstractHUD {
     static {
         preComputeHorizontal();
         preComputeVertical();
+    }
+
+    @Override
+    public String getName() {
+        return "Inventory HUD";
     }
 
     public Inventory() {

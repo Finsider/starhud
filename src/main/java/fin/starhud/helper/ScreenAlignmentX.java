@@ -1,7 +1,5 @@
 package fin.starhud.helper;
 
-import net.minecraft.client.gui.screen.Screen;
-
 public enum ScreenAlignmentX {
     LEFT,
     CENTER,

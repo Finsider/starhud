@@ -2,7 +2,6 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.DaySettings;
-import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -26,6 +25,11 @@ public class Day extends AbstractHUD {
 
     public Day() {
         super(DAY_SETTINGS.base);
+    }
+
+    @Override
+    public String getName() {
+        return "Day HUD";
     }
 
     @Override

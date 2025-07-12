@@ -16,6 +16,7 @@ import net.minecraft.util.Identifier;
 public abstract class Hand extends AbstractHUD {
 
     private static final Identifier HAND_TEXTURE = Identifier.of("starhud", "hud/hand.png");
+    private static final Identifier BIG_HAND_TEXTURE = Identifier.of("starhud", "hud/big_hand.png");
 
     // base HUD Width (Icon width = 13, 1 for the gap between icon and text, 5 for the gap on left side of the attribute, 5 for the gap on the right of the attribute).
     // guys i legit forgot what the "10 for the padding at left / right edge" meant help.
@@ -60,14 +61,34 @@ public abstract class Hand extends AbstractHUD {
 
         // either draw the durability or the amount of item in the inventory.
         if (handSettings.showDurability && item.isDamageable()) {
-            RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.drawItem, handSettings.base.growthDirectionX);
+            Box box = RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.drawItem, handSettings.base.growthDirectionX);
+            setBoundingBox(box);
         } else if (handSettings.showCount) {
             x -= handSettings.base.growthDirectionX.getGrowthDirection(COUNT_WIDTH);
-            renderItemCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);
+            renderStackCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);
         }
     }
 
-    private void renderItemCountHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
+    private void renderStackCountHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
+        if (handSettings.drawItem) {
+            renderStackCountItemHUD(context, playerInventory, stack, x, y, color);
+        } else {
+            renderStackCountIconHUD(context, playerInventory, stack, x, y, v, color);
+        }
+    }
+
+    private void renderStackCountItemHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, int color) {
+        int stackAmount = getItemCount(playerInventory, stack);
+        String amountStr = Integer.toString(stackAmount);
+
+        RenderUtils.drawTextureHUD(context, BIG_HAND_TEXTURE, x, y, 0.0F, 0.0F, ITEM_TEXTURE_WIDTH + COUNT_WIDTH, ITEM_TEXTURE_HEIGHT,ITEM_TEXTURE_WIDTH + COUNT_WIDTH, ITEM_TEXTURE_HEIGHT);
+        context.drawItem(stack, x + 3, y + 3);
+        RenderUtils.drawTextHUD(context, amountStr, x + 22 + 1 + (5 + COUNT_WIDTH - CLIENT.textRenderer.getWidth(amountStr) + 5) / 2, y + 7, color, false);
+
+        setBoundingBox(x, y, ITEM_TEXTURE_WIDTH + COUNT_WIDTH, ITEM_TEXTURE_HEIGHT, color);
+    }
+
+    private void renderStackCountIconHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
         int stackAmount = getItemCount(playerInventory, stack);
 
         RenderUtils.drawTextureHUD(context, HAND_TEXTURE, x, y, 0.0F, v, COUNT_WIDTH + TEXTURE_WIDTH, TEXTURE_HEIGHT, COUNT_WIDTH + TEXTURE_WIDTH, 27, color);

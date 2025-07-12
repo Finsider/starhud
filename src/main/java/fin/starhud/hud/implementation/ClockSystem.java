@@ -2,7 +2,6 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.ClockSystemSettings;
-import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.gui.DrawContext;
@@ -32,6 +31,11 @@ public class ClockSystem extends AbstractHUD {
 
     public ClockSystem() {
         super(CLOCK_SYSTEM_SETTINGS.base);
+    }
+
+    @Override
+    public String getName() {
+        return "Clock System HUD";
     }
 
     @Override

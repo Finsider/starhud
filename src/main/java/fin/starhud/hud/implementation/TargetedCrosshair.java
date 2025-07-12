@@ -4,7 +4,6 @@ import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.ConditionalSettings;
 import fin.starhud.config.hud.TargetedCrosshairSettings;
-import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.block.Block;
@@ -44,19 +43,22 @@ public class TargetedCrosshair extends AbstractHUD {
 
     private static final TargetedCrosshairSettings TARGETED_CROSSHAIR_SETTINGS = Main.settings.targetedCrosshairSettings;
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final int BASE_HUD_WIDTH =
+            ICON_BACKGROUND_WIDTH
+                    + 1     // gap
+                    + 5     // left text padding
+                    + 5;    // right text padding
+
+    private static final int BASE_HUD_HEIGHT = ICON_BACKGROUND_HEIGHT;
 
     public TargetedCrosshair() {
         super(TARGETED_CROSSHAIR_SETTINGS.base);
     }
 
-
-    private static final int BASE_HUD_WIDTH =
-            ICON_BACKGROUND_WIDTH
-            + 1     // gap
-            + 5     // left text padding
-            + 5;    // right text padding
-
-    private static final int BASE_HUD_HEIGHT = ICON_BACKGROUND_HEIGHT;
+    @Override
+    public String getName() {
+        return "Targeted Crosshair HUD";
+    }
 
     @Override
     public boolean shouldRender() {

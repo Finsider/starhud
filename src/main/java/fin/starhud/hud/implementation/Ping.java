@@ -2,7 +2,6 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.PingSettings;
-import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -30,6 +29,12 @@ public class Ping extends AbstractHUD {
     public Ping() {
         super(PING_SETTINGS.base);
     }
+
+    @Override
+    public String getName() {
+        return "Ping HUD";
+    }
+
 
     @Override
     public boolean shouldRender() {
