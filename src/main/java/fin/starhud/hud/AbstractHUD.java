@@ -28,7 +28,7 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     @Override
-    public void render(DrawContext context) {
+    public boolean render(DrawContext context) {
         // I hate this piece of code
         // if Condition is triggered, the X will be modified with xOffset on that condition.
         // example: when bossbar is present, we want to move our hud under the bossbar, or avoid the bossbar.
@@ -37,8 +37,7 @@ public abstract class AbstractHUD implements HUDInterface {
 
         // if the HUD' scale is set to default, don't... change the scale...? whatever, this is faster than the one below.
         if (!isScaled()) {
-            renderHUD(context);
-            return;
+            return renderHUD(context);
         }
 
         // this is so we can change the scale for one hud but not the others.
@@ -46,14 +45,13 @@ public abstract class AbstractHUD implements HUDInterface {
         setHUDScale(context);
 
         try {
-            renderHUD(context);
+            return renderHUD(context);
         } finally {
             context.getMatrices().pop();
         }
-
     }
 
-    public abstract void renderHUD(DrawContext context);
+    public abstract boolean renderHUD(DrawContext context);
     public abstract int getBaseHUDWidth();
     public abstract int getBaseHUDHeight();
     public abstract String getName();
@@ -130,10 +128,10 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     public void setBoundingBox(Box boundingBox) {
-        if (boundingBox == null) {
-            boundingBox = new Box(getBaseX(), getBaseY(), 13, 13);
-        }
-        this.boundingBox.copyFrom(boundingBox);
+        if (boundingBox == null)
+            this.boundingBox.setBoundingBox(getBaseX(), getBaseY(), 13, 13);
+        else
+            this.boundingBox.copyFrom(boundingBox);
     }
 
     public void setBoundingBox(int x, int y, int width, int height, int color) {

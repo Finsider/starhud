@@ -39,7 +39,7 @@ public class Biome extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public boolean renderHUD(DrawContext context) {
         TextRenderer textRenderer = CLIENT.textRenderer;
 
         BlockPos blockPos = CLIENT.player.getBlockPos();
@@ -61,6 +61,7 @@ public class Biome extends AbstractHUD {
         RenderUtils.drawTextHUD(context, cachedFormattedBiomeStr, xTemp + 19, y + 3, color, false);
 
         setBoundingBox(xTemp, y, 14 + cachedTextWidth + 9, TEXTURE_HEIGHT, color);
+        return true;
     }
 
     private static int getDimensionIndex(RegistryKey<World> registryKey) {

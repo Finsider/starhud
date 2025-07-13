@@ -14,13 +14,15 @@ public class MixinInGameHUD {
 
     @Inject(at = @At("TAIL"), method = "renderHotbar")
     private void renderHotbar(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        HUDComponent.getInstance().renderAll(context);
+        if (HUDComponent.getInstance().shouldRenderInGameScreen())
+            HUDComponent.getInstance().renderAll(context);
     }
 
     @Inject(at = @At("HEAD"), method = "renderStatusEffectOverlay", cancellable = true)
     private void renderStatusEffectOverlay(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (HUDComponent.getInstance().effectHUD.shouldRender()) {
-            HUDComponent.getInstance().effectHUD.render(context);
+            if (HUDComponent.getInstance().shouldRenderInGameScreen())
+                HUDComponent.getInstance().effectHUD.render(context);
             ci.cancel();
         }
     }

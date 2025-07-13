@@ -14,6 +14,8 @@ public class HUDComponent {
     // separate status effect hud as they are rendered in a different place.
     public final AbstractHUD effectHUD;
 
+    public boolean shouldRenderInGameScreen;
+
     // singleton
     private HUDComponent() {
         huds.add(new Armor());
@@ -31,6 +33,8 @@ public class HUDComponent {
         huds.add(new TargetedCrosshair());
 
         effectHUD = new Effect();
+
+        shouldRenderInGameScreen = true;
     }
 
     public static HUDComponent getInstance() {
@@ -53,5 +57,13 @@ public class HUDComponent {
         }
 
         effectHUD.update();
+    }
+
+    public void setShouldRenderInGameScreen(boolean shouldRenderInGameScreen) {
+        this.shouldRenderInGameScreen = shouldRenderInGameScreen;
+    }
+
+    public boolean shouldRenderInGameScreen() {
+        return this.shouldRenderInGameScreen;
     }
 }

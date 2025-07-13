@@ -37,7 +37,7 @@ public class ClockInGame extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public boolean renderHUD(DrawContext context) {
         ClientWorld world = CLIENT.world;
 
         long time = world.getTimeOfDay() % 24000;
@@ -69,6 +69,7 @@ public class ClockInGame extends AbstractHUD {
 
             setBoundingBox(x, y, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT, color);
         }
+        return true;
     }
 
     private static int getIconColor(int icon) {

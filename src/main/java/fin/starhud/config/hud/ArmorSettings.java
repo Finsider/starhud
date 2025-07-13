@@ -30,16 +30,19 @@ public class ArmorSettings {
         @Comment("Enable This Piece to Render")
         public boolean shouldRender;
 
+        public boolean drawBar;
+
+        @Comment("Draw The Icon Using the Item instead of the HUD icon. (Warning: LARGE HUD)")
+        public boolean drawItem = false;
+
         @Comment("X Offset to origin X location")
         public int xOffset;
 
         @Comment("Y Offset to origin Y location")
         public int yOffset;
 
-        public boolean drawBar;
-
-        @Comment("Draw The Icon Using the Item instead of the HUD icon. (Warning: LARGE HUD)")
-        public boolean drawItem = false;
+        @ConfigEntry.ColorPicker
+        public int color = 0xD0DAED;
 
         public ArmorPieceSetting(boolean shouldRender, int xOffset, int yOffset, boolean drawBar) {
             this.shouldRender = shouldRender;

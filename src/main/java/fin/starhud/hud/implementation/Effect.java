@@ -55,7 +55,7 @@ public class Effect extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public boolean renderHUD(DrawContext context) {
 
         // straight up copied from minecraft's own status effect rendering system.
 
@@ -83,6 +83,7 @@ public class Effect extends AbstractHUD {
 
         Box cachedBox = null;
         Box tempBox = new Box(0,0);
+        boolean rendered = false;
 
         for (StatusEffectInstance statusEffectInstance : collection) {
             if (!statusEffectInstance.shouldShowIcon())
@@ -106,7 +107,7 @@ public class Effect extends AbstractHUD {
 
             tempBox.setBoundingBox(x2, y2, STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT);
             if (cachedBox == null)
-                cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
+                cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), effectSettings.ambientColor | 0xFF000000);
             else
                 cachedBox.mergeWith(tempBox);
 
@@ -178,6 +179,8 @@ public class Effect extends AbstractHUD {
                     ColorHelper.getWhite(alpha)
             );
 
+            rendered = true;
+
             // draw amplifier text.
             int amplifier = statusEffectAttribute.amplifier() + 1;
             if (amplifier == 1)
@@ -196,6 +199,7 @@ public class Effect extends AbstractHUD {
         }
 
         setBoundingBox(cachedBox);
+        return rendered;
     }
 
     public int getDynamicWidth(boolean isBeneficial, int beneficialSize, int harmSize) {

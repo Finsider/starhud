@@ -39,7 +39,7 @@ public class Direction extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public boolean renderHUD(DrawContext context) {
         float yaw = Math.round(MathHelper.wrapDegrees(CLIENT.cameraEntity.getYaw()) * 10.0F) / 10.0F;
 
         if (DIRECTION_SETTINGS.includeOrdinal) {
@@ -59,6 +59,7 @@ public class Direction extends AbstractHUD {
 
             setBoundingBox(x, y, TEXTURE_CARDINAL_WIDTH, TEXTURE_HEIGHT, color);
         }
+        return true;
     }
 
     private static int getOrdinalDirectionIcon(float yaw) {

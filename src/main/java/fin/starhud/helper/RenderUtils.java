@@ -117,7 +117,7 @@ public class RenderUtils {
         RenderUtils.drawTextureHUD(context, DURABILITY_BACKGROUND_TEXTURE, x + 14, y, 0.0F, 0.0F, 49, 13, 49, 13);
         if (step != 0) RenderUtils.drawTextureHUD(context, DURABILITY_TEXTURE, x + 19, y + 3, 0, 0, 4 * step, 7, 40, 7, durabilityColor);
 
-        tempBox.setBoundingBox(x, y, 13 + 1 + 49, 13, durabilityColor);
+        tempBox.setBoundingBox(x, y, 13 + 1 + 49, 13, color);
         return tempBox;
     }
 
@@ -145,7 +145,7 @@ public class RenderUtils {
         RenderUtils.drawTextHUD(context, remainingStr, x + 14 + 5, y + 3, textColor, false);
         RenderUtils.drawTextHUD(context, maxDamageStr, x + 14 + 5 + remainingTextWidth, y + 3 - 1, textColor, false);
 
-        tempBox.setBoundingBox(x, y, 14 + remainingTextWidth + maxDamageTextWidth + 10, 13, textColor);
+        tempBox.setBoundingBox(x, y, 14 + remainingTextWidth + maxDamageTextWidth + 10, 13, color);
         return tempBox;
     }
 

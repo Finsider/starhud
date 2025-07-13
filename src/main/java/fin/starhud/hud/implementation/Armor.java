@@ -18,11 +18,12 @@ public class Armor extends AbstractHUD {
 
     private static final Identifier ARMOR_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/armor.png");
 
-    private static final int[] X_OFFSETS = new int[4];
-    private static final int[] Y_OFFSETS = new int[4];
-    private static final boolean[] SHOULD_RENDER = new boolean[4];
-    private static final boolean[] DRAW_BAR = new boolean[4];
-    private static final boolean[] DRAW_ITEM = new boolean[4];
+    private static final ArmorSettings.ArmorPieceSetting[] PIECE_SETTINGS = {
+            ARMOR_SETTINGS.helmet,
+            ARMOR_SETTINGS.chestplate,
+            ARMOR_SETTINGS.leggings,
+            ARMOR_SETTINGS.boots
+    };
 
     private static final int TEXTURE_WIDTH = 13 + 1 + 5 + 5;
     private static final int TEXTURE_HEIGHT = 13;
@@ -46,44 +47,47 @@ public class Armor extends AbstractHUD {
 
     @Override
     public int getBaseHUDWidth() {
-        return (DRAW_ITEM[0] || DRAW_ITEM[1] || DRAW_ITEM[2] || DRAW_ITEM[3]) ? ITEM_TEXTURE_WIDTH : TEXTURE_WIDTH;
+        return (PIECE_SETTINGS[0].drawItem || PIECE_SETTINGS[1].drawItem || PIECE_SETTINGS[2].drawItem || PIECE_SETTINGS[3].drawItem) ? ITEM_TEXTURE_WIDTH : TEXTURE_WIDTH;
     }
 
     @Override
     public int getBaseHUDHeight() {
-        return (DRAW_ITEM[0] || DRAW_ITEM[1] || DRAW_ITEM[2] || DRAW_ITEM[3]) ? ITEM_TEXTURE_HEIGHT : TEXTURE_HEIGHT;
+        return (PIECE_SETTINGS[0].drawItem || PIECE_SETTINGS[1].drawItem || PIECE_SETTINGS[2].drawItem || PIECE_SETTINGS[3].drawItem) ? ITEM_TEXTURE_HEIGHT : TEXTURE_HEIGHT;
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public boolean renderHUD(DrawContext context) {
         int armorIndex = 3;
+
+        boolean rendered = false;
 
         for (EquipmentSlot equipmentSlot : AttributeModifierSlot.ARMOR) {
             if (equipmentSlot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
                 ItemStack armor = CLIENT.player.getEquippedStack(equipmentSlot);
-                if (SHOULD_RENDER[armorIndex] && !armor.isEmpty() && armor.isDamageable()) {
+                if (PIECE_SETTINGS[armorIndex].shouldRender && !armor.isEmpty() && armor.isDamageable()) {
                     Box tempBox = RenderUtils.renderDurabilityHUD(
                             context,
                             ARMOR_BACKGROUND_TEXTURE,
                             armor,
-                            x + X_OFFSETS[armorIndex],
-                            y + Y_OFFSETS[armorIndex],
+                            x + PIECE_SETTINGS[armorIndex].xOffset,
+                            y + PIECE_SETTINGS[armorIndex].yOffset,
                             14 * armorIndex,
                             13,
                             TEXTURE_HEIGHT * 4 + 3,
-                            0xFFFFFFFF,
-                            DRAW_BAR[armorIndex],
-                            DRAW_ITEM[armorIndex],
+                            PIECE_SETTINGS[armorIndex].color | 0xFF000000,
+                            PIECE_SETTINGS[armorIndex].drawBar,
+                            PIECE_SETTINGS[armorIndex].drawItem,
                             ARMOR_SETTINGS.base.growthDirectionX
                     );
 
                     if (needBoxUpdate) {
                         if (cachedBox == null) {
-                            cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight());
+                            cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
                         } else {
                             cachedBox.mergeWith(tempBox);
                         }
                     }
+                    rendered = true;
                 }
             }
             --armorIndex;
@@ -91,38 +95,13 @@ public class Armor extends AbstractHUD {
 
         needBoxUpdate = false;
         setBoundingBox(cachedBox);
+        return rendered;
     }
 
     @Override
     public void update() {
         updateX();
         updateY();
-
-        X_OFFSETS[0] = ARMOR_SETTINGS.helmet.xOffset;
-        Y_OFFSETS[0] = ARMOR_SETTINGS.helmet.yOffset;
-        X_OFFSETS[1] = ARMOR_SETTINGS.chestplate.xOffset;
-        Y_OFFSETS[1] = ARMOR_SETTINGS.chestplate.yOffset;
-
-        X_OFFSETS[2] = ARMOR_SETTINGS.leggings.xOffset;
-        Y_OFFSETS[2] = ARMOR_SETTINGS.leggings.yOffset;
-        X_OFFSETS[3] = ARMOR_SETTINGS.boots.xOffset;
-        Y_OFFSETS[3] = ARMOR_SETTINGS.boots.yOffset;
-
-        SHOULD_RENDER[0] = ARMOR_SETTINGS.helmet.shouldRender;
-        SHOULD_RENDER[1] = ARMOR_SETTINGS.chestplate.shouldRender;
-        SHOULD_RENDER[2] = ARMOR_SETTINGS.leggings.shouldRender;
-        SHOULD_RENDER[3] = ARMOR_SETTINGS.boots.shouldRender;
-
-        DRAW_BAR[0] = ARMOR_SETTINGS.helmet.drawBar;
-        DRAW_BAR[1] = ARMOR_SETTINGS.chestplate.drawBar;
-        DRAW_BAR[2] = ARMOR_SETTINGS.leggings.drawBar;
-        DRAW_BAR[3] = ARMOR_SETTINGS.boots.drawBar;
-
-        DRAW_ITEM[0] = ARMOR_SETTINGS.helmet.drawItem;
-        DRAW_ITEM[1] = ARMOR_SETTINGS.chestplate.drawItem;
-        DRAW_ITEM[2] = ARMOR_SETTINGS.leggings.drawItem;
-        DRAW_ITEM[3] = ARMOR_SETTINGS.boots.drawItem;
-
 
         needBoxUpdate = true;
         cachedBox = null;

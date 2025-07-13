@@ -50,11 +50,11 @@ public abstract class Hand extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
-        renderHandHUD(context, arm, x, y);
+    public boolean renderHUD(DrawContext context) {
+        return renderHandHUD(context, arm, x, y);
     }
 
-    public void renderHandHUD(DrawContext context, Arm arm, int x, int y) {
+    public boolean renderHandHUD(DrawContext context, Arm arm, int x, int y) {
         PlayerInventory playerInventory = CLIENT.player.getInventory();
 
         ItemStack item = CLIENT.player.getStackInArm(arm);
@@ -67,6 +67,7 @@ public abstract class Hand extends AbstractHUD {
             x -= handSettings.base.growthDirectionX.getGrowthDirection(COUNT_WIDTH);
             renderStackCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);
         }
+        return true;
     }
 
     private void renderStackCountHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {

@@ -33,7 +33,7 @@ public class Day extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public boolean renderHUD(DrawContext context) {
 
         long day = CLIENT.world.getTimeOfDay() / 24000L;
 
@@ -53,6 +53,7 @@ public class Day extends AbstractHUD {
         RenderUtils.drawTextHUD(context, cachedDayString, xTemp + 19, y + 3, color, false);
 
         setBoundingBox(xTemp, y, 14 + cachedTextWidth + 9, TEXTURE_HEIGHT, color);
+        return true;
     }
 
     @Override

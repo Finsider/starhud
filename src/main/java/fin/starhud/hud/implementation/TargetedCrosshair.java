@@ -8,10 +8,16 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonPart;
+import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.entity.decoration.BlockAttachedEntity;
+import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.WaterCreatureEntity;
@@ -19,6 +25,8 @@ import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.vehicle.MinecartEntity;
+import net.minecraft.entity.vehicle.VehicleEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -85,11 +93,12 @@ public class TargetedCrosshair extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
-        switch (CLIENT.crosshairTarget.getType()) {
+    public boolean renderHUD(DrawContext context) {
+        return switch (CLIENT.crosshairTarget.getType()) {
             case BLOCK -> renderBlockInfoHUD(context);
             case ENTITY -> renderEntityInfoHUD(context);
-        }
+            default -> false;
+        };
     }
 
     private Block cachedBlock = null;
@@ -97,7 +106,7 @@ public class TargetedCrosshair extends AbstractHUD {
     private String cachedBlockModName = null;
     private int cachedBlockMaxWidth = -1;
 
-    public void renderBlockInfoHUD(DrawContext context) {
+    public boolean renderBlockInfoHUD(DrawContext context) {
         BlockPos pos = ((BlockHitResult) CLIENT.crosshairTarget).getBlockPos();
 
         BlockState blockState = CLIENT.world.getBlockState(pos);
@@ -153,6 +162,7 @@ public class TargetedCrosshair extends AbstractHUD {
         );
 
         setBoundingBox(xTemp, y, ICON_BACKGROUND_WIDTH + 1 + 5 + cachedBlockMaxWidth + 5, ICON_BACKGROUND_HEIGHT);
+        return true;
     }
 
     private Entity cachedTargetedEntity = null;
@@ -161,7 +171,7 @@ public class TargetedCrosshair extends AbstractHUD {
     private int cachedEntityMaxWidth = -1;
     private int cachedIndex = -1;
 
-    public void renderEntityInfoHUD(DrawContext context) {
+    public boolean renderEntityInfoHUD(DrawContext context) {
         Entity targetedEntity = MinecraftClient.getInstance().targetedEntity;
 
         if (!targetedEntity.equals(cachedTargetedEntity)) {
@@ -212,6 +222,7 @@ public class TargetedCrosshair extends AbstractHUD {
         );
 
         setBoundingBox(xTemp, y, ICON_BACKGROUND_WIDTH + 1 + 5 + cachedEntityMaxWidth + 5, ICON_BACKGROUND_HEIGHT, color);
+        return true;
     }
 
     private int getEntityIconIndex(Entity e) {
@@ -235,6 +246,7 @@ public class TargetedCrosshair extends AbstractHUD {
     private static boolean isHostileMob(Entity e) {
         return switch (e) {
             case EnderDragonEntity ignored -> true;
+            case EnderDragonPart ignored -> true;
             case Monster ignored -> true;
             default -> false;
         };

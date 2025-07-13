@@ -39,7 +39,7 @@ public class ClockSystem extends AbstractHUD {
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public boolean renderHUD(DrawContext context) {
         // update each minute
         long currentTime = System.currentTimeMillis();
         long minute = currentTime / 60000;
@@ -69,6 +69,7 @@ public class ClockSystem extends AbstractHUD {
 
             setBoundingBox(x, y, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT, color);
         }
+        return true;
     }
 
     private static String buildSystemTime24String(long time) {
