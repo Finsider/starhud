@@ -52,7 +52,6 @@ public class EditHUDScreen extends Screen {
 
     private static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
 
-    private static final int HELP_HEIGHT = 5 + (7 * 9) + 5;
     private static final String[] HELP_KEYS = {
             "[Arrow Keys]",
             "[⇧ Shift + Arrows]",
@@ -72,6 +71,8 @@ public class EditHUDScreen extends Screen {
             "Select HUD",
             "Move HUD"
     };
+
+    private static final int HELP_HEIGHT = 5 + (HELP_KEYS.length * 9) + 5;
 
     public EditHUDScreen(Text title, Screen parent) {
         super(title);
