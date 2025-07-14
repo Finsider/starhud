@@ -23,6 +23,13 @@ public class EditHUDScreen extends Screen {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
+    private static final int PADDING = 25;
+    private static final int WIDGET_WIDTH = 100;
+    private static final int WIDGET_HEIGHT = 20;
+    private static final int TEXT_FIELD_WIDTH = 40;
+    private static final int SQUARE_WIDGET_LENGTH = 20;
+    private static final int GAP = 5;
+
     public Screen parent;
 
     private final List<AbstractHUD> huds;
@@ -45,6 +52,7 @@ public class EditHUDScreen extends Screen {
 
     private static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
 
+    private static final int HELP_HEIGHT = 5 + (7 * 9) + 5;
     private static final String[] HELP_KEYS = {
             "[Arrow Keys]",
             "[⇧ Shift + Arrows]",
@@ -83,21 +91,27 @@ public class EditHUDScreen extends Screen {
     @Override
     protected void init() {
 
+        final int CENTER_X = this.width / 2;
+        final int CENTER_Y = this.height / 2 + (PADDING / 2);
+
         HUDComponent.getInstance().updateAll();
 
-        int centerX = this.width / 2;
-        int centerY = this.height / 2;
-        int padding = 25;
-
-        int widgetWidth = 100;
-        int widgetHeight = 20;
-
-        int textFieldWidth = 40;
-
-        centerY += padding / 2;
-
-        xField = new TextFieldWidget(CLIENT.textRenderer, centerX - textFieldWidth - 10 - 5, centerY - padding, textFieldWidth, widgetHeight, Text.of("X"));
-        yField = new TextFieldWidget(CLIENT.textRenderer, centerX + 10 + 5, centerY - padding, textFieldWidth, widgetHeight, Text.of("Y"));
+        xField = new TextFieldWidget(
+                CLIENT.textRenderer,
+                CENTER_X - TEXT_FIELD_WIDTH - (SQUARE_WIDGET_LENGTH / 2) - GAP,
+                CENTER_Y - PADDING,
+                TEXT_FIELD_WIDTH,
+                WIDGET_HEIGHT,
+                Text.of("X")
+        );
+        yField = new TextFieldWidget(
+                CLIENT.textRenderer,
+                CENTER_X + (SQUARE_WIDGET_LENGTH / 2) + GAP,
+                CENTER_Y - PADDING,
+                TEXT_FIELD_WIDTH,
+                WIDGET_HEIGHT,
+                Text.of("Y")
+        );
 
         alignmentXButton = ButtonWidget.builder(
                 Text.of("X Alignment: N/A"),
@@ -108,7 +122,7 @@ public class EditHUDScreen extends Screen {
                     selectedHUD.update();
                     alignmentXButton.setMessage(Text.of("X Alignment: " + selectedHUD.getSettings().originX));
                 }
-        ).dimensions(centerX - widgetWidth - 10 - 5, centerY - padding * 2, widgetWidth, widgetHeight).build();
+        ).dimensions(CENTER_X - WIDGET_WIDTH - (SQUARE_WIDGET_LENGTH / 2) - GAP, CENTER_Y - PADDING * 2, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
         alignmentYButton = ButtonWidget.builder(
                 Text.of("Y Alignment: N/A"),
@@ -119,7 +133,7 @@ public class EditHUDScreen extends Screen {
                     selectedHUD.update();
                     alignmentYButton.setMessage(Text.of("Y Alignment: " + selectedHUD.getSettings().originY));
                 }
-        ).dimensions(centerX + 10 + 5, centerY - padding * 2, widgetWidth, widgetHeight).build();
+        ).dimensions(CENTER_X + (SQUARE_WIDGET_LENGTH / 2) + GAP, CENTER_Y - PADDING * 2, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
         scaleButton = ButtonWidget.builder(
                 Text.of("N/A"),
@@ -129,7 +143,7 @@ public class EditHUDScreen extends Screen {
                     selectedHUD.update();
                     scaleButton.setMessage(Text.of(Integer.toString(selectedHUD.getSettings().scale)));
                 }
-        ).tooltip(Tooltip.of(Text.of("Scale"))).dimensions(centerX - 10, centerY - padding * 2, 20, 20).build();
+        ).tooltip(Tooltip.of(Text.of("Scale"))).dimensions(CENTER_X - (SQUARE_WIDGET_LENGTH / 2), CENTER_Y - PADDING * 2, SQUARE_WIDGET_LENGTH, SQUARE_WIDGET_LENGTH).build();
 
         directionXButton = ButtonWidget.builder(
                 Text.of("X Direction: N/A"),
@@ -139,7 +153,7 @@ public class EditHUDScreen extends Screen {
                     selectedHUD.update();
                     directionXButton.setMessage(Text.of("X Direction: " + selectedHUD.getSettings().growthDirectionX));
                 }
-        ).dimensions(centerX - widgetWidth - 10 - 5, centerY - padding * 3, widgetWidth, widgetHeight).build();
+        ).dimensions(CENTER_X - WIDGET_WIDTH - (SQUARE_WIDGET_LENGTH / 2) - GAP, CENTER_Y - PADDING * 3, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
         directionYButton = ButtonWidget.builder(
                 Text.of("Y Direction: N/A"),
@@ -149,7 +163,7 @@ public class EditHUDScreen extends Screen {
                     selectedHUD.update();
                     directionYButton.setMessage(Text.of("Y Direction: " + selectedHUD.getSettings().growthDirectionY));
                 }
-        ).dimensions(centerX + 10 + 5, centerY - padding * 3, widgetWidth, widgetHeight).build();
+        ).dimensions(CENTER_X + (SQUARE_WIDGET_LENGTH / 2) + GAP, CENTER_Y - PADDING * 3, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
         xField.setChangedListener(text -> {
             if (selectedHUD == null) return;
@@ -175,7 +189,7 @@ public class EditHUDScreen extends Screen {
                 }
         )
                 .tooltip(Tooltip.of(Text.of("Help")))
-                .dimensions(centerX - 20 - 2, this.height - widgetHeight - 5, 20, 20)
+                .dimensions(CENTER_X - SQUARE_WIDGET_LENGTH - (GAP / 2), this.height - SQUARE_WIDGET_LENGTH - GAP, SQUARE_WIDGET_LENGTH, SQUARE_WIDGET_LENGTH)
                 .build();
 
         ButtonWidget moreOptionButton = ButtonWidget.builder(
@@ -186,7 +200,7 @@ public class EditHUDScreen extends Screen {
                 }
         )
                 .tooltip(Tooltip.of(Text.of("More Options")))
-                .dimensions(centerX + 2, this.height - widgetHeight - 5, 20, 20)
+                .dimensions(CENTER_X + (GAP / 2), this.height - SQUARE_WIDGET_LENGTH - GAP, SQUARE_WIDGET_LENGTH, SQUARE_WIDGET_LENGTH)
                 .build();
 
 
@@ -194,11 +208,11 @@ public class EditHUDScreen extends Screen {
         addDrawableChild(ButtonWidget.builder(Text.of("Save & Quit"), button -> {
             AutoConfig.getConfigHolder(Settings.class).save();
             onClose();
-        }).dimensions(centerX + 2 + 20 + 5, this.height - widgetHeight - 5, terminatorWidth, widgetHeight).build());
+        }).dimensions(CENTER_X + (GAP / 2) + SQUARE_WIDGET_LENGTH + GAP, this.height - WIDGET_HEIGHT - GAP, terminatorWidth, WIDGET_HEIGHT).build());
 
         addDrawableChild(ButtonWidget.builder(Text.of("Cancel"), button -> {
             close();
-        }).dimensions(centerX - terminatorWidth - 20 - 2 - 5, this.height - widgetHeight - 5, terminatorWidth, widgetHeight).build());
+        }).dimensions(CENTER_X - (GAP / 2) - terminatorWidth - SQUARE_WIDGET_LENGTH - GAP, this.height - WIDGET_HEIGHT - GAP, terminatorWidth, WIDGET_HEIGHT).build());
 
         alignmentXButton.visible = false;
         directionXButton.visible = false;
@@ -280,9 +294,11 @@ public class EditHUDScreen extends Screen {
 
         // draw help
         if (isHelpActivated) {
-            renderHelp(context, this.width / 2, ((this.height + 25) / 2) + 5);
+            final int CENTER_X = this.width / 2;
+            final int CENTER_Y = this.height / 2 + (PADDING / 2);
+            renderHelp(context, CENTER_X, CENTER_Y + GAP);
             if (selectedHUD != null)
-                renderHUDInformation(context, this.width / 2, ((this.height + 25) / 2) + 63 + 5 + 10);
+                renderHUDInformation(context, CENTER_X, CENTER_Y + GAP  + HELP_HEIGHT + GAP);
         }
 
         // draw X and Y next to their textField.
