@@ -77,7 +77,6 @@ public class Inventory extends AbstractHUD {
             }
         }
 
-        setBoundingBox(x, y, TEXTURE_WIDTH_VERTICAL, TEXTURE_HEIGHT_VERTICAL);
         return foundItem;
     }
 
@@ -104,7 +103,6 @@ public class Inventory extends AbstractHUD {
             }
         }
 
-        setBoundingBox(x, y, TEXTURE_WIDTH_HORIZONTAL, TEXTURE_HEIGHT_HORIZONTAL);
         return foundItem;
     }
 

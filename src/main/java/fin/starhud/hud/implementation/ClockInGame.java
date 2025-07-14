@@ -57,17 +57,14 @@ public class ClockInGame extends AbstractHUD {
 
         int icon = getWeatherOrTime(world);
         int color = getIconColor(icon) | 0xFF000000;
+        super.boundingBox.setColor(color);
 
         if (use12Hour) {
             RenderUtils.drawTextureHUD(context, CLOCK_12_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedMinecraftTimeString, x + 19, y + 3, color, false);
-
-            setBoundingBox(x, y, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT, color);
         } else {
             RenderUtils.drawTextureHUD(context, CLOCK_24_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedMinecraftTimeString, x + 19, y + 3, color, false);
-
-            setBoundingBox(x, y, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT, color);
         }
         return true;
     }

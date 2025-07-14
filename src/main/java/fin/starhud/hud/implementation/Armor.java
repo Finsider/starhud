@@ -93,15 +93,16 @@ public class Armor extends AbstractHUD {
             --armorIndex;
         }
 
-        needBoxUpdate = false;
-        setBoundingBox(cachedBox);
+        if (needBoxUpdate) {
+            needBoxUpdate = false;
+            copyBoundingBox(cachedBox);
+        }
         return rendered;
     }
 
     @Override
     public void update() {
-        updateX();
-        updateY();
+        super.update();
 
         needBoxUpdate = true;
         cachedBox = null;

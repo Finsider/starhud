@@ -62,7 +62,7 @@ public abstract class Hand extends AbstractHUD {
         // either draw the durability or the amount of item in the inventory.
         if (handSettings.showDurability && item.isDamageable()) {
             Box box = RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.drawItem, handSettings.base.growthDirectionX);
-            setBoundingBox(box);
+            copyBoundingBox(box);
         } else if (handSettings.showCount) {
             x -= handSettings.base.growthDirectionX.getGrowthDirection(COUNT_WIDTH);
             renderStackCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);

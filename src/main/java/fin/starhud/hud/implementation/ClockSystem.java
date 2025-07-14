@@ -57,17 +57,14 @@ public class ClockSystem extends AbstractHUD {
         }
 
         int color = CLOCK_SYSTEM_SETTINGS.color | 0xFF000000;
+        super.boundingBox.setColor(color);
 
         if (use12Hour) {
             RenderUtils.drawTextureHUD(context, CLOCK_12_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedSystemTimeString, x + 19, y + 3, color, false);
-
-            setBoundingBox(x, y, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT, color);
         } else {
             RenderUtils.drawTextureHUD(context, CLOCK_24_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedSystemTimeString, x + 19, y + 3, color, false);
-
-            setBoundingBox(x, y, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT, color);
         }
         return true;
     }

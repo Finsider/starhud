@@ -65,11 +65,11 @@ public class Ping extends AbstractHUD {
         // 0, 150, 300, 450
         int step = Math.min((int) currentPing / 150, 3);
         int color = getPingColor(step) | 0xFF000000;
+        this.boundingBox.setColor(color);
 
         RenderUtils.drawTextureHUD(context, PING_TEXTURE, x, y, 0.0F, step * 13, TEXTURE_WIDTH, TEXTURE_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT * 4, color);
         RenderUtils.drawTextHUD(context, pingStr, x + 19, y + 3, color, false);
 
-        setBoundingBox(x, y, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
         return true;
     }
 

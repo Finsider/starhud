@@ -32,11 +32,10 @@ public class FPS extends AbstractHUD {
     public boolean renderHUD(DrawContext context) {
         String fpsStr = CLIENT.getCurrentFps() + " FPS";
         int color = FPS_SETTINGS.color | 0xFF000000;
+        super.boundingBox.setColor(color);
 
         RenderUtils.drawTextureHUD(context, FPS_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
         RenderUtils.drawTextHUD(context, fpsStr, x + 19, y + 3, color, false);
-
-        setBoundingBox(x, y, TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
         return true;
     }
 

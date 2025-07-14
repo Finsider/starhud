@@ -21,10 +21,23 @@ public abstract class AbstractHUD implements HUDInterface {
     protected int baseX;
     protected int baseY;
 
-    private final Box boundingBox = new Box(0, 0);
+    protected final Box boundingBox = new Box(0, 0);
 
     public AbstractHUD(BaseHUDSettings baseHUDSettings) {
         this.baseHUDSettings = baseHUDSettings;
+    }
+
+    @Override
+    public boolean shouldRender() {
+        return baseHUDSettings.shouldRender && shouldRenderOnCondition();
+    }
+
+    // we update every HUD's x and y points here.
+    @Override
+    public void update() {
+        updateX();
+        updateY();
+        setBoundingBox(getBaseX(), getBaseY(), getBaseHUDWidth(), getBaseHUDHeight());
     }
 
     @Override
@@ -41,13 +54,13 @@ public abstract class AbstractHUD implements HUDInterface {
         }
 
         // this is so we can change the scale for one hud but not the others.
-        context.getMatrices().push();
+        context.getMatrices().pushMatrix();
         setHUDScale(context);
 
         try {
             return renderHUD(context);
         } finally {
-            context.getMatrices().pop();
+            context.getMatrices().popMatrix();
         }
     }
 
@@ -58,9 +71,7 @@ public abstract class AbstractHUD implements HUDInterface {
 
     public void setHUDScale(DrawContext context) {
         float scaleFactor = baseHUDSettings.scale / (float) WINDOW.getScaleFactor();
-        if (scaleFactor == 1) return;
-
-        context.getMatrices().scale(scaleFactor, scaleFactor, scaleFactor);
+        context.getMatrices().scale(scaleFactor, scaleFactor);
     }
 
     public void modifyXY() {
@@ -87,24 +98,12 @@ public abstract class AbstractHUD implements HUDInterface {
         y = baseY;
     }
 
-    // we update every HUD's x and y points here.
-    @Override
-    public void update() {
-        updateX();
-        updateY();
-    }
-
     public boolean shouldRenderOnCondition() {
         for (ConditionalSettings condition: baseHUDSettings.conditions) {
             if (!condition.shouldRender && condition.isConditionMet())
                 return false;
         }
         return true;
-    }
-
-    @Override
-    public boolean shouldRender() {
-        return baseHUDSettings.shouldRender && shouldRenderOnCondition();
     }
 
     public BaseHUDSettings getSettings() {
@@ -120,17 +119,15 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     public boolean isScaled() {
-        return this.baseHUDSettings.scale != 0;
+        return this.baseHUDSettings.scale != 0 || (this.baseHUDSettings.scale / (double) WINDOW.getScaleFactor()) == 1;
     }
 
     public Box getBoundingBox() {
         return boundingBox;
     }
 
-    public void setBoundingBox(Box boundingBox) {
-        if (boundingBox == null)
-            this.boundingBox.setBoundingBox(getBaseX(), getBaseY(), 13, 13);
-        else
+    public void copyBoundingBox(Box boundingBox) {
+        if (boundingBox != null)
             this.boundingBox.copyFrom(boundingBox);
     }
 

@@ -30,6 +30,13 @@ public class Coordinate extends AbstractHUD {
     }
 
     @Override
+    public boolean shouldRender() {
+        return baseHUDSettings.shouldRender
+                && (COORD_SETTINGS.X.shouldRender && COORD_SETTINGS.Y.shouldRender && COORD_SETTINGS.Z.shouldRender)
+                && shouldRenderOnCondition();
+    }
+
+    @Override
     public String getName() {
         return "Coordinate HUD";
     }
@@ -46,41 +53,20 @@ public class Coordinate extends AbstractHUD {
         int colorY = COORD_SETTINGS.Y.color | 0xFF000000;
         int colorZ = COORD_SETTINGS.Z.color | 0xFF000000;
 
-        boolean rendered = false;
-
-        if (COORD_SETTINGS.X.shouldRender) {
+        if (COORD_SETTINGS.X.shouldRender)
             renderEachCoordinate(context, coordX, x + COORD_SETTINGS.X.xOffset, y + COORD_SETTINGS.X.yOffset, 0.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, colorX);
-            if (needBoxUpdate) {
-                cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
-            }
-            rendered = true;
-        }
 
-        if (COORD_SETTINGS.Y.shouldRender) {
+        if (COORD_SETTINGS.Y.shouldRender)
             renderEachCoordinate(context, coordY, x + COORD_SETTINGS.Y.xOffset, y + COORD_SETTINGS.Y.yOffset, 14.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, colorY);
-            if (needBoxUpdate) {
-                if (cachedBox == null)
-                    cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
-                else
-                    cachedBox.mergeWith(tempBox);
-            }
-            rendered = true;
-        }
-        if (COORD_SETTINGS.Z.shouldRender) {
+
+        if (COORD_SETTINGS.Z.shouldRender)
             renderEachCoordinate(context, coordZ, x + COORD_SETTINGS.Z.xOffset, y + COORD_SETTINGS.Z.yOffset, 28.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, colorZ);
 
-            if (needBoxUpdate) {
-                if (cachedBox == null)
-                    cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
-                else
-                    cachedBox.mergeWith(tempBox);
-            }
-            rendered = true;
+        if (needBoxUpdate) {
+            needBoxUpdate = false;
+            copyBoundingBox(cachedBox);
         }
-
-        needBoxUpdate = false;
-        setBoundingBox(cachedBox);
-        return rendered;
+        return true;
     }
 
     @Override
@@ -106,5 +92,11 @@ public class Coordinate extends AbstractHUD {
         RenderUtils.drawTextHUD(context, str, x + 19, y + 3, color, false);
 
         tempBox.setBoundingBox(x, y, width, height, color);
+        if (needBoxUpdate) {
+            if (cachedBox == null)
+                cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
+            else
+                cachedBox.mergeWith(tempBox);
+        }
     }
 }
