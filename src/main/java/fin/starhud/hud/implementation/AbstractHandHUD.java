@@ -13,13 +13,12 @@ import net.minecraft.util.Identifier;
 
 // i dont like this one.
 
-public abstract class Hand extends AbstractHUD {
+public abstract class AbstractHandHUD extends AbstractHUD {
 
     private static final Identifier HAND_TEXTURE = Identifier.of("starhud", "hud/hand.png");
     private static final Identifier BIG_HAND_TEXTURE = Identifier.of("starhud", "hud/big_hand.png");
 
     // base HUD Width (Icon width = 13, 1 for the gap between icon and text, 5 for the gap on left side of the attribute, 5 for the gap on the right of the attribute).
-    // guys i legit forgot what the "10 for the padding at left / right edge" meant help.
     private static final int TEXTURE_WIDTH = 13 + 1 + 5 + 5;
 
     // count string is at max 4 digits, each digit may have 5 pixels.
@@ -36,7 +35,7 @@ public abstract class Hand extends AbstractHUD {
     private final HandSettings handSettings;
     private final Arm arm;
 
-    public Hand(HandSettings handSettings, Arm arm) {
+    public AbstractHandHUD(HandSettings handSettings, Arm arm) {
         super(handSettings.base);
         this.handSettings = handSettings;
         this.arm = arm;
@@ -44,9 +43,8 @@ public abstract class Hand extends AbstractHUD {
 
     @Override
     public boolean shouldRender() {
-        return baseHUDSettings.shouldRender
-                && !CLIENT.player.getStackInArm(arm).isEmpty()
-                && shouldRenderOnCondition();
+        return super.shouldRender()
+                && !CLIENT.player.getStackInArm(arm).isEmpty();
     }
 
     @Override

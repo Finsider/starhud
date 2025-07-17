@@ -8,7 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
-public class Day extends AbstractHUD {
+public class DayHUD extends AbstractHUD {
 
     private static final DaySettings DAY_SETTINGS = Main.settings.daySettings;
 
@@ -23,7 +23,7 @@ public class Day extends AbstractHUD {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
-    public Day() {
+    public DayHUD() {
         super(DAY_SETTINGS.base);
     }
 

@@ -10,7 +10,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
-public class Coordinate extends AbstractHUD {
+public class CoordinateHUD extends AbstractHUD {
 
     private static final CoordSettings COORD_SETTINGS = Main.settings.coordSettings;
 
@@ -22,18 +22,16 @@ public class Coordinate extends AbstractHUD {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     private static boolean needBoxUpdate = true;
-    private static Box cachedBox = null;
     private static final Box tempBox = new Box(0, 0);
 
-    public Coordinate() {
+    public CoordinateHUD() {
         super(COORD_SETTINGS.base);
     }
 
     @Override
     public boolean shouldRender() {
-        return baseHUDSettings.shouldRender
-                && (COORD_SETTINGS.X.shouldRender && COORD_SETTINGS.Y.shouldRender && COORD_SETTINGS.Z.shouldRender)
-                && shouldRenderOnCondition();
+        return super.shouldRender()
+                && (COORD_SETTINGS.X.shouldRender && COORD_SETTINGS.Y.shouldRender && COORD_SETTINGS.Z.shouldRender);
     }
 
     @Override
@@ -62,10 +60,7 @@ public class Coordinate extends AbstractHUD {
         if (COORD_SETTINGS.Z.shouldRender)
             renderEachCoordinate(context, coordZ, x + COORD_SETTINGS.Z.xOffset, y + COORD_SETTINGS.Z.yOffset, 28.0F, TEXTURE_WIDTH, TEXTURE_HEIGHT, colorZ);
 
-        if (needBoxUpdate) {
-            needBoxUpdate = false;
-            copyBoundingBox(cachedBox);
-        }
+        needBoxUpdate = false;
         return true;
     }
 
@@ -74,7 +69,7 @@ public class Coordinate extends AbstractHUD {
         super.update();
 
         needBoxUpdate = true;
-        cachedBox = null;
+        super.boundingBox.setEmpty(true);
     }
 
     @Override
@@ -87,16 +82,16 @@ public class Coordinate extends AbstractHUD {
         return TEXTURE_HEIGHT;
     }
 
-    public static void renderEachCoordinate(DrawContext context, String str, int x, int y, float v, int width, int height, int color) {
+    public void renderEachCoordinate(DrawContext context, String str, int x, int y, float v, int width, int height, int color) {
         RenderUtils.drawTextureHUD(context, COORD_TEXTURE, x, y, 0.0F, v, width, height, width, 41, color);
         RenderUtils.drawTextHUD(context, str, x + 19, y + 3, color, false);
 
         tempBox.setBoundingBox(x, y, width, height, color);
         if (needBoxUpdate) {
-            if (cachedBox == null)
-                cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
+            if (super.boundingBox.isEmpty())
+                super.boundingBox.setBoundingBox(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
             else
-                cachedBox.mergeWith(tempBox);
+                super.boundingBox.mergeWith(tempBox);
         }
     }
 }

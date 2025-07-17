@@ -12,7 +12,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
-public class Armor extends AbstractHUD {
+public class ArmorHUD extends AbstractHUD {
 
     private static final ArmorSettings ARMOR_SETTINGS = Main.settings.armorSettings;
 
@@ -32,11 +32,10 @@ public class Armor extends AbstractHUD {
     private static final int ITEM_TEXTURE_HEIGHT = 3 + 16 + 3;
 
     private static boolean needBoxUpdate = true;
-    private static Box cachedBox = null;
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
-    public Armor() {
+    public ArmorHUD() {
         super(ARMOR_SETTINGS.base);
     }
 
@@ -81,10 +80,10 @@ public class Armor extends AbstractHUD {
                     );
 
                     if (needBoxUpdate) {
-                        if (cachedBox == null) {
-                            cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
+                        if (super.boundingBox.isEmpty()) {
+                            super.boundingBox.setBoundingBox(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), tempBox.getColor());
                         } else {
-                            cachedBox.mergeWith(tempBox);
+                            super.boundingBox.mergeWith(tempBox);
                         }
                     }
                     rendered = true;
@@ -93,10 +92,7 @@ public class Armor extends AbstractHUD {
             --armorIndex;
         }
 
-        if (needBoxUpdate) {
-            needBoxUpdate = false;
-            copyBoundingBox(cachedBox);
-        }
+        needBoxUpdate = false;
         return rendered;
     }
 
@@ -105,6 +101,6 @@ public class Armor extends AbstractHUD {
         super.update();
 
         needBoxUpdate = true;
-        cachedBox = null;
+        super.boundingBox.setEmpty(true);
     }
 }

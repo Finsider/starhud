@@ -14,25 +14,26 @@ public class HUDComponent {
     // separate status effect hud as they are rendered in a different place.
     public final AbstractHUD effectHUD;
 
+    // should the HUD be rendered at ingame screen or the edit hud screen, very terrible.
     public boolean shouldRenderInGameScreen;
 
     // singleton
     private HUDComponent() {
-        huds.add(new Armor());
-        huds.add(new Biome());
-        huds.add(new ClockInGame());
-        huds.add(new ClockSystem());
-        huds.add(new Day());
-        huds.add(new Coordinate());
-        huds.add(new Direction());
-        huds.add(new FPS());
-        huds.add(new Inventory());
-        huds.add(new Ping());
-        huds.add(new LeftHand());
-        huds.add(new RightHand());
-        huds.add(new TargetedCrosshair());
+        huds.add(new ArmorHUD());
+        huds.add(new BiomeHUD());
+        huds.add(new ClockInGameHUD());
+        huds.add(new ClockSystemHUD());
+        huds.add(new DayHUD());
+        huds.add(new CoordinateHUD());
+        huds.add(new DirectionHUD());
+        huds.add(new FPSHUD());
+        huds.add(new InventoryHUD());
+        huds.add(new PingHUD());
+        huds.add(new LeftHandHUD());
+        huds.add(new RightHandHUD());
+        huds.add(new TargetedCrosshairHUD());
 
-        effectHUD = new Effect();
+        effectHUD = new EffectHUD();
 
         shouldRenderInGameScreen = true;
     }

@@ -63,6 +63,20 @@ public class Box {
         this.y = y;
     }
 
+    public void setEmpty(boolean empty) {
+        if (empty) {
+            setWidth(-1);
+            setHeight(-1);
+        } else {
+            setWidth(13);
+            setHeight(13);
+        }
+    }
+
+    public boolean isEmpty() {
+        return width < 0 || height < 0;
+    }
+
     public void setBoundingBox(int x, int y, int width, int height, int color) {
         this.setX(x);
         this.setY(y);

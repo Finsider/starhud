@@ -20,8 +20,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-// WIP
-public class Effect extends AbstractHUD {
+public class EffectHUD extends AbstractHUD {
 
     private static final EffectSettings effectSettings = Main.settings.effectSettings;
 
@@ -39,11 +38,10 @@ public class Effect extends AbstractHUD {
     private static final Map<RegistryEntry<StatusEffect>, Identifier> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
 
     private static final Box tempBox = new Box(0,0);
-    private static Box cachedBox = null;
     private static int cachedSize = -1;
     private static boolean needBoxUpdate = true;
 
-    public Effect() {
+    public EffectHUD() {
         super(effectSettings.base);
     }
 
@@ -54,17 +52,16 @@ public class Effect extends AbstractHUD {
 
     @Override
     public boolean shouldRender() {
-        return baseHUDSettings.shouldRender
-                && !CLIENT.player.getStatusEffects().isEmpty()
-                && shouldRenderOnCondition();
+        return super.shouldRender()
+                && !CLIENT.player.getStatusEffects().isEmpty();
     }
 
     @Override
     public void update() {
         super.update();
 
-        cachedBox = null;
         needBoxUpdate = true;
+        super.boundingBox.setEmpty(true);
     }
 
     @Override
@@ -97,6 +94,9 @@ public class Effect extends AbstractHUD {
         boolean rendered = false;
         boolean shouldBoxUpdate = (needBoxUpdate || cachedSize != StatusEffectAttribute.getStatusEffectAttributeMap().size());
 
+        if (shouldBoxUpdate)
+            cachedSize = StatusEffectAttribute.getStatusEffectAttributeMap().size();
+
         for (StatusEffectInstance statusEffectInstance : collection) {
             if (!statusEffectInstance.shouldShowIcon())
                 continue;
@@ -118,12 +118,11 @@ public class Effect extends AbstractHUD {
             }
 
             if (shouldBoxUpdate) {
-                cachedSize = StatusEffectAttribute.getStatusEffectAttributeMap().size();
                 tempBox.setBoundingBox(x2, y2, STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT);
-                if (cachedBox == null)
-                    cachedBox = new Box(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), effectSettings.ambientColor | 0xFF000000);
+                if (super.boundingBox.isEmpty())
+                    super.boundingBox.setBoundingBox(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), effectSettings.ambientColor | 0xFF000000);
                 else
-                    cachedBox.mergeWith(tempBox);
+                    super.boundingBox.mergeWith(tempBox);
             }
 
             if (statusEffectInstance.isAmbient()) {
@@ -213,11 +212,7 @@ public class Effect extends AbstractHUD {
 
         }
 
-        if (needBoxUpdate) {
-            copyBoundingBox(cachedBox);
-            needBoxUpdate = false;
-        }
-
+        needBoxUpdate = false;
         return rendered;
     }
 

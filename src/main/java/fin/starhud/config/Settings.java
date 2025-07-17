@@ -35,9 +35,9 @@ public class Settings implements ConfigData {
 
     @ConfigEntry.Category("clock")
     @ConfigEntry.Gui.TransitiveObject
-    public ClockSettings clockSettings = new ClockSettings();
+    public Clock clockSettings = new Clock();
 
-    public static class ClockSettings {
+    public static class Clock {
         @ConfigEntry.Gui.CollapsibleObject
         public ClockSystemSettings systemSetting = new ClockSystemSettings();
 
@@ -59,14 +59,14 @@ public class Settings implements ConfigData {
 
     @ConfigEntry.Category("hand")
     @ConfigEntry.Gui.TransitiveObject
-    public HandSettings handSettings = new HandSettings();
+    public Hand handSettings = new Hand();
 
-    public static class HandSettings {
+    public static class Hand {
         @ConfigEntry.Gui.CollapsibleObject
-        public fin.starhud.config.hud.HandSettings leftHandSettings = new fin.starhud.config.hud.HandSettings(true, -108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP,0xffb3b3);
+        public HandSettings leftHandSettings = new HandSettings(true, -108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP,0xffb3b3);
 
         @ConfigEntry.Gui.CollapsibleObject
-        public fin.starhud.config.hud.HandSettings rightHandSettings = new fin.starhud.config.hud.HandSettings(true, 108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
+        public HandSettings rightHandSettings = new HandSettings(true, 108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
     }
 
     @ConfigEntry.Category("effect")

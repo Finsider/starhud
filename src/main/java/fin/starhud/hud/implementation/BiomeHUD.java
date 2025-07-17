@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class Biome extends AbstractHUD {
+public class BiomeHUD extends AbstractHUD {
 
     private static final BiomeSettings BIOME_SETTINGS = Main.settings.biomeSettings;
 
@@ -29,7 +29,7 @@ public class Biome extends AbstractHUD {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
-    public Biome() {
+    public BiomeHUD() {
         super(BIOME_SETTINGS.base);
     }
 

@@ -4,11 +4,11 @@ import fin.starhud.Main;
 import fin.starhud.config.hud.HandSettings;
 import net.minecraft.util.Arm;
 
-public class LeftHand extends Hand{
+public class LeftHandHUD extends AbstractHandHUD {
 
     private static final HandSettings LEFT_HAND_SETTINGS = Main.settings.handSettings.leftHandSettings;
 
-    public LeftHand() {
+    public LeftHandHUD() {
         super(LEFT_HAND_SETTINGS, Arm.LEFT);
     }
 

@@ -12,12 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public class MixinInGameHUD {
 
-    @Inject(at = @At("TAIL"), method = "renderHotbar")
-    private void renderHotbar(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        if (HUDComponent.getInstance().shouldRenderInGameScreen())
-            HUDComponent.getInstance().renderAll(context);
-    }
-
+    // Mixin used to override vanilla effect HUD, I'm not sure whether this can be done using HUDElementRegistry
     @Inject(at = @At("HEAD"), method = "renderStatusEffectOverlay", cancellable = true)
     private void renderStatusEffectOverlay(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (HUDComponent.getInstance().effectHUD.shouldRender()) {

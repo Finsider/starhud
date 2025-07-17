@@ -29,7 +29,7 @@ public abstract class AbstractHUD implements HUDInterface {
 
     @Override
     public boolean shouldRender() {
-        return baseHUDSettings.shouldRender && shouldRenderOnCondition();
+        return getSettings().shouldRender();
     }
 
     // we update every HUD's x and y points here.
@@ -37,7 +37,6 @@ public abstract class AbstractHUD implements HUDInterface {
     public void update() {
         updateX();
         updateY();
-        setBoundingBox(getBaseX(), getBaseY(), getBaseHUDWidth(), getBaseHUDHeight());
     }
 
     @Override
@@ -64,20 +63,33 @@ public abstract class AbstractHUD implements HUDInterface {
         }
     }
 
+    public abstract String getName();
     public abstract boolean renderHUD(DrawContext context);
+
+    /*
+    * Base HUD Width / Height
+    * the width of the hud that is not affected by any realtime changing length
+    *
+    * Example: Biome HUD, since the name of biome can be of any length, we can't exactly have a "static" length,
+    *          hence the base hud width is (ICON_WIDTH + GAP + TEXT_PADDING_LEFT + TEXT_PADDING_RIGHT)
+    *          which leaves the (TEXT_LENGTH) for in-render calculation.
+    *
+    * Example: Item Count HUD, since Item Count HUD can be generalized into maximum item amount in inventory, which is usually 64 * 37 or 4 digits.
+    *          we can just give the base hud width (ICON_WIDTH + GAP + TEXT_PADDING_LEFT + TEXT_LENGTH_OF_4_DIGITS + TEXT_PADDING_RIGHT).
+    *          though yeah it will surely be a problem if the amount of item reaches over 5 digits.
+    * */
     public abstract int getBaseHUDWidth();
     public abstract int getBaseHUDHeight();
-    public abstract String getName();
 
     public void setHUDScale(DrawContext context) {
-        float scaleFactor = baseHUDSettings.scale / (float) WINDOW.getScaleFactor();
+        float scaleFactor = getSettings().getScale() / (float) WINDOW.getScaleFactor();
         context.getMatrices().scale(scaleFactor, scaleFactor);
     }
 
     public void modifyXY() {
         int tempX = 0, tempY = 0;
 
-        for (ConditionalSettings condition : baseHUDSettings.conditions) {
+        for (ConditionalSettings condition : baseHUDSettings.getConditions()) {
             if (condition.isConditionMet()) {
                 tempX += condition.xOffset;
                 tempY += condition.yOffset;
@@ -89,37 +101,38 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     public void updateX() {
-        baseX = baseHUDSettings.getCalculatedPosX() - baseHUDSettings.growthDirectionX.getGrowthDirection(getBaseHUDWidth());
-        x = baseX;
+        baseX = getSettings().getCalculatedPosX() - getSettings().getGrowthDirectionX().getGrowthDirection(getBaseHUDWidth());
     }
 
     public void updateY() {
-        baseY = baseHUDSettings.getCalculatedPosY() - baseHUDSettings.growthDirectionY.getGrowthDirection(getBaseHUDHeight());
-        y = baseY;
-    }
-
-    public boolean shouldRenderOnCondition() {
-        for (ConditionalSettings condition: baseHUDSettings.conditions) {
-            if (!condition.shouldRender && condition.isConditionMet())
-                return false;
-        }
-        return true;
-    }
-
-    public BaseHUDSettings getSettings() {
-        return this.baseHUDSettings;
-    }
-
-    public int getBaseX() {
-        return baseX;
-    }
-
-    public int getBaseY() {
-        return baseY;
+        baseY = getSettings().getCalculatedPosY() - getSettings().getGrowthDirectionY().getGrowthDirection(getBaseHUDHeight());
     }
 
     public boolean isScaled() {
-        return this.baseHUDSettings.scale != 0 || (this.baseHUDSettings.scale / (double) WINDOW.getScaleFactor()) == 1;
+        return this.getSettings().getScale() != 0 || (this.getSettings().getScale() / (double) WINDOW.getScaleFactor()) == 1;
+    }
+
+    public BaseHUDSettings getSettings() {
+        return baseHUDSettings;
+    }
+
+    // bounding box attribute will return 0 if HUD is not rendered once.
+    // the HUD must be rendered at least once to update the bounding box.
+
+    public int getRawX() {
+        return getBoundingBox().getX();
+    }
+
+    public int getRawY() {
+        return getBoundingBox().getY();
+    }
+
+    public int getWidth() {
+        return getBoundingBox().getWidth();
+    }
+
+    public int getHeight() {
+        return getBoundingBox().getHeight();
     }
 
     public Box getBoundingBox() {

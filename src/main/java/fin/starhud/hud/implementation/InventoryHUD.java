@@ -10,7 +10,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
-public class Inventory extends AbstractHUD {
+public class InventoryHUD extends AbstractHUD {
 
     private static final InventorySettings INVENTORY_SETTINGS = Main.settings.inventorySettings;
     private static final Identifier INVENTORY_TEXTURE = Identifier.of("starhud", "hud/inventory.png");
@@ -41,7 +41,7 @@ public class Inventory extends AbstractHUD {
         return "Inventory HUD";
     }
 
-    public Inventory() {
+    public InventoryHUD() {
         super(INVENTORY_SETTINGS.base);
     }
 
@@ -77,6 +77,7 @@ public class Inventory extends AbstractHUD {
             }
         }
 
+        setBoundingBox(x, y, TEXTURE_WIDTH_VERTICAL, TEXTURE_HEIGHT_VERTICAL);
         return foundItem;
     }
 
@@ -103,6 +104,7 @@ public class Inventory extends AbstractHUD {
             }
         }
 
+        setBoundingBox(x, y, TEXTURE_WIDTH_HORIZONTAL, TEXTURE_HEIGHT_HORIZONTAL);
         return foundItem;
     }
 

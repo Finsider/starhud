@@ -9,7 +9,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-public class Direction extends AbstractHUD {
+public class DirectionHUD extends AbstractHUD {
 
     private static final DirectionSettings DIRECTION_SETTINGS = Main.settings.directionSettings;
 
@@ -29,7 +29,7 @@ public class Direction extends AbstractHUD {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
-    public Direction() {
+    public DirectionHUD() {
         super(DIRECTION_SETTINGS.base);
     }
 
@@ -45,17 +45,18 @@ public class Direction extends AbstractHUD {
         if (DIRECTION_SETTINGS.includeOrdinal) {
             int icon = getOrdinalDirectionIcon(yaw);
             int color = getDirectionColor(icon) | 0xFF000000;
-            super.boundingBox.setColor(color);
 
             RenderUtils.drawTextureHUD(context, DIRECTION_ORDINAL_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_ORDINAL_WIDTH, TEXTURE_HEIGHT, TEXTURE_ORDINAL_WIDTH, TEXTURE_HEIGHT * ORDINAL_ICON_AMOUNT, color);
             RenderUtils.drawTextHUD(context, Float.toString(yaw), x + ORDINAL_TEXT_OFFSET, y + 3, color, false);
+
+            setBoundingBox(x, y, TEXTURE_ORDINAL_WIDTH, TEXTURE_HEIGHT, color);
         } else {
             int icon = getCardinalDirectionIcon(yaw);
             int color = getDirectionColor(icon * 2) | 0xFF000000;
-            super.boundingBox.setColor(color);
 
             RenderUtils.drawTextureHUD(context, DIRECTION_CARDINAL_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_CARDINAL_WIDTH, TEXTURE_HEIGHT, TEXTURE_CARDINAL_WIDTH, TEXTURE_HEIGHT * CARDINAL_ICON_AMOUNT, color);
             RenderUtils.drawTextHUD(context, Float.toString(yaw), x + CARDINAL_TEXT_OFFSET, y + 3, color, false);
+            setBoundingBox(x, y, TEXTURE_CARDINAL_WIDTH, TEXTURE_HEIGHT, color);
         }
         return true;
     }

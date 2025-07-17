@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ClockSystem extends AbstractHUD {
+public class ClockSystemHUD extends AbstractHUD {
 
     private static final ClockSystemSettings CLOCK_SYSTEM_SETTINGS = Main.settings.clockSettings.systemSetting;
 
@@ -29,7 +29,7 @@ public class ClockSystem extends AbstractHUD {
     private static final int TEXTURE_SYSTEM_12_WIDTH = 65;
     private static final int TEXTURE_SYSTEM_24_WIDTH = 49;
 
-    public ClockSystem() {
+    public ClockSystemHUD() {
         super(CLOCK_SYSTEM_SETTINGS.base);
     }
 
@@ -62,9 +62,11 @@ public class ClockSystem extends AbstractHUD {
         if (use12Hour) {
             RenderUtils.drawTextureHUD(context, CLOCK_12_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedSystemTimeString, x + 19, y + 3, color, false);
+            setBoundingBox(x, y, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT, color);
         } else {
             RenderUtils.drawTextureHUD(context, CLOCK_24_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedSystemTimeString, x + 19, y + 3, color, false);
+            setBoundingBox(x, y, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT, color);
         }
         return true;
     }

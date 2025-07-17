@@ -2,7 +2,6 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Helper;
 import fin.starhud.Main;
-import fin.starhud.config.ConditionalSettings;
 import fin.starhud.config.hud.TargetedCrosshairSettings;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
@@ -33,7 +32,7 @@ import net.minecraft.util.math.BlockPos;
 
 
 // HUD similar to JADE's. TargetedCrosshairHUD.
-public class TargetedCrosshair extends AbstractHUD {
+public class TargetedCrosshairHUD extends AbstractHUD {
 
     private static final Identifier ICON_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/item.png");
     private static final Identifier ENTITY_ICON_TEXTURE = Identifier.of("starhud", "hud/targeted_icon_entity.png");
@@ -52,7 +51,7 @@ public class TargetedCrosshair extends AbstractHUD {
 
     private static final int BASE_HUD_HEIGHT = ICON_BACKGROUND_HEIGHT;
 
-    public TargetedCrosshair() {
+    public TargetedCrosshairHUD() {
         super(TARGETED_CROSSHAIR_SETTINGS.base);
     }
 
@@ -63,26 +62,17 @@ public class TargetedCrosshair extends AbstractHUD {
 
     @Override
     public boolean shouldRender() {
-        return baseHUDSettings.shouldRender &&
-                CLIENT.crosshairTarget != null &&
-                CLIENT.crosshairTarget.getType() != HitResult.Type.MISS &&
-                shouldRenderOnCondition();
+        return super.shouldRender()
+                && CLIENT.crosshairTarget != null
+                && CLIENT.crosshairTarget.getType() != HitResult.Type.MISS;
     }
 
     public static boolean shouldHUDRender() {
 
-        if (!TARGETED_CROSSHAIR_SETTINGS.base.shouldRender)
+        if (!TARGETED_CROSSHAIR_SETTINGS.base.shouldRender())
             return false;
 
-        if (CLIENT.crosshairTarget == null || CLIENT.crosshairTarget.getType() == HitResult.Type.MISS)
-            return false;
-
-        for (ConditionalSettings condition: TARGETED_CROSSHAIR_SETTINGS.base.conditions) {
-            if (!condition.shouldRender)
-                return false;
-        }
-
-        return true;
+        return CLIENT.crosshairTarget != null && CLIENT.crosshairTarget.getType() != HitResult.Type.MISS;
     }
 
     @Override
@@ -180,7 +170,6 @@ public class TargetedCrosshair extends AbstractHUD {
         }
 
         int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.base.growthDirectionX.getGrowthDirection(cachedEntityMaxWidth);
-
         int color = getEntityIconColor(cachedIndex) | 0xFF000000;
 
         RenderUtils.drawTextureHUD(

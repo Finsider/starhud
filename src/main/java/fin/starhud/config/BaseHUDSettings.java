@@ -51,19 +51,97 @@ public class BaseHUDSettings implements ConfigData {
         this.growthDirectionY = growthDirectionY;
     }
 
+    public boolean shouldRender() {
+        if (!shouldRender) return false;
+
+        for (ConditionalSettings condition : conditions)
+            if (!condition.shouldRender())
+                return false;
+
+        return true;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public GrowthDirectionX getGrowthDirectionX() {
+        if (growthDirectionX == null) {
+            if (getX() > 0) {
+                growthDirectionX = GrowthDirectionX.RIGHT;
+            } else if (getX() < 0) {
+                growthDirectionX = GrowthDirectionX.LEFT;
+            } else {
+                growthDirectionX = GrowthDirectionX.CENTER;
+            }
+        }
+        return growthDirectionX;
+    }
+
+    public GrowthDirectionY getGrowthDirectionY() {
+        if (growthDirectionY == null) {
+            if (getY() > 0) {
+                growthDirectionY = GrowthDirectionY.DOWN;
+            } else if (getY() < 0) {
+                growthDirectionY = GrowthDirectionY.UP;
+            } else {
+                growthDirectionY = GrowthDirectionY.MIDDLE;
+            }
+        }
+        return growthDirectionY;
+    }
+
+    public ScreenAlignmentX getOriginX() {
+        if (originX == null) {
+            if (getX() > 0) {
+                originX = ScreenAlignmentX.LEFT;
+            } else if (getX() < 0) {
+                originX = ScreenAlignmentX.RIGHT;
+            } else {
+                originX = ScreenAlignmentX.CENTER;
+            }
+        }
+        return originX;
+    }
+
+    public ScreenAlignmentY getOriginY() {
+        if (originY == null) {
+            if (getY() > 0) {
+                originY = ScreenAlignmentY.TOP;
+            } else if (getY() < 0) {
+                originY = ScreenAlignmentY.BOTTOM;
+            } else {
+                originY = ScreenAlignmentY.MIDDLE;
+            }
+        }
+        return originY;
+    }
+
+    public int getScale() {
+        return scale;
+    }
+
+    public List<ConditionalSettings> getConditions() {
+        return conditions;
+    }
+
     // get the scaled factor
     // this can either make your HUD bigger or smaller.
     public float getScaledFactor() {
-        return this.scale == 0 ? 1 : (float) MinecraftClient.getInstance().getWindow().getScaleFactor() / this.scale;
+        return this.getScale() == 0 ? 1 : (float) MinecraftClient.getInstance().getWindow().getScaleFactor() / this.getScale();
     }
 
     // this shifts your HUD based on your x point, and alignment on X axis, and place them accordingly in your screen.
     public int getCalculatedPosX() {
-        return this.x + (int) (this.originX.getAlignmentPos(MinecraftClient.getInstance().getWindow().getScaledWidth()) * getScaledFactor());
+        return this.getX() + (int) (this.getOriginX().getAlignmentPos(MinecraftClient.getInstance().getWindow().getScaledWidth()) * getScaledFactor());
     }
 
     // this also shifts your HUD based on your y point, and alignment on Y axis, and place them accordingly in your screen.
     public int getCalculatedPosY() {
-        return this.y + (int) (this.originY.getAlignmentPos(MinecraftClient.getInstance().getWindow().getScaledHeight()) * getScaledFactor());
+        return this.getY() + (int) (this.getOriginY().getAlignmentPos(MinecraftClient.getInstance().getWindow().getScaledHeight()) * getScaledFactor());
     }
 }
