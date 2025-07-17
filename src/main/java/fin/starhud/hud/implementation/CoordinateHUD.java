@@ -31,7 +31,7 @@ public class CoordinateHUD extends AbstractHUD {
     @Override
     public boolean shouldRender() {
         return super.shouldRender()
-                && (COORD_SETTINGS.X.shouldRender && COORD_SETTINGS.Y.shouldRender && COORD_SETTINGS.Z.shouldRender);
+                && (COORD_SETTINGS.X.shouldRender || COORD_SETTINGS.Y.shouldRender || COORD_SETTINGS.Z.shouldRender);
     }
 
     @Override

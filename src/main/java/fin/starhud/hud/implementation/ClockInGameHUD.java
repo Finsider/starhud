@@ -20,7 +20,6 @@ public class ClockInGameHUD extends AbstractHUD {
 
     private static String cachedMinecraftTimeString = "";
     private static int cachedMinecraftMinute = -1;
-    private static boolean cachedInGameUse12Hour = CLOCK_IN_GAME_SETTINGS.use12Hour;
 
     private static final int TEXTURE_INGAME_12_WIDTH = 65;
     private static final int TEXTURE_INGAME_24_WIDTH = 49;
@@ -46,9 +45,8 @@ public class ClockInGameHUD extends AbstractHUD {
 
         int minutes = (int) ((time % 1000) * 3 / 50);
         int hours = (int) ((time / 1000) + 6) % 24;
-        if (minutes != cachedMinecraftMinute || use12Hour != cachedInGameUse12Hour) {
+        if (minutes != cachedMinecraftMinute) {
             cachedMinecraftMinute = minutes;
-            cachedInGameUse12Hour = use12Hour;
 
             cachedMinecraftTimeString = use12Hour ?
                     buildMinecraftTime12String(hours, minutes) :
@@ -121,5 +119,11 @@ public class ClockInGameHUD extends AbstractHUD {
     @Override
     public int getBaseHUDHeight() {
         return TEXTURE_HEIGHT;
+    }
+
+    @Override
+    public void update(){
+        super.update();
+        cachedMinecraftMinute = -1;
     }
 }

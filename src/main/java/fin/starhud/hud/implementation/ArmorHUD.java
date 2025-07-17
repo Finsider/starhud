@@ -55,10 +55,14 @@ public class ArmorHUD extends AbstractHUD {
     }
 
     @Override
+    public boolean shouldRender() {
+        return super.shouldRender()
+                && (PIECE_SETTINGS[0].shouldRender || PIECE_SETTINGS[1].shouldRender || PIECE_SETTINGS[2].shouldRender || PIECE_SETTINGS[3].shouldRender);
+    }
+
+    @Override
     public boolean renderHUD(DrawContext context) {
         int armorIndex = 3;
-
-        boolean rendered = false;
 
         for (EquipmentSlot equipmentSlot : AttributeModifierSlot.ARMOR) {
             if (equipmentSlot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
@@ -86,14 +90,13 @@ public class ArmorHUD extends AbstractHUD {
                             super.boundingBox.mergeWith(tempBox);
                         }
                     }
-                    rendered = true;
                 }
             }
             --armorIndex;
         }
 
         needBoxUpdate = false;
-        return rendered;
+        return true;
     }
 
     @Override

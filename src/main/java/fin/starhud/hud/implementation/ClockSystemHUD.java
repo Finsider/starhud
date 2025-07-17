@@ -24,7 +24,6 @@ public class ClockSystemHUD extends AbstractHUD {
 
     private static String cachedSystemTimeString = buildSystemTime24String(System.currentTimeMillis());
     private static long cachedSystemMinute = -1;
-    private static boolean cachedSystemUse12Hour = CLOCK_SYSTEM_SETTINGS.use12Hour;
 
     private static final int TEXTURE_SYSTEM_12_WIDTH = 65;
     private static final int TEXTURE_SYSTEM_24_WIDTH = 49;
@@ -47,9 +46,8 @@ public class ClockSystemHUD extends AbstractHUD {
         boolean use12Hour = CLOCK_SYSTEM_SETTINGS.use12Hour;
 
         // update on either a new minute or user updated the config
-        if (minute != cachedSystemMinute || use12Hour != cachedSystemUse12Hour) {
+        if (minute != cachedSystemMinute) {
             cachedSystemMinute = minute;
-            cachedSystemUse12Hour = use12Hour;
 
             cachedSystemTimeString = use12Hour ?
                     buildSystemTime12String(currentTime) :
@@ -87,5 +85,11 @@ public class ClockSystemHUD extends AbstractHUD {
     @Override
     public int getBaseHUDHeight() {
         return TEXTURE_HEIGHT;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        cachedSystemMinute = -1;
     }
 }

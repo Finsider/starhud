@@ -34,6 +34,8 @@ import net.minecraft.util.math.BlockPos;
 // HUD similar to JADE's. TargetedCrosshairHUD.
 public class TargetedCrosshairHUD extends AbstractHUD {
 
+    private static final TargetedCrosshairSettings TARGETED_CROSSHAIR_SETTINGS = Main.settings.targetedCrosshairSettings;
+
     private static final Identifier ICON_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/item.png");
     private static final Identifier ENTITY_ICON_TEXTURE = Identifier.of("starhud", "hud/targeted_icon_entity.png");
 
@@ -41,7 +43,6 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     private static final int ICON_BACKGROUND_WIDTH = 3 + 16 + 3;
     private static final int ICON_BACKGROUND_HEIGHT = 3 + 16 + 3;
 
-    private static final TargetedCrosshairSettings TARGETED_CROSSHAIR_SETTINGS = Main.settings.targetedCrosshairSettings;
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final int BASE_HUD_WIDTH =
             ICON_BACKGROUND_WIDTH

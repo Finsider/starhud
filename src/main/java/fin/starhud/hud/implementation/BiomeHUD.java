@@ -13,6 +13,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 public class BiomeHUD extends AbstractHUD {
 
@@ -43,7 +44,7 @@ public class BiomeHUD extends AbstractHUD {
         TextRenderer textRenderer = CLIENT.textRenderer;
 
         BlockPos blockPos = CLIENT.player.getBlockPos();
-        RegistryEntry<net.minecraft.world.biome.Biome> currentBiome = CLIENT.world.getBiome(blockPos);
+        RegistryEntry<Biome> currentBiome = CLIENT.world.getBiome(blockPos);
 
         if (cachedBiome != currentBiome) {
             cachedFormattedBiomeStr = Helper.idNameFormatter(currentBiome.getIdAsString());

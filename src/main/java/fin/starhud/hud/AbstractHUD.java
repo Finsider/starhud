@@ -7,7 +7,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.Window;
 
-
 public abstract class AbstractHUD implements HUDInterface {
     private static final Window WINDOW = MinecraftClient.getInstance().getWindow();
 
