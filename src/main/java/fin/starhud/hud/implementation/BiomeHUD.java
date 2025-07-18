@@ -10,18 +10,22 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Language;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-public class BiomeHUD extends AbstractHUD {
+import java.util.Optional;
+
+public class  BiomeHUD extends AbstractHUD {
 
     private static final BiomeSettings BIOME_SETTINGS = Main.settings.biomeSettings;
 
     private static final Identifier DIMENSION_TEXTURE = Identifier.of("starhud", "hud/biome.png");
 
-    private static String cachedFormattedBiomeStr = "";
+    private static Text cachedBiomeNameText;
     private static RegistryEntry<net.minecraft.world.biome.Biome> cachedBiome;
     private static int cachedTextWidth;
 
@@ -47,9 +51,24 @@ public class BiomeHUD extends AbstractHUD {
         RegistryEntry<Biome> currentBiome = CLIENT.world.getBiome(blockPos);
 
         if (cachedBiome != currentBiome) {
-            cachedFormattedBiomeStr = Helper.idNameFormatter(currentBiome.getIdAsString());
+            Optional<RegistryKey<Biome>> biomeKey = currentBiome.getKey();
+
+            if (biomeKey.isPresent()) {
+                Identifier biomeId = biomeKey.get().getValue();
+                String translatableKey = "biome." + biomeId.getNamespace() + '.' + biomeId.getPath();
+
+                // if it has translation we get the translation, else we just convert it to Pascal Case manually.
+                if (Language.getInstance().hasTranslation(translatableKey))
+                    cachedBiomeNameText = Text.translatable(translatableKey);
+                else
+                    cachedBiomeNameText = Text.of(Helper.idNameFormatter(currentBiome.getIdAsString()));
+
+            } else {
+                cachedBiomeNameText = Text.of("Unregistered");
+            }
+
             cachedBiome = currentBiome;
-            cachedTextWidth = textRenderer.getWidth(cachedFormattedBiomeStr);
+            cachedTextWidth = textRenderer.getWidth(cachedBiomeNameText);
         }
 
         int dimensionIndex = getDimensionIndex(CLIENT.world.getRegistryKey());
@@ -59,7 +78,7 @@ public class BiomeHUD extends AbstractHUD {
 
         RenderUtils.drawTextureHUD(context, DIMENSION_TEXTURE, xTemp, y, 0.0F, dimensionIndex * TEXTURE_HEIGHT, 13, TEXTURE_HEIGHT, 13, 52);
         RenderUtils.fillRoundedRightSide(context, xTemp + 14, y, xTemp + 14 + cachedTextWidth + 9, y + TEXTURE_HEIGHT, 0x80000000);
-        RenderUtils.drawTextHUD(context, cachedFormattedBiomeStr, xTemp + 19, y + 3, color, false);
+        RenderUtils.drawTextHUD(context, cachedBiomeNameText.asOrderedText(), xTemp + 19, y + 3, color, false);
 
         setBoundingBox(xTemp, y, 14 + cachedTextWidth + 9, TEXTURE_HEIGHT, color);
         return true;
