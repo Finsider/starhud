@@ -8,7 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
-public class Day extends AbstractHUD {
+public class DayHUD extends AbstractHUD {
 
     private static final DaySettings DAY_SETTINGS = Main.settings.daySettings;
 
@@ -23,12 +23,17 @@ public class Day extends AbstractHUD {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
-    public Day() {
+    public DayHUD() {
         super(DAY_SETTINGS.base);
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public String getName() {
+        return "Day HUD";
+    }
+
+    @Override
+    public boolean renderHUD(DrawContext context) {
 
         long day = CLIENT.world.getTimeOfDay() / 24000L;
 
@@ -40,12 +45,15 @@ public class Day extends AbstractHUD {
             cachedTextWidth = CLIENT.textRenderer.getWidth(cachedDayString);
         }
 
-        int xTemp = x - DAY_SETTINGS.textGrowth.getGrowthDirection(cachedTextWidth);
+        int xTemp = x - DAY_SETTINGS.base.growthDirectionX.getGrowthDirection(cachedTextWidth);
         int color = DAY_SETTINGS.color | 0xFF000000;
 
         RenderUtils.drawTextureHUD(context, DAY_TEXTURE, xTemp, y, 0.0F, 0, 13, TEXTURE_HEIGHT, 13,  TEXTURE_HEIGHT);
         RenderUtils.fillRoundedRightSide(context, xTemp + 14, y, xTemp + 14 + cachedTextWidth + 9, y + TEXTURE_HEIGHT, 0x80000000);
         RenderUtils.drawTextHUD(context, cachedDayString, xTemp + 19, y + 3, color, false);
+
+        setBoundingBox(xTemp, y, 14 + cachedTextWidth + 9, TEXTURE_HEIGHT, color);
+        return true;
     }
 
     @Override

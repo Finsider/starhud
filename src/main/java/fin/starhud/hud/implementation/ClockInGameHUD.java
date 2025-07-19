@@ -9,7 +9,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 
-public class ClockInGame extends AbstractHUD {
+public class ClockInGameHUD extends AbstractHUD {
 
     private static final ClockInGameSettings CLOCK_IN_GAME_SETTINGS = Main.settings.clockSettings.inGameSetting;
 
@@ -20,22 +20,24 @@ public class ClockInGame extends AbstractHUD {
 
     private static String cachedMinecraftTimeString = "";
     private static int cachedMinecraftMinute = -1;
-    private static boolean cachedInGameUse12Hour = CLOCK_IN_GAME_SETTINGS.use12Hour;
 
     private static final int TEXTURE_INGAME_12_WIDTH = 65;
     private static final int TEXTURE_INGAME_24_WIDTH = 49;
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
-    public ClockInGame() {
+    public ClockInGameHUD() {
         super(CLOCK_IN_GAME_SETTINGS.base);
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
-        ClientWorld world = CLIENT.world;
+    public String getName() {
+        return "Clock In-Game HUD";
+    }
 
-        if (world == null) return;
+    @Override
+    public boolean renderHUD(DrawContext context) {
+        ClientWorld world = CLIENT.world;
 
         long time = world.getTimeOfDay() % 24000;
 
@@ -43,9 +45,8 @@ public class ClockInGame extends AbstractHUD {
 
         int minutes = (int) ((time % 1000) * 3 / 50);
         int hours = (int) ((time / 1000) + 6) % 24;
-        if (minutes != cachedMinecraftMinute || use12Hour != cachedInGameUse12Hour) {
+        if (minutes != cachedMinecraftMinute) {
             cachedMinecraftMinute = minutes;
-            cachedInGameUse12Hour = use12Hour;
 
             cachedMinecraftTimeString = use12Hour ?
                     buildMinecraftTime12String(hours, minutes) :
@@ -57,11 +58,14 @@ public class ClockInGame extends AbstractHUD {
 
         if (use12Hour) {
             RenderUtils.drawTextureHUD(context, CLOCK_12_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT * 5, color);
-            RenderUtils.drawTextHUD(context, cachedMinecraftTimeString, x + 19, y + 3, color, false);
+            RenderUtils.drawTextHUD(context, cachedMinecraftTimeString, x + 19, y + 3, color, false);;
+            setBoundingBox(x, y, TEXTURE_INGAME_12_WIDTH, TEXTURE_HEIGHT, color);
         } else {
             RenderUtils.drawTextureHUD(context, CLOCK_24_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedMinecraftTimeString, x + 19, y + 3, color, false);
+            setBoundingBox(x, y, TEXTURE_INGAME_24_WIDTH, TEXTURE_HEIGHT, color);
         }
+        return true;
     }
 
     private static int getIconColor(int icon) {
@@ -115,5 +119,11 @@ public class ClockInGame extends AbstractHUD {
     @Override
     public int getBaseHUDHeight() {
         return TEXTURE_HEIGHT;
+    }
+
+    @Override
+    public void update(){
+        super.update();
+        cachedMinecraftMinute = -1;
     }
 }

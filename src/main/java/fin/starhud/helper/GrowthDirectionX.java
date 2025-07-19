@@ -12,4 +12,28 @@ public enum GrowthDirectionX {
             case RIGHT -> 0;
         };
     }
+
+    public GrowthDirectionX next() {
+        return switch (this) {
+            case LEFT -> CENTER;
+            case CENTER -> RIGHT;
+            case RIGHT -> LEFT;
+        };
+    }
+
+    public GrowthDirectionX prev() {
+        return switch (this) {
+            case LEFT -> RIGHT;
+            case CENTER -> LEFT;
+            case RIGHT -> CENTER;
+        };
+    }
+
+    public GrowthDirectionX recommendedScreenAlignment(ScreenAlignmentX screenAlignmentX) {
+        return switch (screenAlignmentX) {
+            case LEFT -> RIGHT;
+            case CENTER -> CENTER;
+            case RIGHT -> LEFT;
+        };
+    }
 }

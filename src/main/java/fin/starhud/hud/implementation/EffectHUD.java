@@ -3,27 +3,25 @@ package fin.starhud.hud.implementation;
 import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.hud.EffectSettings;
-import fin.starhud.helper.RenderUtils;
-import fin.starhud.helper.ScreenAlignmentX;
-import fin.starhud.helper.ScreenAlignmentY;
-import fin.starhud.helper.StatusEffectAttribute;
+import fin.starhud.helper.*;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.texture.MissingSprite;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-// WIP
-public class Effect extends AbstractHUD {
+public class EffectHUD extends AbstractHUD {
 
     private static final EffectSettings effectSettings = Main.settings.effectSettings;
 
@@ -38,58 +36,123 @@ public class Effect extends AbstractHUD {
     private static final int STATUS_EFFECT_BAR_TEXTURE_WIDTH = 21;
     private static final int STATUS_EFFECT_BAR_TEXTURE_HEIGHT = 3;
 
-    private static final Map<RegistryEntry<StatusEffect>, Identifier> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
+    private static final Map<StatusEffect, Identifier> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
 
-    public Effect() {
+    private static final Box tempBox = new Box(0,0);
+    private static int cachedSize = -1;
+    private static boolean needBoxUpdate = true;
+
+    public EffectHUD() {
         super(effectSettings.base);
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public String getName() {
+        return "Status Effect HUD";
+    }
+
+    @Override
+    public boolean shouldRender() {
+        return super.shouldRender()
+                && !CLIENT.player.getStatusEffects().isEmpty();
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        needBoxUpdate = true;
+        super.boundingBox.setEmpty(true);
+    }
+
+    @Override
+    public boolean renderHUD(DrawContext context) {
 
         // straight up copied from minecraft's own status effect rendering system.
+        // but with 20x more mess!!!!
 
         Collection<StatusEffectInstance> collection = CLIENT.player.getStatusEffects();
-        if (collection.isEmpty())
-            return;
 
         int beneficialIndex = 0;
         int harmIndex = 0;
 
         boolean drawVertical = effectSettings.drawVertical;
+
+        // sameTypeGap = the gap between each beneficial / harm effect.
         int sameTypeGap = effectSettings.sameTypeGap;
+
+        /* differentTypeGap = the gap between beneficial and harm effect.
+        * if HUD on the right screen and is drawn Vertically, We change the differentTypeGap from going right, to left.so that the harm effect hud does not go out of screen
+        * if HUD on the bottom screen and is drawn horizontally, We change the differentTypeGap from going down, to up. so that the harm effect hud does not go out of screen
+        * */
         int differentTypeGap = ((drawVertical && effectSettings.base.originX == ScreenAlignmentX.RIGHT) || (!drawVertical && effectSettings.base.originY == ScreenAlignmentY.BOTTOM)) ? -effectSettings.differentTypeGap :effectSettings.differentTypeGap;
 
-        // if originX = right, invert differentTypeGap
-        // if originY = down, invert differentTypeGap
-
+        int effectSize = collection.size();
         int beneficialSize = getBeneficialSize();
-        int harmSize = collection.size() - beneficialSize;
+        int harmSize = effectSize - beneficialSize;
 
-        int xBeneficial = x - effectSettings.growthDirectionX.getGrowthDirection(getDynamicWidth(true, beneficialSize, harmSize));
-        int yBeneficial = y - effectSettings.growthDirectionY.getGrowthDirection(getDynamicHeight(true, beneficialSize, harmSize));
+        // xBeneficial, yBeneficial = Starting point for beneficial effect HUD.
+        int xBeneficial = x - effectSettings.base.growthDirectionX.getGrowthDirection(getDynamicWidth(true, beneficialSize, harmSize));
+        int yBeneficial = y - effectSettings.base.growthDirectionY.getGrowthDirection(getDynamicHeight(true, beneficialSize, harmSize));
 
-        int xHarm = (beneficialSize == 0 && drawVertical) ? xBeneficial : x - effectSettings.growthDirectionX.getGrowthDirection(getDynamicWidth(false, beneficialSize, harmSize));
-        int yHarm = (beneficialSize == 0 && !drawVertical) ? yBeneficial : y - effectSettings.growthDirectionY.getGrowthDirection(getDynamicHeight(false, beneficialSize, harmSize));
+        // xHarm, yHarm = Starting point for harm effect HUD.
+        // this is just a way to say
+        // "if the beneficial effect is empty, we place harm effect in the same place as beneficial effect, yes, replacing its position"
+        int xHarm = (beneficialSize == 0 && drawVertical) ? xBeneficial :
+                x - effectSettings.base.growthDirectionX.getGrowthDirection(getDynamicWidth(false, beneficialSize, harmSize));
+        int yHarm = (beneficialSize == 0 && !drawVertical) ? yBeneficial :
+                y - effectSettings.base.growthDirectionY.getGrowthDirection(getDynamicHeight(false, beneficialSize, harmSize));
+
+        boolean shouldBoxUpdate = (needBoxUpdate || cachedSize != StatusEffectAttribute.getStatusEffectAttributeMap().size());
+
+        if (shouldBoxUpdate)
+            cachedSize = StatusEffectAttribute.getStatusEffectAttributeMap().size();
 
         for (StatusEffectInstance statusEffectInstance : collection) {
             if (!statusEffectInstance.shouldShowIcon())
                 continue;
 
-            RegistryEntry<StatusEffect> registryEntry = statusEffectInstance.getEffectType();
+            StatusEffect statusEffect = statusEffectInstance.getEffectType();
             StatusEffectAttribute statusEffectAttribute = StatusEffectAttribute.getStatusEffectAttribute(statusEffectInstance);
 
             int x2;
             int y2;
 
-            if (registryEntry.value().isBeneficial()) {
+            if (statusEffect.isBeneficial()) {
+
+                // if the hud is drawn vertically, we definitely do not want to move the beneficial effect horizontally.
                 x2 = (xBeneficial) + ((drawVertical ? 0 : sameTypeGap) * beneficialIndex);
+
+                // if the hud is drawn horizontally, we definitely do not want to move the beneficial effect vertically.
                 y2 = (yBeneficial) + ((drawVertical ? sameTypeGap : 0) * beneficialIndex);
+
                 ++beneficialIndex;
+
             } else {
-                x2 = (xHarm) + (beneficialSize == 0 ? 0 : (drawVertical ? differentTypeGap : 0)) + ((drawVertical ? 0 : sameTypeGap) * harmIndex);
-                y2 = (yHarm) + (beneficialSize == 0 ? 0 : (drawVertical ? 0 : differentTypeGap)) + ((drawVertical ? sameTypeGap : 0) * harmIndex);
+
+                x2 = (xHarm)
+                        // if beneficial is empty, we replace the position to harm effect. else we shift the harm effect hud accordingly.
+                        + (beneficialSize == 0 ? 0 : (drawVertical ? differentTypeGap : 0))
+                        // if hud is drawn vertically, we do not want to move the effect horizontally.
+                        + ((drawVertical ? 0 : sameTypeGap) * harmIndex);
+
+                y2 = (yHarm)
+                        // if beneficial is empty, we replace the position to harm effect. else we shift the harm effect hud accordingly.
+                        + (beneficialSize == 0 ? 0 : (drawVertical ? 0 : differentTypeGap))
+                        // if hud is drawn vertically, we do not want to move the effect horizontally.
+                        + ((drawVertical ? sameTypeGap : 0) * harmIndex);
+
                 ++harmIndex;
+            }
+
+            // Final State: x2 and y2 contains the correct placement for the effect HUD, ready to be drawn.
+
+            if (shouldBoxUpdate) {
+                tempBox.setBoundingBox(x2, y2, STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT);
+                if (super.boundingBox.isEmpty())
+                    super.boundingBox.setBoundingBox(tempBox.getX(), tempBox.getY(), tempBox.getWidth(), tempBox.getHeight(), effectSettings.ambientColor | 0xFF000000);
+                else
+                    super.boundingBox.mergeWith(tempBox);
             }
 
             if (statusEffectInstance.isAmbient()) {
@@ -128,7 +191,7 @@ public class Effect extends AbstractHUD {
                 int maxDuration = statusEffectAttribute.maxDuration();
 
                 step = Helper.getStep(duration, maxDuration, 7);
-                color = RenderUtils.getItemBarColor(step, 7) | 0xFF000000;
+                color = (effectSettings.useEffectColor ? statusEffect.getColor() : RenderUtils.getItemBarColor(step, 7)) | 0xFF000000;
             }
 
             // draw timer bar
@@ -152,7 +215,7 @@ public class Effect extends AbstractHUD {
             // draw effect texture.
             RenderUtils.drawTextureHUD(
                     context,
-                    getStatusEffectTexture(registryEntry),
+                    getStatusEffectTexture(statusEffect),
                     x2 + 3, y2 + 3,
                     0,0,
                     18, 18,
@@ -176,27 +239,35 @@ public class Effect extends AbstractHUD {
             );
 
         }
+
+        needBoxUpdate = false;
+        return true;
     }
 
     public int getDynamicWidth(boolean isBeneficial, int beneficialSize, int harmSize) {
-         return effectSettings.drawVertical ? STATUS_EFFECT_TEXTURE_WIDTH : ((isBeneficial ? beneficialSize : harmSize) * effectSettings.sameTypeGap);
+                 // if we draw the HUD vertically, essentially the width should be the texture width
+         return effectSettings.drawVertical ? STATUS_EFFECT_TEXTURE_WIDTH
+                 // else, the width should be the whole column of Effect HUDs.
+                 : ((isBeneficial ? beneficialSize : harmSize) * effectSettings.sameTypeGap);
     }
 
     public int getDynamicHeight(boolean isBeneficial, int beneficialSize, int harmSize) {
-        return effectSettings.drawVertical ? ((isBeneficial ? beneficialSize : harmSize) * effectSettings.sameTypeGap) : STATUS_EFFECT_TEXTURE_HEIGHT;
+                // if the HUD is drawn Vertically, the Height should be the whole row of Effect HUDs
+        return effectSettings.drawVertical ? ((isBeneficial ? beneficialSize : harmSize) * effectSettings.sameTypeGap)
+                // else, the height is just the same as the texture height.
+                : STATUS_EFFECT_TEXTURE_HEIGHT;
     }
 
     public static int getBeneficialSize() {
         int size = 0;
         for (StatusEffectInstance collection : CLIENT.player.getStatusEffects()) {
-            if (collection.getEffectType().value().isBeneficial())
+            if (collection.getEffectType().isBeneficial())
                 ++size;
         }
         return size;
     }
 
     // 0 because the width is dependent to how many status effect are present.
-
     @Override
     public int getBaseHUDWidth() {
         return 0;
@@ -207,14 +278,11 @@ public class Effect extends AbstractHUD {
         return 0;
     }
 
-    public static Identifier getStatusEffectTexture(RegistryEntry<StatusEffect> effect) {
-        return STATUS_EFFECT_TEXTURE_MAP.computeIfAbsent(
-                effect,
-                e -> e.getKey()
-                        .map(RegistryKey::getValue)
-                        .map(id -> Identifier.of(id.getNamespace(), "textures/mob_effect/" + id.getPath() + ".png"))
-                        .orElseGet(MissingSprite::getMissingSpriteId)
-        );
+    public static Identifier getStatusEffectTexture(StatusEffect effect) {
+        return STATUS_EFFECT_TEXTURE_MAP.computeIfAbsent(effect, e -> {
+            Identifier id = Registries.STATUS_EFFECT.getId(e);
+            return new Identifier(id.getNamespace(), "textures/mob_effect/" + id.getPath() + ".png");
+        });
     }
 
 }

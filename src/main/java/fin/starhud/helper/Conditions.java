@@ -1,6 +1,6 @@
 package fin.starhud.helper;
 
-import fin.starhud.hud.implementation.TargetedCrosshair;
+import fin.starhud.hud.implementation.TargetedCrosshairHUD;
 import fin.starhud.mixin.accessor.AccessorBossBarHud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EquipmentSlot;
@@ -58,6 +58,6 @@ public class Conditions {
     }
 
     public static boolean isTargetedCrosshairHUDShown() {
-        return TargetedCrosshair.shouldHUDRender();
+        return TargetedCrosshairHUD.shouldHUDRender();
     }
 }

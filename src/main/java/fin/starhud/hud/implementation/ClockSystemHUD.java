@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ClockSystem extends AbstractHUD {
+public class ClockSystemHUD extends AbstractHUD {
 
     private static final ClockSystemSettings CLOCK_SYSTEM_SETTINGS = Main.settings.clockSettings.systemSetting;
 
@@ -24,17 +24,21 @@ public class ClockSystem extends AbstractHUD {
 
     private static String cachedSystemTimeString = buildSystemTime24String(System.currentTimeMillis());
     private static long cachedSystemMinute = -1;
-    private static boolean cachedSystemUse12Hour = CLOCK_SYSTEM_SETTINGS.use12Hour;
 
     private static final int TEXTURE_SYSTEM_12_WIDTH = 65;
     private static final int TEXTURE_SYSTEM_24_WIDTH = 49;
 
-    public ClockSystem() {
+    public ClockSystemHUD() {
         super(CLOCK_SYSTEM_SETTINGS.base);
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public String getName() {
+        return "Clock System HUD";
+    }
+
+    @Override
+    public boolean renderHUD(DrawContext context) {
         // update each minute
         long currentTime = System.currentTimeMillis();
         long minute = currentTime / 60000;
@@ -42,9 +46,8 @@ public class ClockSystem extends AbstractHUD {
         boolean use12Hour = CLOCK_SYSTEM_SETTINGS.use12Hour;
 
         // update on either a new minute or user updated the config
-        if (minute != cachedSystemMinute || use12Hour != cachedSystemUse12Hour) {
+        if (minute != cachedSystemMinute) {
             cachedSystemMinute = minute;
-            cachedSystemUse12Hour = use12Hour;
 
             cachedSystemTimeString = use12Hour ?
                     buildSystemTime12String(currentTime) :
@@ -52,14 +55,18 @@ public class ClockSystem extends AbstractHUD {
         }
 
         int color = CLOCK_SYSTEM_SETTINGS.color | 0xFF000000;
+        super.boundingBox.setColor(color);
 
         if (use12Hour) {
             RenderUtils.drawTextureHUD(context, CLOCK_12_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedSystemTimeString, x + 19, y + 3, color, false);
+            setBoundingBox(x, y, TEXTURE_SYSTEM_12_WIDTH, TEXTURE_HEIGHT, color);
         } else {
             RenderUtils.drawTextureHUD(context, CLOCK_24_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT * 5, color);
             RenderUtils.drawTextHUD(context, cachedSystemTimeString, x + 19, y + 3, color, false);
+            setBoundingBox(x, y, TEXTURE_SYSTEM_24_WIDTH, TEXTURE_HEIGHT, color);
         }
+        return true;
     }
 
     private static String buildSystemTime24String(long time) {
@@ -78,5 +85,11 @@ public class ClockSystem extends AbstractHUD {
     @Override
     public int getBaseHUDHeight() {
         return TEXTURE_HEIGHT;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        cachedSystemMinute = -1;
     }
 }

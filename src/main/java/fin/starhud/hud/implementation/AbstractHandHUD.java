@@ -1,6 +1,7 @@
 package fin.starhud.hud.implementation;
 
 import fin.starhud.config.hud.HandSettings;
+import fin.starhud.helper.Box;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
@@ -9,16 +10,17 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
 // i dont like this one.
 
-public abstract class Hand extends AbstractHUD {
+public abstract class AbstractHandHUD extends AbstractHUD {
 
     private static final Identifier HAND_TEXTURE = Identifier.of("starhud", "hud/hand.png");
+    private static final Identifier BIG_HAND_TEXTURE = Identifier.of("starhud", "hud/big_hand.png");
 
     // base HUD Width (Icon width = 13, 1 for the gap between icon and text, 5 for the gap on left side of the attribute, 5 for the gap on the right of the attribute).
-    // guys i legit forgot what the "10 for the padding at left / right edge" meant help.
     private static final int TEXTURE_WIDTH = 13 + 1 + 5 + 5;
 
     // count string is at max 4 digits, each digit may have 5 pixels.
@@ -33,37 +35,67 @@ public abstract class Hand extends AbstractHUD {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     private final HandSettings handSettings;
+    private final Arm arm;
 
-    public Hand(HandSettings handSettings) {
+    public AbstractHandHUD(HandSettings handSettings, Arm arm) {
         super(handSettings.base);
         this.handSettings = handSettings;
+        this.arm = arm;
     }
 
-    public void renderHandHUD(DrawContext context, Arm arm, int x, int y) {
+    @Override
+    public boolean shouldRender() {
+        return super.shouldRender()
+                && !CLIENT.player.getStackInHand(CLIENT.player.getMainArm() == arm ? Hand.MAIN_HAND : Hand.OFF_HAND).isEmpty();
+    }
+
+    @Override
+    public boolean renderHUD(DrawContext context) {
+        return renderHandHUD(context, arm, x, y);
+    }
+
+    public boolean renderHandHUD(DrawContext context, Arm arm, int x, int y) {
         PlayerInventory playerInventory = CLIENT.player.getInventory();
 
-        ItemStack item;
-        if (CLIENT.player.getMainArm() == arm)
-            item = CLIENT.player.getEquippedStack(EquipmentSlot.MAINHAND);
-        else
-            item = CLIENT.player.getEquippedStack(EquipmentSlot.OFFHAND);
-
-        if (item.isEmpty()) return;
+        ItemStack item = CLIENT.player.getStackInHand(CLIENT.player.getMainArm() == arm ? Hand.MAIN_HAND : Hand.OFF_HAND);
 
         // either draw the durability or the amount of item in the inventory.
         if (handSettings.showDurability && item.isDamageable()) {
-            RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.drawItem, handSettings.textureGrowth);
+            Box box = RenderUtils.renderDurabilityHUD(context, HAND_TEXTURE, item, x, y, getV(), COUNT_WIDTH + TEXTURE_WIDTH, 27, handSettings.color | 0xFF000000, handSettings.drawBar, handSettings.drawItem, handSettings.base.growthDirectionX);
+            copyBoundingBox(box);
         } else if (handSettings.showCount) {
-            x -= handSettings.textureGrowth.getGrowthDirection(COUNT_WIDTH);
-            renderItemCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);
+            x -= handSettings.base.growthDirectionX.getGrowthDirection(COUNT_WIDTH);
+            renderStackCountHUD(context, playerInventory, item, x, y, getV(), handSettings.color | 0xFF000000);
+        }
+        return true;
+    }
+
+    private void renderStackCountHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
+        if (handSettings.drawItem) {
+            renderStackCountItemHUD(context, playerInventory, stack, x, y, color);
+        } else {
+            renderStackCountIconHUD(context, playerInventory, stack, x, y, v, color);
         }
     }
 
-    private static void renderItemCountHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
+    private void renderStackCountItemHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, int color) {
+        int stackAmount = getItemCount(playerInventory, stack);
+        String amountStr = Integer.toString(stackAmount);
+
+        RenderUtils.drawTextureHUD(context, BIG_HAND_TEXTURE, x, y, 0.0F, 0.0F, ITEM_TEXTURE_WIDTH + COUNT_WIDTH, ITEM_TEXTURE_HEIGHT,ITEM_TEXTURE_WIDTH + COUNT_WIDTH, ITEM_TEXTURE_HEIGHT);
+        context.drawItem(stack, x + 3, y + 3);
+        RenderUtils.drawTextHUD(context, amountStr, x + 22 + 1 + (5 + COUNT_WIDTH - CLIENT.textRenderer.getWidth(amountStr) + 5) / 2, y + 7, color, false);
+
+        setBoundingBox(x, y, ITEM_TEXTURE_WIDTH + COUNT_WIDTH, ITEM_TEXTURE_HEIGHT, color);
+    }
+
+    private void renderStackCountIconHUD(DrawContext context, PlayerInventory playerInventory, ItemStack stack, int x, int y, float v, int color) {
         int stackAmount = getItemCount(playerInventory, stack);
 
         RenderUtils.drawTextureHUD(context, HAND_TEXTURE, x, y, 0.0F, v, COUNT_WIDTH + TEXTURE_WIDTH, TEXTURE_HEIGHT, COUNT_WIDTH + TEXTURE_WIDTH, 27, color);
         RenderUtils.drawTextHUD(context, Integer.toString(stackAmount), x + 19, y + 3, color, false);
+
+        setBoundingBox(x, y, COUNT_WIDTH + TEXTURE_WIDTH, TEXTURE_HEIGHT, color);
     }
 
     private static int getItemCount(PlayerInventory inventory, ItemStack stack) {

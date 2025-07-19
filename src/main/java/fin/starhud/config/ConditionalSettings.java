@@ -19,12 +19,18 @@ public class ConditionalSettings {
     @Comment("Shifts this HUD in the Y Axis")
     public int yOffset = 0;
 
+    public boolean shouldRender() {
+        return !shouldHide();
+    }
+
+    public boolean shouldHide() {
+        return !shouldRender && isConditionMet();
+    }
+
     public boolean isConditionMet() {
-        try {
-            return this.condition.isConditionMet();
-        } catch (NullPointerException e) {
-            this.condition = Condition.DEBUG_HUD_OPENED;
-            return this.condition.isConditionMet();
+        if (condition == null) {
+            condition = Condition.DEBUG_HUD_OPENED;
         }
+        return this.condition.isConditionMet();
     }
 }

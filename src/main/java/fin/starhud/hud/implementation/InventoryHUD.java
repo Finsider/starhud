@@ -10,7 +10,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
-public class Inventory extends AbstractHUD {
+public class InventoryHUD extends AbstractHUD {
 
     private static final InventorySettings INVENTORY_SETTINGS = Main.settings.inventorySettings;
     private static final Identifier INVENTORY_TEXTURE = Identifier.of("starhud", "hud/inventory.png");
@@ -36,20 +36,25 @@ public class Inventory extends AbstractHUD {
         preComputeVertical();
     }
 
-    public Inventory() {
+    @Override
+    public String getName() {
+        return "Inventory HUD";
+    }
+
+    public InventoryHUD() {
         super(INVENTORY_SETTINGS.base);
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
+    public boolean renderHUD(DrawContext context) {
         if (INVENTORY_SETTINGS.drawVertical) {
-            drawInventoryVertical(context, x, y);
+            return drawInventoryVertical(context, x, y);
         } else {
-            drawInventoryHorizontal(context, x, y);
+            return drawInventoryHorizontal(context, x, y);
         }
     }
 
-    private static void drawInventoryVertical(DrawContext context, int x, int y) {
+    private boolean drawInventoryVertical(DrawContext context, int x, int y) {
         PlayerInventory inventory = CLIENT.player.getInventory();
         boolean foundItem = false;
 
@@ -71,9 +76,12 @@ public class Inventory extends AbstractHUD {
                 context.drawItemInSlot(CLIENT.textRenderer, stack, x1, y1);
             }
         }
+
+        setBoundingBox(x, y, TEXTURE_WIDTH_VERTICAL, TEXTURE_HEIGHT_VERTICAL);
+        return foundItem;
     }
 
-    private static void drawInventoryHorizontal(DrawContext context, int x, int y) {
+    private boolean drawInventoryHorizontal(DrawContext context, int x, int y) {
         PlayerInventory inventory = CLIENT.player.getInventory();
         boolean foundItem = false;
 
@@ -95,6 +103,9 @@ public class Inventory extends AbstractHUD {
                 context.drawItemInSlot(CLIENT.textRenderer, stack, x1, y1);
             }
         }
+
+        setBoundingBox(x, y, TEXTURE_WIDTH_HORIZONTAL, TEXTURE_HEIGHT_HORIZONTAL);
+        return foundItem;
     }
 
     private static void preComputeHorizontal() {

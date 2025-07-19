@@ -1,26 +1,25 @@
 package fin.starhud;
 
 import fin.starhud.config.Settings;
-import fin.starhud.hud.HUDComponent;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigHolder;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import fin.starhud.init.ConfigInit;
+import fin.starhud.init.EventInit;
+import fin.starhud.init.KeybindInit;
+import fin.starhud.integration.ImmediatelyFastAPI;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.util.ActionResult;
+import net.minecraft.client.option.KeyBinding;
 
 public class Main implements ClientModInitializer {
 
     public static Settings settings;
+    public static KeyBinding openEditHUDKey;
 
     @Override
     public void onInitializeClient() {
-        AutoConfig.register(Settings.class, GsonConfigSerializer::new);
-        settings = AutoConfig.getConfigHolder(Settings.class).getConfig();
-        AutoConfig.getConfigHolder(Settings.class).registerSaveListener(this::onConfigSaved);
+        ConfigInit.init();
+        KeybindInit.init();
+        EventInit.init();
+
+        ImmediatelyFastAPI.init();
     }
 
-    private ActionResult onConfigSaved(ConfigHolder<Settings> holder, Settings config) {
-        HUDComponent.getInstance().updateAll();
-        return ActionResult.SUCCESS;
-    }
 }

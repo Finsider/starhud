@@ -1,7 +1,5 @@
 package fin.starhud.helper;
 
-import fin.starhud.hud.implementation.TargetedCrosshair;
-
 public enum Condition {
     DEBUG_HUD_OPENED,
     CHAT_HUD_OPENED,

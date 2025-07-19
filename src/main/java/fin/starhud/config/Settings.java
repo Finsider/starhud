@@ -2,6 +2,7 @@ package fin.starhud.config;
 
 import fin.starhud.config.hud.*;
 import fin.starhud.helper.GrowthDirectionX;
+import fin.starhud.helper.GrowthDirectionY;
 import fin.starhud.helper.ScreenAlignmentX;
 import fin.starhud.helper.ScreenAlignmentY;
 import me.shedaniel.autoconfig.ConfigData;
@@ -11,6 +12,10 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 @Config.Gui.Background("cloth-config2:transparent")
 @Config(name = "starhud")
 public class Settings implements ConfigData {
+
+    @ConfigEntry.Category("general")
+    @ConfigEntry.Gui.TransitiveObject
+    public GeneralSettings generalSettings = new GeneralSettings();
 
     @ConfigEntry.Category("armor")
     @ConfigEntry.Gui.TransitiveObject
@@ -34,9 +39,9 @@ public class Settings implements ConfigData {
 
     @ConfigEntry.Category("clock")
     @ConfigEntry.Gui.TransitiveObject
-    public ClockSettings clockSettings = new ClockSettings();
+    public Clock clockSettings = new Clock();
 
-    public static class ClockSettings {
+    public static class Clock {
         @ConfigEntry.Gui.CollapsibleObject
         public ClockSystemSettings systemSetting = new ClockSystemSettings();
 
@@ -58,14 +63,14 @@ public class Settings implements ConfigData {
 
     @ConfigEntry.Category("hand")
     @ConfigEntry.Gui.TransitiveObject
-    public HandSettings handSettings = new HandSettings();
+    public Hand handSettings = new Hand();
 
-    public static class HandSettings {
+    public static class Hand {
         @ConfigEntry.Gui.CollapsibleObject
-        public fin.starhud.config.hud.HandSettings leftHandSettings = new fin.starhud.config.hud.HandSettings(true, -108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, 0xffb3b3);
+        public HandSettings leftHandSettings = new HandSettings(true, -108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP,0xffb3b3);
 
         @ConfigEntry.Gui.CollapsibleObject
-        public fin.starhud.config.hud.HandSettings rightHandSettings = new fin.starhud.config.hud.HandSettings(true, 108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, 0x87ceeb);
+        public HandSettings rightHandSettings = new HandSettings(true, 108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
     }
 
     @ConfigEntry.Category("effect")
