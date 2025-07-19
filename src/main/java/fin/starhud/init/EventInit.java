@@ -1,9 +1,10 @@
 package fin.starhud.init;
 
+import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
 import fin.starhud.hud.HUDComponent;
-import fin.starhud.integration.ImmediatelyFastAPI;
+import fin.starhud.compat.ImmediatelyFastCompat;
 import fin.starhud.screen.EditHUDScreen;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -27,12 +28,12 @@ public class EventInit {
         HudRenderCallback.EVENT.register( (context, tickCounter) -> {
             if (SETTINGS.disableHUDRendering) return;
 
-            if (SETTINGS.shouldBatchHUDWithImmediatelyFast && ImmediatelyFastAPI.isModPresent()) {
-                ImmediatelyFastAPI.beginHudBatching();
+            if (SETTINGS.shouldBatchHUDWithImmediatelyFast && Helper.isModPresent("immediatelyfast")) {
+                ImmediatelyFastCompat.beginHudBatching();
                 if (!MinecraftClient.getInstance().options.hudHidden)
                     if (HUDComponent.getInstance().shouldRenderInGameScreen())
                         HUDComponent.getInstance().renderAll(context);
-                ImmediatelyFastAPI.endHudBatching();
+                ImmediatelyFastCompat.endHudBatching();
             } else {
                 if (!MinecraftClient.getInstance().options.hudHidden)
                     if (HUDComponent.getInstance().shouldRenderInGameScreen())

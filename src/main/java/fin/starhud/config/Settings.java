@@ -67,10 +67,10 @@ public class Settings implements ConfigData {
 
     public static class Hand {
         @ConfigEntry.Gui.CollapsibleObject
-        public HandSettings leftHandSettings = new HandSettings(true, -108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP,0xffb3b3);
+        public HandSettings leftHandSettings = new HandSettings(true, -96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP,0xffb3b3);
 
         @ConfigEntry.Gui.CollapsibleObject
-        public HandSettings rightHandSettings = new HandSettings(true, 108, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
+        public HandSettings rightHandSettings = new HandSettings(true, 96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
     }
 
     @ConfigEntry.Category("effect")

@@ -1,6 +1,7 @@
 package fin.starhud.config;
 
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 public class GeneralSettings {
 
@@ -11,6 +12,8 @@ public class GeneralSettings {
     public InGameHUDSettings inGameSettings = new InGameHUDSettings();
 
     public static class EditHUDScreenSettings {
+
+        @Comment("3x Frametime improvement, at the cost of MANY rendering glitches.")
         public boolean shouldBatchHUDWithImmediatelyFast = false;
 
         @ConfigEntry.ColorPicker
@@ -18,8 +21,11 @@ public class GeneralSettings {
     }
 
     public static class InGameHUDSettings {
+
+        @Comment("3x Frametime improvement, with hardly any rendering glitches.")
         public boolean shouldBatchHUDWithImmediatelyFast = true;
 
+        @Comment("Completely disable HUD Rendering.")
         public boolean disableHUDRendering = false;
     }
 }
