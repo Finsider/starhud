@@ -1,6 +1,8 @@
 package fin.starhud.config.hud;
 
 import fin.starhud.config.BaseHUDSettings;
+import fin.starhud.helper.GrowthDirectionX;
+import fin.starhud.helper.GrowthDirectionY;
 import fin.starhud.helper.ScreenAlignmentX;
 import fin.starhud.helper.ScreenAlignmentY;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
@@ -8,7 +10,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class DirectionSettings {
 
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(true, 26, 19, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP);
+    public BaseHUDSettings base = new BaseHUDSettings(true, 26, 19, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN);
 
     public boolean includeOrdinal = false;
 

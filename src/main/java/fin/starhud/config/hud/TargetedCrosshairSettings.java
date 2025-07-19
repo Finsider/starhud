@@ -2,6 +2,7 @@ package fin.starhud.config.hud;
 
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.helper.GrowthDirectionX;
+import fin.starhud.helper.GrowthDirectionY;
 import fin.starhud.helper.ScreenAlignmentX;
 import fin.starhud.helper.ScreenAlignmentY;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
@@ -9,10 +10,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class TargetedCrosshairSettings {
 
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(true, 0, 37, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP);
-
-    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-    public GrowthDirectionX textureGrowth = GrowthDirectionX.CENTER;
+    public BaseHUDSettings base = new BaseHUDSettings(true, 0, 37, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN);
 
     @ConfigEntry.ColorPicker
     public int modNameColor = 0xddebf5;

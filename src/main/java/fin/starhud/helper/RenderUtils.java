@@ -24,6 +24,8 @@ public class RenderUtils {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
+    private static final Box tempBox = new Box(0,0);
+
     public static void fillRoundedRightSide(DrawContext context, int x1, int y1, int x2, int y2, int color) {
         context.fill(x1, y1, x2 - 1, y2, color);
         context.fill(x2 - 1, y1 + 1, x2, y2 - 1, color);
@@ -39,31 +41,31 @@ public class RenderUtils {
         return MathHelper.hsvToRgb(0.35F * stackStep / (float) maxStep, 0.45F, 0.95F);
     }
 
-    public static void renderDurabilityHUD(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, boolean drawBar, boolean drawItem, GrowthDirectionX textureGrowth) {
+    public static Box renderDurabilityHUD(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, boolean drawBar, boolean drawItem, GrowthDirectionX textureGrowth) {
         if (drawItem) {
-            renderItemDurability(context, stack, x , y, drawBar, textureGrowth);
+            return renderItemDurability(context, stack, x , y, drawBar, textureGrowth);
         } else {
-            renderDurability(context, ICON, stack, x, y, v, textureWidth, textureHeight, color, drawBar, textureGrowth);
+            return renderDurability(context, ICON, stack, x, y, v, textureWidth, textureHeight, color, drawBar, textureGrowth);
         }
     }
 
-    public static void renderItemDurability(DrawContext context, ItemStack stack, int x, int y, boolean drawBar, GrowthDirectionX textureGrowth) {
+    public static Box renderItemDurability(DrawContext context, ItemStack stack, int x, int y, boolean drawBar, GrowthDirectionX textureGrowth) {
         if (drawBar) {
-            renderItemDurabilityBar(context, stack, x, y,textureGrowth);
+            return renderItemDurabilityBar(context, stack, x, y,textureGrowth);
         } else {
-            renderItemDurabilityNumber(context, stack, x, y, textureGrowth);
+            return renderItemDurabilityNumber(context, stack, x, y, textureGrowth);
         }
     }
 
-    public static void renderDurability(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, boolean drawBar, GrowthDirectionX textureGrowth) {
+    public static Box renderDurability(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, boolean drawBar, GrowthDirectionX textureGrowth) {
         if (drawBar) {
-            renderDurabilityBar(context, ICON, stack, x, y, v, textureWidth, textureHeight, color, textureGrowth);
+            return renderDurabilityBar(context, ICON, stack, x, y, v, textureWidth, textureHeight, color, textureGrowth);
         } else {
-            renderDurabilityNumber(context, ICON, stack, x, y, v, textureWidth, textureHeight, color, textureGrowth);
+            return renderDurabilityNumber(context, ICON, stack, x, y, v, textureWidth, textureHeight, color, textureGrowth);
         }
     }
 
-    public static void renderItemDurabilityBar(DrawContext context, ItemStack stack, int x, int y, GrowthDirectionX textureGrowth) {
+    public static Box renderItemDurabilityBar(DrawContext context, ItemStack stack, int x, int y, GrowthDirectionX textureGrowth) {
         int step = getItemBarStep(stack, 10);
         int durabilityColor = getItemBarColor(step, 10) | 0xFF000000;
 
@@ -74,9 +76,12 @@ public class RenderUtils {
         context.drawItem(stack, x + 3, y + 3);
 
         if (step != 0) RenderUtils.drawTextureHUD(context, ITEM_DURABILITY_TEXTURE, x + 28, y + 4, 0, 0, 7 * step, 14, 70, 14, durabilityColor);
+
+        tempBox.setBoundingBox(x, y, 101, 22, durabilityColor);
+        return tempBox;
     }
 
-    public static void renderItemDurabilityNumber(DrawContext context, ItemStack stack, int x, int y, GrowthDirectionX textureGrowth) {
+    public static Box renderItemDurabilityNumber(DrawContext context, ItemStack stack, int x, int y, GrowthDirectionX textureGrowth) {
         int damage = stack.getDamage();
         int maxDamage = stack.getMaxDamage();
         int remaining = maxDamage - damage;
@@ -94,9 +99,12 @@ public class RenderUtils {
 
         fillRoundedRightSide(context, x + 23,  y, x + 22 + 1 + 5 + durabilityWidth + 5, y + 22, 0x80000000);
         RenderUtils.drawTextHUD(context, durability, x + 22 + 1 + 5, y + 7, textColor, false);
+
+        tempBox.setBoundingBox(x, y, 22 + 1 + 5 + durabilityWidth + 5, 22, textColor);
+        return tempBox;
     }
 
-    public static void renderDurabilityBar(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, GrowthDirectionX textureGrowth) {
+    public static Box renderDurabilityBar(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, GrowthDirectionX textureGrowth) {
         int step = getItemBarStep(stack, 10);
         int durabilityColor = getItemBarColor(step, 10) | 0xFF000000;
 
@@ -108,10 +116,13 @@ public class RenderUtils {
         // draw the durability background and steps
         RenderUtils.drawTextureHUD(context, DURABILITY_BACKGROUND_TEXTURE, x + 14, y, 0.0F, 0.0F, 49, 13, 49, 13);
         if (step != 0) RenderUtils.drawTextureHUD(context, DURABILITY_TEXTURE, x + 19, y + 3, 0, 0, 4 * step, 7, 40, 7, durabilityColor);
+
+        tempBox.setBoundingBox(x, y, 13 + 1 + 49, 13, color);
+        return tempBox;
     }
 
     // example render: ¹²³⁴/₅₆₇₈
-    public static void renderDurabilityNumber(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, GrowthDirectionX textureGrowth) {
+    public static Box renderDurabilityNumber(DrawContext context, Identifier ICON, ItemStack stack, int x, int y, float v, int textureWidth, int textureHeight, int color, GrowthDirectionX textureGrowth) {
         int damage = stack.getDamage();
         int maxDamage = stack.getMaxDamage();
         int remaining = maxDamage - damage;
@@ -133,7 +144,13 @@ public class RenderUtils {
         // Minecraft default subscript's font is 1 pixel to deep for my liking, so I have to shift them up.
         RenderUtils.drawTextHUD(context, remainingStr, x + 14 + 5, y + 3, textColor, false);
         RenderUtils.drawTextHUD(context, maxDamageStr, x + 14 + 5 + remainingTextWidth, y + 3 - 1, textColor, false);
+
+        tempBox.setBoundingBox(x, y, 14 + remainingTextWidth + maxDamageTextWidth + 10, 13, color);
+        return tempBox;
     }
+
+    // for easier version porting.
+
     public static void drawTextureAlphaColor(DrawContext context, Identifier identifier, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, int color) {
 
         float alpha = (color >> 24 & 0xFF) / 255.0F;

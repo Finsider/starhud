@@ -2,7 +2,6 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Helper;
 import fin.starhud.Main;
-import fin.starhud.config.ConditionalSettings;
 import fin.starhud.config.hud.TargetedCrosshairSettings;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
@@ -12,6 +11,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonPart;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.WaterCreatureEntity;
@@ -32,7 +32,9 @@ import net.minecraft.util.math.BlockPos;
 
 
 // HUD similar to JADE's. TargetedCrosshairHUD.
-public class TargetedCrosshair extends AbstractHUD {
+public class TargetedCrosshairHUD extends AbstractHUD {
+
+    private static final TargetedCrosshairSettings TARGETED_CROSSHAIR_SETTINGS = Main.settings.targetedCrosshairSettings;
 
     private static final Identifier ICON_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/item.png");
     private static final Identifier ENTITY_ICON_TEXTURE = Identifier.of("starhud", "hud/targeted_icon_entity.png");
@@ -41,52 +43,46 @@ public class TargetedCrosshair extends AbstractHUD {
     private static final int ICON_BACKGROUND_WIDTH = 3 + 16 + 3;
     private static final int ICON_BACKGROUND_HEIGHT = 3 + 16 + 3;
 
-    private static final TargetedCrosshairSettings TARGETED_CROSSHAIR_SETTINGS = Main.settings.targetedCrosshairSettings;
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
-
-    public TargetedCrosshair() {
-        super(TARGETED_CROSSHAIR_SETTINGS.base);
-    }
-
-
     private static final int BASE_HUD_WIDTH =
             ICON_BACKGROUND_WIDTH
-            + 1     // gap
-            + 5     // left text padding
-            + 5;    // right text padding
+                    + 1     // gap
+                    + 5     // left text padding
+                    + 5;    // right text padding
 
     private static final int BASE_HUD_HEIGHT = ICON_BACKGROUND_HEIGHT;
 
+    public TargetedCrosshairHUD() {
+        super(TARGETED_CROSSHAIR_SETTINGS.base);
+    }
+
+    @Override
+    public String getName() {
+        return "Targeted Crosshair HUD";
+    }
+
     @Override
     public boolean shouldRender() {
-        return baseHUDSettings.shouldRender &&
-                CLIENT.crosshairTarget != null &&
-                CLIENT.crosshairTarget.getType() != HitResult.Type.MISS &&
-                shouldRenderOnCondition();
+        return super.shouldRender()
+                && CLIENT.crosshairTarget != null
+                && CLIENT.crosshairTarget.getType() != HitResult.Type.MISS;
     }
 
     public static boolean shouldHUDRender() {
 
-        if (!TARGETED_CROSSHAIR_SETTINGS.base.shouldRender)
+        if (!TARGETED_CROSSHAIR_SETTINGS.base.shouldRender())
             return false;
 
-        if (CLIENT.crosshairTarget == null || CLIENT.crosshairTarget.getType() == HitResult.Type.MISS)
-            return false;
-
-        for (ConditionalSettings condition: TARGETED_CROSSHAIR_SETTINGS.base.conditions) {
-            if (!condition.shouldRender)
-                return false;
-        }
-
-        return true;
+        return CLIENT.crosshairTarget != null && CLIENT.crosshairTarget.getType() != HitResult.Type.MISS;
     }
 
     @Override
-    public void renderHUD(DrawContext context) {
-        switch (CLIENT.crosshairTarget.getType()) {
+    public boolean renderHUD(DrawContext context) {
+        return switch (CLIENT.crosshairTarget.getType()) {
             case BLOCK -> renderBlockInfoHUD(context);
             case ENTITY -> renderEntityInfoHUD(context);
-        }
+            default -> false;
+        };
     }
 
     private Block cachedBlock = null;
@@ -94,7 +90,7 @@ public class TargetedCrosshair extends AbstractHUD {
     private String cachedBlockModName = null;
     private int cachedBlockMaxWidth = -1;
 
-    public void renderBlockInfoHUD(DrawContext context) {
+    public boolean renderBlockInfoHUD(DrawContext context) {
         BlockPos pos = ((BlockHitResult) CLIENT.crosshairTarget).getBlockPos();
 
         BlockState blockState = CLIENT.world.getBlockState(pos);
@@ -115,7 +111,7 @@ public class TargetedCrosshair extends AbstractHUD {
             cachedBlockMaxWidth = Math.max(modNameWidth, blockNameWidth) - 1;
         }
 
-        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.textureGrowth.getGrowthDirection(cachedBlockMaxWidth);
+        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.base.growthDirectionX.getGrowthDirection(cachedBlockMaxWidth);
 
         RenderUtils.drawTextureHUD(
                 context,
@@ -148,6 +144,9 @@ public class TargetedCrosshair extends AbstractHUD {
                 TARGETED_CROSSHAIR_SETTINGS.modNameColor | 0xFF000000,
                 false
         );
+
+        setBoundingBox(xTemp, y, ICON_BACKGROUND_WIDTH + 1 + 5 + cachedBlockMaxWidth + 5, ICON_BACKGROUND_HEIGHT);
+        return true;
     }
 
     private Entity cachedTargetedEntity = null;
@@ -156,7 +155,7 @@ public class TargetedCrosshair extends AbstractHUD {
     private int cachedEntityMaxWidth = -1;
     private int cachedIndex = -1;
 
-    public void renderEntityInfoHUD(DrawContext context) {
+    public boolean renderEntityInfoHUD(DrawContext context) {
         Entity targetedEntity = MinecraftClient.getInstance().targetedEntity;
 
         if (!targetedEntity.equals(cachedTargetedEntity)) {
@@ -171,8 +170,7 @@ public class TargetedCrosshair extends AbstractHUD {
             cachedIndex = getEntityIconIndex(targetedEntity);
         }
 
-        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.textureGrowth.getGrowthDirection(cachedEntityMaxWidth);
-
+        int xTemp = x - TARGETED_CROSSHAIR_SETTINGS.base.growthDirectionX.getGrowthDirection(cachedEntityMaxWidth);
         int color = getEntityIconColor(cachedIndex) | 0xFF000000;
 
         RenderUtils.drawTextureHUD(
@@ -205,6 +203,9 @@ public class TargetedCrosshair extends AbstractHUD {
                 TARGETED_CROSSHAIR_SETTINGS.modNameColor | 0xFF000000,
                 false
         );
+
+        setBoundingBox(xTemp, y, ICON_BACKGROUND_WIDTH + 1 + 5 + cachedEntityMaxWidth + 5, ICON_BACKGROUND_HEIGHT, color);
+        return true;
     }
 
     private int getEntityIconIndex(Entity e) {
@@ -227,6 +228,7 @@ public class TargetedCrosshair extends AbstractHUD {
 
     private static boolean isHostileMob(Entity e) {
         if (e instanceof EnderDragonEntity) return true;
+        else if (e instanceof EnderDragonPart) return true;
         else if (e instanceof Monster) return true;
         else return false;
 
