@@ -13,7 +13,7 @@ public class GeneralSettings {
 
     public static class EditHUDScreenSettings {
 
-        @Comment("3x Frametime improvement, at the cost of MANY rendering glitches.")
+        @Comment("Requires ImmediatelyFast mod, 3x Frametime improvement, at the cost of MANY rendering glitches.")
         public boolean shouldBatchHUDWithImmediatelyFast = false;
 
         @ConfigEntry.ColorPicker
@@ -22,7 +22,7 @@ public class GeneralSettings {
 
     public static class InGameHUDSettings {
 
-        @Comment("3x Frametime improvement, with hardly any rendering glitches.")
+        @Comment("Requires ImmediatelyFast mod, 3x Frametime improvement, with hardly any rendering glitches.")
         public boolean shouldBatchHUDWithImmediatelyFast = true;
 
         @Comment("Completely disable HUD Rendering.")
