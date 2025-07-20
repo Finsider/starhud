@@ -62,6 +62,7 @@ public class ArmorHUD extends AbstractHUD {
     public boolean renderHUD(DrawContext context) {
         int armorIndex = 3;
 
+        boolean rendered = false;
         for (ItemStack armor : CLIENT.player.getArmorItems()) {
             if (PIECE_SETTINGS[armorIndex].shouldRender && !armor.isEmpty() && armor.isDamageable()) {
                 Box tempBox = RenderUtils.renderDurabilityHUD(
@@ -78,6 +79,7 @@ public class ArmorHUD extends AbstractHUD {
                         PIECE_SETTINGS[armorIndex].drawItem,
                         ARMOR_SETTINGS.base.growthDirectionX
                 );
+                rendered = true;
 
                 if (needBoxUpdate) {
                     if (super.boundingBox.isEmpty()) {
@@ -91,7 +93,7 @@ public class ArmorHUD extends AbstractHUD {
         }
 
         needBoxUpdate = false;
-        return true;
+        return rendered;
     }
 
     @Override
