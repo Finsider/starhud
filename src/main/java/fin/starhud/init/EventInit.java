@@ -5,8 +5,8 @@ import fin.starhud.config.GeneralSettings;
 import fin.starhud.hud.HUDComponent;
 import fin.starhud.screen.EditHUDScreen;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -24,13 +24,18 @@ public class EventInit {
             }
         });
 
-        // register hud element into before hotbar. I hope this was safe enough.
-        HudElementRegistry.attachElementBefore(VanillaHudElements.HOTBAR, Identifier.of("starhud"), (context, tickCounter) -> {
-            if (SETTINGS.disableHUDRendering) return;
-            if (MinecraftClient.getInstance().options.hudHidden) return;
-            if (!HUDComponent.getInstance().shouldRenderInGameScreen()) return;
+        HudLayerRegistrationCallback.EVENT.register((layeredDrawerWrapper) -> {
+            layeredDrawerWrapper.attachLayerBefore(
+                    IdentifiedLayer.HOTBAR_AND_BARS,
+                    Identifier.of("starhud"),
+                    (context, tickCounter) -> {
+                        if (SETTINGS.disableHUDRendering) return;
+                        if (MinecraftClient.getInstance().options.hudHidden) return;
+                        if (!HUDComponent.getInstance().shouldRenderInGameScreen()) return;
 
-            HUDComponent.getInstance().renderAll(context);
+                        HUDComponent.getInstance().renderAll(context);
+                    }
+            );
         });
     }
 }

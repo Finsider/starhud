@@ -330,7 +330,7 @@ public class EditHUDScreen extends Screen {
             int selectedColor = SETTINGS.selectedBoxColor | 0x80000000;
 
             if (p.isScaled()) {
-                context.getMatrices().pushMatrix();
+                context.getMatrices().push();
                 p.setHUDScale(context);
 
                 context.drawBorder(x, y, width, height, color);
@@ -340,7 +340,7 @@ public class EditHUDScreen extends Screen {
                 if (p == selectedHUD) {
                     context.fill(x, y, x + width, y + height, selectedColor);
                 }
-                context.getMatrices().popMatrix();
+                context.getMatrices().pop();
                 continue;
             }
 

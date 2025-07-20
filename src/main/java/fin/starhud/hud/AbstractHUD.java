@@ -52,13 +52,13 @@ public abstract class AbstractHUD implements HUDInterface {
         }
 
         // this is so we can change the scale for one hud but not the others.
-        context.getMatrices().pushMatrix();
+        context.getMatrices().push();
         setHUDScale(context);
 
         try {
             return renderHUD(context);
         } finally {
-            context.getMatrices().popMatrix();
+            context.getMatrices().pop();
         }
     }
 
@@ -82,7 +82,7 @@ public abstract class AbstractHUD implements HUDInterface {
 
     public void setHUDScale(DrawContext context) {
         float scaleFactor = getSettings().getScale() / (float) WINDOW.getScaleFactor();
-        context.getMatrices().scale(scaleFactor, scaleFactor);
+        context.getMatrices().scale(scaleFactor, scaleFactor, scaleFactor);
     }
 
     public void modifyXY() {
