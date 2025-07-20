@@ -1,6 +1,7 @@
 package fin.starhud.init;
 
 import fin.starhud.Main;
+import fin.starhud.config.GeneralSettings;
 import fin.starhud.hud.HUDComponent;
 import fin.starhud.screen.EditHUDScreen;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -11,6 +12,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class EventInit {
+
+    private static final GeneralSettings.InGameHUDSettings SETTINGS = Main.settings.generalSettings.inGameSettings;
 
     public static void init() {
 
@@ -23,9 +26,11 @@ public class EventInit {
 
         // register hud element into before hotbar. I hope this was safe enough.
         HudElementRegistry.attachElementBefore(VanillaHudElements.HOTBAR, Identifier.of("starhud"), (context, tickCounter) -> {
-            if (!MinecraftClient.getInstance().options.hudHidden)
-                if (HUDComponent.getInstance().shouldRenderInGameScreen())
-                    HUDComponent.getInstance().renderAll(context);
+            if (SETTINGS.disableHUDRendering) return;
+            if (MinecraftClient.getInstance().options.hudHidden) return;
+            if (!HUDComponent.getInstance().shouldRenderInGameScreen()) return;
+
+            HUDComponent.getInstance().renderAll(context);
         });
     }
 }

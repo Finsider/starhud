@@ -64,6 +64,8 @@ public class ArmorHUD extends AbstractHUD {
     public boolean renderHUD(DrawContext context) {
         int armorIndex = 3;
 
+        boolean isRendered = false;
+
         for (EquipmentSlot equipmentSlot : AttributeModifierSlot.ARMOR) {
             if (equipmentSlot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
                 ItemStack armor = CLIENT.player.getEquippedStack(equipmentSlot);
@@ -82,6 +84,7 @@ public class ArmorHUD extends AbstractHUD {
                             PIECE_SETTINGS[armorIndex].drawItem,
                             ARMOR_SETTINGS.base.growthDirectionX
                     );
+                    isRendered = true;
 
                     if (needBoxUpdate) {
                         if (super.boundingBox.isEmpty()) {
@@ -96,7 +99,7 @@ public class ArmorHUD extends AbstractHUD {
         }
 
         needBoxUpdate = false;
-        return true;
+        return isRendered;
     }
 
     @Override

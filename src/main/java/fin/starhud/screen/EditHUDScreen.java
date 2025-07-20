@@ -1,6 +1,8 @@
 package fin.starhud.screen;
 
+import fin.starhud.Main;
 import fin.starhud.config.BaseHUDSettings;
+import fin.starhud.config.GeneralSettings;
 import fin.starhud.config.Settings;
 import fin.starhud.helper.*;
 import fin.starhud.hud.AbstractHUD;
@@ -22,6 +24,7 @@ import java.util.List;
 public class EditHUDScreen extends Screen {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final GeneralSettings.EditHUDScreenSettings SETTINGS = Main.settings.generalSettings.screenSettings;
 
     private static final int PADDING = 25;
     private static final int WIDGET_WIDTH = 100;
@@ -324,6 +327,7 @@ public class EditHUDScreen extends Screen {
             int width = boundingBox.getWidth();
             int height = boundingBox.getHeight();
             int color = boundingBox.getColor();
+            int selectedColor = SETTINGS.selectedBoxColor | 0x80000000;
 
             if (p.isScaled()) {
                 context.getMatrices().pushMatrix();
@@ -334,7 +338,7 @@ public class EditHUDScreen extends Screen {
                     context.fill(x, y, x + width, y + height, (color & 0x00FFFFFF) | 0x80000000);
                 }
                 if (p == selectedHUD) {
-                    context.fill(x, y, x + width, y + height, 0x8087ceeb);
+                    context.fill(x, y, x + width, y + height, selectedColor);
                 }
                 context.getMatrices().popMatrix();
                 continue;
@@ -345,7 +349,7 @@ public class EditHUDScreen extends Screen {
                 context.fill(x, y, x + width, y + height, (color & 0x00FFFFFF) | 0x80000000);
             }
             if (p == selectedHUD) {
-                context.fill(x, y, x + width, y + height, 0x8087ceeb);
+                context.fill(x, y, x + width, y + height, selectedColor);
             }
         }
     }

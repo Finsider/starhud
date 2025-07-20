@@ -13,6 +13,10 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 @Config(name = "starhud")
 public class Settings implements ConfigData {
 
+    @ConfigEntry.Category("general")
+    @ConfigEntry.Gui.TransitiveObject
+    public GeneralSettings generalSettings = new GeneralSettings();
+
     @ConfigEntry.Category("armor")
     @ConfigEntry.Gui.TransitiveObject
     public ArmorSettings armorSettings = new ArmorSettings();

@@ -4,6 +4,16 @@
   "category.starhud" : "StarHUD",
   "key.starhud.open_edithud": "Open HUD Edit Screen",
 
+  "text.autoconfig.starhud.category.general": "General",
+
+  "text.autoconfig.starhud.option.generalSettings.screenSettings" : "Screen Settings",
+  "text.autoconfig.starhud.option.generalSettings.screenSettings.shouldBatchHUDWithImmediatelyFast" : "Batch HUD With ImmediatelyFast",
+  "text.autoconfig.starhud.option.generalSettings.screenSettings.selectedBoxColor" : "Selected HUD Box Color",
+
+  "text.autoconfig.starhud.option.generalSettings.inGameSettings" : "In-Game Settings",
+  "text.autoconfig.starhud.option.generalSettings.inGameSettings.shouldBatchHUDWithImmediatelyFast" : "Batch HUD With ImmediatelyFast",
+  "text.autoconfig.starhud.option.generalSettings.inGameSettings.disableHUDRendering" : "Disable HUD Rendering",
+
   "text.autoconfig.starhud.option.ConditionalSettings" : "Condition",
   "text.autoconfig.starhud.option.ConditionalSettings.condition" : "Condition Type",
   "text.autoconfig.starhud.option.ConditionalSettings.shouldRender" : "Show HUD",
@@ -249,6 +259,7 @@
   "text.autoconfig.starhud.option.effectSettings.base.scale": "HUD Scale",
   "text.autoconfig.starhud.option.effectSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.effectSettings.drawVertical": "Draw Vertically",
+  "text.autoconfig.starhud.option.effectSettings.useEffectColor": "Use Status Effect Color on Timer",
   "text.autoconfig.starhud.option.effectSettings.differentTypeGap": "Different Type Gap",
   "text.autoconfig.starhud.option.effectSettings.sameTypeGap": "Same Type Gap",
   "text.autoconfig.starhud.option.effectSettings.ambientColor": "Ambient Effect Color",
