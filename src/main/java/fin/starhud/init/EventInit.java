@@ -27,18 +27,10 @@ public class EventInit {
         // register hud... idk where tho haha
         HudRenderCallback.EVENT.register( (context, tickCounter) -> {
             if (SETTINGS.disableHUDRendering) return;
+            if (MinecraftClient.getInstance().options.hudHidden) return;
+            if (!HUDComponent.getInstance().shouldRenderInGameScreen()) return;
 
-            if (SETTINGS.shouldBatchHUDWithImmediatelyFast && Helper.isModPresent("immediatelyfast")) {
-                ImmediatelyFastCompat.beginHudBatching();
-                if (!MinecraftClient.getInstance().options.hudHidden)
-                    if (HUDComponent.getInstance().shouldRenderInGameScreen())
-                        HUDComponent.getInstance().renderAll(context);
-                ImmediatelyFastCompat.endHudBatching();
-            } else {
-                if (!MinecraftClient.getInstance().options.hudHidden)
-                    if (HUDComponent.getInstance().shouldRenderInGameScreen())
-                        HUDComponent.getInstance().renderAll(context);
-            }
+            HUDComponent.getInstance().renderAll(context);
         });
     }
 }

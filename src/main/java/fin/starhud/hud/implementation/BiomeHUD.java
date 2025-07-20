@@ -19,7 +19,7 @@ import net.minecraft.world.biome.Biome;
 
 import java.util.Optional;
 
-public class  BiomeHUD extends AbstractHUD {
+public class BiomeHUD extends AbstractHUD {
 
     private static final BiomeSettings BIOME_SETTINGS = Main.settings.biomeSettings;
 

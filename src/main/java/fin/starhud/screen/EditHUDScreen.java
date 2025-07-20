@@ -298,9 +298,8 @@ public class EditHUDScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 
         if (SETTINGS.shouldBatchHUDWithImmediatelyFast && Helper.isModPresent("immediatelyfast")) {
-            ImmediatelyFastCompat.beginHudBatching();
-            renderElements(context, mouseX, mouseY, delta);
-            ImmediatelyFastCompat.endHudBatching();
+            ImmediatelyFastCompat.runBatched(context, () -> renderElements(context, mouseX, mouseY, delta));
+
         } else {
             renderElements(context, mouseX, mouseY, delta);
         }
@@ -308,8 +307,6 @@ public class EditHUDScreen extends Screen {
     }
 
     public void renderElements(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.fill(0, 0, this.width, this.height, 0x80000000);
-
         super.render(context, mouseX, mouseY, delta);
 
         // draw help

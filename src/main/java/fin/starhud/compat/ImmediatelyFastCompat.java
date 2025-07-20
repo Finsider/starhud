@@ -1,15 +1,12 @@
 package fin.starhud.compat;
 
-import net.raphimc.immediatelyfastapi.ImmediatelyFastApi;
+import net.minecraft.client.gui.DrawContext;
+import net.raphimc.immediatelyfast.feature.batching.BatchingBuffers;
 
 public class ImmediatelyFastCompat {
 
-    public static void beginHudBatching() {
-        ImmediatelyFastApi.getApiImpl().getBatching().beginHudBatching();
-    }
-
-    public static void endHudBatching() {
-        ImmediatelyFastApi.getApiImpl().getBatching().endHudBatching();
+    public static void runBatched(DrawContext context, Runnable runnable) {
+        BatchingBuffers.runBatched(context, runnable);
     }
 }
 

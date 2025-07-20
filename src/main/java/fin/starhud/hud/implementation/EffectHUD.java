@@ -10,7 +10,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.texture.MissingSprite;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
@@ -36,7 +35,7 @@ public class EffectHUD extends AbstractHUD {
     private static final int STATUS_EFFECT_BAR_TEXTURE_WIDTH = 21;
     private static final int STATUS_EFFECT_BAR_TEXTURE_HEIGHT = 3;
 
-    private static final Map<StatusEffect, Identifier> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
+    private static final Map<RegistryEntry<StatusEffect>, Identifier> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
 
     private static final Box tempBox = new Box(0,0);
     private static int cachedSize = -1;
@@ -82,9 +81,9 @@ public class EffectHUD extends AbstractHUD {
         int sameTypeGap = effectSettings.sameTypeGap;
 
         /* differentTypeGap = the gap between beneficial and harm effect.
-        * if HUD on the right screen and is drawn Vertically, We change the differentTypeGap from going right, to left.so that the harm effect hud does not go out of screen
-        * if HUD on the bottom screen and is drawn horizontally, We change the differentTypeGap from going down, to up. so that the harm effect hud does not go out of screen
-        * */
+         * if HUD on the right screen and is drawn Vertically, We change the differentTypeGap from going right, to left.so that the harm effect hud does not go out of screen
+         * if HUD on the bottom screen and is drawn horizontally, We change the differentTypeGap from going down, to up. so that the harm effect hud does not go out of screen
+         * */
         int differentTypeGap = ((drawVertical && effectSettings.base.originX == ScreenAlignmentX.RIGHT) || (!drawVertical && effectSettings.base.originY == ScreenAlignmentY.BOTTOM)) ? -effectSettings.differentTypeGap :effectSettings.differentTypeGap;
 
         int effectSize = collection.size();
@@ -112,13 +111,13 @@ public class EffectHUD extends AbstractHUD {
             if (!statusEffectInstance.shouldShowIcon())
                 continue;
 
-            StatusEffect statusEffect = statusEffectInstance.getEffectType();
+            RegistryEntry<StatusEffect> registryEntry = statusEffectInstance.getEffectType();
             StatusEffectAttribute statusEffectAttribute = StatusEffectAttribute.getStatusEffectAttribute(statusEffectInstance);
 
             int x2;
             int y2;
 
-            if (statusEffect.isBeneficial()) {
+            if (registryEntry.value().isBeneficial()) {
 
                 // if the hud is drawn vertically, we definitely do not want to move the beneficial effect horizontally.
                 x2 = (xBeneficial) + ((drawVertical ? 0 : sameTypeGap) * beneficialIndex);
@@ -191,7 +190,7 @@ public class EffectHUD extends AbstractHUD {
                 int maxDuration = statusEffectAttribute.maxDuration();
 
                 step = Helper.getStep(duration, maxDuration, 7);
-                color = (effectSettings.useEffectColor ? statusEffect.getColor() : RenderUtils.getItemBarColor(step, 7)) | 0xFF000000;
+                color = (effectSettings.useEffectColor ? registryEntry.value().getColor() : RenderUtils.getItemBarColor(step, 7)) | 0xFF000000;
             }
 
             // draw timer bar
@@ -215,7 +214,7 @@ public class EffectHUD extends AbstractHUD {
             // draw effect texture.
             RenderUtils.drawTextureHUD(
                     context,
-                    getStatusEffectTexture(statusEffect),
+                    getStatusEffectTexture(registryEntry),
                     x2 + 3, y2 + 3,
                     0,0,
                     18, 18,
@@ -245,14 +244,14 @@ public class EffectHUD extends AbstractHUD {
     }
 
     public int getDynamicWidth(boolean isBeneficial, int beneficialSize, int harmSize) {
-                 // if we draw the HUD vertically, essentially the width should be the texture width
-         return effectSettings.drawVertical ? STATUS_EFFECT_TEXTURE_WIDTH
-                 // else, the width should be the whole column of Effect HUDs.
-                 : ((isBeneficial ? beneficialSize : harmSize) * effectSettings.sameTypeGap);
+        // if we draw the HUD vertically, essentially the width should be the texture width
+        return effectSettings.drawVertical ? STATUS_EFFECT_TEXTURE_WIDTH
+                // else, the width should be the whole column of Effect HUDs.
+                : ((isBeneficial ? beneficialSize : harmSize) * effectSettings.sameTypeGap);
     }
 
     public int getDynamicHeight(boolean isBeneficial, int beneficialSize, int harmSize) {
-                // if the HUD is drawn Vertically, the Height should be the whole row of Effect HUDs
+        // if the HUD is drawn Vertically, the Height should be the whole row of Effect HUDs
         return effectSettings.drawVertical ? ((isBeneficial ? beneficialSize : harmSize) * effectSettings.sameTypeGap)
                 // else, the height is just the same as the texture height.
                 : STATUS_EFFECT_TEXTURE_HEIGHT;
@@ -261,7 +260,7 @@ public class EffectHUD extends AbstractHUD {
     public static int getBeneficialSize() {
         int size = 0;
         for (StatusEffectInstance collection : CLIENT.player.getStatusEffects()) {
-            if (collection.getEffectType().isBeneficial())
+            if (collection.getEffectType().value().isBeneficial())
                 ++size;
         }
         return size;
@@ -278,11 +277,14 @@ public class EffectHUD extends AbstractHUD {
         return 0;
     }
 
-    public static Identifier getStatusEffectTexture(StatusEffect effect) {
-        return STATUS_EFFECT_TEXTURE_MAP.computeIfAbsent(effect, e -> {
-            Identifier id = Registries.STATUS_EFFECT.getId(e);
-            return new Identifier(id.getNamespace(), "textures/mob_effect/" + id.getPath() + ".png");
-        });
+    public static Identifier getStatusEffectTexture(RegistryEntry<StatusEffect> effect) {
+        return STATUS_EFFECT_TEXTURE_MAP.computeIfAbsent(
+                effect,
+                e -> e.getKey()
+                        .map(RegistryKey::getValue)
+                        .map(id -> Identifier.of(id.getNamespace(), "textures/mob_effect/" + id.getPath() + ".png"))
+                        .orElseGet(MissingSprite::getMissingSpriteId)
+        );
     }
 
 }

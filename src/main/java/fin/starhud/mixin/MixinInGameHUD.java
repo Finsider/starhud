@@ -5,6 +5,7 @@ import fin.starhud.config.GeneralSettings;
 import fin.starhud.hud.HUDComponent;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +20,7 @@ public class MixinInGameHUD {
 
     // Mixin used to override vanilla effect HUD, I'm not sure whether this can be done using HUDElementRegistry
     @Inject(at = @At("HEAD"), method = "renderStatusEffectOverlay", cancellable = true)
-    private void renderStatusEffectOverlay(DrawContext context, CallbackInfo ci) {
+    private void renderStatusEffectOverlay(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (SETTINGS.disableHUDRendering) return;
 
         if (HUDComponent.getInstance().effectHUD.shouldRender()) {

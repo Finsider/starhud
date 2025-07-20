@@ -11,7 +11,6 @@
   "text.autoconfig.starhud.option.generalSettings.screenSettings.selectedBoxColor" : "Selected HUD Box Color",
 
   "text.autoconfig.starhud.option.generalSettings.inGameSettings" : "In-Game Settings",
-  "text.autoconfig.starhud.option.generalSettings.inGameSettings.shouldBatchHUDWithImmediatelyFast" : "Batch HUD With ImmediatelyFast",
   "text.autoconfig.starhud.option.generalSettings.inGameSettings.disableHUDRendering" : "Disable HUD Rendering",
 
   "text.autoconfig.starhud.option.ConditionalSettings" : "Condition",
