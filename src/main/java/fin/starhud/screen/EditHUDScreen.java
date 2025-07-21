@@ -2,13 +2,13 @@ package fin.starhud.screen;
 
 import fin.starhud.Helper;
 import fin.starhud.Main;
+import fin.starhud.compat.ImmediatelyFastCompat;
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.config.GeneralSettings;
 import fin.starhud.config.Settings;
 import fin.starhud.helper.*;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDComponent;
-import fin.starhud.compat.ImmediatelyFastCompat;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

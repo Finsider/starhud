@@ -108,7 +108,7 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     public boolean isScaled() {
-        return this.getSettings().getScale() != 0 || (this.getSettings().getScale() / (double) WINDOW.getScaleFactor()) == 1;
+        return this.getSettings().getScale() != 0 && (this.getSettings().getScale() / WINDOW.getScaleFactor()) != 1;
     }
 
     public BaseHUDSettings getSettings() {
