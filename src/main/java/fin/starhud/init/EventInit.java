@@ -2,9 +2,9 @@ package fin.starhud.init;
 
 import fin.starhud.Helper;
 import fin.starhud.Main;
+import fin.starhud.compat.ImmediatelyFastCompat;
 import fin.starhud.config.GeneralSettings;
 import fin.starhud.hud.HUDComponent;
-import fin.starhud.compat.ImmediatelyFastCompat;
 import fin.starhud.screen.EditHUDScreen;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;

@@ -27,6 +27,7 @@ import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 
@@ -156,7 +157,7 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     private int cachedIndex = -1;
 
     public boolean renderEntityInfoHUD(DrawContext context) {
-        Entity targetedEntity = MinecraftClient.getInstance().targetedEntity;
+        Entity targetedEntity = ((EntityHitResult) CLIENT.crosshairTarget).getEntity();
 
         if (!targetedEntity.equals(cachedTargetedEntity)) {
             cachedTargetedEntity = targetedEntity;
