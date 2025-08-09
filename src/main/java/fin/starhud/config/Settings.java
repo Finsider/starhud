@@ -77,6 +77,24 @@ public class Settings implements ConfigData {
                 new BaseHUDSettings(true, 5, 5 + 14 * 2, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN),
                 0x6CE1FC
         );
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public CoordSettings netherX = new CoordSettings(
+                new BaseHUDSettings(false, 5, 100, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN),
+                0xe89a9a
+        );
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public CoordSettings netherY = new CoordSettings(
+                new BaseHUDSettings(false, 5, 100 + 14, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN),
+                0xf1ae94
+        );
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public CoordSettings netherZ = new CoordSettings(
+                new BaseHUDSettings(false, 5, 100 + 14 * 2, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN),
+                0xf9cba7
+        );
     }
 
     @ConfigEntry.Category("direction")
@@ -214,6 +232,30 @@ public class Settings implements ConfigData {
             coordSettings.Z = new CoordSettings(
                     new BaseHUDSettings(true, 5, 5 + 14 * 2, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN),
                     0x6CE1FC
+            );
+        }
+
+        CoordSettings netherCoordX = coordSettings.netherX;
+        if (netherCoordX.base == null) {
+            coordSettings.netherX = new CoordSettings(
+                    new BaseHUDSettings(false, 5, 100, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN),
+                    0xe89a9a
+            );
+        }
+
+        CoordSettings netherCoordY = coordSettings.netherY;
+        if (netherCoordY.base == null) {
+            coordSettings.netherY = new CoordSettings(
+                    new BaseHUDSettings(false, 5, 100 + 14, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN),
+                    0xf1ae94
+            );
+        }
+
+        CoordSettings netherCoordZ = coordSettings.netherZ;
+        if (netherCoordZ.base == null) {
+            coordSettings.netherZ = new CoordSettings(
+                    new BaseHUDSettings(false, 5, 100 + 14 * 2, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN),
+                    0xf9cba7
             );
         }
 

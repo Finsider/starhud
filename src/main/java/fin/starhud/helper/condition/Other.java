@@ -3,6 +3,7 @@ package fin.starhud.helper.condition;
 import fin.starhud.Helper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.world.World;
 
 public class Other {
 
@@ -23,5 +24,17 @@ public class Other {
         String serverIP = entry.address.split(":")[0];
 
         return serverIP.equalsIgnoreCase(arg);
+    }
+
+    public static boolean isInOverworld(String ignored) {
+        return CLIENT.player.getWorld().getRegistryKey() == World.OVERWORLD;
+    }
+
+    public static boolean isInNether(String ignored) {
+        return CLIENT.player.getWorld().getRegistryKey() == World.NETHER;
+    }
+
+    public static boolean isInEnd(String ignored) {
+        return CLIENT.player.getWorld().getRegistryKey() == World.END;
     }
 }
