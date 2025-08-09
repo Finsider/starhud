@@ -136,6 +136,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                     int stretchHeight = ICON_HEIGHT + gap + INFO_HEIGHT;
                     float uvScale = (float)stretchHeight / iconHeight;
 
+                    context.fill(x, y, x + ICON_WIDTH, y + ICON_HEIGHT + gap + INFO_HEIGHT, 0x80000000);
                     RenderUtils.drawTextureHUD(
                             context,
                             STATUS_EFFECT_AMBIENT_COMBINED_TEXTURE,
@@ -151,13 +152,24 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
             } else {
                 RenderUtils.drawTextureHUD(
                         context,
-                        statusEffectInstance.isAmbient() ? STATUS_EFFECT_AMBIENT_TEXTURE : STATUS_EFFECT_TEXTURE,
+                        STATUS_EFFECT_TEXTURE,
                         x, y,
                         0.0F, 0.0F,
                         STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT,
-                        STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT,
-                        statusEffectInstance.isAmbient() ? effectSettings.ambientColor | 0xFF000000 : 0xFFFFFFFF
+                        STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT
                 );
+
+                // draw border
+                if (statusEffectInstance.isAmbient())
+                    RenderUtils.drawTextureHUD(
+                            context,
+                            STATUS_EFFECT_AMBIENT_TEXTURE,
+                            x, y,
+                            0.0F, 0.0F,
+                            STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT,
+                            STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT,
+                            effectSettings.ambientColor | 0xFF000000
+                    );
             }
         }
 
