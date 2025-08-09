@@ -9,4 +9,3 @@ public class ImmediatelyFastCompat {
         BatchingBuffers.runBatched(context, runnable);
     }
 }
-

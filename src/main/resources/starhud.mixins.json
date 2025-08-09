@@ -6,11 +6,15 @@
     "defaultRequire": 1
   },
   "client": [
+    "MixinClientPlayNetworkHandler",
     "MixinInGameHUD",
+    "MixinPlayerListHud",
     "MixinWindow",
-    "accessor.AccessorBossBarHud"
+    "accessor.AccessorBossBarHud",
+    "accessor.AccessorInGameHUD"
   ],
   "mixins": [
-    "MixinLivingEntity"
+    "MixinLivingEntity",
+    "accessor.AccessorPlayerListHud"
   ]
 }
