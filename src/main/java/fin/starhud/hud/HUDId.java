@@ -1,0 +1,31 @@
+package fin.starhud.hud;
+
+public enum HUDId {
+    HELMET,
+    CHESTPLATE,
+    LEGGINGS,
+    BOOTS,
+
+    X_COORDINATE,
+    Y_COORDINATE,
+    Z_COORDINATE,
+
+    LEFT_HAND,
+    RIGHT_HAND,
+
+    CLOCK_INGAME,
+    CLOCK_SYSTEM,
+
+    BIOME,
+    DAY,
+    DIRECTION,
+    FPS,
+    TPS,
+    PING,
+    SPEED,
+    INVENTORY,
+    TARGETED_CROSSHAIR,
+
+    POSITIVE_EFFECT,
+    NEGATIVE_EFFECT;
+}

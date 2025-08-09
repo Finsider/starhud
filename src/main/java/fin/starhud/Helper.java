@@ -23,7 +23,7 @@ public class Helper {
                 chars[i] = superscripts[c - '0'];
         }
 
-        return String.valueOf(chars);
+        return new String(chars);
     }
 
     public static String toSubscript(String str) {
@@ -37,7 +37,7 @@ public class Helper {
                 chars[i] = subscripts[c - '0'];
         }
 
-        return String.valueOf(chars);
+        return new String(chars);
     }
 
     // convert (modname:snake_case) into (Snake Case)
@@ -71,11 +71,11 @@ public class Helper {
         return container == null ? nameSpace : container.getMetadata().getName();
     }
 
-    public static int getStep(int curr, int max, int maxStep) {
-        return MathHelper.clamp(Math.round((float) curr * maxStep / (float) max), 0, maxStep);
-    }
-
     public static boolean isModPresent(String id) {
         return FabricLoader.getInstance().isModLoaded(id);
+    }
+
+    public static int getStep(int curr, int max, int maxStep) {
+        return MathHelper.clamp(Math.round((float) curr * maxStep / (float) max), 0, maxStep);
     }
 }

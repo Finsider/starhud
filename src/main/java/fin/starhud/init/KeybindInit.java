@@ -15,5 +15,12 @@ public class KeybindInit {
                 GLFW.GLFW_KEY_RIGHT_SHIFT,
                 "category.starhud"
         ));
+
+        Main.toggleHUDKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.starhud.toggle_hud",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_UNKNOWN,
+                "category.starhud"
+        ));
     }
 }

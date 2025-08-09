@@ -12,4 +12,3 @@ public class ImmediatelyFastCompat {
         ImmediatelyFastApi.getApiImpl().getBatching().endHudBatching();
     }
 }
-

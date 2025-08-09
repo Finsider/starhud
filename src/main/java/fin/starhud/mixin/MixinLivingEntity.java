@@ -2,10 +2,14 @@ package fin.starhud.mixin;
 
 import fin.starhud.helper.StatusEffectAttribute;
 import fin.starhud.hud.HUDComponent;
+import fin.starhud.hud.HUDId;
+import fin.starhud.hud.implementation.NegativeEffectHUD;
+import fin.starhud.hud.implementation.PositiveEffectHUD;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,7 +24,10 @@ public class MixinLivingEntity {
 
     @Inject(method = "setStatusEffect", at = @At("HEAD"))
     private void onSetStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
-        if (!HUDComponent.getInstance().effectHUD.shouldRender())
+        final PositiveEffectHUD POSITIVE_EFFECT_HUD = (PositiveEffectHUD) HUDComponent.getInstance().getHUD(HUDId.POSITIVE_EFFECT);
+        final NegativeEffectHUD NEGATIVE_EFFECT_HUD = (NegativeEffectHUD) HUDComponent.getInstance().getHUD(HUDId.NEGATIVE_EFFECT);
+
+        if (!POSITIVE_EFFECT_HUD.shouldRender() && !NEGATIVE_EFFECT_HUD.shouldRender())
             return;
 
         StatusEffectAttribute statusEffectAttribute = StatusEffectAttribute.getStatusEffectAttribute(effect);
