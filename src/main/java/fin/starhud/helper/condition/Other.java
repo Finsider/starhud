@@ -1,0 +1,27 @@
+package fin.starhud.helper.condition;
+
+import fin.starhud.Helper;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ServerInfo;
+
+public class Other {
+
+    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+
+    public static boolean isModLoaded(String arg) {
+        if (arg == null || arg.isEmpty()) return false;
+
+        return Helper.isModPresent(arg);
+    }
+
+    public static boolean isOnServer(String arg) {
+        if (arg == null || arg.isEmpty()) return false;
+
+        ServerInfo entry = CLIENT.getCurrentServerEntry();
+        if (entry == null) return false;
+
+        String serverIP = entry.address.split(":")[0];
+
+        return serverIP.equalsIgnoreCase(arg);
+    }
+}
