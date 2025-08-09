@@ -120,8 +120,14 @@ public class ClockInGameHUD extends AbstractHUD {
     private static int getWeatherOrTime(ClientWorld clientWorld) {
         if (clientWorld.isThundering()) return 3;
         else if (clientWorld.isRaining()) return 2;
-        else if (clientWorld.isNight()) return 1;
+        else if (isNightTime(clientWorld)) return 1;
         else return 0;
+    }
+
+    private static boolean isNightTime(ClientWorld clientWorld) {
+        long time = (clientWorld.getTime() % 24000);
+
+        return time >= 13000 && time <= 23000;
     }
 
     private static String buildMinecraftTime24String(int hours, int minutes) {
