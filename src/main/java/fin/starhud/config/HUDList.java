@@ -44,21 +44,6 @@ public class HUDList {
                         new ArrayList<>(List.of(HUDId.POSITIVE_EFFECT.toString(), HUDId.NEGATIVE_EFFECT.toString()))
                 )
         );
-
-        individualHudIds.addAll(
-                List.of(
-                        HUDId.FPS.toString(),
-                        HUDId.TPS.toString(),
-                        HUDId.DIRECTION.toString(),
-                        HUDId.DAY.toString(),
-                        HUDId.INVENTORY.toString(),
-                        HUDId.TARGETED_CROSSHAIR.toString(),
-                        HUDId.PING.toString(),
-                        HUDId.BIOME.toString(),
-                        HUDId.CLOCK_SYSTEM.toString(), HUDId.CLOCK_INGAME.toString(),
-                        HUDId.X_COORDINATE.toString(), HUDId.Y_COORDINATE.toString(), HUDId.Z_COORDINATE.toString()
-                )
-        );
     }
 
 

@@ -106,6 +106,24 @@ public enum Condition {
             Other::isOnServer,
             () -> 0,
             () -> 0
+    ),
+
+    IS_IN_OVERWORLD(
+            Other::isInOverworld,
+            () -> 0,
+            () -> 0
+    ),
+
+    IS_IN_NETHER(
+            Other::isInNether,
+            () -> 0,
+            () -> 0
+    ),
+
+    IS_IN_END(
+            Other::isInEnd,
+            () -> 0,
+            () -> 0
     );
 
     private final Function<String, Boolean> shownCheck;

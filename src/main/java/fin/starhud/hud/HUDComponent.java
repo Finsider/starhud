@@ -57,6 +57,10 @@ public class HUDComponent {
         registerHUD(new YCoordinateHUD());
         registerHUD(new ZCoordinateHUD());
 
+        registerHUD(new NetherXCoordinate());
+        registerHUD(new NetherYCoordinate());
+        registerHUD(new NetherZCoordinate());
+
         registerHUD(new LeftHandHUD());
         registerHUD(new RightHandHUD());
 
