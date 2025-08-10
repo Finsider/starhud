@@ -5,22 +5,20 @@ import fin.starhud.config.ConditionalSettings;
 import fin.starhud.helper.Box;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.Window;
 
 public abstract class AbstractHUD implements HUDInterface {
-    private static final Window WINDOW = MinecraftClient.getInstance().getWindow();
 
     protected final BaseHUDSettings baseHUDSettings;
 
-    // the actual x and y point we use in HUDs
-    protected int x;
-    protected int y;
+    private int baseX;
+    private int baseY;
 
-    // temporary x and y point.
-    protected int baseX;
-    protected int baseY;
+    private int totalXOffset;
+    private int totalYOffset;
 
-    protected final Box boundingBox = new Box(0, 0);
+    protected final Box boundingBox = new Box(-1, -1, -1, -1);
+
+    public String groupId = null;
 
     public AbstractHUD(BaseHUDSettings baseHUDSettings) {
         this.baseHUDSettings = baseHUDSettings;
@@ -34,95 +32,125 @@ public abstract class AbstractHUD implements HUDInterface {
     // we update every HUD's x and y points here.
     @Override
     public void update() {
-        updateX();
-        updateY();
+        baseX = getSettings().getCalculatedPosX();
+        baseY = getSettings().getCalculatedPosY();
+        setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
     }
 
     @Override
     public boolean render(DrawContext context) {
-        // I hate this piece of code
-        // if Condition is triggered, the X will be modified with xOffset on that condition.
-        // example: when bossbar is present, we want to move our hud under the bossbar, or avoid the bossbar.
-        // modifyX and modifyY will add our xOffset and yOffset to our initial x position.
-        modifyXY();
-
-        // if the HUD' scale is set to default, don't... change the scale...? whatever, this is faster than the one below.
-        if (!isScaled()) {
-            return renderHUD(context);
-        }
+        if (!isScaled())
+            return renderHUD(context, getX(), getY(), shouldDrawBackground());
 
         // this is so we can change the scale for one hud but not the others.
         context.getMatrices().push();
         setHUDScale(context);
 
         try {
-            return renderHUD(context);
+            return renderHUD(context, getX(), getY(), shouldDrawBackground());
         } finally {
             context.getMatrices().pop();
         }
     }
 
-    public abstract String getName();
-    public abstract boolean renderHUD(DrawContext context);
+    @Override
+    public boolean collect() {
+        if (!collectHUDInformation())
+            return false;
 
-    /*
-    * Base HUD Width / Height
-    * the width of the hud that is not affected by any realtime changing length
-    *
-    * Example: Biome HUD, since the name of biome can be of any length, we can't exactly have a "static" length,
-    *          hence the base hud width is (ICON_WIDTH + GAP + TEXT_PADDING_LEFT + TEXT_PADDING_RIGHT)
-    *          which leaves the (TEXT_LENGTH) for in-render calculation.
-    *
-    * Example: Item Count HUD, since Item Count HUD can be generalized into maximum item amount in inventory, which is usually 64 * 37 or 4 digits.
-    *          we can just give the base hud width (ICON_WIDTH + GAP + TEXT_PADDING_LEFT + TEXT_LENGTH_OF_4_DIGITS + TEXT_PADDING_RIGHT).
-    *          though yeah it will surely be a problem if the amount of item reaches over 5 digits.
-    * */
-    public abstract int getBaseHUDWidth();
-    public abstract int getBaseHUDHeight();
+        modifyXY();
+
+        setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
+        return true;
+    }
+
+    // collect what is needed for the hud to render.
+    // the true purpose of collectData is to collect the width and height during data collection,
+    // this is to ensure that the width and height can be used before the rendering
+    // returns false if the HUD cannot be rendered
+    // returns true if the HUD is ready to be rendered.
+    public abstract boolean collectHUDInformation();
+
+    // this is where the hud is rendered. Where we put the rendering logic.
+    // it is highly discouraged to put information collecting in this function.
+    // for information collecting please refer to collectHUDInformation()
+    public abstract boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground);
+
+    public abstract String getName();
 
     public void setHUDScale(DrawContext context) {
-        float scaleFactor = getSettings().getScale() / (float) WINDOW.getScaleFactor();
+        float scaleFactor = getSettings().getScale() / (float) MinecraftClient.getInstance().getWindow().getScaleFactor();
         context.getMatrices().scale(scaleFactor, scaleFactor, scaleFactor);
     }
 
     public void modifyXY() {
-        int tempX = 0, tempY = 0;
+        int xOffset = 0, yOffset = 0;
 
+        float scaleFactor = getSettings().getScaledFactor();
         for (ConditionalSettings condition : baseHUDSettings.getConditions()) {
-            if (condition.isConditionMet()) {
-                tempX += condition.xOffset;
-                tempY += condition.yOffset;
+            if (condition.renderMode != ConditionalSettings.RenderMode.HIDE && condition.isConditionMet()) {
+                xOffset += condition.getXOffset(scaleFactor);
+                yOffset += condition.getYOffset(scaleFactor);
             }
         }
 
-        x = baseX + tempX;
-        y = baseY + tempY;
-    }
-
-    public void updateX() {
-        baseX = getSettings().getCalculatedPosX() - getSettings().getGrowthDirectionX().getGrowthDirection(getBaseHUDWidth());
-    }
-
-    public void updateY() {
-        baseY = getSettings().getCalculatedPosY() - getSettings().getGrowthDirectionY().getGrowthDirection(getBaseHUDHeight());
+        totalXOffset = xOffset;
+        totalYOffset = yOffset;
     }
 
     public boolean isScaled() {
-        return this.getSettings().getScale() != 0 && (this.getSettings().getScale() / WINDOW.getScaleFactor()) != 1;
+        return this.getSettings().getScale() != 0 && (this.getSettings().getScale() != MinecraftClient.getInstance().getWindow().getScaleFactor());
+    }
+
+    public boolean isInGroup() {
+        return groupId != null;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getGroupId() {
+        return this.groupId;
     }
 
     public BaseHUDSettings getSettings() {
         return baseHUDSettings;
     }
 
+    public int getGrowthDirectionHorizontal(int dynamicWidth) {
+        return getSettings().getGrowthDirectionHorizontal(dynamicWidth);
+    }
+
+    public int getGrowthDirectionVertical(int dynamicHeight) {
+        return getSettings().getGrowthDirectionVertical(dynamicHeight);
+    }
+
+    public boolean shouldDrawBackground() {
+        return getSettings().drawBackground;
+    }
+
     // bounding box attribute will return 0 if HUD is not rendered once.
     // the HUD must be rendered at least once to update the bounding box.
 
-    public int getRawX() {
+    public void setWidthHeight(int width, int height) {
+        this.boundingBox.setWidthHeight(width, height);
+    }
+
+    public void setWidthHeightColor(int width, int height, int color) {
+        this.boundingBox.setWidthHeightColor(width, height, color);
+    }
+
+    public void setXY(int x, int y) {
+        this.boundingBox.setX(x);
+        this.boundingBox.setY(y);
+    }
+
+    public int getX() {
         return getBoundingBox().getX();
     }
 
-    public int getRawY() {
+    public int getY() {
         return getBoundingBox().getY();
     }
 

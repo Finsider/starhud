@@ -2,8 +2,10 @@ package fin.starhud.hud.implementation;
 
 import fin.starhud.Main;
 import fin.starhud.config.hud.DirectionSettings;
+import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
+import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
@@ -16,16 +18,15 @@ public class DirectionHUD extends AbstractHUD {
     private static final Identifier DIRECTION_CARDINAL_TEXTURE = Identifier.of("starhud", "hud/direction.png");
     private static final Identifier DIRECTION_ORDINAL_TEXTURE = Identifier.of("starhud", "hud/direction_ordinal.png");
 
-    private static final int TEXTURE_HEIGHT = 13;
+    private static final int ORDINAL_TEXTURE_WIDTH = 19;
+    private static final int ORDINAL_TEXTURE_HEIGHT = 104;
+    private static final int ORDINAL_ICON_WIDTH = 19;
+    private static final int ORDINAL_ICON_HEIGHT = 13;
 
-    private static final int TEXTURE_CARDINAL_WIDTH = 55;
-    private static final int TEXTURE_ORDINAL_WIDTH = 61;
-
-    private static final int CARDINAL_ICON_AMOUNT = 4;
-    private static final int ORDINAL_ICON_AMOUNT = 8;
-
-    private static final int CARDINAL_TEXT_OFFSET = 19;
-    private static final int ORDINAL_TEXT_OFFSET = 25;
+    private static final int CARDINAL_TEXTURE_WIDTH = 13;
+    private static final int CARDINAL_TEXTURE_HEIGHT = 52;
+    private static final int CARDINAL_ICON_WIDTH = 13;
+    private static final int CARDINAL_ICON_HEIGHT = 13;
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
@@ -39,24 +40,85 @@ public class DirectionHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context) {
+    public String getId() {
+        return HUDId.DIRECTION.toString();
+    }
+
+    private String yawStr;
+    private int iconIndex;
+    private int width;
+    private int height;
+    private int color;
+    private boolean includeOrdinal;
+
+    private HUDDisplayMode displayMode;
+
+    @Override
+    public boolean collectHUDInformation() {
         float yaw = Math.round(MathHelper.wrapDegrees(CLIENT.cameraEntity.getYaw()) * 10.0F) / 10.0F;
+        yawStr = Float.toString(yaw);
+        int yawWidth = CLIENT.textRenderer.getWidth(yawStr) - 1;
 
-        if (DIRECTION_SETTINGS.includeOrdinal) {
-            int icon = getOrdinalDirectionIcon(yaw);
-            int color = getDirectionColor(icon) | 0xFF000000;
+        includeOrdinal = DIRECTION_SETTINGS.includeOrdinal;
+        displayMode = getSettings().getDisplayMode();
 
-            RenderUtils.drawTextureHUD(context, DIRECTION_ORDINAL_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_ORDINAL_WIDTH, TEXTURE_HEIGHT, TEXTURE_ORDINAL_WIDTH, TEXTURE_HEIGHT * ORDINAL_ICON_AMOUNT, color);
-            RenderUtils.drawTextHUD(context, Float.toString(yaw), x + ORDINAL_TEXT_OFFSET, y + 3, color, false);
+        if (includeOrdinal) {
+            iconIndex = getOrdinalDirectionIcon(yaw);
 
-            setBoundingBox(x, y, TEXTURE_ORDINAL_WIDTH, TEXTURE_HEIGHT, color);
+            width = displayMode.calculateWidth(ORDINAL_ICON_WIDTH, yawWidth);
+            height = ORDINAL_ICON_HEIGHT;
+
+            color = getDirectionColor(iconIndex) | 0xFF000000;
+
         } else {
-            int icon = getCardinalDirectionIcon(yaw);
-            int color = getDirectionColor(icon * 2) | 0xFF000000;
+            iconIndex = getCardinalDirectionIcon(yaw);
 
-            RenderUtils.drawTextureHUD(context, DIRECTION_CARDINAL_TEXTURE, x, y, 0.0F, icon * 13, TEXTURE_CARDINAL_WIDTH, TEXTURE_HEIGHT, TEXTURE_CARDINAL_WIDTH, TEXTURE_HEIGHT * CARDINAL_ICON_AMOUNT, color);
-            RenderUtils.drawTextHUD(context, Float.toString(yaw), x + CARDINAL_TEXT_OFFSET, y + 3, color, false);
-            setBoundingBox(x, y, TEXTURE_CARDINAL_WIDTH, TEXTURE_HEIGHT, color);
+            width = displayMode.calculateWidth(CARDINAL_ICON_WIDTH, yawWidth);
+            height = CARDINAL_ICON_HEIGHT;
+
+            color = getDirectionColor(iconIndex * 2) | 0xFF000000;
+        }
+
+        setWidthHeightColor(width, height, color);
+
+        return true;
+    }
+
+    @Override
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+
+        int w = getWidth();
+        int h = getHeight();
+
+        if (includeOrdinal) {
+            RenderUtils.drawSmallHUD(
+                    context,
+                    yawStr,
+                    x, y,
+                    w, h,
+                    DIRECTION_ORDINAL_TEXTURE,
+                    0.0F, ORDINAL_ICON_HEIGHT * iconIndex,
+                    ORDINAL_TEXTURE_WIDTH, ORDINAL_TEXTURE_HEIGHT,
+                    ORDINAL_ICON_WIDTH, ORDINAL_ICON_HEIGHT,
+                    color,
+                    displayMode,
+                    drawBackground
+            );
+
+        } else {
+            RenderUtils.drawSmallHUD(
+                    context,
+                    yawStr,
+                    x, y,
+                    w, h,
+                    DIRECTION_CARDINAL_TEXTURE,
+                    0.0F, CARDINAL_ICON_HEIGHT * iconIndex,
+                    CARDINAL_TEXTURE_WIDTH, CARDINAL_TEXTURE_HEIGHT,
+                    CARDINAL_ICON_WIDTH, CARDINAL_ICON_HEIGHT,
+                    color,
+                    displayMode,
+                    drawBackground
+            );
         }
         return true;
     }
@@ -93,15 +155,5 @@ public class DirectionHUD extends AbstractHUD {
             case 7 -> DIRECTION_SETTINGS.directionColor.se;
             default -> 0xFFFFFF;
         };
-    }
-
-    @Override
-    public int getBaseHUDWidth() {
-        return DIRECTION_SETTINGS.includeOrdinal ? TEXTURE_ORDINAL_WIDTH : TEXTURE_CARDINAL_WIDTH;
-    }
-
-    @Override
-    public int getBaseHUDHeight() {
-        return TEXTURE_HEIGHT;
     }
 }

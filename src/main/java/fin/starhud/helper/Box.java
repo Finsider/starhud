@@ -77,6 +77,17 @@ public class Box {
         return width < 0 || height < 0;
     }
 
+    public void setWidthHeight(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public void setWidthHeightColor(int width, int height, int color) {
+        this.width = width;
+        this.height = height;
+        this.color = color;
+    }
+
     public void setBoundingBox(int x, int y, int width, int height, int color) {
         this.setX(x);
         this.setY(y);

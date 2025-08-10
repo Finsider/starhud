@@ -23,7 +23,7 @@ public class Helper {
                 chars[i] = superscripts[c - '0'];
         }
 
-        return String.valueOf(chars);
+        return new String(chars);
     }
 
     public static String toSubscript(String str) {
@@ -37,7 +37,7 @@ public class Helper {
                 chars[i] = subscripts[c - '0'];
         }
 
-        return String.valueOf(chars);
+        return new String(chars);
     }
 
     // convert (modname:snake_case) into (Snake Case)

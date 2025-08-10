@@ -11,15 +11,17 @@ import net.minecraft.util.ActionResult;
 public class ConfigInit {
     public static void init() {
 
-        // register the Settings.java config into clothconfig
         AutoConfig.register(Settings.class, GsonConfigSerializer::new);
         ConfigHolder<Settings> holder = AutoConfig.getConfigHolder(Settings.class);
         Main.settings = holder.getConfig();
 
         // onConfigSaved we update every HUDs
-        holder.registerSaveListener((ignored, ignored1) -> {
-            HUDComponent.getInstance().updateAll();
-            return ActionResult.SUCCESS;
-        });
+        holder.registerSaveListener(ConfigInit::onConfigSaved);
+    }
+
+    public static ActionResult onConfigSaved(ConfigHolder<Settings> configHolder, Settings settings) {
+        Main.settings.hudList.onConfigSaved();
+        HUDComponent.getInstance().updateActiveHUDs();
+        return ActionResult.SUCCESS;
     }
 }
