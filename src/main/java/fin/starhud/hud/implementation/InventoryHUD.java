@@ -114,7 +114,7 @@ public class InventoryHUD extends AbstractHUD {
 
         for (int itemIndex = 0; itemIndex < 27; ++itemIndex) {
 
-            ItemStack stack = inventory.getMainStacks().get(itemIndex + 9);
+            ItemStack stack = inventory.main.get(itemIndex + 9);
 
             if (!stack.isEmpty()) {
 
@@ -147,7 +147,7 @@ public class InventoryHUD extends AbstractHUD {
 
         for (int itemIndex = 0; itemIndex < 27; ++itemIndex) {
 
-            ItemStack stack = inventory.getMainStacks().get(itemIndex + 9);
+            ItemStack stack = inventory.main.get(itemIndex + 9);
 
             if (!stack.isEmpty()) {
                 int x1 = x + SLOT_X_HORIZONTAL[itemIndex];
@@ -164,7 +164,7 @@ public class InventoryHUD extends AbstractHUD {
     public boolean hasItemInInventory() {
         PlayerInventory inventory = CLIENT.player.getInventory();
         for (int itemIndex = 0; itemIndex < 27; ++itemIndex) {
-            ItemStack stack = inventory.getMainStacks().get(itemIndex + 9);
+            ItemStack stack = inventory.main.get(itemIndex + 9);
             if (!stack.isEmpty()) {
                 return true;
             }

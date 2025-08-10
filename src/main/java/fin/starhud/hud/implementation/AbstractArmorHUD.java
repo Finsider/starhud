@@ -8,6 +8,8 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
+import java.util.List;
+
 public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
@@ -30,8 +32,7 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
 
     @Override
     public ItemStack getStack() {
-        EquipmentSlot equipmentSlot = AttributeModifierSlot.ARMOR.getSlots().get(armorIndex);
-        return CLIENT.player.getEquippedStack(equipmentSlot);
+        return ((List<ItemStack>) CLIENT.player.getArmorItems()).get(armorIndex);
     }
 
     @Override
