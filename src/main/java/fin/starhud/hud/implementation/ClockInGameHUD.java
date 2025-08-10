@@ -125,7 +125,7 @@ public class ClockInGameHUD extends AbstractHUD {
     }
 
     private static boolean isNightTime(ClientWorld clientWorld) {
-        long time = (clientWorld.getTime() % 24000);
+        long time = (clientWorld.getTimeOfDay() % 24000);
 
         return time >= 13000 && time <= 23000;
     }
