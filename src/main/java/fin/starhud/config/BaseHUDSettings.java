@@ -38,7 +38,7 @@ public class BaseHUDSettings implements ConfigData {
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public HUDDisplayMode displayMode = HUDDisplayMode.BOTH;
 
-    public boolean drawBackground;
+    public boolean drawBackground = true;
 
     @Comment("Set to 0 or below for default GUI Scale")
     public float scale = 0;
@@ -54,7 +54,6 @@ public class BaseHUDSettings implements ConfigData {
         this.originY = originY;
         this.growthDirectionX = growthDirectionX;
         this.growthDirectionY = growthDirectionY;
-        this.drawBackground = true;
     }
 
     public BaseHUDSettings(boolean shouldRender, int x, int y, ScreenAlignmentX originX, ScreenAlignmentY originY, GrowthDirectionX growthDirectionX, GrowthDirectionY growthDirectionY, float scale, HUDDisplayMode displayMode, boolean drawBackground) {
