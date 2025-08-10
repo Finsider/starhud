@@ -58,6 +58,11 @@ public class GroupedHUDSettings {
         this(new BaseHUDSettings(true, 0, 0, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN, false));
     }
 
+    public ChildAlignment getChildAlignment() {
+        if (this.childAlignment == null) this.childAlignment = ChildAlignment.THIS;
+        return childAlignment;
+    }
+
     public boolean isEqual(GroupedHUDSettings other) {
         return this.base.isEqual(other.base)
                 && this.gap == other.gap
