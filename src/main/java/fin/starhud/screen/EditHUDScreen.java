@@ -127,7 +127,7 @@ public class EditHUDScreen extends Screen {
                             p.getId(),
                             p.groupSettings.gap,
                             p.groupSettings.alignVertical,
-                            p.groupSettings.childAlignment,
+                            p.groupSettings.getChildAlignment(),
                             p.groupSettings.boxColor,
                             p.groupSettings.hudIds
                     )
@@ -176,7 +176,7 @@ public class EditHUDScreen extends Screen {
                     selectedHUD.getSettings().originX = selectedHUD.getSettings().originX.next();
                     selectedHUD.getSettings().growthDirectionX = selectedHUD.getSettings().growthDirectionX.recommendedScreenAlignment(selectedHUD.getSettings().originX);
                     selectedHUD.update();
-                    alignmentXButton.setMessage(Text.of("X Alignment: " + selectedHUD.getSettings().originX));
+                    alignmentXButton.setMessage(Text.of("X Alignment: " + selectedHUD.getSettings().getOriginX()));
                 }
         ).dimensions(alignmentXButtonX, alignmentXButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
@@ -190,7 +190,7 @@ public class EditHUDScreen extends Screen {
                     selectedHUD.getSettings().originY = selectedHUD.getSettings().originY.next();
                     selectedHUD.getSettings().growthDirectionY = selectedHUD.getSettings().growthDirectionY.recommendedScreenAlignment(selectedHUD.getSettings().originY);
                     selectedHUD.update();
-                    alignmentYButton.setMessage(Text.of("Y Alignment: " + selectedHUD.getSettings().originY));
+                    alignmentYButton.setMessage(Text.of("Y Alignment: " + selectedHUD.getSettings().getOriginY()));
                 }
         ).dimensions(alignmentYButtonX, alignmentYButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
@@ -203,7 +203,7 @@ public class EditHUDScreen extends Screen {
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
                     selectedHUD.getSettings().growthDirectionX = selectedHUD.getSettings().growthDirectionX.next();
                     selectedHUD.update();
-                    directionXButton.setMessage(Text.of("X Direction: " + selectedHUD.getSettings().growthDirectionX));
+                    directionXButton.setMessage(Text.of("X Direction: " + selectedHUD.getSettings().getGrowthDirectionX()));
                 }
         ).dimensions(directionXButtonX, directionXButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
@@ -227,7 +227,7 @@ public class EditHUDScreen extends Screen {
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
                     selectedHUD.getSettings().growthDirectionY = selectedHUD.getSettings().growthDirectionY.next();
                     selectedHUD.update();
-                    directionYButton.setMessage(Text.of("Y Direction: " + selectedHUD.getSettings().growthDirectionY));
+                    directionYButton.setMessage(Text.of("Y Direction: " + selectedHUD.getSettings().getGrowthDirectionY()));
                 }
         ).dimensions(directionYButtonX, directionYButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
@@ -240,7 +240,7 @@ public class EditHUDScreen extends Screen {
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
                     selectedHUD.getSettings().displayMode = selectedHUD.getSettings().displayMode.next();
                     selectedHUD.update();
-                    hudDisplayButton.setMessage(Text.of("Display: " + selectedHUD.getSettings().displayMode));
+                    hudDisplayButton.setMessage(Text.of("Display: " + selectedHUD.getSettings().getDisplayMode()));
                 }
         ).dimensions(hudDisplayButtonX, hudDisplayButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
@@ -399,9 +399,9 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
-                    hud.groupSettings.childAlignment = hud.groupSettings.childAlignment.next();
+                    hud.groupSettings.childAlignment = hud.groupSettings.getChildAlignment().next();
 
-                    button.setMessage(Text.of(hud.groupSettings.childAlignment.name()));
+                    button.setMessage(Text.of(hud.groupSettings.getChildAlignment().name()));
                 }
         )
                 .dimensions(xChildAlignmentButton, yChildAlignmentButton, terminatorWidth, SQUARE_WIDGET_LENGTH)
@@ -516,11 +516,11 @@ public class EditHUDScreen extends Screen {
             yField.setText(String.valueOf(settings.y));
             scaleField.setText(String.valueOf(settings.getScale()));
 
-            alignmentXButton.setMessage(Text.of("X Alignment: " + settings.originX));
-            directionXButton.setMessage(Text.of("X Direction: " + settings.growthDirectionX));
-            alignmentYButton.setMessage(Text.of("Y Alignment: " + settings.originY));
-            directionYButton.setMessage(Text.of("Y Direction: " + settings.growthDirectionY));
-            hudDisplayButton.setMessage(Text.of("Display: " + settings.displayMode));
+            alignmentXButton.setMessage(Text.of("X Alignment: " + settings.getOriginX()));
+            directionXButton.setMessage(Text.of("X Direction: " + settings.getGrowthDirectionX()));
+            alignmentYButton.setMessage(Text.of("Y Alignment: " + settings.getOriginY()));
+            directionYButton.setMessage(Text.of("Y Direction: " + settings.getGrowthDirectionY()));
+            hudDisplayButton.setMessage(Text.of("Display: " + settings.getDisplayMode()));
             drawBackgroundButton.setMessage(Text.of("Background: " + (settings.drawBackground ? "ON" : "OFF")));
             shouldRenderButton.setMessage(Text.of(settings.shouldRender ? "ON" : "OFF"));
 
@@ -570,7 +570,7 @@ public class EditHUDScreen extends Screen {
                             hud.groupSettings.alignVertical ? "Vertical" : "Horizontal"
                     ));
 
-                    childAlignmentButton.setMessage(Text.of(hud.groupSettings.childAlignment.name()));
+                    childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().name()));
                 }
             } else {
                 groupUngroupButton.visible = false;
@@ -1337,7 +1337,7 @@ public class EditHUDScreen extends Screen {
                         hud.groupSettings.alignVertical ? "Vertical" : "Horizontal"
                 ));
 
-                childAlignmentButton.setMessage(Text.of(hud.groupSettings.childAlignment.name()));
+                childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().name()));
             }
         } else {
             alignmentXButton.visible = false;
