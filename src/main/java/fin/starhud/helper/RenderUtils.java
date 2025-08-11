@@ -172,7 +172,7 @@ public class RenderUtils {
 
     public static void drawText(OrderedText text, int x, int y, int color, boolean shadow, float scale) {
         drawTexts.computeIfAbsent(scale, s -> new ArrayList<>())
-                .add(new DrawText(text, x, y, color, shadow));
+                .add(new DrawText(text, x, y + HUD_SETTINGS.textYOffset, color, shadow));
     }
 
     public static void drawItem(ItemStack item, int x, int y, float scale) {

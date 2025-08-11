@@ -114,4 +114,10 @@ public class PingHUD extends AbstractHUD {
         return true;
     }
 
+    @Override
+    public void update() {
+        super.update();
+
+        LAST_PING_UPDATE = -1;
+    }
 }

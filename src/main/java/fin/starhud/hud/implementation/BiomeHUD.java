@@ -122,6 +122,13 @@ public class  BiomeHUD extends AbstractHUD {
         return true;
     }
 
+    @Override
+    public void update() {
+        super.update();
+
+        cachedBiome = null;
+    }
+
     private static int getDimensionIndex(RegistryKey<World> registryKey) {
         if (registryKey == World.OVERWORLD) return 0;
         else if (registryKey == World.NETHER) return 1;

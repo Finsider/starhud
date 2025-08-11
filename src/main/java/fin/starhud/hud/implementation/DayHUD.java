@@ -92,4 +92,11 @@ public class DayHUD extends AbstractHUD {
 
         return true;
     }
+
+    @Override
+    public void update() {
+        super.update();
+
+        lastDay = -1;
+    }
 }
