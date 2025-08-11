@@ -8,6 +8,7 @@ import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -52,7 +53,15 @@ public class PingHUD extends AbstractHUD {
     public boolean collectHUDInformation() {
         displayMode = getSettings().getDisplayMode();
 
-        PlayerListEntry playerListEntry = CLIENT.getNetworkHandler().getPlayerListEntry(CLIENT.player.getUuid());
+        ClientPlayNetworkHandler networkHandler = CLIENT.getNetworkHandler();
+
+        if (networkHandler == null)
+            return false;
+
+        PlayerListEntry playerListEntry = networkHandler.getPlayerListEntry(CLIENT.player.getUuid());
+
+        if (playerListEntry == null)
+            return false;
 
         int currentPing = playerListEntry.getLatency();
 
