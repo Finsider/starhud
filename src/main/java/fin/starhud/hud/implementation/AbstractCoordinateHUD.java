@@ -53,13 +53,12 @@ public abstract class AbstractCoordinateHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
 
         int w = getWidth();
         int h = getHeight();
 
         RenderUtils.drawSmallHUD(
-                context,
                 coordStr,
                 x, y,
                 w, h,
@@ -69,7 +68,8 @@ public abstract class AbstractCoordinateHUD extends AbstractHUD {
                 ICON_WIDTH, ICON_HEIGHT,
                 color,
                 displayMode,
-                drawBackground
+                drawBackground,
+                scale
         );
 
         return true;

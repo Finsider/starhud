@@ -98,11 +98,11 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
 
         for (StatusEffectInstance statusEffectInstance : collection) {
 
-            if (drawStatusEffectHUD(context, statusEffectInstance, x, y, drawBackground)) {
+            if (drawStatusEffectHUD(context, statusEffectInstance, x, y, drawBackground, scale)) {
                 if (drawVertical) {
                     y += sameTypeGap;
                 } else {
@@ -115,7 +115,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean drawStatusEffectHUD(DrawContext context, StatusEffectInstance statusEffectInstance, int x, int y, boolean drawBackground) {
+    public boolean drawStatusEffectHUD(DrawContext context, StatusEffectInstance statusEffectInstance, int x, int y, boolean drawBackground, float scale) {
         if (!statusEffectInstance.shouldShowIcon())
             return false;
 
@@ -135,27 +135,27 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                     int stretchHeight = ICON_HEIGHT + gap + INFO_HEIGHT;
                     float uvScale = (float)stretchHeight / iconHeight;
 
-                    RenderUtils.drawTextureHUD(
-                            context,
+                    RenderUtils.drawTexture(
                             STATUS_EFFECT_AMBIENT_COMBINED_TEXTURE,
                             x, y,
                             0.0F, 0.0F,
                             ICON_WIDTH, stretchHeight,
                             ICON_WIDTH, (int)(iconHeight * uvScale),
-                            effectSettings.ambientColor | 0xff000000
+                            effectSettings.ambientColor | 0xff000000,
+                            scale
                     );
                 } else {
-                    RenderUtils.fillRounded(context, x, y, x + ICON_WIDTH, y + ICON_HEIGHT + gap + INFO_HEIGHT, 0x80000000);
+                    RenderUtils.fillRounded(x, y, x + ICON_WIDTH, y + ICON_HEIGHT + gap + INFO_HEIGHT, 0x80000000, scale);
                 }
             } else {
-                RenderUtils.drawTextureHUD(
-                        context,
+                RenderUtils.drawTexture(
                         statusEffectInstance.isAmbient() ? STATUS_EFFECT_AMBIENT_TEXTURE : STATUS_EFFECT_TEXTURE,
                         x, y,
                         0.0F, 0.0F,
                         STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT,
                         STATUS_EFFECT_TEXTURE_WIDTH, STATUS_EFFECT_TEXTURE_HEIGHT,
-                        statusEffectInstance.isAmbient() ? effectSettings.ambientColor | 0xFF000000 : 0xFFFFFFFF
+                        statusEffectInstance.isAmbient() ? effectSettings.ambientColor | 0xFF000000 : 0xFFFFFFFF,
+                        scale
                 );
             }
         }
@@ -174,22 +174,22 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         }
 
         // draw timer bar
-        RenderUtils.drawTextureHUD(
-                context,
+        RenderUtils.drawTexture(
                 STATUS_EFFECT_BAR_BACKGROUND_TEXTURE,
                 x + 2, y + ICON_HEIGHT + gap + 2,
                 0, 0,
                 STATUS_EFFECT_BAR_TEXTURE_WIDTH, STATUS_EFFECT_BAR_TEXTURE_HEIGHT,
-                STATUS_EFFECT_BAR_TEXTURE_WIDTH, STATUS_EFFECT_BAR_TEXTURE_HEIGHT
+                STATUS_EFFECT_BAR_TEXTURE_WIDTH, STATUS_EFFECT_BAR_TEXTURE_HEIGHT,
+                scale
         );
-        RenderUtils.drawTextureHUD(
-                context,
+        RenderUtils.drawTexture(
                 STATUS_EFFECT_BAR_TEXTURE,
                 x + 2, y + ICON_HEIGHT + gap + 2,
                 0, 0,
                 3 * step, STATUS_EFFECT_BAR_TEXTURE_HEIGHT,
                 STATUS_EFFECT_BAR_TEXTURE_WIDTH, STATUS_EFFECT_BAR_TEXTURE_HEIGHT,
-                color
+                color,
+                scale
         );
 
         float alpha = 1.0F;
@@ -200,14 +200,14 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         }
 
         // draw effect texture.
-        RenderUtils.drawTextureHUD(
-                context,
+        RenderUtils.drawTexture(
                 getStatusEffectTexture(registryEntry),
                 x + 3, y + 3,
                 0,0,
                 18, 18,
                 18,18,
-                ColorHelper.getWhite(alpha)
+                ColorHelper.getWhite(alpha),
+                scale
         );
 
         // draw amplifier text.
@@ -218,12 +218,12 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
 
         String amplifierStr = Helper.toSubscript(Integer.toString(amplifier));
 
-        RenderUtils.drawTextHUD(
-                context,
+        RenderUtils.drawText(
                 amplifierStr,
                 x + 3 + 18 - CLIENT.textRenderer.getWidth(amplifierStr) + 1, y + 2 + 18 - 7,
                 0xFFFFFFFF,
-                true
+                true,
+                scale
         );
 
         return true;

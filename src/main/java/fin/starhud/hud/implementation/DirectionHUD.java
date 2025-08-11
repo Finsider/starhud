@@ -85,14 +85,13 @@ public class DirectionHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
 
         int w = getWidth();
         int h = getHeight();
 
         if (includeOrdinal) {
             RenderUtils.drawSmallHUD(
-                    context,
                     yawStr,
                     x, y,
                     w, h,
@@ -102,12 +101,12 @@ public class DirectionHUD extends AbstractHUD {
                     ORDINAL_ICON_WIDTH, ORDINAL_ICON_HEIGHT,
                     color,
                     displayMode,
-                    drawBackground
+                    drawBackground,
+                    scale
             );
 
         } else {
             RenderUtils.drawSmallHUD(
-                    context,
                     yawStr,
                     x, y,
                     w, h,
@@ -117,7 +116,8 @@ public class DirectionHUD extends AbstractHUD {
                     CARDINAL_ICON_WIDTH, CARDINAL_ICON_HEIGHT,
                     color,
                     displayMode,
-                    drawBackground
+                    drawBackground,
+                    scale
             );
         }
         return true;

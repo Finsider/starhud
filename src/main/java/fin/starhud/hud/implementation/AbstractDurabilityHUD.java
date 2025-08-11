@@ -223,23 +223,23 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         return MathHelper.hsvToRgb(0.35F * stackStep / (float) maxStep, 0.45F, 0.95F);
     }
 
-    public void renderDurabilityHUD(DrawContext context, Identifier iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public void renderDurabilityHUD(DrawContext context, Identifier iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
         if (drawItem) {
-            renderItemDurability(context, x , y, drawBackground);
+            renderItemDurability(context, x , y, drawBackground, scale);
         } else {
-            renderDurability(context, iconTexture, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
+            renderDurability(context, iconTexture, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
         }
     }
 
-    public void renderItemDurability(DrawContext context, int x, int y, boolean drawBackground) {
+    public void renderItemDurability(DrawContext context, int x, int y, boolean drawBackground, float scale) {
         switch (displayMode) {
-            case FRACTIONAL, VALUE_ONLY, PERCENTAGE -> RenderUtils.drawItemHUD(context, str, x, y, getWidth(), getHeight(), stack, durabilityColor, hudDisplayMode, drawBackground);
-            case BAR -> renderItemDurabilityBar(context, x, y, drawBackground);
-            case COMPACT -> renderItemDurabilityCompact(context, x, y, drawBackground);
+            case FRACTIONAL, VALUE_ONLY, PERCENTAGE -> RenderUtils.drawItemHUD(str, x, y, getWidth(), getHeight(), stack, durabilityColor, hudDisplayMode, drawBackground, scale);
+            case BAR -> renderItemDurabilityBar(context, x, y, drawBackground, scale);
+            case COMPACT -> renderItemDurabilityCompact(context, x, y, drawBackground, scale);
         }
     }
 
-    public void renderItemDurabilityBar(DrawContext context, int x, int y, boolean drawBackground) {
+    public void renderItemDurabilityBar(DrawContext context, int x, int y, boolean drawBackground, float scale) {
         int w = getWidth();
         int h = getHeight();
 
@@ -249,57 +249,57 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         switch (hudDisplayMode) {
             case ICON -> {
                 if (drawBackground)
-                    RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
-                context.drawItem(stack, x + 3, y + 3);
+                    RenderUtils.fillRounded(x, y, x + w, y + h, 0x80000000, scale);
+                RenderUtils.drawItem(stack, x + 3, y + 3, scale);
             }
             case INFO -> {
                 if (drawBackground)
-                    RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
-                RenderUtils.drawTextureHUD(context, BIG_DURABILITY_BACKGROUND_TEXTURE, x + padding, y + 4, 0.0F, 0.0F, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT);
+                    RenderUtils.fillRounded(x, y, x + w, y + h, 0x80000000, scale);
+                RenderUtils.drawTexture(BIG_DURABILITY_BACKGROUND_TEXTURE, x + padding, y + 4, 0.0F, 0.0F, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, scale);
                 if (step != 0)
-                    RenderUtils.drawTextureHUD(context, BIG_DURABILITY_TEXTURE, x + padding, y + 4, 0.0F, 0.0F, step * 7, BIG_DURABILITY_TEXTURE_HEIGHT, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, durabilityColor);
+                    RenderUtils.drawTexture(BIG_DURABILITY_TEXTURE, x + padding, y + 4, 0.0F, 0.0F, step * 7, BIG_DURABILITY_TEXTURE_HEIGHT, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, durabilityColor, scale);
             }
             case BOTH -> {
                 // draw background for the item texture
                 if (drawBackground) {
                     if (gap <= 0) {
-                        RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
+                        RenderUtils.fillRounded(x, y, x + w, y + h, 0x80000000, scale);
                     } else {
-                        RenderUtils.fillRoundedLeftSide(context, x, y, x + ITEM_BACKGROUND_WIDTH, y + h, 0x80000000);
-                        RenderUtils.fillRoundedRightSide(context, x + ITEM_BACKGROUND_WIDTH + gap, y, x + w, y + h, 0x80000000);
+                        RenderUtils.fillRoundedLeftSide(x, y, x + ITEM_BACKGROUND_WIDTH, y + h, 0x80000000, scale);
+                        RenderUtils.fillRoundedRightSide(x + ITEM_BACKGROUND_WIDTH + gap, y, x + w, y + h, 0x80000000, scale);
                     }
                 }
                 // draw content
-                context.drawItem(stack, x + 3, y + 3);
+                RenderUtils.drawItem(stack, x + 3, y + 3, scale);
 
-                RenderUtils.drawTextureHUD(context, BIG_DURABILITY_BACKGROUND_TEXTURE, x + ITEM_BACKGROUND_WIDTH + gap + padding, y + 4, 0.0F, 0.0F, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT);
+                RenderUtils.drawTexture(BIG_DURABILITY_BACKGROUND_TEXTURE, x + ITEM_BACKGROUND_WIDTH + gap + padding, y + 4, 0.0F, 0.0F, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, scale);
                 if (step != 0)
-                    RenderUtils.drawTextureHUD(context, BIG_DURABILITY_TEXTURE, x + ITEM_BACKGROUND_WIDTH + gap + padding, y + 4, 0.0F, 0.0F, step * 7, BIG_DURABILITY_TEXTURE_HEIGHT, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, durabilityColor);
+                    RenderUtils.drawTexture(BIG_DURABILITY_TEXTURE, x + ITEM_BACKGROUND_WIDTH + gap + padding, y + 4, 0.0F, 0.0F, step * 7, BIG_DURABILITY_TEXTURE_HEIGHT, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, durabilityColor, scale);
             }
         }
     }
 
-    public void renderItemDurabilityCompact(DrawContext context, int x, int y, boolean drawBackground) {
+    public void renderItemDurabilityCompact(DrawContext context, int x, int y, boolean drawBackground, float scale) {
         if (drawBackground)
-            RenderUtils.fillRounded(context, x, y, x + getWidth(), y + getHeight(), 0x80000000);
+            RenderUtils.fillRounded(x, y, x + getWidth(), y + getHeight(), 0x80000000, scale);
 
         if (hudDisplayMode != INFO)
-            context.drawItem(stack, x + 3, y + 3);
+            RenderUtils.drawItem(stack, x + 3, y + 3, scale);
 
         if (hudDisplayMode != ICON)
-            context.drawStackOverlay(CLIENT.textRenderer, stack, x + 3, y + 3);
+            RenderUtils.drawStackOverlay(stack, x + 3, y + 3, scale);
     }
 
-    public void renderDurability(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public void renderDurability(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
         switch (displayMode) {
-            case FRACTIONAL -> renderDurabilityNumber(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
-            case BAR -> renderDurabilityBar(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
-            case VALUE_ONLY, PERCENTAGE -> RenderUtils.drawSmallHUD(context, str, x, y, getWidth(), getHeight(), ICON, u, v, textureWidth, textureHeight, iconWidth, iconHeight, durabilityColor, iconColor, hudDisplayMode, drawBackground);
-            case COMPACT -> renderDurabilityCompact(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
+            case FRACTIONAL -> renderDurabilityNumber(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
+            case BAR -> renderDurabilityBar(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
+            case VALUE_ONLY, PERCENTAGE -> RenderUtils.drawSmallHUD(str, x, y, getWidth(), getHeight(), ICON, u, v, textureWidth, textureHeight, iconWidth, iconHeight, durabilityColor, iconColor, hudDisplayMode, drawBackground, scale);
+            case COMPACT -> renderDurabilityCompact(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
         }
     }
 
-    public void renderDurabilityBar(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public void renderDurabilityBar(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
         int w = getWidth();
         int h = getHeight();
 
@@ -309,37 +309,37 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         switch (hudDisplayMode) {
             case ICON -> {
                 if (drawBackground)
-                    RenderUtils.fillRounded(context, x, y, x + iconWidth, y + iconHeight, 0x80000000);
-                RenderUtils.drawTextureHUD(context, ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
+                    RenderUtils.fillRounded(x, y, x + iconWidth, y + iconHeight, 0x80000000, scale);
+                RenderUtils.drawTexture(ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor, scale);
             }
             case INFO -> {
                 if (drawBackground)
-                    RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
-                RenderUtils.drawTextureHUD(context, DURABILITY_BACKGROUND_TEXTURE, x + padding, y + 3, 0.0F, 0.0F, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT);
-                if (step != 0) RenderUtils.drawTextureHUD(context, DURABILITY_TEXTURE, x + padding, y + 3, 0.0F, 0.0F, 4 * step, DURABILITY_TEXTURE_HEIGHT, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, this.durabilityColor);
+                    RenderUtils.fillRounded(x, y, x + w, y + h, 0x80000000, scale);
+                RenderUtils.drawTexture(DURABILITY_BACKGROUND_TEXTURE, x + padding, y + 3, 0.0F, 0.0F, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, scale);
+                if (step != 0) RenderUtils.drawTexture(DURABILITY_TEXTURE, x + padding, y + 3, 0.0F, 0.0F, 4 * step, DURABILITY_TEXTURE_HEIGHT, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, this.durabilityColor, scale);
             }
             case BOTH -> { // WIP INFO_ONLY bruh
                 // draw the background
                 if (drawBackground) {
                     if (gap <= 0)
-                        RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
+                        RenderUtils.fillRounded(x, y, x + w, y + h, 0x80000000, scale);
                     else {
-                        RenderUtils.fillRoundedLeftSide(context, x, y, x + iconWidth, y + h, 0x80000000);
-                        RenderUtils.fillRoundedRightSide(context, x + iconWidth + gap, y, x + w, y + h, 0x80000000);
+                        RenderUtils.fillRoundedLeftSide(x, y, x + iconWidth, y + h, 0x80000000, scale);
+                        RenderUtils.fillRoundedRightSide(x + iconWidth + gap, y, x + w, y + h, 0x80000000, scale);
                     }
                 }
 
-                RenderUtils.drawTextureHUD(context, ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
+                RenderUtils.drawTexture(ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor, scale);
 
                 // draw the durability background and steps
-                RenderUtils.drawTextureHUD(context, DURABILITY_BACKGROUND_TEXTURE, x + iconWidth + gap + padding, y + 3, 0.0F, 0.0F, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT);
-                if (step != 0) RenderUtils.drawTextureHUD(context, DURABILITY_TEXTURE, x + iconWidth + gap + padding, y + 3, 0.0F, 0.0F, 4 * step, DURABILITY_TEXTURE_HEIGHT, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, this.durabilityColor);
+                RenderUtils.drawTexture(DURABILITY_BACKGROUND_TEXTURE, x + iconWidth + gap + padding, y + 3, 0.0F, 0.0F, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, scale);
+                if (step != 0) RenderUtils.drawTexture(DURABILITY_TEXTURE, x + iconWidth + gap + padding, y + 3, 0.0F, 0.0F, 4 * step, DURABILITY_TEXTURE_HEIGHT, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, this.durabilityColor, scale);
             }
         }
     }
 
     // example render: ¹²³⁴/₅₆₇₈
-    public void renderDurabilityNumber(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public void renderDurabilityNumber(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
         int w = getWidth();
         int h = getHeight();
 
@@ -349,40 +349,40 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         switch (hudDisplayMode) {
             case ICON -> {
                 if (drawBackground)
-                    RenderUtils.fillRounded(context, x, y, x + iconWidth, y + iconHeight, 0x80000000);
-                RenderUtils.drawTextureHUD(context, ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
+                    RenderUtils.fillRounded(x, y, x + iconWidth, y + iconHeight, 0x80000000, scale);
+                RenderUtils.drawTexture(ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor, scale);
             }
             case INFO -> {
                 if (drawBackground)
-                    RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
-                RenderUtils.drawTextHUD(context, str, x + padding, y + 3, durabilityColor, false);
-                RenderUtils.drawTextHUD(context, str2, x + padding + remainingTextWidth, y + 3 - 1, durabilityColor, false);
+                    RenderUtils.fillRounded(x, y, x + w, y + h, 0x80000000, scale);
+                RenderUtils.drawText(str, x + padding, y + 3, durabilityColor, false, scale);
+                RenderUtils.drawText(str2, x + padding + remainingTextWidth, y + 3 - 1, durabilityColor, false, scale);
             }
             case BOTH ->  {
 
                 if (drawBackground) {
                     if (gap <= 0)
-                        RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
+                        RenderUtils.fillRounded(x, y, x + w, y + h, 0x80000000, scale);
                     else {
-                        RenderUtils.fillRoundedLeftSide(context, x, y, x + iconWidth, y + h, 0x80000000);
-                        RenderUtils.fillRoundedRightSide(context, x + iconWidth + gap, y, x + w, y + h, 0x80000000);
+                        RenderUtils.fillRoundedLeftSide(x, y, x + iconWidth, y + h, 0x80000000, scale);
+                        RenderUtils.fillRoundedRightSide(x + iconWidth + gap, y, x + w, y + h, 0x80000000, scale);
                     }
                 }
-                RenderUtils.drawTextureHUD(context, ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
+                RenderUtils.drawTexture(ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor, scale);
 
-                RenderUtils.drawTextHUD(context, str, x + iconWidth + gap + padding, y + 3, durabilityColor, false);
-                RenderUtils.drawTextHUD(context, str2, x + iconWidth + gap + padding + remainingTextWidth, y + 3 - 1, durabilityColor, false);
+                RenderUtils.drawText(str, x + iconWidth + gap + padding, y + 3, durabilityColor, false, scale);
+                RenderUtils.drawText(str2, x + iconWidth + gap + padding + remainingTextWidth, y + 3 - 1, durabilityColor, false, scale);
             }
         }
     }
 
-    public void renderDurabilityCompact(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public void renderDurabilityCompact(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
 
         if (drawBackground)
-            RenderUtils.fillRounded(context, x, y, x + iconWidth, y + iconHeight, 0x80000000);
+            RenderUtils.fillRounded(x, y, x + iconWidth, y + iconHeight, 0x80000000, scale);
 
         if (hudDisplayMode != INFO) {
-            RenderUtils.drawTextureHUD(context, ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
+            RenderUtils.drawTexture(ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor, scale);
         }
 
         if (hudDisplayMode != HUDDisplayMode.ICON) {
@@ -390,8 +390,8 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
             int firstX = x + ((iconWidth - durabilityWidth) / 2);
             int firstY = y + iconHeight - 2;
 
-            context.fill(firstX, firstY, firstX + durabilityWidth, firstY + 1, 0x80000000);
-            context.fill(firstX, firstY, firstX + step, firstY + 1, durabilityColor);
+            RenderUtils.fill(firstX, firstY, firstX + durabilityWidth, firstY + 1, 0x80000000, scale);
+            RenderUtils.fill(firstX, firstY, firstX + step, firstY + 1, durabilityColor, scale);
         }
     }
 }

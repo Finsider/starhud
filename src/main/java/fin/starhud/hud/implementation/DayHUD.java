@@ -71,13 +71,12 @@ public class DayHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
 
         int w = getWidth();
         int h = getHeight();
 
         RenderUtils.drawSmallHUD(
-                context,
                 cachedDayString,
                 x, y,
                 w, h,
@@ -87,7 +86,8 @@ public class DayHUD extends AbstractHUD {
                 ICON_WIDTH, ICON_HEIGHT,
                 color,
                 displayMode,
-                drawBackground
+                drawBackground,
+                scale
         );
 
         return true;

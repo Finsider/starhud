@@ -81,11 +81,11 @@ public class InventoryHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
         if (drawVertical) {
-            return drawInventoryVertical(context, x, y, drawBackground);
+            return drawInventoryVertical(context, x, y, drawBackground, scale);
         } else {
-            return drawInventoryHorizontal(context, x, y, drawBackground);
+            return drawInventoryHorizontal(context, x, y, drawBackground, scale);
         }
     }
 
@@ -97,7 +97,7 @@ public class InventoryHUD extends AbstractHUD {
         preComputeVertical();
     }
 
-    private boolean drawInventoryVertical(DrawContext context, int x, int y, boolean drawBackground) {
+    private boolean drawInventoryVertical(DrawContext context, int x, int y, boolean drawBackground, float scale) {
         PlayerInventory inventory = CLIENT.player.getInventory();
 
         int w = getWidth();
@@ -106,9 +106,9 @@ public class InventoryHUD extends AbstractHUD {
 
         if (drawBackground) {
             if (gap <= 0) {
-                RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
+                RenderUtils.fillRounded(x, y, x + w, y + h, 0x80000000, scale);
             } else {
-                RenderUtils.drawTextureHUD(context, INVENTORY_TEXTURE_VERTICAL, x, y, 0.0F, 0.0F, TEXTURE_WIDTH_VERTICAL, TEXTURE_HEIGHT_VERTICAL, TEXTURE_WIDTH_VERTICAL, TEXTURE_HEIGHT_VERTICAL);
+                RenderUtils.drawTexture(INVENTORY_TEXTURE_VERTICAL, x, y, 0.0F, 0.0F, TEXTURE_WIDTH_VERTICAL, TEXTURE_HEIGHT_VERTICAL, TEXTURE_WIDTH_VERTICAL, TEXTURE_HEIGHT_VERTICAL, scale);
             }
         }
 
@@ -121,15 +121,15 @@ public class InventoryHUD extends AbstractHUD {
                 int x1 = x + SLOT_X_VERTICAL[itemIndex];
                 int y1 = y + SLOT_Y_VERTICAL[itemIndex];
 
-                context.drawItem(stack, x1, y1);
-                context.drawStackOverlay(CLIENT.textRenderer, stack, x1, y1);
+                RenderUtils.drawItem(stack, x1, y1, scale);
+                RenderUtils.drawStackOverlay(stack, x1, y1, scale);
             }
         }
 
         return true;
     }
 
-    private boolean drawInventoryHorizontal(DrawContext context, int x, int y, boolean drawBackground) {
+    private boolean drawInventoryHorizontal(DrawContext context, int x, int y, boolean drawBackground, float scale) {
         PlayerInventory inventory = CLIENT.player.getInventory();
 
         int w = getWidth();
@@ -138,9 +138,9 @@ public class InventoryHUD extends AbstractHUD {
 
         if (drawBackground) {
             if (gap <= 0) {
-                RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
+                RenderUtils.fillRounded(x, y, x + w, y + h, 0x80000000, scale);
             } else {
-                RenderUtils.drawTextureHUD(context, INVENTORY_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_WIDTH_HORIZONTAL, TEXTURE_HEIGHT_HORIZONTAL, TEXTURE_WIDTH_HORIZONTAL, TEXTURE_HEIGHT_HORIZONTAL);
+                RenderUtils.drawTexture(INVENTORY_TEXTURE, x, y, 0.0F, 0.0F, TEXTURE_WIDTH_HORIZONTAL, TEXTURE_HEIGHT_HORIZONTAL, TEXTURE_WIDTH_HORIZONTAL, TEXTURE_HEIGHT_HORIZONTAL, scale);
             }
 
         }
@@ -153,8 +153,8 @@ public class InventoryHUD extends AbstractHUD {
                 int x1 = x + SLOT_X_HORIZONTAL[itemIndex];
                 int y1 = y + SLOT_Y_HORIZONTAL[itemIndex];
 
-                context.drawItem(stack, x1, y1);
-                context.drawStackOverlay(CLIENT.textRenderer, stack, x1, y1);
+                RenderUtils.drawItem(stack, x1, y1, scale);
+                RenderUtils.drawStackOverlay(stack, x1, y1, scale);
             }
         }
 

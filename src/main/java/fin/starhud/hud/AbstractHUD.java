@@ -41,18 +41,7 @@ public abstract class AbstractHUD implements HUDInterface {
         setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
         setScale(getSettings().getScale());
 
-        if (!isScaled())
-            return renderHUD(context, getX(), getY(), shouldDrawBackground());
-
-        // this is so we can change the scale for one hud but not the others.
-        context.getMatrices().pushMatrix();
-        scaleHUD(context);
-
-        try {
-            return renderHUD(context, getX(), getY(), shouldDrawBackground());
-        } finally {
-            context.getMatrices().popMatrix();
-        }
+        return renderHUD(context, getX(), getY(), shouldDrawBackground(), getScale());
     }
 
     @Override
@@ -74,7 +63,7 @@ public abstract class AbstractHUD implements HUDInterface {
     // this is where the hud is rendered. Where we put the rendering logic.
     // it is highly discouraged to put information collecting in this function.
     // for information collecting please refer to collectHUDInformation()
-    public abstract boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground);
+    public abstract boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale);
 
     public abstract String getName();
 

@@ -4,6 +4,7 @@ import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
 import fin.starhud.config.GroupedHUDSettings;
 import fin.starhud.config.HUDList;
+import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.implementation.*;
 import net.minecraft.client.gui.DrawContext;
 import org.slf4j.Logger;
@@ -159,12 +160,15 @@ public class HUDComponent {
         long intervalNanos = (long) (HUD_SETTINGS.dataCollectionInterval * 1_000_000_000L);
 
         if (now - lastCollect >= intervalNanos) {
+            RenderUtils.clearAll();
             collectAll();
             lastCollect = now;
+
+            for (HUDInterface hud : renderedHUDs)
+                hud.render(context);
         }
 
-        for (HUDInterface hud : renderedHUDs)
-            hud.render(context);
+        RenderUtils.drawAll(context);
     }
 
     public void collectAll() {

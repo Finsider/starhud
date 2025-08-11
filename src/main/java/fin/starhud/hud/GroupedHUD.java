@@ -119,11 +119,11 @@ public class GroupedHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
-        return renderHUD(context, x, y, drawBackground, false);
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+        return renderHUD(context, x, y, drawBackground, false, scale);
     }
 
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean parentDrewBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean parentDrewBackground, float scale) {
         int w = getWidth();
         int h = getHeight();
         int size = renderedHUDs.size();
@@ -132,7 +132,7 @@ public class GroupedHUD extends AbstractHUD {
 
         // Only draw background if this group is not inside another that already drew one
         if (!parentDrewBackground && drawBackground) {
-            RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
+            RenderUtils.fillRounded(x, y, x + w, y + h, 0x80000000, scale);
             drewBackground = true;
         }
 
@@ -150,9 +150,9 @@ public class GroupedHUD extends AbstractHUD {
             hud.setScale(getScale());
 
             if (hud instanceof GroupedHUD group) {
-                group.renderHUD(context, hud.getX(), hud.getY(), childShouldDrawBackground, thisDrewBackground);
+                group.renderHUD(context, hud.getX(), hud.getY(), childShouldDrawBackground, thisDrewBackground, scale);
             } else {
-                hud.renderHUD(context, hud.getX(), hud.getY(), childShouldDrawBackground);
+                hud.renderHUD(context, hud.getX(), hud.getY(), childShouldDrawBackground, scale);
             }
         }
 
