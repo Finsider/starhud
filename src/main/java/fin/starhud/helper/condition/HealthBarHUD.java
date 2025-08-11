@@ -12,7 +12,7 @@ public class HealthBarHUD {
     private static int cachedHeartAmount = -1;
 
     public static boolean isShown(String ignored) {
-        return CLIENT.interactionManager.hasStatusBars();
+        return CLIENT.interactionManager != null && CLIENT.interactionManager.hasStatusBars();
     }
 
     // assuming 10 health textures + 9 gaps
@@ -24,6 +24,8 @@ public class HealthBarHUD {
 
     public static int getHeight() {
         PlayerEntity player = CLIENT.player;
+
+        if (player == null) return -1;
 
         float maxHealth = player.getMaxHealth();
         int absorption = MathHelper.ceil(player.getAbsorptionAmount());

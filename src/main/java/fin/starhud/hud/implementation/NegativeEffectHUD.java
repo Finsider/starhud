@@ -4,7 +4,6 @@ import fin.starhud.Main;
 import fin.starhud.config.hud.EffectSettings;
 import fin.starhud.hud.HUDId;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.registry.entry.RegistryEntry;
 
 public class NegativeEffectHUD extends AbstractEffectHUD {
 

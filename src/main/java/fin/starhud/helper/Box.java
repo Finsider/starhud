@@ -2,8 +2,9 @@ package fin.starhud.helper;
 
 public class Box {
     private int x, y, width, height, color;
+    private float scale;
 
-    public Box(int x, int y, int width, int height, int color) {
+    public Box(int x, int y, int width, int height, float scale, int color) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -12,15 +13,15 @@ public class Box {
     }
 
     public Box(int x, int y, int width, int height) {
-        this(x, y, width, height, 0xFFFFFFFF);
+        this(x, y, width, height, 0, 0xFFFFFFFF);
     }
 
     public Box(int x, int y) {
-        this(x, y, 13, 13, 0xFFFFFFFF);
+        this(x, y, 13, 13, 0, 0xFFFFFFFF);
     }
 
     public Box(int x, int y, int color) {
-        this(x, y, 13, 13, color);
+        this(x, y, 13, 13, 0, color);
     }
 
     public int getHeight() {
@@ -39,8 +40,20 @@ public class Box {
         return y;
     }
 
+    public float getScale() {
+        return scale;
+    }
+
     public int getColor() {
         return color;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public void setColor(int color) {
@@ -55,12 +68,8 @@ public class Box {
         this.width = width;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 
     public void setEmpty(boolean empty) {
@@ -75,6 +84,10 @@ public class Box {
 
     public boolean isEmpty() {
         return width < 0 || height < 0;
+    }
+
+    public boolean isScaled() {
+        return this.scale > 0;
     }
 
     public void setWidthHeight(int width, int height) {

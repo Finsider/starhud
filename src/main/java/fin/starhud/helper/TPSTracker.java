@@ -1,7 +1,6 @@
 package fin.starhud.helper;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.MathHelper;
 
 public class TPSTracker {

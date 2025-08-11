@@ -16,9 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(InGameHud.class)
+@Mixin(value = InGameHud.class, priority = 500)
 public class MixinInGameHUD {
-
     @Unique
     private static final PositiveEffectHUD POSITIVE_EFFECT_HUD = (PositiveEffectHUD) HUDComponent.getInstance().getHUD(HUDId.POSITIVE_EFFECT);
 
@@ -37,7 +36,8 @@ public class MixinInGameHUD {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V",
                     ordinal = 1
-            )
+            ),
+            require = 0
     )
     private void captureScoreboardFill(DrawContext instance, int x1, int y1, int x2, int y2, int color) {
         ScoreboardHUD.captureBoundingBox(x1, y1 - 9, x2, y2); // -9 due to the first fill call is for header, which has 9 additional offset
@@ -48,7 +48,9 @@ public class MixinInGameHUD {
             method = "renderHeldItemTooltip",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V")
+                    target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"
+            ),
+            require = 0
     )
     private void captureHeldItemTooltipBox(DrawContext instance, int x1, int y1, int x2, int y2, int color) {
         HeldItemTooltip.setBoundingBox(x1, y1, x2 - x1, y2 - y1);

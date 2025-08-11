@@ -42,32 +42,37 @@ public class DayHUD extends AbstractHUD {
         return HUDId.DAY.toString();
     }
 
-    private int width;
-    private int height;
     private int color;
 
     private HUDDisplayMode displayMode;
 
     @Override
+    public void update() {
+        super.update();
+
+        lastDay = -1;
+    }
+
+    @Override
     public boolean collectHUDInformation() {
+        if (CLIENT.world == null) return false;
         long day = CLIENT.world.getTimeOfDay() / 24000L;
 
         // I cached these because textRendered.getWidth() is expensive.
         // And since day count hardly updates at all, doing this is reasonable.
         if (day != lastDay) {
             lastDay = day;
-            cachedDayString = "Day " + day;
+            cachedDayString = DAY_SETTINGS.additionalString + day;
             cachedTextWidth = CLIENT.textRenderer.getWidth(cachedDayString) - 1;
         }
 
         displayMode = getSettings().getDisplayMode();
         color = DAY_SETTINGS.color | 0xFF000000;
-        width = displayMode.calculateWidth(ICON_WIDTH, cachedTextWidth);
-        height = ICON_HEIGHT;
+        int width = displayMode.calculateWidth(ICON_WIDTH, cachedTextWidth);
 
-        setWidthHeightColor(width, height, color);
+        setWidthHeightColor(width, ICON_HEIGHT, color);
 
-        return true;
+        return cachedDayString != null;
     }
 
     @Override
@@ -76,7 +81,7 @@ public class DayHUD extends AbstractHUD {
         int w = getWidth();
         int h = getHeight();
 
-        RenderUtils.drawSmallHUD(
+        return RenderUtils.drawSmallHUD(
                 context,
                 cachedDayString,
                 x, y,
@@ -89,7 +94,5 @@ public class DayHUD extends AbstractHUD {
                 displayMode,
                 drawBackground
         );
-
-        return true;
     }
 }

@@ -13,5 +13,7 @@ public class FPSSettings {
     public BaseHUDSettings base = new BaseHUDSettings(true, 5, -5, ScreenAlignmentX.LEFT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP);
 
     @ConfigEntry.ColorPicker
-    public int color = 0xE5ECf8;
+    public int color = 0xb7dff5;
+
+    public String additionalString = " FPS";
 }

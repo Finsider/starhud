@@ -9,10 +9,12 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
 public class TPSSettings {
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(true, 50, -5, ScreenAlignmentX.LEFT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP);
+    public BaseHUDSettings base = new BaseHUDSettings(true, -116, -5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP);
 
     @ConfigEntry.ColorPicker
-    public int color = 0xE5ECf8;
+    public int color = 0xb5ead7;
 
-    public boolean useDynamicColor = false;
+    public boolean useDynamicColor = true;
+
+    public String additionalString = " TPS";
 }

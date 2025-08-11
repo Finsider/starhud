@@ -1,6 +1,5 @@
 package fin.starhud.helper.condition;
 
-import fin.starhud.Helper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
@@ -13,7 +12,7 @@ public class Other {
     public static boolean isModLoaded(String arg) {
         if (arg == null || arg.isEmpty()) return false;
 
-        return Helper.isModPresent(arg);
+        return FabricLoader.getInstance().isModLoaded(arg);
     }
 
     public static boolean isOnServer(String arg) {
@@ -28,14 +27,14 @@ public class Other {
     }
 
     public static boolean isInOverworld(String ignored) {
-        return CLIENT.player.getWorld().getRegistryKey() == World.OVERWORLD;
+        return CLIENT.player != null && CLIENT.player.getWorld().getRegistryKey() == World.OVERWORLD;
     }
 
     public static boolean isInNether(String ignored) {
-        return CLIENT.player.getWorld().getRegistryKey() == World.NETHER;
+        return CLIENT.player != null && CLIENT.player.getWorld().getRegistryKey() == World.NETHER;
     }
 
     public static boolean isInEnd(String ignored) {
-        return CLIENT.player.getWorld().getRegistryKey() == World.END;
+        return CLIENT.player != null &&  CLIENT.player.getWorld().getRegistryKey() == World.END;
     }
 }

@@ -20,6 +20,7 @@ public class GeneralSettings {
         public boolean shouldBatchHUDWithImmediatelyFast = false;
 
         public boolean drawBorder = true;
+        public boolean drawGrid = true;
 
         @ConfigEntry.ColorPicker(allowAlpha = true)
         public int selectedBoxColor = 0x8087ceeb;
@@ -27,8 +28,13 @@ public class GeneralSettings {
         @ConfigEntry.ColorPicker(allowAlpha = true)
         public int selectedGroupBoxColor = 0x80Fc7871;
 
+        @ConfigEntry.ColorPicker(allowAlpha = true)
+        public int gridColor = 0x20A8E6E6;
+
         @ConfigEntry.ColorPicker
         public int dragBoxColor = 0xa8d8ea;
+
+        public int gridEdgePadding = 5;
     }
 
     public static class InGameHUDSettings {
@@ -51,5 +57,8 @@ public class GeneralSettings {
         public int textPadding = 5;
 
         public int iconInfoGap = 1;
+
+        @Comment("Either draw the background rounded or rectangle")
+        public boolean drawBackgroundRounded = true;
     }
 }

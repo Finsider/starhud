@@ -52,9 +52,6 @@ public class GroupedHUD extends AbstractHUD {
         return name.toString();
     }
 
-    private int width;
-    private int height;
-
     private final List<AbstractHUD> renderedHUDs = new ArrayList<>();
     private final List<Integer> xOffsets = new ArrayList<>();
     private final List<Integer> yOffsets = new ArrayList<>();
@@ -65,8 +62,8 @@ public class GroupedHUD extends AbstractHUD {
         xOffsets.clear();
         yOffsets.clear();
 
-        width = 0;
-        height = 0;
+        int width = 0;
+        int height = 0;
 
         int renderedCount = 0;
 
@@ -146,10 +143,13 @@ public class GroupedHUD extends AbstractHUD {
             // if grouped hud decided to draw background, child shouldn't.
             boolean childShouldDrawBackground = !thisDrewBackground && hud.shouldDrawBackground();
 
+            hud.setXY(x + xOffset, y + yOffset);
+            hud.setScale(getScale());
+
             if (hud instanceof GroupedHUD group) {
-                group.renderHUD(context, x + xOffset, y + yOffset, childShouldDrawBackground, thisDrewBackground);
+                group.renderHUD(context, hud.getX(), hud.getY(), childShouldDrawBackground, thisDrewBackground);
             } else {
-                hud.renderHUD(context, x + xOffset, y + yOffset, childShouldDrawBackground);
+                hud.renderHUD(context, hud.getX(), hud.getY(), childShouldDrawBackground);
             }
         }
 
@@ -176,8 +176,8 @@ public class GroupedHUD extends AbstractHUD {
     }
 
     public int getAlignmentOffset(AbstractHUD childHUD, int length) {
-        return switch (groupSettings.childAlignment) {
-            case THIS -> groupSettings.alignVertical ? getSettings().getOriginX().getAlignmentPos(length) : getSettings().getOriginY().getAlignmentPos(length);
+        return switch (groupSettings.getChildAlignment()) {
+            case GROUP -> groupSettings.alignVertical ? getSettings().getOriginX().getAlignmentPos(length) : getSettings().getOriginY().getAlignmentPos(length);
             case CHILD -> groupSettings.alignVertical ? childHUD.getSettings().getOriginX().getAlignmentPos(length) : childHUD.getSettings().getOriginY().getAlignmentPos(length);
             case START -> 0;
             case CENTER -> length / 2;

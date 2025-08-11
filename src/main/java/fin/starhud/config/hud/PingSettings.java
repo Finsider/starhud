@@ -13,20 +13,13 @@ public class PingSettings {
     @ConfigEntry.Gui.TransitiveObject
     public BaseHUDSettings base = new BaseHUDSettings(true, -57, -5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP);
 
+    @ConfigEntry.ColorPicker
+    public int color = 0xa4d8e1;
+
+    public boolean useDynamicColor = true;
+
     @Comment("Ping update interval, in seconds.")
     public double updateInterval = 5.0;
 
-    @ConfigEntry.Gui.CollapsibleObject
-    public PingColorSetting pingColor = new PingColorSetting();
-
-    public static class PingColorSetting {
-        @ConfigEntry.ColorPicker
-        public int first = 0x85F290;
-        @ConfigEntry.ColorPicker
-        public int second = 0xECF285;
-        @ConfigEntry.ColorPicker
-        public int third = 0xFEBC49;
-        @ConfigEntry.ColorPicker
-        public int fourth = 0xFF5C71;
-    }
+    public String additionalString = " ms";
 }

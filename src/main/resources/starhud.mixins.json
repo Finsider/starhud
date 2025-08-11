@@ -8,12 +8,13 @@
   "client": [
     "MixinClientPlayNetworkHandler",
     "MixinInGameHUD",
+    "MixinPlayerListHud",
     "MixinWindow",
     "accessor.AccessorBossBarHud",
-    "accessor.AccessorInGameHUD",
-    "accessor.AccessorPlayerListHud"
+    "accessor.AccessorInGameHUD"
   ],
   "mixins": [
-    "MixinLivingEntity"
+    "MixinLivingEntity",
+    "accessor.AccessorPlayerListHud"
   ]
 }

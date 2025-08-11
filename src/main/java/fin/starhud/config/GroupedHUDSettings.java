@@ -6,6 +6,8 @@ import fin.starhud.helper.ScreenAlignmentX;
 import fin.starhud.helper.ScreenAlignmentY;
 import fin.starhud.hud.HUDComponent;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.minecraft.client.resource.language.I18n;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +16,20 @@ public class GroupedHUDSettings {
     @ConfigEntry.Gui.TransitiveObject
     public BaseHUDSettings base;
 
+    @ConfigEntry.Gui.Excluded
     public int gap = 0;
 
+    @ConfigEntry.Gui.Excluded
     public boolean alignVertical = false;
 
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-    public ChildAlignment childAlignment = ChildAlignment.THIS;
+    @ConfigEntry.Gui.Excluded
+    public ChildAlignment childAlignment = ChildAlignment.GROUP;
 
     @ConfigEntry.ColorPicker
     public int boxColor = 0xFFFFFF;
 
-    @ConfigEntry.Gui.Excluded
+    @Comment("DO NOT BY ANY MEANS CHANGE THIS DIRECTLY FROM THE CONFIG SCREEN. THIS IS FOR DISPLAY ONLY!")
     public List<String> hudIds = new ArrayList<>();
 
     @ConfigEntry.Gui.Excluded
@@ -59,7 +64,7 @@ public class GroupedHUDSettings {
     }
 
     public ChildAlignment getChildAlignment() {
-        if (this.childAlignment == null) this.childAlignment = ChildAlignment.THIS;
+        if (this.childAlignment == null) this.childAlignment = ChildAlignment.GROUP;
         return childAlignment;
     }
 
@@ -76,6 +81,7 @@ public class GroupedHUDSettings {
         this.base.copySettings(other.base);
         this.gap = other.gap;
         this.alignVertical = other.alignVertical;
+        this.childAlignment = other.childAlignment;
         this.hudIds = new ArrayList<>(other.hudIds);
         this.id = other.id;
     }
@@ -99,8 +105,8 @@ public class GroupedHUDSettings {
                 '}';
     }
 
-    public static enum ChildAlignment {
-        THIS,
+    public enum ChildAlignment {
+        GROUP,
         CHILD,
         START,
         CENTER,
@@ -108,12 +114,17 @@ public class GroupedHUDSettings {
 
         public ChildAlignment next() {
             return switch (this) {
-                case THIS -> CHILD;
+                case GROUP -> CHILD;
                 case CHILD -> START;
                 case START -> CENTER;
                 case CENTER -> END;
-                case END -> THIS;
+                case END -> GROUP;
             };
+        }
+
+        @Override
+        public String toString() {
+            return I18n.translate("starhud.option.childAlignment." + name().toLowerCase());
         }
     }
 }
