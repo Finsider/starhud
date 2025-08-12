@@ -102,7 +102,7 @@ public class  BiomeHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public boolean drawHUD(int x, int y, boolean drawBackground, float scale) {
 
         RenderUtils.drawSmallHUD(
                 cachedBiomeNameText,

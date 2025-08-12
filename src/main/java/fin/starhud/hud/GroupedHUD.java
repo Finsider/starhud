@@ -3,7 +3,6 @@ package fin.starhud.hud;
 import fin.starhud.Main;
 import fin.starhud.config.GroupedHUDSettings;
 import fin.starhud.helper.RenderUtils;
-import net.minecraft.client.gui.DrawContext;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -119,11 +118,11 @@ public class GroupedHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
-        return renderHUD(context, x, y, drawBackground, false, scale);
+    public boolean drawHUD(int x, int y, boolean drawBackground, float scale) {
+        return drawHUD(x, y, drawBackground, false, scale);
     }
 
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean parentDrewBackground, float scale) {
+    public boolean drawHUD(int x, int y, boolean drawBackground, boolean parentDrewBackground, float scale) {
         int w = getWidth();
         int h = getHeight();
         int size = renderedHUDs.size();
@@ -150,9 +149,9 @@ public class GroupedHUD extends AbstractHUD {
             hud.setScale(getScale());
 
             if (hud instanceof GroupedHUD group) {
-                group.renderHUD(context, hud.getX(), hud.getY(), childShouldDrawBackground, thisDrewBackground, scale);
+                group.drawHUD(hud.getX(), hud.getY(), childShouldDrawBackground, thisDrewBackground, scale);
             } else {
-                hud.renderHUD(context, hud.getX(), hud.getY(), childShouldDrawBackground, scale);
+                hud.drawHUD(hud.getX(), hud.getY(), childShouldDrawBackground, scale);
             }
         }
 

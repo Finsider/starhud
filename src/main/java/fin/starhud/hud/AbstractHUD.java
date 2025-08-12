@@ -37,11 +37,11 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     @Override
-    public boolean render(DrawContext context) {
+    public void appendDraw() {
         setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
         setScale(getSettings().getScale());
 
-        return renderHUD(context, getX(), getY(), shouldDrawBackground(), getScale());
+        drawHUD(getX(), getY(), shouldDrawBackground(), getScale());
     }
 
     @Override
@@ -63,7 +63,7 @@ public abstract class AbstractHUD implements HUDInterface {
     // this is where the hud is rendered. Where we put the rendering logic.
     // it is highly discouraged to put information collecting in this function.
     // for information collecting please refer to collectHUDInformation()
-    public abstract boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale);
+    public abstract boolean drawHUD(int x, int y, boolean drawBackground, float scale);
 
     public abstract String getName();
 

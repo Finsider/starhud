@@ -163,15 +163,15 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public boolean drawHUD(int x, int y, boolean drawBackground, float scale) {
         return switch (hitResultType) {
-            case BLOCK -> renderBlockInfoHUD(context, x, y, drawBackground, scale);
-            case ENTITY -> renderEntityInfoHUD(context, x, y, drawBackground, scale);
+            case BLOCK -> renderBlockInfoHUD(x, y, drawBackground, scale);
+            case ENTITY -> renderEntityInfoHUD(x, y, drawBackground, scale);
             default -> false;
         };
     }
 
-    public boolean renderBlockInfoHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public boolean renderBlockInfoHUD(int x, int y, boolean drawBackground, float scale) {
 
         int w = getWidth();
         int h = getHeight();
@@ -238,7 +238,7 @@ public class TargetedCrosshairHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean renderEntityInfoHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public boolean renderEntityInfoHUD(int x, int y, boolean drawBackground, float scale) {
 
         int w = getWidth();
         int h = getHeight();

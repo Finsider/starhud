@@ -81,11 +81,11 @@ public class InventoryHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public boolean drawHUD(int x, int y, boolean drawBackground, float scale) {
         if (drawVertical) {
-            return drawInventoryVertical(context, x, y, drawBackground, scale);
+            return drawInventoryVertical(x, y, drawBackground, scale);
         } else {
-            return drawInventoryHorizontal(context, x, y, drawBackground, scale);
+            return drawInventoryHorizontal(x, y, drawBackground, scale);
         }
     }
 
@@ -97,7 +97,7 @@ public class InventoryHUD extends AbstractHUD {
         preComputeVertical();
     }
 
-    private boolean drawInventoryVertical(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    private boolean drawInventoryVertical(int x, int y, boolean drawBackground, float scale) {
         PlayerInventory inventory = CLIENT.player.getInventory();
 
         int w = getWidth();
@@ -129,7 +129,7 @@ public class InventoryHUD extends AbstractHUD {
         return true;
     }
 
-    private boolean drawInventoryHorizontal(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    private boolean drawInventoryHorizontal(int x, int y, boolean drawBackground, float scale) {
         PlayerInventory inventory = CLIENT.player.getInventory();
 
         int w = getWidth();

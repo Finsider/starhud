@@ -4,7 +4,6 @@ import fin.starhud.config.hud.HandSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
@@ -93,15 +92,14 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
-        return renderHandHUD(context, x, y, drawBackground, scale);
+    public boolean drawHUD(int x, int y, boolean drawBackground, float scale) {
+        return drawHandHUD(x, y, drawBackground, scale);
     }
 
-    public boolean renderHandHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public boolean drawHandHUD(int x, int y, boolean drawBackground, float scale) {
         // either draw the durability or the amount of item in the inventory.
         if (showDurability && isItemDamagable) {
-            renderDurabilityHUD(
-                    context,
+            drawDurability(
                     ICON_TEXTURE,
                     x, y,
                     0.0F, 0.0F,
@@ -111,22 +109,22 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
                     scale
             );
         } else if (showCount) {
-            renderStackCountHUD(context, x, y, drawBackground, scale);
+            drawStackCountHUD(x, y, drawBackground, scale);
         }
 
         return true;
     }
 
-    private void renderStackCountHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    private void drawStackCountHUD(int x, int y, boolean drawBackground, float scale) {
 
         if (drawItem) {
-            renderStackCountItemHUD(context, x, y, drawBackground, scale);
+            drawStackCountItemHUD(x, y, drawBackground, scale);
         } else {
-            renderStackCountIconHUD(context, x, y, drawBackground, scale);
+            drawStackCountIconHUD(x, y, drawBackground, scale);
         }
     }
 
-    private void renderStackCountItemHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    private void drawStackCountItemHUD(int x, int y, boolean drawBackground, float scale) {
         RenderUtils.drawItemHUD(
                 amountStr,
                 x, y,
@@ -139,7 +137,7 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         );
     }
 
-    private void renderStackCountIconHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    private void drawStackCountIconHUD(int x, int y, boolean drawBackground, float scale) {
         RenderUtils.drawSmallHUD(
                 amountStr,
                 x, y,

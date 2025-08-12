@@ -9,7 +9,6 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -223,23 +222,23 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         return MathHelper.hsvToRgb(0.35F * stackStep / (float) maxStep, 0.45F, 0.95F);
     }
 
-    public void renderDurabilityHUD(DrawContext context, Identifier iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
+    public void drawDurability(Identifier iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
         if (drawItem) {
-            renderItemDurability(context, x , y, drawBackground, scale);
+            drawItemDurability(x , y, drawBackground, scale);
         } else {
-            renderDurability(context, iconTexture, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
+            drawIconDurability(iconTexture, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
         }
     }
 
-    public void renderItemDurability(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public void drawItemDurability(int x, int y, boolean drawBackground, float scale) {
         switch (displayMode) {
             case FRACTIONAL, VALUE_ONLY, PERCENTAGE -> RenderUtils.drawItemHUD(str, x, y, getWidth(), getHeight(), stack, durabilityColor, hudDisplayMode, drawBackground, scale);
-            case BAR -> renderItemDurabilityBar(context, x, y, drawBackground, scale);
-            case COMPACT -> renderItemDurabilityCompact(context, x, y, drawBackground, scale);
+            case BAR -> drawItemDurabilityBar(x, y, drawBackground, scale);
+            case COMPACT -> drawItemDurabilityCompact(x, y, drawBackground, scale);
         }
     }
 
-    public void renderItemDurabilityBar(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public void drawItemDurabilityBar(int x, int y, boolean drawBackground, float scale) {
         int w = getWidth();
         int h = getHeight();
 
@@ -279,7 +278,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         }
     }
 
-    public void renderItemDurabilityCompact(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public void drawItemDurabilityCompact(int x, int y, boolean drawBackground, float scale) {
         if (drawBackground)
             RenderUtils.fillRounded(x, y, x + getWidth(), y + getHeight(), 0x80000000, scale);
 
@@ -290,16 +289,16 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
             RenderUtils.drawStackOverlay(stack, x + 3, y + 3, scale);
     }
 
-    public void renderDurability(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
+    public void drawIconDurability(Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
         switch (displayMode) {
-            case FRACTIONAL -> renderDurabilityNumber(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
-            case BAR -> renderDurabilityBar(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
+            case FRACTIONAL -> drawDurabilityNumber(ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
+            case BAR -> drawDurabilityBar(ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
             case VALUE_ONLY, PERCENTAGE -> RenderUtils.drawSmallHUD(str, x, y, getWidth(), getHeight(), ICON, u, v, textureWidth, textureHeight, iconWidth, iconHeight, durabilityColor, iconColor, hudDisplayMode, drawBackground, scale);
-            case COMPACT -> renderDurabilityCompact(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
+            case COMPACT -> drawDurabilityCompact(ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, scale);
         }
     }
 
-    public void renderDurabilityBar(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
+    public void drawDurabilityBar(Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
         int w = getWidth();
         int h = getHeight();
 
@@ -339,7 +338,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
     }
 
     // example render: ¹²³⁴/₅₆₇₈
-    public void renderDurabilityNumber(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
+    public void drawDurabilityNumber(Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
         int w = getWidth();
         int h = getHeight();
 
@@ -376,7 +375,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         }
     }
 
-    public void renderDurabilityCompact(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
+    public void drawDurabilityCompact(Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, float scale) {
 
         if (drawBackground)
             RenderUtils.fillRounded(x, y, x + iconWidth, y + iconHeight, 0x80000000, scale);

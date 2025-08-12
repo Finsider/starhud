@@ -155,20 +155,24 @@ public class HUDComponent {
     private long lastCollect = -1;
 
     public void renderAll(DrawContext context) {
-
         long now = System.nanoTime();
         long intervalNanos = (long) (HUD_SETTINGS.dataCollectionInterval * 1_000_000_000L);
 
         if (now - lastCollect >= intervalNanos) {
             RenderUtils.clearAll();
-            collectAll();
-            lastCollect = now;
 
-            for (HUDInterface hud : renderedHUDs)
-                hud.render(context);
+            collectAll();
+            appendAll();
+
+            lastCollect = now;
         }
 
         RenderUtils.drawAll(context);
+    }
+
+    public void appendAll() {
+        for (HUDInterface hud : renderedHUDs)
+            hud.appendDraw();
     }
 
     public void collectAll() {

@@ -98,11 +98,11 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public boolean drawHUD(int x, int y, boolean drawBackground, float scale) {
 
         for (StatusEffectInstance statusEffectInstance : collection) {
 
-            if (drawStatusEffectHUD(context, statusEffectInstance, x, y, drawBackground, scale)) {
+            if (drawStatusEffectHUD(statusEffectInstance, x, y, drawBackground, scale)) {
                 if (drawVertical) {
                     y += sameTypeGap;
                 } else {
@@ -115,7 +115,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean drawStatusEffectHUD(DrawContext context, StatusEffectInstance statusEffectInstance, int x, int y, boolean drawBackground, float scale) {
+    public boolean drawStatusEffectHUD(StatusEffectInstance statusEffectInstance, int x, int y, boolean drawBackground, float scale) {
         if (!statusEffectInstance.shouldShowIcon())
             return false;
 

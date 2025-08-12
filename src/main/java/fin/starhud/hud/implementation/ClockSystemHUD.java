@@ -83,7 +83,7 @@ public class ClockSystemHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, float scale) {
+    public boolean drawHUD(int x, int y, boolean drawBackground, float scale) {
 
         int w = getWidth();
         int h = getHeight();
