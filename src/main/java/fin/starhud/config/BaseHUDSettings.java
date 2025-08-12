@@ -16,10 +16,7 @@ public class BaseHUDSettings implements ConfigData {
     @Comment("Toggle HUD")
     public boolean shouldRender;
 
-    @ConfigEntry.Gui.Excluded
     public int x;
-
-    @ConfigEntry.Gui.Excluded
     public int y;
 
     @Comment("HUD default Horizontal location")

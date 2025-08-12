@@ -161,7 +161,7 @@ public class RenderUtils {
     private static final Map<Float, List<DrawStackOverlay>> drawStackOverlays = new HashMap<>();
 
     public static void fill(int x1, int y1, int x2, int y2, int color, float scale) {
-        fills.computeIfAbsent(scale, (s) -> new ArrayList<>())
+        fills.computeIfAbsent(scale, s -> new ArrayList<>())
                 .add(new Fill(x1, y1, x2, y2, color));
     }
 
