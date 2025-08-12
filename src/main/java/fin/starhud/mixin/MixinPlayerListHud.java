@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(PlayerListHud.class)
+@Mixin(value = PlayerListHud.class, priority = 500)
 public class MixinPlayerListHud {
 
     @Unique
