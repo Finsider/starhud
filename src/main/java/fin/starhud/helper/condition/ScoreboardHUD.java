@@ -8,7 +8,7 @@ public class ScoreboardHUD {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
-    private static final Box boundingBox = new Box(0,0);
+    private static final Box boundingBox = new Box(0,0, 0, 0);
 
     public static boolean isShown(String ignored) {
         return CLIENT.world.getScoreboard().getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR) != null;

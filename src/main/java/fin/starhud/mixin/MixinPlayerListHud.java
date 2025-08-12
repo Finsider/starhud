@@ -32,7 +32,8 @@ public class MixinPlayerListHud {
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"
-            )
+            ),
+            require = 0
     )
     private void captureFillBounds(DrawContext instance, int x1, int y1, int x2, int y2, int color) {
         tempBox.setBoundingBox(x1, y1, x2 - x1, y2 - y1);
