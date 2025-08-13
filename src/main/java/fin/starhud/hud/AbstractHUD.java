@@ -34,10 +34,12 @@ public abstract class AbstractHUD implements HUDInterface {
     public void update() {
         baseX = getSettings().getCalculatedPosX();
         baseY = getSettings().getCalculatedPosY();
-        setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
-        setScale(getSettings().getScale());
 
-        clampPos();
+        if (!isInGroup()) {
+            setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
+            setScale(getSettings().getScale());
+            clampPos();
+        }
     }
 
     @Override
