@@ -20,7 +20,7 @@ public record StatusEffectAttribute(int maxDuration, int amplifier, boolean isAm
         return STATUS_EFFECT_ATTRIBUTE_MAP.computeIfAbsent(effect.getEffectType(), key ->
                 new StatusEffectAttribute(
                         effect.getDuration(),
-                        effect.getAmplifier(),
+                        effect.getAmplifier() & 0xFF, // #24 fix by @DYG-FINT, normalize the amplifier to unsigned 0 - 255
                         effect.isAmbient()
                 )
         );
@@ -29,7 +29,7 @@ public record StatusEffectAttribute(int maxDuration, int amplifier, boolean isAm
     public static void updateStatusEffectAttribute(StatusEffect effectRegistry, int maxDuration, int amplifier, boolean isAmbient) {
         StatusEffectAttribute newEffect = new StatusEffectAttribute(
                 maxDuration,
-                amplifier,
+                amplifier & 0xFF,
                 isAmbient
         );
 
@@ -42,7 +42,7 @@ public record StatusEffectAttribute(int maxDuration, int amplifier, boolean isAm
     }
 
     public static boolean shouldUpdate(StatusEffectInstance current, StatusEffectAttribute cached) {
-        return  current.getAmplifier() != cached.amplifier() || // different Amplifier: update
+        return  (current.getAmplifier() & 0xFF) != cached.amplifier() || // different Amplifier: update
                 current.isAmbient() != cached.isAmbient() || // different Ambient: update
                 current.getDuration() > cached.maxDuration(); // higher Duration: update
     }
