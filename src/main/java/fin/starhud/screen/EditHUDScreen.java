@@ -798,31 +798,12 @@ public class EditHUDScreen extends Screen {
                 return hud;
         }
 
-        for (AbstractHUD hud : groupedHUDs.values()) {
-            if (!hud.isInGroup())
-                if (isHUDClickable(hud, mouseX, mouseY))
-                    return hud;
-        }
-
-        for (AbstractHUD hud : individualHUDs.values()) {
-            if (isHUDClickable(hud, mouseX, mouseY)) {
+        for (AbstractHUD hud : HUDComponent.getInstance().getRenderedHUDs()) {
+            if (hud.isHovered((int) mouseX, (int) mouseY))
                 return hud;
-            }
         }
 
         return null;
-    }
-
-    private boolean isHUDClickable(AbstractHUD hud, double mouseX, double mouseY) {
-        if (!hud.shouldRender()) return false;
-
-        Box boundingBox = hud.getBoundingBox();
-        if (boundingBox.isEmpty()) return false;
-
-        return hud.isHovered(
-                (int) mouseX,
-                (int) mouseY
-        );
     }
 
     private boolean pendingChildClick;
