@@ -179,8 +179,8 @@ public class GroupedHUD extends AbstractHUD {
 
     public int getAlignmentOffset(AbstractHUD childHUD, int length) {
         return switch (groupSettings.childAlignment) {
-            case THIS -> groupSettings.alignVertical ? getSettings().getOriginX().getAlignmentPos(length) : getSettings().getOriginY().getAlignmentPos(length);
-            case CHILD -> groupSettings.alignVertical ? childHUD.getSettings().getOriginX().getAlignmentPos(length) : childHUD.getSettings().getOriginY().getAlignmentPos(length);
+            case THIS -> groupSettings.alignVertical ? getSettings().getAlignmentX().getAlignmentPos(length) : getSettings().getAlignmentY().getAlignmentPos(length);
+            case CHILD -> groupSettings.alignVertical ? childHUD.getSettings().getAlignmentX().getAlignmentPos(length) : childHUD.getSettings().getAlignmentY().getAlignmentPos(length);
             case START -> 0;
             case CENTER -> length / 2;
             case END -> length;

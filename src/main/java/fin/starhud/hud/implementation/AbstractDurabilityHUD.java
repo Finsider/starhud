@@ -13,7 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-import static fin.starhud.helper.HUDDisplayMode.*;
+import static fin.starhud.helper.HUDDisplayMode.ICON;
+import static fin.starhud.helper.HUDDisplayMode.INFO;
 
 public abstract class AbstractDurabilityHUD extends AbstractHUD {
 

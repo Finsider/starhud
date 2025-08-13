@@ -5,6 +5,26 @@
   "key.starhud.open_edithud": "Open HUD Edit Screen",
   "key.starhud.toggle_hud": "Toggle HUD In Game",
 
+  "starhud.help.key.move_1": "[Arrow Keys]",
+  "starhud.help.info.move_1": "Move HUD by 1",
+
+  "starhud.help.key.move_5": "[⇧ Shift + Arrows]",
+  "starhud.help.info.move_5": "Move HUD by 5",
+
+  "starhud.help.key.alignment_mac": "[⌘ Cmd + Arrows]",
+  "starhud.help.key.alignment_windows": "[Ctrl + Arrows]",
+  "starhud.help.info.alignment": "Change Alignment",
+
+  "starhud.help.key.direction": "[⌥ Alt + Arrows]",
+  "starhud.help.info.direction": "Change Growth Direction",
+
+  "starhud.help.key.revert_changes_mac": "[⌘ Cmd + R]",
+  "starhud.help.key.revert_changes_windows": "[Ctrl + R]",
+  "starhud.help.info.revert_changes": "Revert All Changes",
+
+  "starhud.help.key.group_ungroup": "[G]",
+  "starhud.help.info.group_ungroup": "Group / Ungroup"  ,
+
   "text.autoconfig.starhud.category.general": "General",
 
   "text.autoconfig.starhud.option.generalSettings.screenSettings" : "Screen Settings",

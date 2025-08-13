@@ -78,29 +78,20 @@ public class EditHUDScreen extends Screen {
 
     private static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
 
-    private static final String[] HELP_KEYS = {
-            "[Arrow Keys]",
-            "[⇧ Shift + Arrows]",
-            isMac ? "[⌘ Cmd + Arrows]" : "[Ctrl + Arrows]",
-            "[⌥ Alt + Arrows]",
-            isMac ? "[⌘ Cmd + R]" : "[Ctrl + R]",
-            "[Click]",
-            "[Drag]",
-            "[G]"
+    private record Help(Text key, Text info) {}
+
+    private static final Help[] HELPS = {
+            new Help(Text.translatable("starhud.help.key.move_1"), Text.translatable("starhud.help.info.move_1")),
+            new Help(Text.translatable("starhud.help.key.move_5"), Text.translatable("starhud.help.info.move_5")),
+            new Help(Text.translatable(isMac ? "starhud.help.key.alignment_mac" : "starhud.help.key.alignment_windows"), Text.translatable("starhud.help.info.alignment")),
+            new Help(Text.translatable("starhud.help.key.direction"), Text.translatable("starhud.help.info.direction")),
+            new Help(Text.translatable(isMac ? "starhud.help.key.revert_changes_mac" : "starhud.help.key.revert_changes_windows"), Text.translatable("starhud.help.info.revert_changes")),
+            new Help(Text.translatable("starhud.help.key.group_ungroup"), Text.translatable("starhud.help.info.group_ungroup"))
     };
 
-    private static final String[] HELP_INFOS = {
-            "Move HUD by 1",
-            "Move HUD by 5",
-            "Change Alignment",
-            "Change Growth Direction",
-            "Revert All Changes",
-            "Select HUD",
-            "Move HUD",
-            "Group / Ungroup"
-    };
-
-    private static final int HELP_HEIGHT = 5 + (HELP_KEYS.length * 9) + 5;
+    private static int HELP_KEY_MAX_WIDTH;
+    private static int HELP_INFO_MAX_WIDTH;
+    private static final int HELP_HEIGHT = 5 + (HELPS.length * 9) + 5;
 
     public EditHUDScreen(Text title, Screen parent) {
         super(title);
@@ -114,7 +105,7 @@ public class EditHUDScreen extends Screen {
         oldHUDSettings = new HashMap<>();
         for (AbstractHUD p : HUDMap.values()) {
             BaseHUDSettings settings = p.getSettings();
-            oldHUDSettings.put(p.getId(), new BaseHUDSettings(settings.shouldRender, settings.x, settings.y, settings.originX, settings.originY, settings.growthDirectionX, settings.growthDirectionY, settings.scale, settings.displayMode, settings.drawBackground));
+            oldHUDSettings.put(p.getId(), new BaseHUDSettings(settings.shouldRender, settings.x, settings.y, settings.alignmentX, settings.alignmentY, settings.growthDirectionX, settings.growthDirectionY, settings.scale, settings.displayMode, settings.drawBackground));
         }
 
         oldGroupedHUDSettings = new HashMap<>();
@@ -123,7 +114,7 @@ public class EditHUDScreen extends Screen {
             oldGroupedHUDSettings.put(
                     p.getId(),
                     new GroupedHUDSettings(
-                            new BaseHUDSettings(settings.shouldRender, settings.x, settings.y, settings.originX, settings.originY, settings.growthDirectionX, settings.growthDirectionY, settings.scale, settings.displayMode, settings.drawBackground),
+                            new BaseHUDSettings(settings.shouldRender, settings.x, settings.y, settings.alignmentX, settings.alignmentY, settings.growthDirectionX, settings.growthDirectionY, settings.scale, settings.displayMode, settings.drawBackground),
                             p.getId(),
                             p.groupSettings.gap,
                             p.groupSettings.alignVertical,
@@ -173,10 +164,10 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    selectedHUD.getSettings().originX = selectedHUD.getSettings().originX.next();
-                    selectedHUD.getSettings().growthDirectionX = selectedHUD.getSettings().growthDirectionX.recommendedScreenAlignment(selectedHUD.getSettings().originX);
+                    selectedHUD.getSettings().alignmentX = selectedHUD.getSettings().alignmentX.next();
+                    selectedHUD.getSettings().growthDirectionX = selectedHUD.getSettings().growthDirectionX.recommendedScreenAlignment(selectedHUD.getSettings().alignmentX);
                     selectedHUD.update();
-                    alignmentXButton.setMessage(Text.of("X Alignment: " + selectedHUD.getSettings().getOriginX()));
+                    alignmentXButton.setMessage(Text.of("X Alignment: " + selectedHUD.getSettings().getAlignmentX()));
                 }
         ).dimensions(alignmentXButtonX, alignmentXButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
@@ -187,10 +178,10 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    selectedHUD.getSettings().originY = selectedHUD.getSettings().originY.next();
-                    selectedHUD.getSettings().growthDirectionY = selectedHUD.getSettings().growthDirectionY.recommendedScreenAlignment(selectedHUD.getSettings().originY);
+                    selectedHUD.getSettings().alignmentY = selectedHUD.getSettings().alignmentY.next();
+                    selectedHUD.getSettings().growthDirectionY = selectedHUD.getSettings().growthDirectionY.recommendedScreenAlignment(selectedHUD.getSettings().alignmentY);
                     selectedHUD.update();
-                    alignmentYButton.setMessage(Text.of("Y Alignment: " + selectedHUD.getSettings().getOriginY()));
+                    alignmentYButton.setMessage(Text.of("Y Alignment: " + selectedHUD.getSettings().getAlignmentY()));
                 }
         ).dimensions(alignmentYButtonX, alignmentYButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
@@ -465,6 +456,20 @@ public class EditHUDScreen extends Screen {
         addDrawableChild(groupAlignmentButton);
 
         updateFieldsFromSelectedHUD();
+        getHelpMaxWidths();
+    }
+
+    private void getHelpMaxWidths() {
+        int maxKey = 0;
+        int maxInfo = 0;
+
+        for (Help h : HELPS) {
+            maxKey = Math.max(maxKey, CLIENT.textRenderer.getWidth(h.key));
+            maxInfo = Math.max(maxInfo, CLIENT.textRenderer.getWidth(h.info));
+        }
+
+        HELP_KEY_MAX_WIDTH = maxKey;
+        HELP_INFO_MAX_WIDTH = maxInfo;
     }
 
     private void updateFieldsFromSelectedHUD() {
@@ -517,9 +522,9 @@ public class EditHUDScreen extends Screen {
             yField.setText(String.valueOf(settings.y));
             scaleField.setText(String.valueOf(settings.getScale()));
 
-            alignmentXButton.setMessage(Text.of("X Alignment: " + settings.getOriginX()));
+            alignmentXButton.setMessage(Text.of("X Alignment: " + settings.getAlignmentX()));
             directionXButton.setMessage(Text.of("X Direction: " + settings.getGrowthDirectionX()));
-            alignmentYButton.setMessage(Text.of("Y Alignment: " + settings.getOriginY()));
+            alignmentYButton.setMessage(Text.of("Y Alignment: " + settings.getAlignmentY()));
             directionYButton.setMessage(Text.of("Y Direction: " + settings.getGrowthDirectionY()));
             hudDisplayButton.setMessage(Text.of("Display: " + settings.getDisplayMode()));
             drawBackgroundButton.setMessage(Text.of("Background: " + (settings.drawBackground ? "ON" : "OFF")));
@@ -715,20 +720,21 @@ public class EditHUDScreen extends Screen {
         int padding = 5;
 
         int lineHeight = CLIENT.textRenderer.fontHeight;
-        int maxKeyWidth = CLIENT.textRenderer.getWidth(HELP_KEYS[1]);
-        int maxInfoWidth = CLIENT.textRenderer.getWidth(HELP_INFOS[3]);
+
+        int maxKeyWidth = HELP_KEY_MAX_WIDTH;
+        int maxInfoWidth = HELP_INFO_MAX_WIDTH;
 
         int width = padding + maxKeyWidth + padding + 1 + padding + maxInfoWidth + padding;
-        int height = padding + (lineHeight * HELP_KEYS.length) + padding - 2;
+        int height = padding + (lineHeight * HELPS.length) + padding - 2;
 
         x -= width / 2;
         y -= padding;
 
         context.fill(x, y, x + width, y + height, 0x80000000);
 
-        for (int i = 0; i < HELP_KEYS.length; ++i) {
-            String key = HELP_KEYS[i];
-            String info = HELP_INFOS[i];
+        for (Help h : HELPS) {
+            Text key = h.key;
+            Text info = h.info;
 
             context.drawText(CLIENT.textRenderer, key, x + padding, y + padding, 0xFFFFFFFF, false);
             context.drawText(CLIENT.textRenderer, info, x + padding + maxKeyWidth + padding + 1 + padding, y + padding, 0xFFFFFFFF, false);
@@ -1168,8 +1174,8 @@ public class EditHUDScreen extends Screen {
         switch (keyCode) {
             case GLFW.GLFW_KEY_LEFT -> {
                 if (isCtrl) {
-                    settings.originX = settings.originX.prev();
-                    settings.growthDirectionX = settings.growthDirectionX.recommendedScreenAlignment(settings.originX);
+                    settings.alignmentX = settings.alignmentX.prev();
+                    settings.growthDirectionX = settings.growthDirectionX.recommendedScreenAlignment(settings.alignmentX);
                 }
                 else if (isAlt) settings.growthDirectionX = settings.growthDirectionX.prev();
                 else settings.x -= step;
@@ -1179,8 +1185,8 @@ public class EditHUDScreen extends Screen {
 
             case GLFW.GLFW_KEY_RIGHT -> {
                 if (isCtrl) {
-                    settings.originX = settings.originX.next();
-                    settings.growthDirectionX = settings.growthDirectionX.recommendedScreenAlignment(settings.originX);
+                    settings.alignmentX = settings.alignmentX.next();
+                    settings.growthDirectionX = settings.growthDirectionX.recommendedScreenAlignment(settings.alignmentX);
                 }
                 else if (isAlt) settings.growthDirectionX = settings.growthDirectionX.next();
                 else settings.x += step;
@@ -1190,8 +1196,8 @@ public class EditHUDScreen extends Screen {
 
             case GLFW.GLFW_KEY_UP -> {
                 if (isCtrl) {
-                    settings.originY = settings.originY.prev();
-                    settings.growthDirectionY = settings.growthDirectionY.recommendedScreenAlignment(settings.originY);
+                    settings.alignmentY = settings.alignmentY.prev();
+                    settings.growthDirectionY = settings.growthDirectionY.recommendedScreenAlignment(settings.alignmentY);
                 }
                 else if (isAlt) {
                     settings.growthDirectionY = settings.growthDirectionY.prev();
@@ -1203,8 +1209,8 @@ public class EditHUDScreen extends Screen {
 
             case GLFW.GLFW_KEY_DOWN -> {
                 if (isCtrl) {
-                    settings.originY = settings.originY.next();
-                    settings.growthDirectionY = settings.growthDirectionY.recommendedScreenAlignment(settings.originY);
+                    settings.alignmentY = settings.alignmentY.next();
+                    settings.growthDirectionY = settings.growthDirectionY.recommendedScreenAlignment(settings.alignmentY);
                 }
                 else if (isAlt) settings.growthDirectionY = settings.growthDirectionY.next();
                 else settings.y += step;
