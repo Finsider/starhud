@@ -673,6 +673,7 @@ public class EditHUDScreen extends Screen {
         }
 
         for (AbstractHUD hud : selectedHUDs) {
+            if (!hud.getSettings().shouldRender) continue;
             if (hud.isScaled()) {
                 context.getMatrices().pushMatrix();
                 hud.scaleHUD(context);
@@ -1056,7 +1057,7 @@ public class EditHUDScreen extends Screen {
 
         for (AbstractHUD hud : individualHUDs.values()) {
             if (hud.shouldRender() && !hud.getBoundingBox().isEmpty()) {
-                if (intersectsBox(x1, y1, x2, y2, hud)) {
+                if (hud.intersects(x1, y1, x2, y2)) {
                     boxSelectedHUDs.add(hud);
                 }
             }
@@ -1064,7 +1065,7 @@ public class EditHUDScreen extends Screen {
 
         for (AbstractHUD hud : groupedHUDs.values()) {
             if (!hud.isInGroup() && hud.shouldRender() && !hud.getBoundingBox().isEmpty()) {
-                if (intersectsBox(x1, y1, x2, y2, hud)) {
+                if (hud.intersects(x1, y1, x2, y2)) {
                     boxSelectedHUDs.add(hud);
                 }
             }
@@ -1241,27 +1242,6 @@ public class EditHUDScreen extends Screen {
         }
 
         return handled;
-    }
-
-    private boolean intersectsBox(int x1, int y1, int x2, int y2, AbstractHUD hud) {
-        Box box = hud.getBoundingBox();
-
-        float scale = hud.getSettings().getScale() == 0 ? 1.0f : (float) MinecraftClient.getInstance().getWindow().getScaleFactor() / hud.getSettings().getScale();
-
-        int scaledX1 = (int) (x1 * scale);
-        int scaledY1 = (int) (y1 * scale);
-        int scaledX2 = (int) (x2 * scale);
-        int scaledY2 = (int) (y2 * scale);
-
-        int hudLeft   = box.getX();
-        int hudTop    = box.getY();
-        int hudRight  = box.getX() + box.getWidth();
-        int hudBottom = box.getY() + box.getHeight();
-
-        return hudRight >= Math.min(scaledX1, scaledX2) &&
-                hudLeft  <= Math.max(scaledX1, scaledX2) &&
-                hudBottom >= Math.min(scaledY1, scaledY2) &&
-                hudTop    <= Math.max(scaledY1, scaledY2);
     }
 
 
