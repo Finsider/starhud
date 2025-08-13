@@ -44,9 +44,6 @@ public abstract class AbstractHUD implements HUDInterface {
 
     @Override
     public void appendDraw() {
-        setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
-        setScale(getSettings().getScale());
-
         drawHUD(getX(), getY(), shouldDrawBackground(), getScale());
     }
 
@@ -56,6 +53,9 @@ public abstract class AbstractHUD implements HUDInterface {
             return false;
 
         modifyXY();
+
+        setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
+        setScale(getSettings().getScale());
         return true;
     }
 
