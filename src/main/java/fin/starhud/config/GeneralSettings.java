@@ -52,5 +52,8 @@ public class GeneralSettings {
         public int textPadding = 5;
 
         public int iconInfoGap = 1;
+
+        @Comment("Either draw the background rounded or rectangle")
+        public boolean drawBackgroundRounded = true;
     }
 }

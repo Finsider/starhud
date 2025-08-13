@@ -100,29 +100,49 @@ public class RenderUtils {
     }
 
     public static void fillRoundedRightSide(int x1, int y1, int x2, int y2, int color, float scale) {
-        fill(x1, y1, x2 - 1, y2, color, scale);
-        fill(x2 - 1, y1 + 1, x2, y2 - 1, color, scale);
+        if (HUD_SETTINGS.drawBackgroundRounded) {
+            fill(x1, y1, x2 - 1, y2, color, scale);
+            fill(x2 - 1, y1 + 1, x2, y2 - 1, color, scale);
+        } else {
+            fill(x1, y1, x2, y2, color, scale);
+        }
     }
 
     public static void fillRoundedLeftSide(int x1, int y1, int x2, int y2, int color, float scale) {
-        fill(x1, y1 + 1, x1 + 1, y2 - 1, color, scale);
-        fill(x1 + 1, y1, x2, y2, color, scale);
+        if (HUD_SETTINGS.drawBackgroundRounded) {
+            fill(x1, y1 + 1, x1 + 1, y2 - 1, color, scale);
+            fill(x1 + 1, y1, x2, y2, color, scale);
+        } else {
+            fill(x1, y1, x2, y2, color, scale);
+        }
     }
 
     public static void fillRoundedUpperSide(int x1, int y1, int x2, int y2, int color, float scale) {
-        fill(x1 + 1, y1, x2 - 1, y1 + 1, color, scale);
-        fill(x1, y1 + 1, x2, y2, color, scale);
+        if (HUD_SETTINGS.drawBackgroundRounded) {
+            fill(x1 + 1, y1, x2 - 1, y1 + 1, color, scale);
+            fill(x1, y1 + 1, x2, y2, color, scale);
+        } else {
+            fill(x1, y1, x2, y2, color, scale);
+        }
     }
 
     public static void fillRoundedBottomSide(int x1, int y1, int x2, int y2, int color, float scale) {
-        fill(x1, y1, x2, y2 - 1, color, scale);
-        fill(x1 + 1, y2 - 1, x2 - 1, y2, color, scale);
+        if (HUD_SETTINGS.drawBackgroundRounded) {
+            fill(x1, y1, x2, y2 - 1, color, scale);
+            fill(x1 + 1, y2 - 1, x2 - 1, y2, color, scale);
+        } else {
+            fill(x1, y1, x2, y2, color ,scale);
+        }
     }
 
     public static void fillRounded(int x1, int y1, int x2, int y2, int color, float scale) {
-        fill(x1, y1 + 1, x1 + 1, y2 - 1, color, scale);
-        fill(x1 + 1, y1, x2 - 1, y2, color, scale);
-        fill(x2 - 1, y1 + 1, x2, y2 - 1, color, scale);
+        if (HUD_SETTINGS.drawBackgroundRounded) {
+            fill(x1, y1 + 1, x1 + 1, y2 - 1, color, scale);
+            fill(x1 + 1, y1, x2 - 1, y2, color, scale);
+            fill(x2 - 1, y1 + 1, x2, y2 - 1, color, scale);
+        } else {
+            fill(x1, y1, x2, y2, color ,scale);
+        }
     }
 
     public static void drawBorderedFill(int x1, int y1, int x2, int y2, int fillColor, int borderColor, float scale) {
