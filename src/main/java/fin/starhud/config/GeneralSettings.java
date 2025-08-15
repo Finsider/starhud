@@ -17,6 +17,7 @@ public class GeneralSettings {
     public static class EditHUDScreenSettings {
 
         public boolean drawBorder = true;
+        public boolean drawGrid = true;
 
         @ConfigEntry.ColorPicker(allowAlpha = true)
         public int selectedBoxColor = 0x8087ceeb;
@@ -24,15 +25,13 @@ public class GeneralSettings {
         @ConfigEntry.ColorPicker(allowAlpha = true)
         public int selectedGroupBoxColor = 0x80Fc7871;
 
-        public boolean drawGrid = true;
-
         @ConfigEntry.ColorPicker(allowAlpha = true)
         public int gridColor = 0x20A8E6E6;
 
-        public int gridEdgePadding = 5;
-
         @ConfigEntry.ColorPicker
         public int dragBoxColor = 0xa8d8ea;
+
+        public int gridEdgePadding = 5;
     }
 
     public static class InGameHUDSettings {
