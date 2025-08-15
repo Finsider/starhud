@@ -166,7 +166,7 @@
   "text.autoconfig.starhud.option.tpsSettings.color": "TPSカウンターの色",
   "text.autoconfig.starhud.option.tpsSettings.useDynamicColor": "動的カラーを使用",
 
-  "text.autoconfig.starhud.category.coord": "座標"
+  "text.autoconfig.starhud.category.coord": "座標",
 
   "text.autoconfig.starhud.option.coordSettings.X": "X座標",
   "text.autoconfig.starhud.option.coordSettings.X.base.shouldRender": "HUDを表示",
