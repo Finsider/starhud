@@ -7,6 +7,7 @@ import fin.starhud.helper.ScreenAlignmentY;
 import fin.starhud.hud.HUDComponent;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.minecraft.client.resource.language.I18n;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class GroupedHUDSettings {
 
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     @ConfigEntry.Gui.Excluded
-    public ChildAlignment childAlignment = ChildAlignment.THIS;
+    public ChildAlignment childAlignment = ChildAlignment.GROUP;
 
     @ConfigEntry.ColorPicker
     public int boxColor = 0xFFFFFF;
@@ -63,7 +64,7 @@ public class GroupedHUDSettings {
     }
 
     public ChildAlignment getChildAlignment() {
-        if (this.childAlignment == null) this.childAlignment = ChildAlignment.THIS;
+        if (this.childAlignment == null) this.childAlignment = ChildAlignment.GROUP;
         return childAlignment;
     }
 
@@ -105,7 +106,7 @@ public class GroupedHUDSettings {
     }
 
     public static enum ChildAlignment {
-        THIS,
+        GROUP,
         CHILD,
         START,
         CENTER,
@@ -113,12 +114,17 @@ public class GroupedHUDSettings {
 
         public ChildAlignment next() {
             return switch (this) {
-                case THIS -> CHILD;
+                case GROUP -> CHILD;
                 case CHILD -> START;
                 case START -> CENTER;
                 case CENTER -> END;
-                case END -> THIS;
+                case END -> GROUP;
             };
+        }
+
+        @Override
+        public String toString() {
+            return I18n.translate("starhud.option.childAlignment." + name().toLowerCase());
         }
     }
 }

@@ -393,7 +393,7 @@ public class EditHUDScreen extends Screen {
                     if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
                     hud.groupSettings.childAlignment = hud.groupSettings.getChildAlignment().next();
 
-                    button.setMessage(Text.of(hud.groupSettings.getChildAlignment().name()));
+                    button.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
                 }
         )
                 .dimensions(xChildAlignmentButton, yChildAlignmentButton, terminatorWidth, SQUARE_WIDGET_LENGTH)
@@ -578,7 +578,7 @@ public class EditHUDScreen extends Screen {
                         hud.groupSettings.alignVertical ? "Vertical" : "Horizontal"
                 ));
 
-                childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().name()));
+                childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
 
             }
 
@@ -1345,7 +1345,7 @@ public class EditHUDScreen extends Screen {
                         hud.groupSettings.alignVertical ? "Vertical" : "Horizontal"
                 ));
 
-                childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().name()));
+                childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
             }
         } else {
             alignmentXButton.visible = false;

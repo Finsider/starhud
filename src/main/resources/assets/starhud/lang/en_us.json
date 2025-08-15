@@ -23,7 +23,33 @@
   "starhud.help.info.revert_changes": "Revert All Changes",
 
   "starhud.help.key.group_ungroup": "[G]",
-  "starhud.help.info.group_ungroup": "Group / Ungroup"  ,
+  "starhud.help.info.group_ungroup": "Group / Ungroup",
+
+  "starhud.option.growthDirectionX.left": "Left",
+  "starhud.option.growthDirectionX.center": "Center",
+  "starhud.option.growthDirectionX.right": "Right",
+
+  "starhud.option.growthDirectionY.up": "Up",
+  "starhud.option.growthDirectionY.middle": "Down",
+  "starhud.option.growthDirectionY.down": "Middle",
+
+  "starhud.option.screenAlignmentX.left": "Left",
+  "starhud.option.screenAlignmentX.center": "Center",
+  "starhud.option.screenAlignmentX.right": "Right",
+
+  "starhud.option.screenAlignmentY.top": "Up",
+  "starhud.option.screenAlignmentY.middle": "Down",
+  "starhud.option.screenAlignmentY.bottom": "Middle",
+
+  "starhud.option.hudDisplayMode.icon": "Icon Only",
+  "starhud.option.hudDisplayMode.info": "Info Only",
+  "starhud.option.hudDisplayMode.both": "Both",
+
+  "starhud.option.childAlignment.group": "Group",
+  "starhud.option.childAlignment.child": "Child",
+  "starhud.option.childAlignment.start": "Start",
+  "starhud.option.childAlignment.center": "Center",
+  "starhud.option.childAlignment.end": "End",
 
   "text.autoconfig.starhud.category.general": "General",
 
