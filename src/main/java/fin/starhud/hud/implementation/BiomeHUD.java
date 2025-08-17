@@ -44,8 +44,6 @@ public class  BiomeHUD extends AbstractHUD {
         super(BIOME_SETTINGS.base);
     }
 
-    private int width;
-    private int height;
     private int color;
     private int dimensionIndex;
 
@@ -55,6 +53,8 @@ public class  BiomeHUD extends AbstractHUD {
     public boolean collectHUDInformation() {
         TextRenderer textRenderer = CLIENT.textRenderer;
         displayMode = getSettings().getDisplayMode();
+
+        if (CLIENT.player == null || CLIENT.world == null) return false;
 
         BlockPos blockPos = CLIENT.player.getBlockPos();
         RegistryEntry<Biome> currentBiome = CLIENT.world.getBiome(blockPos);
@@ -83,12 +83,11 @@ public class  BiomeHUD extends AbstractHUD {
         dimensionIndex = getDimensionIndex(CLIENT.world.getRegistryKey());
         color = getTextColorFromDimension(dimensionIndex) | 0xFF000000;
 
-        width = displayMode.calculateWidth(ICON_WIDTH, cachedTextWidth);
-        height = ICON_HEIGHT;
+        int width = displayMode.calculateWidth(ICON_WIDTH, cachedTextWidth);
 
-        setWidthHeightColor(width, height, color);
+        setWidthHeightColor(width, ICON_HEIGHT, color);
 
-        return true;
+        return cachedBiomeNameText != null;
     }
 
     @Override
@@ -104,7 +103,7 @@ public class  BiomeHUD extends AbstractHUD {
     @Override
     public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
 
-        RenderUtils.drawSmallHUD(
+        return RenderUtils.drawSmallHUD(
                 context,
                 cachedBiomeNameText,
                 x, y,
@@ -119,7 +118,6 @@ public class  BiomeHUD extends AbstractHUD {
                 drawBackground
         );
 
-        return true;
     }
 
     private static int getDimensionIndex(RegistryKey<World> registryKey) {

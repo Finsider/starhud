@@ -84,7 +84,7 @@ public enum Condition {
             ArmorBarHUD::getHeight
     ),
 
-    OVERLAY_MESSAGE_SHOWN(
+    HELD_ITEM_TOOLTIP_SHOWN(
             HeldItemTooltip::isShown,
             HeldItemTooltip::getWidth,
             HeldItemTooltip::getHeight

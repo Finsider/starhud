@@ -7,7 +7,7 @@ public class ExperienceBarHUD {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     public static boolean isShown(String ignored) {
-        return CLIENT.interactionManager.hasExperienceBar();
+        return CLIENT.interactionManager != null && CLIENT.interactionManager.hasExperienceBar();
     }
 
     public static int getWidth() {

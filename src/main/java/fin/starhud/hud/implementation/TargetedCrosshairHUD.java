@@ -72,11 +72,6 @@ public class TargetedCrosshairHUD extends AbstractHUD {
         return CLIENT.crosshairTarget != null && CLIENT.crosshairTarget.getType() != HitResult.Type.MISS;
     }
 
-    @Override
-    public boolean shouldRender() {
-        return super.shouldRender() && CLIENT.crosshairTarget.getType() != HitResult.Type.MISS;
-    }
-
     private int width;
     private int height;
     private HitResult.Type hitResultType;
@@ -84,8 +79,12 @@ public class TargetedCrosshairHUD extends AbstractHUD {
 
     @Override
     public boolean collectHUDInformation() {
+        if (CLIENT.crosshairTarget == null) return false;
+
         hitResultType = CLIENT.crosshairTarget.getType();
-        displayMode = getSettings().getDisplayMode();
+
+        if (hitResultType == null) return false;
+
         return switch (hitResultType) {
             case BLOCK -> collectDataBlock();
             case ENTITY -> collectDataEntity();
@@ -102,7 +101,14 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     private int modNameColor;
 
     public boolean collectDataBlock() {
-        BlockPos pos = ((BlockHitResult) CLIENT.crosshairTarget).getBlockPos();
+        displayMode = getSettings().getDisplayMode();
+
+        if (CLIENT.world == null) return false;
+
+        if (!(CLIENT.crosshairTarget instanceof BlockHitResult blockHitResult))
+            return false;
+
+        BlockPos pos = blockHitResult.getBlockPos();
 
         BlockState blockState = CLIENT.world.getBlockState(pos);
         Block block = blockState.getBlock();
@@ -128,7 +134,7 @@ public class TargetedCrosshairHUD extends AbstractHUD {
         height = ICON_HEIGHT;
 
         setWidthHeightColor(width, height, targetedNameColor);
-        return true;
+        return cachedBlockName != null && cachedBlockModName != null;
     }
 
     private Entity cachedTargetedEntity = null;
@@ -138,7 +144,12 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     private int cachedIndex = -1;
 
     public boolean collectDataEntity() {
-        Entity targetedEntity = ((EntityHitResult) CLIENT.crosshairTarget).getEntity();
+        displayMode = getSettings().getDisplayMode();
+
+        if (!(CLIENT.crosshairTarget instanceof EntityHitResult entityHitResult))
+            return false;
+
+        Entity targetedEntity = entityHitResult.getEntity();
 
         if (!targetedEntity.equals(cachedTargetedEntity)) {
             cachedTargetedEntity = targetedEntity;
@@ -159,11 +170,13 @@ public class TargetedCrosshairHUD extends AbstractHUD {
 
         setWidthHeightColor(width, height, targetedNameColor);
 
-        return true;
+        return cachedEntityName != null && cachedEntityModName != null;
     }
 
     @Override
     public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+        if (hitResultType == null)
+            return false;
         return switch (hitResultType) {
             case BLOCK -> renderBlockInfoHUD(context, x, y, drawBackground);
             case ENTITY -> renderEntityInfoHUD(context, x, y, drawBackground);
@@ -172,6 +185,9 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     }
 
     public boolean renderBlockInfoHUD(DrawContext context, int x, int y, boolean drawBackground) {
+
+        if (displayMode == null || cachedBlockName == null || cachedBlockModName == null || blockStack == null)
+            return false;
 
         int w = getWidth();
         int h = getHeight();
@@ -239,6 +255,9 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     }
 
     public boolean renderEntityInfoHUD(DrawContext context, int x, int y, boolean drawBackground) {
+
+        if (displayMode == null || cachedEntityName == null || cachedEntityModName == null)
+            return false;
 
         int w = getWidth();
         int h = getHeight();

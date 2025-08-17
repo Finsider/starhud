@@ -2,6 +2,7 @@ package fin.starhud.mixin;
 
 import fin.starhud.Main;
 import fin.starhud.helper.condition.HeldItemTooltip;
+import fin.starhud.helper.condition.ScoreboardHUD;
 import fin.starhud.hud.HUDComponent;
 import fin.starhud.hud.HUDId;
 import fin.starhud.hud.implementation.NegativeEffectHUD;
@@ -18,9 +19,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(InGameHud.class)
+@Mixin(value = InGameHud.class, priority = 500)
 public class MixinInGameHUD {
-
     @Unique
     private static final PositiveEffectHUD POSITIVE_EFFECT_HUD = (PositiveEffectHUD) HUDComponent.getInstance().getHUD(HUDId.POSITIVE_EFFECT);
 
@@ -37,7 +37,9 @@ public class MixinInGameHUD {
             method = "renderHeldItemTooltip",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithBackground(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIII)I")
+                    target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithBackground(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIII)I"
+            ),
+            require = 0
     )
     private int captureHeldItemTooltipBox(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int width, int color) {
         HeldItemTooltip.setBoundingBox(x, y, width, 2 + 9 + 2);

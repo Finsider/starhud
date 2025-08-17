@@ -7,7 +7,7 @@ public class ArmorBarHUD {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     public static boolean isShown(String ignored) {
-        return CLIENT.interactionManager.hasStatusBars() && CLIENT.player.getArmor() > 0;
+        return CLIENT.interactionManager != null && CLIENT.player != null && CLIENT.interactionManager.hasStatusBars() && CLIENT.player.getArmor() > 0;
     }
 
     public static int getWidth() {
