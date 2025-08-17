@@ -10,8 +10,10 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class SpeedSettings {
 
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(true, 0, -150, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.CENTER, GrowthDirectionY.UP);
+    public BaseHUDSettings base = new BaseHUDSettings(true, 70, -5, ScreenAlignmentX.LEFT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP);
 
     @ConfigEntry.ColorPicker
-    public int color = 0xffffff;
+    public int color = 0xb5d0e8;
+
+    public String additionalString = " BPS";
 }

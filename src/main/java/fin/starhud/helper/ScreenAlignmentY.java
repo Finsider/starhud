@@ -1,5 +1,7 @@
 package fin.starhud.helper;
 
+import net.minecraft.client.resource.language.I18n;
+
 public enum ScreenAlignmentY {
     TOP,
     MIDDLE,
@@ -28,5 +30,10 @@ public enum ScreenAlignmentY {
             case MIDDLE -> TOP;
             case BOTTOM -> MIDDLE;
         };
+    }
+
+    @Override
+    public String toString() {
+        return I18n.translate("starhud.option.screenAlignmentY." + name().toLowerCase());
     }
 }

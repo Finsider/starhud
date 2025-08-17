@@ -24,7 +24,10 @@ public class MixinLivingEntity {
 
     @Inject(method = "setStatusEffect", at = @At("HEAD"))
     private void onSetStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
-        if (!PositiveEffectHUD.isRendered() && !NegativeEffectHUD.isRendered())
+        final PositiveEffectHUD POSITIVE_EFFECT_HUD = (PositiveEffectHUD) HUDComponent.getInstance().getHUD(HUDId.POSITIVE_EFFECT);
+        final NegativeEffectHUD NEGATIVE_EFFECT_HUD = (NegativeEffectHUD) HUDComponent.getInstance().getHUD(HUDId.NEGATIVE_EFFECT);
+
+        if (!POSITIVE_EFFECT_HUD.shouldRender() && !NEGATIVE_EFFECT_HUD.shouldRender())
             return;
 
         StatusEffectAttribute statusEffectAttribute = StatusEffectAttribute.getStatusEffectAttribute(effect);

@@ -67,7 +67,7 @@ public class ConditionalSettings {
     public enum RenderMode {
         SHOW,
         HIDE,
-        RENDER_IF_ACTIVE;
+        RENDER_IF_ACTIVE
     }
 
     public enum PositionMode {
@@ -75,6 +75,6 @@ public class ConditionalSettings {
         ADD_WIDTH,
         SUBTRACT_WIDTH,
         ADD_HEIGHT,
-        SUBTRACT_HEIGHT;
+        SUBTRACT_HEIGHT
     }
 }

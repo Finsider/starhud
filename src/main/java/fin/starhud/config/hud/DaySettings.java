@@ -14,4 +14,6 @@ public class DaySettings {
 
     @ConfigEntry.ColorPicker
     public int color = 0xFFFFFF;
+
+    public String additionalString = "Day ";
 }

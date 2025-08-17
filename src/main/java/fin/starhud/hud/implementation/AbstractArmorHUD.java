@@ -3,8 +3,6 @@ package fin.starhud.hud.implementation;
 import fin.starhud.config.hud.ArmorSettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -32,6 +30,8 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
 
     @Override
     public ItemStack getStack() {
+        if (CLIENT.player == null) return null;
+
         return ((List<ItemStack>) CLIENT.player.getArmorItems()).get(armorIndex);
     }
 
@@ -42,7 +42,7 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
 
     @Override
     public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
-        renderDurabilityHUD(
+        return renderDurabilityHUD(
                 context,
                 TEXTURE,
                 x, y,
@@ -51,7 +51,5 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
                 ICON_WIDTH, ICON_HEIGHT,
                 drawBackground
         );
-
-        return true;
     }
 }

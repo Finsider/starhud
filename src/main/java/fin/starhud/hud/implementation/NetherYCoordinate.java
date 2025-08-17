@@ -4,7 +4,6 @@ import fin.starhud.Main;
 import fin.starhud.config.hud.CoordSettings;
 import fin.starhud.hud.HUDId;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class NetherYCoordinate extends AbstractCoordinateHUD {

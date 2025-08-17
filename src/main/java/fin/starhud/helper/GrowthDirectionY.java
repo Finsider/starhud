@@ -1,5 +1,7 @@
 package fin.starhud.helper;
 
+import net.minecraft.client.resource.language.I18n;
+
 public enum GrowthDirectionY {
     UP,
     MIDDLE,
@@ -35,5 +37,10 @@ public enum GrowthDirectionY {
             case MIDDLE -> MIDDLE;
             case BOTTOM -> UP;
         };
+    }
+
+    @Override
+    public String toString() {
+        return I18n.translate("starhud.option.growthDirectionY." + name().toLowerCase());
     }
 }

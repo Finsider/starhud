@@ -134,7 +134,6 @@ public class HUDComponent {
 
         List<GroupedHUDSettings> groupSettings = Main.settings.hudList.groupedHuds;
         for (GroupedHUDSettings setting : groupSettings) {
-            System.out.println(setting.id);
             if (id.equals(setting.id)) {
                 hud = new GroupedHUD(setting);
                 groupedHUDs.put(id, (GroupedHUD) hud);
@@ -153,6 +152,8 @@ public class HUDComponent {
 
     private long lastCollect = -1;
 
+    private final List<AbstractHUD> invalidHUDs = new ArrayList<>();
+
     public void renderAll(DrawContext context) {
 
         long now = System.nanoTime();
@@ -163,8 +164,17 @@ public class HUDComponent {
             lastCollect = now;
         }
 
-        for (HUDInterface hud : renderedHUDs)
-            hud.render(context);
+        for (AbstractHUD hud : renderedHUDs) {
+            if (!hud.render(context)) {
+                LOGGER.warn("{} is collected but still failed! Removing from rendered hud.", hud.getName());
+                invalidHUDs.add(hud);
+            }
+        }
+
+        if (!invalidHUDs.isEmpty()) {
+            renderedHUDs.removeAll(invalidHUDs);
+            invalidHUDs.clear();
+        }
     }
 
     public void collectAll() {

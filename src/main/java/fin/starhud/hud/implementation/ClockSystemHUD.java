@@ -46,8 +46,6 @@ public class ClockSystemHUD extends AbstractHUD {
         return HUDId.CLOCK_SYSTEM.toString();
     }
 
-    private int width;
-    private int height;
     private int color;
 
     private HUDDisplayMode displayMode;
@@ -74,12 +72,11 @@ public class ClockSystemHUD extends AbstractHUD {
         displayMode = getSettings().getDisplayMode();
         color = CLOCK_SYSTEM_SETTINGS.color | 0xFF000000;
 
-        width = displayMode.calculateWidth(ICON_WIDTH, cachedStrWidth);
-        height = ICON_HEIGHT;
+        int width = displayMode.calculateWidth(ICON_WIDTH, cachedStrWidth);
 
-        setWidthHeightColor(width, height, color);
+        setWidthHeightColor(width, ICON_HEIGHT, color);
 
-        return true;
+        return cachedSystemTimeString != null;
     }
 
     @Override
@@ -88,7 +85,7 @@ public class ClockSystemHUD extends AbstractHUD {
         int w = getWidth();
         int h = getHeight();
 
-        RenderUtils.drawSmallHUD(
+        return RenderUtils.drawSmallHUD(
                 context,
                 cachedSystemTimeString,
                 x, y,
@@ -101,8 +98,6 @@ public class ClockSystemHUD extends AbstractHUD {
                 displayMode,
                 drawBackground
         );
-
-        return true;
     }
 
     private static String buildSystemTime24String(long time) {
