@@ -1,5 +1,7 @@
 package fin.starhud.helper;
 
+import net.minecraft.client.resource.language.I18n;
+
 public enum ScreenAlignmentX {
     LEFT,
     CENTER,
@@ -29,5 +31,10 @@ public enum ScreenAlignmentX {
             case CENTER -> LEFT;
             case RIGHT -> CENTER;
         };
+    }
+
+    @Override
+    public String toString() {
+        return I18n.translate("starhud.option.screenAlignmentX." + name().toLowerCase());
     }
 }

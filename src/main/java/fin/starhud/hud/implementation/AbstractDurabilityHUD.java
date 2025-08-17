@@ -14,7 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-import static fin.starhud.helper.HUDDisplayMode.*;
+import static fin.starhud.helper.HUDDisplayMode.ICON;
+import static fin.starhud.helper.HUDDisplayMode.INFO;
 
 public abstract class AbstractDurabilityHUD extends AbstractHUD {
 
@@ -45,11 +46,8 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
     private int stackDamage = 0;
     private int stackMaxDamage = 0;
 
-    private int width = 0;
-    private int height = 0;
-
-    private String str;
-    private String str2;
+    private String str = null;
+    private String str2 = null;
 
     private int durabilityColor;
     private int iconColor;
@@ -57,10 +55,10 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
 
     private int remainingTextWidth;
 
-    private DurabilitySettings.DisplayMode displayMode;
+    private DurabilitySettings.DisplayMode displayMode = null;
     private boolean drawItem;
 
-    private HUDDisplayMode hudDisplayMode;
+    private HUDDisplayMode hudDisplayMode = null;
 
     public AbstractDurabilityHUD(BaseHUDSettings baseHUDSettings, DurabilitySettings durabilitySettings) {
         super(baseHUDSettings);
@@ -85,8 +83,8 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         drawItem = durabilitySettings.drawItem;
         iconColor = getIconColor();
 
-        width = processWidth();
-        height = drawItem ? ITEM_BACKGROUND_HEIGHT : ICON_BACKGROUND_HEIGHT;
+        int width = processWidth();
+        int height = drawItem ? ITEM_BACKGROUND_HEIGHT : ICON_BACKGROUND_HEIGHT;
 
         durabilityColor = getItemBarColor(stackMaxDamage - stackDamage, stackMaxDamage) | 0xFF000000;
 
@@ -223,23 +221,26 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         return MathHelper.hsvToRgb(0.35F * stackStep / (float) maxStep, 0.45F, 0.95F);
     }
 
-    public void renderDurabilityHUD(DrawContext context, Identifier iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public boolean renderDurabilityHUD(DrawContext context, Identifier iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
         if (drawItem) {
-            renderItemDurability(context, x , y, drawBackground);
+            return renderItemDurability(context, x , y, drawBackground);
         } else {
-            renderDurability(context, iconTexture, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
+            return renderDurability(context, iconTexture, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
         }
     }
 
-    public void renderItemDurability(DrawContext context, int x, int y, boolean drawBackground) {
-        switch (displayMode) {
+    public boolean renderItemDurability(DrawContext context, int x, int y, boolean drawBackground) {
+        if (displayMode == null) return false;
+        return switch (displayMode) {
             case FRACTIONAL, VALUE_ONLY, PERCENTAGE -> RenderUtils.drawItemHUD(context, str, x, y, getWidth(), getHeight(), stack, durabilityColor, hudDisplayMode, drawBackground);
             case BAR -> renderItemDurabilityBar(context, x, y, drawBackground);
             case COMPACT -> renderItemDurabilityCompact(context, x, y, drawBackground);
-        }
+        };
     }
 
-    public void renderItemDurabilityBar(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderItemDurabilityBar(DrawContext context, int x, int y, boolean drawBackground) {
+        if (stack == null) return false;
+
         int w = getWidth();
         int h = getHeight();
 
@@ -277,9 +278,13 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
                     RenderUtils.drawTextureHUD(context, BIG_DURABILITY_TEXTURE, x + ITEM_BACKGROUND_WIDTH + gap + padding, y + 4, 0.0F, 0.0F, step * 7, BIG_DURABILITY_TEXTURE_HEIGHT, BIG_DURABILITY_TEXTURE_WIDTH, BIG_DURABILITY_TEXTURE_HEIGHT, durabilityColor);
             }
         }
+
+        return true;
     }
 
-    public void renderItemDurabilityCompact(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderItemDurabilityCompact(DrawContext context, int x, int y, boolean drawBackground) {
+        if (stack == null || hudDisplayMode == null) return false;
+
         if (drawBackground)
             RenderUtils.fillRounded(context, x, y, x + getWidth(), y + getHeight(), 0x80000000);
 
@@ -288,18 +293,24 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
 
         if (hudDisplayMode != ICON)
             context.drawStackOverlay(CLIENT.textRenderer, stack, x + 3, y + 3);
+
+        return true;
     }
 
-    public void renderDurability(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
-        switch (displayMode) {
+    public boolean renderDurability(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+        if (displayMode == null) return false;
+        return switch (displayMode) {
             case FRACTIONAL -> renderDurabilityNumber(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
             case BAR -> renderDurabilityBar(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
             case VALUE_ONLY, PERCENTAGE -> RenderUtils.drawSmallHUD(context, str, x, y, getWidth(), getHeight(), ICON, u, v, textureWidth, textureHeight, iconWidth, iconHeight, durabilityColor, iconColor, hudDisplayMode, drawBackground);
             case COMPACT -> renderDurabilityCompact(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
-        }
+        };
     }
 
-    public void renderDurabilityBar(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public boolean renderDurabilityBar(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+        if (ICON == null || hudDisplayMode == null)
+            return false;
+
         int w = getWidth();
         int h = getHeight();
 
@@ -336,10 +347,13 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
                 if (step != 0) RenderUtils.drawTextureHUD(context, DURABILITY_TEXTURE, x + iconWidth + gap + padding, y + 3, 0.0F, 0.0F, 4 * step, DURABILITY_TEXTURE_HEIGHT, DURABILITY_TEXTURE_WIDTH, DURABILITY_TEXTURE_HEIGHT, this.durabilityColor);
             }
         }
+
+        return true;
     }
 
     // example render: ¹²³⁴/₅₆₇₈
-    public void renderDurabilityNumber(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public boolean renderDurabilityNumber(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+        if (ICON == null || str == null || str2 == null || hudDisplayMode == null) return false;
         int w = getWidth();
         int h = getHeight();
 
@@ -374,9 +388,13 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
                 RenderUtils.drawTextHUD(context, str2, x + iconWidth + gap + padding + remainingTextWidth, y + 3 - 1, durabilityColor, false);
             }
         }
+
+        return true;
     }
 
-    public void renderDurabilityCompact(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public boolean renderDurabilityCompact(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+
+        if (ICON == null || hudDisplayMode == null) return false;
 
         if (drawBackground)
             RenderUtils.fillRounded(context, x, y, x + iconWidth, y + iconHeight, 0x80000000);
@@ -393,5 +411,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
             context.fill(firstX, firstY, firstX + durabilityWidth, firstY + 1, 0x80000000);
             context.fill(firstX, firstY, firstX + step, firstY + 1, durabilityColor);
         }
+
+        return true;
     }
 }

@@ -10,7 +10,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 public class NegativeEffectHUD extends AbstractEffectHUD {
 
     private static final EffectSettings SETTINGS = Main.settings.effectSettings.negativeSettings;
-
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     public static boolean isRendered() {

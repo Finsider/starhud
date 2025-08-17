@@ -9,6 +9,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HUDList {
 
@@ -48,6 +49,24 @@ public class HUDList {
 
 
     public void onConfigSaved() {
+
+        // remove invalid id if user acts silly and do something silly and everything became silly
+        Set<String> validHudIds = Arrays.stream(HUDId.values())
+                .map(HUDId::toString)
+                .collect(Collectors.toSet());
+
+        individualHudIds.removeIf(id -> !validHudIds.contains(id));
+
+        for (Iterator<GroupedHUDSettings> it = groupedHuds.iterator(); it.hasNext();) {
+            GroupedHUDSettings group = it.next();
+
+            group.hudIds.removeIf(id -> !isValidHudOrGroupId(id, validHudIds));
+
+            if (group.hudIds.isEmpty()) {
+                it.remove();
+            }
+        }
+
         // count appearances of each HUD ID
         Map<String, Integer> appearanceMap = new HashMap<>();
 
@@ -94,5 +113,9 @@ public class HUDList {
                 individualHudIds.add(id.toString());
             }
         }
+    }
+
+    private boolean isValidHudOrGroupId(String id, Set<String> validHudIds) {
+        return validHudIds.contains(id) || id.matches("^group_\\d+$");
     }
 }

@@ -25,13 +25,11 @@ public class EventInit {
 
         // register hud element into before hotbar. I hope this was safe enough.
         HudLayerRegistrationCallback.EVENT.register(
-                (layeredDrawerWrapper -> {
-                    layeredDrawerWrapper.attachLayerBefore(
-                            IdentifiedLayer.HOTBAR_AND_BARS,
-                            Identifier.of("starhud"),
-                            EventInit::onHUDRender
-                    );
-                })
+                (layeredDrawerWrapper -> layeredDrawerWrapper.attachLayerBefore(
+                        IdentifiedLayer.HOTBAR_AND_BARS,
+                        Identifier.of("starhud"),
+                        EventInit::onHUDRender
+                ))
         );
     }
 

@@ -18,7 +18,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +36,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     private static final int ICON_WIDTH = 24;
     private static final int ICON_HEIGHT = 24;
 
-    private static final int INFO_WIDTH = 24;
+//    private static final int INFO_WIDTH = 24;
     private static final int INFO_HEIGHT = 7;
 
     private static final int STATUS_EFFECT_TEXTURE_HEIGHT = 32;
@@ -57,27 +56,22 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     public abstract boolean isEffectAllowedToRender(RegistryEntry<StatusEffect> registryEntry);
 
     public int size;
-    private int width;
-    private int height;
     private int sameTypeGap;
     private int iconInfoGap;
 
     private boolean drawVertical;
 
-    Collection<StatusEffectInstance> collection;
-
     @Override
     public boolean shouldRender() {
-        return super.shouldRender() && !CLIENT.player.getStatusEffects().isEmpty();
+        return super.shouldRender();
     }
 
     @Override
     public boolean collectHUDInformation() {
-
-        collection = CLIENT.player.getStatusEffects();
+        if (CLIENT.player == null) return false;
 
         size = 0;
-        for (StatusEffectInstance instance : collection) {
+        for (StatusEffectInstance instance : CLIENT.player.getStatusEffects()) {
             if (instance.shouldShowIcon() && isEffectAllowedToRender(instance.getEffectType()))
                 ++size;
         }
@@ -86,8 +80,8 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
 
         iconInfoGap = Math.min(HUD_SETTINGS.iconInfoGap, 1);
 
-        width = getDynamicWidth(size);
-        height = getDynamicHeight(size);
+        int width = getDynamicWidth(size);
+        int height = getDynamicHeight(size);
 
         drawVertical = effectSettings.drawVertical;
         sameTypeGap = getSameTypeGap();
@@ -99,8 +93,9 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
 
     @Override
     public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+        if (CLIENT.player == null) return false;
 
-        for (StatusEffectInstance statusEffectInstance : collection) {
+        for (StatusEffectInstance statusEffectInstance : CLIENT.player.getStatusEffects()) {
 
             if (drawStatusEffectHUD(context, statusEffectInstance, x, y, drawBackground)) {
                 if (drawVertical) {

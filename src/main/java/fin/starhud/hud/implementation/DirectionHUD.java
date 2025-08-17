@@ -46,8 +46,6 @@ public class DirectionHUD extends AbstractHUD {
 
     private String yawStr;
     private int iconIndex;
-    private int width;
-    private int height;
     private int color;
     private boolean includeOrdinal;
 
@@ -55,6 +53,9 @@ public class DirectionHUD extends AbstractHUD {
 
     @Override
     public boolean collectHUDInformation() {
+
+        if (CLIENT.cameraEntity == null) return false;
+
         float yaw = Math.round(MathHelper.wrapDegrees(CLIENT.cameraEntity.getYaw()) * 10.0F) / 10.0F;
         yawStr = Float.toString(yaw);
         int yawWidth = CLIENT.textRenderer.getWidth(yawStr) - 1;
@@ -62,6 +63,8 @@ public class DirectionHUD extends AbstractHUD {
         includeOrdinal = DIRECTION_SETTINGS.includeOrdinal;
         displayMode = getSettings().getDisplayMode();
 
+        int width;
+        int height;
         if (includeOrdinal) {
             iconIndex = getOrdinalDirectionIcon(yaw);
 
@@ -81,7 +84,7 @@ public class DirectionHUD extends AbstractHUD {
 
         setWidthHeightColor(width, height, color);
 
-        return true;
+        return yawStr != null;
     }
 
     @Override
@@ -91,7 +94,7 @@ public class DirectionHUD extends AbstractHUD {
         int h = getHeight();
 
         if (includeOrdinal) {
-            RenderUtils.drawSmallHUD(
+            return RenderUtils.drawSmallHUD(
                     context,
                     yawStr,
                     x, y,
@@ -106,7 +109,7 @@ public class DirectionHUD extends AbstractHUD {
             );
 
         } else {
-            RenderUtils.drawSmallHUD(
+            return RenderUtils.drawSmallHUD(
                     context,
                     yawStr,
                     x, y,
@@ -120,7 +123,6 @@ public class DirectionHUD extends AbstractHUD {
                     drawBackground
             );
         }
-        return true;
     }
 
     private static int getOrdinalDirectionIcon(float yaw) {

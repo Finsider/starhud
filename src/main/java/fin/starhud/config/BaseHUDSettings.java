@@ -2,12 +2,10 @@ package fin.starhud.config;
 
 import fin.starhud.helper.*;
 import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,31 +14,41 @@ public class BaseHUDSettings implements ConfigData {
     @Comment("Toggle HUD")
     public boolean shouldRender;
 
+    @ConfigEntry.Gui.Excluded
     public int x;
+
+    @ConfigEntry.Gui.Excluded
     public int y;
 
     @Comment("HUD default Horizontal location")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    @ConfigEntry.Gui.Excluded
     public ScreenAlignmentX originX;
 
     @Comment("HUD default Vertical location")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    @ConfigEntry.Gui.Excluded
     public ScreenAlignmentY originY;
 
     @Comment("Which way should the HUD goes when the length increases horizontally? (Recommended to go the opposite way from Alignment)")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    @ConfigEntry.Gui.Excluded
     public GrowthDirectionX growthDirectionX;
 
     @Comment("Which way should the HUD goes when the length increases vertically? (Recommended to go the opposite way from Alignment)")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    @ConfigEntry.Gui.Excluded
     public GrowthDirectionY growthDirectionY;
 
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    @ConfigEntry.Gui.Excluded
     public HUDDisplayMode displayMode = HUDDisplayMode.BOTH;
 
+    @ConfigEntry.Gui.Excluded
     public boolean drawBackground = true;
 
     @Comment("Set to 0 or below for default GUI Scale")
+    @ConfigEntry.Gui.Excluded
     public float scale = 0;
 
     @Comment("Modify HUD Based on Conditions.")
@@ -93,10 +101,7 @@ public class BaseHUDSettings implements ConfigData {
         }
 
         // if every RENDER_IF_ACTIVE' condition is not met, we don't render.
-        if (hasAnyRenderIfActive)
-            return false;
-
-        return true;
+        return !hasAnyRenderIfActive;
     }
 
     public int getX() {
@@ -191,7 +196,8 @@ public class BaseHUDSettings implements ConfigData {
 
 
     public boolean isEqual(BaseHUDSettings other) {
-        return (this.x == other.x)
+        return (this.shouldRender == other.shouldRender)
+                && (this.x == other.x)
                 && (this.y == other.y)
                 && (this.originX == other.originX)
                 && (this.originY == other.originY)
@@ -214,6 +220,7 @@ public class BaseHUDSettings implements ConfigData {
     }
 
     public void copySettings(BaseHUDSettings src) {
+        this.shouldRender = src.shouldRender;
         this.x = src.x;
         this.y = src.y;
         this.originX = src.originX;
