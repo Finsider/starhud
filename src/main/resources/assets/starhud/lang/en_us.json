@@ -78,16 +78,16 @@
   "starhud.option.growthDirectionX.right": "Right",
 
   "starhud.option.growthDirectionY.up": "Up",
-  "starhud.option.growthDirectionY.middle": "Down",
-  "starhud.option.growthDirectionY.down": "Middle",
+  "starhud.option.growthDirectionY.middle": "Middle",
+  "starhud.option.growthDirectionY.down": "Down",
 
   "starhud.option.screenAlignmentX.left": "Left",
   "starhud.option.screenAlignmentX.center": "Center",
   "starhud.option.screenAlignmentX.right": "Right",
 
-  "starhud.option.screenAlignmentY.top": "Up",
+  "starhud.option.screenAlignmentY.top": "Top",
   "starhud.option.screenAlignmentY.middle": "Down",
-  "starhud.option.screenAlignmentY.bottom": "Middle",
+  "starhud.option.screenAlignmentY.bottom": "Bottom",
 
   "starhud.option.hudDisplayMode.icon": "Icon Only",
   "starhud.option.hudDisplayMode.info": "Info Only",
@@ -123,7 +123,7 @@
   "text.autoconfig.starhud.option.generalSettings.hudSettings.drawBackgroundRounded" : "Draw Background Rounded",
 
   "text.autoconfig.starhud.category.hudList" : "Group",
-  "text.autoconfig.starhud.option.hudList.groupedHuds" : "List of Groupped HUDs",
+  "text.autoconfig.starhud.option.hudList.groupedHuds" : "List of Grouped HUDs",
   "text.autoconfig.starhud.option.GroupedHUDSettings" : "Settings",
   "text.autoconfig.starhud.option.GroupedHUDSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.GroupedHUDSettings.base.conditions": "Conditions",
@@ -134,7 +134,7 @@
   "text.autoconfig.starhud.option.ConditionalSettings.condition" : "Condition Type",
   "text.autoconfig.starhud.option.ConditionalSettings.positionMode" : "Position Mode",
   "text.autoconfig.starhud.option.ConditionalSettings.renderMode" : "Render Mode",
-  "text.autoconfig.starhud.option.ConditionalSettings.additionalString" : "Additional String",
+  "text.autoconfig.starhud.option.ConditionalSettings.additionalString" : "Extra Label",
   "text.autoconfig.starhud.option.ConditionalSettings.xOffset" : "X Offset",
   "text.autoconfig.starhud.option.ConditionalSettings.yOffset" : "Y Offset",
 
@@ -172,14 +172,14 @@
   "text.autoconfig.starhud.option.fpsSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.fpsSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.fpsSettings.color": "FPS Counter Color",
-  "text.autoconfig.starhud.option.fpsSettings.additionalString": "Additional String",
+  "text.autoconfig.starhud.option.fpsSettings.additionalString": "Extra Label",
 
   "text.autoconfig.starhud.category.tps": "TPS",
   "text.autoconfig.starhud.option.tpsSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.tpsSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.tpsSettings.color": "TPS Counter Color",
   "text.autoconfig.starhud.option.tpsSettings.useDynamicColor": "Use Dynamic Color",
-  "text.autoconfig.starhud.option.tpsSettings.additionalString": "Additional String",
+  "text.autoconfig.starhud.option.tpsSettings.additionalString": "Extra Label",
 
   "text.autoconfig.starhud.category.coord": "Coordinates",
 
@@ -233,7 +233,7 @@
   "text.autoconfig.starhud.option.pingSettings.color": "Color",
   "text.autoconfig.starhud.option.pingSettings.useDynamicColor": "Use Dynamic Color",
   "text.autoconfig.starhud.option.pingSettings.updateInterval": "Update Interval (seconds)",
-  "text.autoconfig.starhud.option.pingSettings.additionalString": "Additional String",
+  "text.autoconfig.starhud.option.pingSettings.additionalString": "Extra Label",
 
   "text.autoconfig.starhud.category.clock": "Clock",
   "text.autoconfig.starhud.option.clockSettings.systemSetting": "System Clock Settings",
@@ -257,7 +257,7 @@
   "text.autoconfig.starhud.option.daySettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.daySettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.daySettings.color": "Day Counter Color",
-  "text.autoconfig.starhud.option.daySettings.additionalString": "Additional String",
+  "text.autoconfig.starhud.option.daySettings.additionalString": "Extra Label",
 
   "text.autoconfig.starhud.category.biome": "Biome",
   "text.autoconfig.starhud.option.biomeSettings.base.shouldRender": "Show HUD",
@@ -329,5 +329,5 @@
   "text.autoconfig.starhud.option.speedSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.speedSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.speedSettings.color": "Color",
-  "text.autoconfig.starhud.option.speedSettings.additionalString": "Additional String"
+  "text.autoconfig.starhud.option.speedSettings.additionalString": "Extra Label"
 }
