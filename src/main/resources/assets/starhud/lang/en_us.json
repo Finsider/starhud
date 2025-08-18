@@ -86,7 +86,7 @@
   "starhud.option.screenAlignmentX.right": "Right",
 
   "starhud.option.screenAlignmentY.top": "Top",
-  "starhud.option.screenAlignmentY.middle": "Down",
+  "starhud.option.screenAlignmentY.middle": "Middle",
   "starhud.option.screenAlignmentY.bottom": "Bottom",
 
   "starhud.option.hudDisplayMode.icon": "Icon Only",
