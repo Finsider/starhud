@@ -7,7 +7,6 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -46,8 +45,6 @@ public class DirectionHUD extends AbstractHUD {
 
     private String yawStr;
     private int iconIndex;
-    private int width;
-    private int height;
     private int color;
     private boolean includeOrdinal;
 
@@ -62,6 +59,8 @@ public class DirectionHUD extends AbstractHUD {
         includeOrdinal = DIRECTION_SETTINGS.includeOrdinal;
         displayMode = getSettings().getDisplayMode();
 
+        int width;
+        int height;
         if (includeOrdinal) {
             iconIndex = getOrdinalDirectionIcon(yaw);
 
@@ -81,7 +80,7 @@ public class DirectionHUD extends AbstractHUD {
 
         setWidthHeightColor(width, height, color);
 
-        return true;
+        return yawStr != null;
     }
 
     @Override
@@ -91,7 +90,7 @@ public class DirectionHUD extends AbstractHUD {
         int h = getHeight();
 
         if (includeOrdinal) {
-            RenderUtils.drawSmallHUD(
+            return RenderUtils.drawSmallHUD(
                     yawStr,
                     x, y,
                     w, h,
@@ -106,7 +105,7 @@ public class DirectionHUD extends AbstractHUD {
             );
 
         } else {
-            RenderUtils.drawSmallHUD(
+            return RenderUtils.drawSmallHUD(
                     yawStr,
                     x, y,
                     w, h,
@@ -120,7 +119,6 @@ public class DirectionHUD extends AbstractHUD {
                     scale
             );
         }
-        return true;
     }
 
     private static int getOrdinalDirectionIcon(float yaw) {

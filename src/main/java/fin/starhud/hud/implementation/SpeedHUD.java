@@ -7,7 +7,6 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
@@ -28,11 +27,14 @@ public class SpeedHUD extends AbstractHUD {
     }
 
     private String str;
-    private int width, height, color;
+    private int color;
     private HUDDisplayMode displayMode;
 
     @Override
     public boolean collectHUDInformation() {
+
+        if (CLIENT.player == null)
+            return false;
 
         Vec3d vel = CLIENT.player.getVelocity();
 
@@ -43,13 +45,12 @@ public class SpeedHUD extends AbstractHUD {
         int strWidth = CLIENT.textRenderer.getWidth(str) - 1;
 
         displayMode = getSettings().getDisplayMode();
-        width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
-        height = ICON_HEIGHT;
+        int width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
         color = SETTINGS.color | 0xff000000;
 
-        setWidthHeightColor(width, height, color);
+        setWidthHeightColor(width, ICON_HEIGHT, color);
 
-        return true;
+        return str != null;
     }
 
     @Override
@@ -58,7 +59,7 @@ public class SpeedHUD extends AbstractHUD {
         int w = getWidth();
         int h = getHeight();
 
-        RenderUtils.drawSmallHUD(
+        return RenderUtils.drawSmallHUD(
                 str,
                 x, y,
                 w, h,
@@ -71,8 +72,6 @@ public class SpeedHUD extends AbstractHUD {
                 drawBackground,
                 scale
         );
-
-        return true;
     }
 
     @Override

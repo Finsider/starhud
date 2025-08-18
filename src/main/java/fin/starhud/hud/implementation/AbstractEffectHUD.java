@@ -8,7 +8,6 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.helper.StatusEffectAttribute;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.texture.MissingSprite;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -57,27 +56,24 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     public abstract boolean isEffectAllowedToRender(RegistryEntry<StatusEffect> registryEntry);
 
     public int size;
-    private int width;
-    private int height;
     private int sameTypeGap;
     private int iconInfoGap;
 
     private boolean drawVertical;
 
-    Collection<StatusEffectInstance> collection;
-
     @Override
     public boolean shouldRender() {
-        return super.shouldRender() && !CLIENT.player.getStatusEffects().isEmpty();
+        return super.shouldRender() && CLIENT.player != null && !CLIENT.player.getStatusEffects().isEmpty();
     }
 
     @Override
     public boolean collectHUDInformation() {
 
-        collection = CLIENT.player.getStatusEffects();
+        if (CLIENT.player == null)
+            return false;
 
         size = 0;
-        for (StatusEffectInstance instance : collection) {
+        for (StatusEffectInstance instance : CLIENT.player.getStatusEffects()) {
             if (instance.shouldShowIcon() && isEffectAllowedToRender(instance.getEffectType()))
                 ++size;
         }
@@ -86,8 +82,8 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
 
         iconInfoGap = Math.min(HUD_SETTINGS.iconInfoGap, 1);
 
-        width = getDynamicWidth(size);
-        height = getDynamicHeight(size);
+        int width = getDynamicWidth(size);
+        int height = getDynamicHeight(size);
 
         drawVertical = effectSettings.drawVertical;
         sameTypeGap = getSameTypeGap();
@@ -100,7 +96,10 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     @Override
     public boolean drawHUD(int x, int y, boolean drawBackground, float scale) {
 
-        for (StatusEffectInstance statusEffectInstance : collection) {
+        if (CLIENT.player == null)
+            return false;
+
+        for (StatusEffectInstance statusEffectInstance : CLIENT.player.getStatusEffects()) {
 
             if (drawStatusEffectHUD(statusEffectInstance, x, y, drawBackground, scale)) {
                 if (drawVertical) {

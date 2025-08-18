@@ -43,8 +43,8 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     @Override
-    public void appendDraw() {
-        drawHUD(getX(), getY(), shouldDrawBackground(), getScale());
+    public boolean appendDraw() {
+        return drawHUD(getX(), getY(), shouldDrawBackground(), getScale());
     }
 
     @Override

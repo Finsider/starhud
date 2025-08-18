@@ -20,12 +20,12 @@ public class BaseHUDSettings implements ConfigData {
     @Comment("HUD default Horizontal location")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     @ConfigEntry.Gui.Excluded
-    public ScreenAlignmentX alignmentX;
+    public ScreenAlignmentX originX;
 
     @Comment("HUD default Vertical location")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     @ConfigEntry.Gui.Excluded
-    public ScreenAlignmentY alignmentY;
+    public ScreenAlignmentY originY;
 
     @Comment("Which way should the HUD goes when the length increases horizontally? (Recommended to go the opposite way from Alignment)")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
@@ -51,29 +51,29 @@ public class BaseHUDSettings implements ConfigData {
     @Comment("Modify HUD Based on Conditions.")
     public List<ConditionalSettings> conditions = new ArrayList<>();
 
-    public BaseHUDSettings(boolean shouldRender, int x, int y, ScreenAlignmentX alignmentX, ScreenAlignmentY alignmentY, GrowthDirectionX growthDirectionX, GrowthDirectionY growthDirectionY) {
+    public BaseHUDSettings(boolean shouldRender, int x, int y, ScreenAlignmentX originX, ScreenAlignmentY originY, GrowthDirectionX growthDirectionX, GrowthDirectionY growthDirectionY) {
         this.shouldRender = shouldRender;
         this.x = x;
         this.y = y;
-        this.alignmentX = alignmentX;
-        this.alignmentY = alignmentY;
+        this.originX = originX;
+        this.originY = originY;
         this.growthDirectionX = growthDirectionX;
         this.growthDirectionY = growthDirectionY;
     }
 
-    public BaseHUDSettings(boolean shouldRender, int x, int y, ScreenAlignmentX alignmentX, ScreenAlignmentY alignmentY, GrowthDirectionX growthDirectionX, GrowthDirectionY growthDirectionY, float scale, HUDDisplayMode displayMode, boolean drawBackground) {
-        this(shouldRender, x , y, alignmentX, alignmentY, growthDirectionX, growthDirectionY);
+    public BaseHUDSettings(boolean shouldRender, int x, int y, ScreenAlignmentX originX, ScreenAlignmentY originY, GrowthDirectionX growthDirectionX, GrowthDirectionY growthDirectionY, float scale, HUDDisplayMode displayMode, boolean drawBackground) {
+        this(shouldRender, x , y, originX, originY, growthDirectionX, growthDirectionY);
         this.scale = scale;
         this.displayMode = displayMode;
         this.drawBackground = drawBackground;
     }
 
-    public BaseHUDSettings(boolean shouldRender, int x, int y, ScreenAlignmentX alignmentX, ScreenAlignmentY alignmentY, GrowthDirectionX growthDirectionX, GrowthDirectionY growthDirectionY, boolean drawBackground) {
+    public BaseHUDSettings(boolean shouldRender, int x, int y, ScreenAlignmentX originX, ScreenAlignmentY originY, GrowthDirectionX growthDirectionX, GrowthDirectionY growthDirectionY, boolean drawBackground) {
         this.shouldRender = shouldRender;
         this.x = x;
         this.y = y;
-        this.alignmentX = alignmentX;
-        this.alignmentY = alignmentY;
+        this.originX = originX;
+        this.originY = originY;
         this.growthDirectionX = growthDirectionX;
         this.growthDirectionY = growthDirectionY;
         this.drawBackground = drawBackground;
@@ -138,30 +138,30 @@ public class BaseHUDSettings implements ConfigData {
         return growthDirectionY;
     }
 
-    public ScreenAlignmentX getAlignmentX() {
-        if (alignmentX == null) {
+    public ScreenAlignmentX getOriginX() {
+        if (originX == null) {
             if (getX() > 0) {
-                alignmentX = ScreenAlignmentX.LEFT;
+                originX = ScreenAlignmentX.LEFT;
             } else if (getX() < 0) {
-                alignmentX = ScreenAlignmentX.RIGHT;
+                originX = ScreenAlignmentX.RIGHT;
             } else {
-                alignmentX = ScreenAlignmentX.CENTER;
+                originX = ScreenAlignmentX.CENTER;
             }
         }
-        return alignmentX;
+        return originX;
     }
 
-    public ScreenAlignmentY getAlignmentY() {
-        if (alignmentY == null) {
+    public ScreenAlignmentY getOriginY() {
+        if (originY == null) {
             if (getY() > 0) {
-                alignmentY = ScreenAlignmentY.TOP;
+                originY = ScreenAlignmentY.TOP;
             } else if (getY() < 0) {
-                alignmentY = ScreenAlignmentY.BOTTOM;
+                originY = ScreenAlignmentY.BOTTOM;
             } else {
-                alignmentY = ScreenAlignmentY.MIDDLE;
+                originY = ScreenAlignmentY.MIDDLE;
             }
         }
-        return alignmentY;
+        return originY;
     }
 
     public HUDDisplayMode getDisplayMode() {
@@ -185,8 +185,8 @@ public class BaseHUDSettings implements ConfigData {
                 "shouldRender=" + shouldRender +
                 ", x=" + x +
                 ", y=" + y +
-                ", originX=" + alignmentX +
-                ", originY=" + alignmentY +
+                ", originX=" + originX +
+                ", originY=" + originY +
                 ", growthDirectionX=" + growthDirectionX +
                 ", growthDirectionY=" + growthDirectionY +
                 ", scale=" + scale +
@@ -199,8 +199,8 @@ public class BaseHUDSettings implements ConfigData {
         return (this.shouldRender == other.shouldRender)
                 && (this.x == other.x)
                 && (this.y == other.y)
-                && (this.alignmentX == other.alignmentX)
-                && (this.alignmentY == other.alignmentY)
+                && (this.originX == other.originX)
+                && (this.originY == other.originY)
                 && (this.growthDirectionX == other.growthDirectionX)
                 && (this.growthDirectionY == other.growthDirectionY)
                 && (this.scale == other.scale)
@@ -211,8 +211,8 @@ public class BaseHUDSettings implements ConfigData {
     public void copyFrom(BaseHUDSettings other) {
         this.x = other.x;
         this.y = other.y;
-        this.alignmentX = other.alignmentX;
-        this.alignmentY = other.alignmentY;
+        this.originX = other.originX;
+        this.originY = other.originY;
         this.growthDirectionX = other.growthDirectionX;
         this.growthDirectionY = other.growthDirectionY;
         this.scale = other.scale;
@@ -223,8 +223,8 @@ public class BaseHUDSettings implements ConfigData {
         this.shouldRender = src.shouldRender;
         this.x = src.x;
         this.y = src.y;
-        this.alignmentX = src.alignmentX;
-        this.alignmentY = src.alignmentY;
+        this.originX = src.originX;
+        this.originY = src.originY;
         this.growthDirectionX = src.growthDirectionX;
         this.growthDirectionY = src.growthDirectionY;
         this.scale = src.scale;
@@ -251,7 +251,7 @@ public class BaseHUDSettings implements ConfigData {
         Window window = MinecraftClient.getInstance().getWindow();
         int scaledWidth = (window == null ? 0 : window.getScaledWidth());
 
-        return this.getX() + (int) (this.getAlignmentX().getAlignmentPos(scaledWidth) * getScaledFactor());
+        return this.getX() + (int) (this.getOriginX().getAlignmentPos(scaledWidth) * getScaledFactor());
     }
 
     // this also shifts your HUD based on your y point, and alignment on Y axis, and place them accordingly in your screen.
@@ -259,6 +259,6 @@ public class BaseHUDSettings implements ConfigData {
         Window window = MinecraftClient.getInstance().getWindow();
         int scaledHeight = (window == null ? 0 : window.getScaledHeight());
 
-        return this.getY() + (int) (this.getAlignmentY().getAlignmentPos(scaledHeight) * getScaledFactor());
+        return this.getY() + (int) (this.getOriginY().getAlignmentPos(scaledHeight) * getScaledFactor());
     }
 }

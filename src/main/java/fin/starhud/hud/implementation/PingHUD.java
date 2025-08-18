@@ -7,7 +7,6 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.PingMeasurer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.MultiValueDebugSampleLogImpl;
@@ -46,8 +45,6 @@ public class PingHUD extends AbstractHUD {
 
     private String pingStr;
     private int strWidth;
-    private int width;
-    private int height;
     private int color;
     private int step;
 
@@ -84,9 +81,8 @@ public class PingHUD extends AbstractHUD {
         }
 
         color = (SETTINGS.useDynamicColor ? AbstractDurabilityHUD.getItemBarColor(3 - step, 3) : SETTINGS.color) | 0xFF000000;
-        width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
-        height = ICON_HEIGHT;
-        setWidthHeightColor(width, height, color);
+        int width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
+        setWidthHeightColor(width, ICON_HEIGHT, color);
 
         return pingStr != null;
     }
@@ -97,7 +93,7 @@ public class PingHUD extends AbstractHUD {
         int w = getWidth();
         int h = getHeight();
 
-        RenderUtils.drawSmallHUD(
+        return RenderUtils.drawSmallHUD(
                 pingStr,
                 x, y,
                 w, h,
@@ -110,8 +106,6 @@ public class PingHUD extends AbstractHUD {
                 drawBackground,
                 scale
         );
-
-        return true;
     }
 
     @Override

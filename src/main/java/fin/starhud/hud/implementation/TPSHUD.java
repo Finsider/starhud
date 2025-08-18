@@ -8,7 +8,6 @@ import fin.starhud.helper.TPSTracker;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
 public class TPSHUD extends AbstractHUD {
@@ -28,8 +27,6 @@ public class TPSHUD extends AbstractHUD {
     }
 
     private String str;
-    private int width;
-    private int height;
     private int color;
     private int step;
     private HUDDisplayMode displayMode;
@@ -44,12 +41,11 @@ public class TPSHUD extends AbstractHUD {
         int strWidth = CLIENT.textRenderer.getWidth(str) - 1;
 
         displayMode = getSettings().getDisplayMode();
-        height = ICON_HEIGHT;
-        width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
+        int width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
 
         color = (SETTINGS.useDynamicColor ? (AbstractDurabilityHUD.getItemBarColor(4 - step, 4)) : SETTINGS.color) | 0xFF000000;
 
-        setWidthHeightColor(width, height, color);
+        setWidthHeightColor(width, ICON_HEIGHT, color);
 
         return true;
     }
@@ -68,7 +64,7 @@ public class TPSHUD extends AbstractHUD {
         int w = getWidth();
         int h = getHeight();
 
-        RenderUtils.drawSmallHUD(
+        return RenderUtils.drawSmallHUD(
                 str,
                 x, y,
                 w, h,
@@ -81,8 +77,6 @@ public class TPSHUD extends AbstractHUD {
                 drawBackground,
                 scale
         );
-
-        return true;
     }
 
     @Override

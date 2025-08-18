@@ -51,9 +51,6 @@ public class GroupedHUD extends AbstractHUD {
         return name.toString();
     }
 
-    private int width;
-    private int height;
-
     private final List<AbstractHUD> renderedHUDs = new ArrayList<>();
     private final List<Integer> xOffsets = new ArrayList<>();
     private final List<Integer> yOffsets = new ArrayList<>();
@@ -64,8 +61,8 @@ public class GroupedHUD extends AbstractHUD {
         xOffsets.clear();
         yOffsets.clear();
 
-        width = 0;
-        height = 0;
+        int width = 0;
+        int height = 0;
 
         int renderedCount = 0;
 
@@ -179,8 +176,8 @@ public class GroupedHUD extends AbstractHUD {
 
     public int getAlignmentOffset(AbstractHUD childHUD, int length) {
         return switch (groupSettings.getChildAlignment()) {
-            case GROUP -> groupSettings.alignVertical ? getSettings().getAlignmentX().getAlignmentPos(length) : getSettings().getAlignmentY().getAlignmentPos(length);
-            case CHILD -> groupSettings.alignVertical ? childHUD.getSettings().getAlignmentX().getAlignmentPos(length) : childHUD.getSettings().getAlignmentY().getAlignmentPos(length);
+            case GROUP -> groupSettings.alignVertical ? getSettings().getOriginX().getAlignmentPos(length) : getSettings().getOriginY().getAlignmentPos(length);
+            case CHILD -> groupSettings.alignVertical ? childHUD.getSettings().getOriginX().getAlignmentPos(length) : childHUD.getSettings().getOriginY().getAlignmentPos(length);
             case START -> 0;
             case CENTER -> length / 2;
             case END -> length;

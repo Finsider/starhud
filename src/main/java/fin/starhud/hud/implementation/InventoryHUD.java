@@ -7,7 +7,6 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -40,8 +39,6 @@ public class InventoryHUD extends AbstractHUD {
         preComputeVertical();
     }
 
-    private int width;
-    private int height;
     private boolean drawVertical;
 
     public int getTotalLargerLength() {
@@ -56,8 +53,8 @@ public class InventoryHUD extends AbstractHUD {
     public boolean collectHUDInformation() {
         if (hasItemInInventory()) {
             drawVertical = INVENTORY_SETTINGS.drawVertical;
-            width = drawVertical ? getTotalSmallerLength() : getTotalLargerLength();
-            height = drawVertical ? getTotalLargerLength() : getTotalSmallerLength();
+            int width = drawVertical ? getTotalSmallerLength() : getTotalLargerLength();
+            int height = drawVertical ? getTotalLargerLength() : getTotalSmallerLength();
 
             setWidthHeight(width, height);
             return true;
@@ -98,6 +95,9 @@ public class InventoryHUD extends AbstractHUD {
     }
 
     private boolean drawInventoryVertical(int x, int y, boolean drawBackground, float scale) {
+        if (CLIENT.player == null)
+            return false;
+
         PlayerInventory inventory = CLIENT.player.getInventory();
 
         int w = getWidth();
@@ -130,6 +130,9 @@ public class InventoryHUD extends AbstractHUD {
     }
 
     private boolean drawInventoryHorizontal(int x, int y, boolean drawBackground, float scale) {
+        if (CLIENT.player == null)
+            return false;
+
         PlayerInventory inventory = CLIENT.player.getInventory();
 
         int w = getWidth();
@@ -162,6 +165,9 @@ public class InventoryHUD extends AbstractHUD {
     }
 
     public boolean hasItemInInventory() {
+        if (CLIENT.player == null)
+            return false;
+
         PlayerInventory inventory = CLIENT.player.getInventory();
         for (int itemIndex = 0; itemIndex < 27; ++itemIndex) {
             ItemStack stack = inventory.getMainStacks().get(itemIndex + 9);

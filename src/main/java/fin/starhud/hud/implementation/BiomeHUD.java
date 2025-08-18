@@ -8,8 +8,6 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.OrderedText;
@@ -44,8 +42,6 @@ public class  BiomeHUD extends AbstractHUD {
         super(BIOME_SETTINGS.base);
     }
 
-    private int width;
-    private int height;
     private int color;
     private int dimensionIndex;
 
@@ -53,7 +49,9 @@ public class  BiomeHUD extends AbstractHUD {
 
     @Override
     public boolean collectHUDInformation() {
-        TextRenderer textRenderer = CLIENT.textRenderer;
+        if (CLIENT.world == null || CLIENT.player == null)
+            return false;
+
         displayMode = getSettings().getDisplayMode();
 
         BlockPos blockPos = CLIENT.player.getBlockPos();
@@ -77,18 +75,17 @@ public class  BiomeHUD extends AbstractHUD {
             }
 
             cachedBiome = currentBiome;
-            cachedTextWidth = textRenderer.getWidth(cachedBiomeNameText) - 1;
+            cachedTextWidth = CLIENT.textRenderer.getWidth(cachedBiomeNameText) - 1;
         }
 
         dimensionIndex = getDimensionIndex(CLIENT.world.getRegistryKey());
         color = getTextColorFromDimension(dimensionIndex) | 0xFF000000;
 
-        width = displayMode.calculateWidth(ICON_WIDTH, cachedTextWidth);
-        height = ICON_HEIGHT;
+        int width = displayMode.calculateWidth(ICON_WIDTH, cachedTextWidth);
 
-        setWidthHeightColor(width, height, color);
+        setWidthHeightColor(width, ICON_HEIGHT, color);
 
-        return true;
+        return cachedBiomeNameText != null;
     }
 
     @Override
@@ -104,7 +101,7 @@ public class  BiomeHUD extends AbstractHUD {
     @Override
     public boolean drawHUD(int x, int y, boolean drawBackground, float scale) {
 
-        RenderUtils.drawSmallHUD(
+        return RenderUtils.drawSmallHUD(
                 cachedBiomeNameText,
                 x, y,
                 getWidth(), getHeight(),
@@ -118,8 +115,6 @@ public class  BiomeHUD extends AbstractHUD {
                 drawBackground,
                 scale
         );
-
-        return true;
     }
 
     @Override

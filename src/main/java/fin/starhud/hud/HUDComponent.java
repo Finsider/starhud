@@ -162,7 +162,6 @@ public class HUDComponent {
             RenderUtils.clearAll();
 
             collectAll();
-            appendAll();
 
             lastCollect = now;
         }
@@ -170,21 +169,16 @@ public class HUDComponent {
         RenderUtils.drawAll(context);
     }
 
-    public void appendAll() {
-        for (HUDInterface hud : renderedHUDs)
-            hud.appendDraw();
-    }
-
     public void collectAll() {
         renderedHUDs.clear();
         for (AbstractHUD hud : individualHUDs.values()) {
-            if (hud.shouldRender() && hud.collect()) {
+            if (hud.shouldRender() && hud.collect() && hud.appendDraw()) {
                 renderedHUDs.add(hud);
             }
         }
 
         for (GroupedHUD group : groupedHUDs.values()) {
-            if (!group.isInGroup() && group.shouldRender() && group.collect()) {
+            if (!group.isInGroup() && group.shouldRender() && group.collect() && group.appendDraw()) {
                 renderedHUDs.add(group);
             }
         }

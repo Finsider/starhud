@@ -18,11 +18,14 @@ public class NetherZCoordinate extends AbstractCoordinateHUD {
 
     @Override
     public boolean shouldRender() {
-        return super.shouldRender() && (CLIENT.player.getWorld().getRegistryKey() == World.OVERWORLD || CLIENT.player.getWorld().getRegistryKey() == World.NETHER);
+        return super.shouldRender() && (CLIENT.player != null && (CLIENT.player.getWorld().getRegistryKey() == World.OVERWORLD || CLIENT.player.getWorld().getRegistryKey() == World.NETHER));
     }
 
     @Override
     public int getCoord() {
+        if (CLIENT.player == null)
+            return -1;
+
         World world = CLIENT.player.getWorld();
         Vec3d pos = CLIENT.player.getPos();
 

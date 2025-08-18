@@ -29,6 +29,9 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
 
     @Override
     public ItemStack getStack() {
+        if (CLIENT.player == null)
+            return null;
+
         EquipmentSlot equipmentSlot = AttributeModifierSlot.ARMOR.getSlots().get(armorIndex);
         return CLIENT.player.getEquippedStack(equipmentSlot);
     }
@@ -40,7 +43,7 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
 
     @Override
     public boolean drawHUD(int x, int y, boolean drawBackground, float scale) {
-        drawDurability(
+        return drawDurability(
                 TEXTURE,
                 x, y,
                 0.0F, 0.0F,
@@ -49,7 +52,5 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
                 drawBackground,
                 scale
         );
-
-        return true;
     }
 }

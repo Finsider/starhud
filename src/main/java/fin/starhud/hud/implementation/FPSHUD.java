@@ -7,7 +7,6 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
 public class FPSHUD extends AbstractHUD {
@@ -38,8 +37,6 @@ public class FPSHUD extends AbstractHUD {
     }
 
     private String fpsStr;
-    private int width;
-    private int height;
     private int color;
     private HUDDisplayMode displayMode;
 
@@ -50,12 +47,11 @@ public class FPSHUD extends AbstractHUD {
 
         displayMode = getSettings().getDisplayMode();
 
-        width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
-        height = TEXTURE_HEIGHT;
+        int width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
 
         color = FPS_SETTINGS.color | 0xFF000000;
 
-        setWidthHeightColor(width, height, color);
+        setWidthHeightColor(width, TEXTURE_HEIGHT, color);
 
         return true;
     }
@@ -66,7 +62,7 @@ public class FPSHUD extends AbstractHUD {
         int w = getWidth();
         int h = getHeight();
 
-        RenderUtils.drawSmallHUD(
+        return RenderUtils.drawSmallHUD(
                 fpsStr,
                 x, y,
                 w, h,
@@ -79,6 +75,5 @@ public class FPSHUD extends AbstractHUD {
                 drawBackground,
                 scale
         );
-        return true;
     }
 }

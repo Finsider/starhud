@@ -13,8 +13,6 @@ import net.minecraft.util.Identifier;
 
 public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
 
-    private static final Identifier ITEM_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/item.png");
-
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
 
@@ -40,14 +38,14 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
 
     @Override
     public ItemStack getStack() {
+        if (CLIENT.player == null)
+            return null;
+
         return CLIENT.player.getStackInArm(arm);
     }
 
     private ItemStack item;
     private int iconColor;
-
-    private int width;
-    private int height;
 
     private String amountStr;
 
@@ -61,6 +59,9 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
 
     @Override
     public boolean collectHUDInformation() {
+        if (CLIENT.player == null)
+            return false;
+
         item = getStack();
         if (item.isEmpty())
             return false;
@@ -83,8 +84,8 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         amountStr = Integer.toString(getItemCount(CLIENT.player.getInventory(), item));
 
         int strWidth = CLIENT.textRenderer.getWidth(amountStr) - 1;
-        width = displayMode.calculateWidth((drawItem ? ITEM_TEXTURE_WIDTH : ICON_WIDTH), strWidth);
-        height = drawItem ? ITEM_TEXTURE_HEIGHT : ICON_HEIGHT;
+        int width = displayMode.calculateWidth((drawItem ? ITEM_TEXTURE_WIDTH : ICON_WIDTH), strWidth);
+        int height = drawItem ? ITEM_TEXTURE_HEIGHT : ICON_HEIGHT;
 
         setWidthHeightColor(width, height, iconColor);
 

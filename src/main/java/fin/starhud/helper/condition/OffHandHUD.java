@@ -8,7 +8,7 @@ public class OffHandHUD {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     public static boolean isShown(String ignored) {
-        return !CLIENT.player.getEquippedStack(EquipmentSlot.OFFHAND).isEmpty();
+        return CLIENT.player != null && !CLIENT.player.getEquippedStack(EquipmentSlot.OFFHAND).isEmpty();
     }
 
     public static int getWidth() {

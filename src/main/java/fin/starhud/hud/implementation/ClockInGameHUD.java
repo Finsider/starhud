@@ -7,7 +7,6 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 
@@ -44,8 +43,6 @@ public class ClockInGameHUD extends AbstractHUD {
         return HUDId.CLOCK_INGAME.toString();
     }
 
-    private int width;
-    private int height;
     private int color;
     private int iconIndex;
 
@@ -54,6 +51,9 @@ public class ClockInGameHUD extends AbstractHUD {
     @Override
     public boolean collectHUDInformation() {
         ClientWorld world = CLIENT.world;
+
+        if (world == null)
+            return false;
 
         long time = world.getTimeOfDay() % 24000;
 
@@ -76,12 +76,11 @@ public class ClockInGameHUD extends AbstractHUD {
         iconIndex = getWeatherOrTime(world);
         color = getIconColor(iconIndex) | 0xFF000000;
 
-        width = displayMode.calculateWidth(ICON_WIDTH, cachedStrWidth);
-        height = ICON_HEIGHT;
+        int width = displayMode.calculateWidth(ICON_WIDTH, cachedStrWidth);
 
-        setWidthHeightColor(width, height, color);
+        setWidthHeightColor(width, ICON_HEIGHT, color);
 
-        return true;
+        return cachedMinecraftTimeString != null;
     }
 
     @Override
@@ -90,7 +89,7 @@ public class ClockInGameHUD extends AbstractHUD {
         int w = getWidth();
         int h = getHeight();
 
-        RenderUtils.drawSmallHUD(
+        return RenderUtils.drawSmallHUD(
                 cachedMinecraftTimeString,
                 x, y,
                 w, h,
@@ -103,8 +102,6 @@ public class ClockInGameHUD extends AbstractHUD {
                 drawBackground,
                 scale
         );
-
-        return true;
     }
 
     private static int getIconColor(int icon) {

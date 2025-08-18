@@ -2,7 +2,7 @@ package fin.starhud.hud;
 
 public interface HUDInterface {
 
-    void appendDraw();
+    boolean appendDraw();
 
     boolean collect();
 
