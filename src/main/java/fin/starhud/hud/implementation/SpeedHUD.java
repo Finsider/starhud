@@ -7,6 +7,7 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -36,12 +37,13 @@ public class SpeedHUD extends AbstractHUD {
 
         if (CLIENT.player == null) return false;
 
-        Vec3d vel = CLIENT.player.getVelocity();
+        Entity entity = CLIENT.player.getVehicle() != null ? CLIENT.player.getVehicle() : CLIENT.player;
+        Vec3d vel = entity.getVelocity();
 
-        double horizontalSpeed = (double) Math.round(vel.horizontalLength() * 20.0 * 10) / 10;
+        double speed = SETTINGS.useFullSpeed ? vel.length() : vel.horizontalLength();
+        speed = (double) Math.round(speed * 20.0 * 10) / 10;
 
-        str = horizontalSpeed + SETTINGS.additionalString;
-
+        str = speed + SETTINGS.additionalString;
         int strWidth = CLIENT.textRenderer.getWidth(str) - 1;
 
         displayMode = getSettings().getDisplayMode();
