@@ -6,6 +6,7 @@ import fin.starhud.helper.GrowthDirectionY;
 import fin.starhud.helper.ScreenAlignmentX;
 import fin.starhud.helper.ScreenAlignmentY;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 public class SpeedSettings {
 
@@ -14,6 +15,9 @@ public class SpeedSettings {
 
     @ConfigEntry.ColorPicker
     public int color = 0xb5d0e8;
+
+    @Comment("Whether display the ground speed only, or full-3D speed.")
+    public boolean useFullSpeed = false;
 
     public String additionalString = " BPS";
 }

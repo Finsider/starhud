@@ -128,7 +128,7 @@
   "text.autoconfig.starhud.option.GroupedHUDSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.GroupedHUDSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.GroupedHUDSettings.boxColor": "Bounding Box Color",
-  "text.autoconfig.starhud.option.GroupedHUDSettings.hudIds": "List Of HUD",
+  "text.autoconfig.starhud.option.GroupedHUDSettings.hudIds": "List of HUD",
 
   "text.autoconfig.starhud.option.ConditionalSettings" : "Condition",
   "text.autoconfig.starhud.option.ConditionalSettings.condition" : "Condition Type",
@@ -329,5 +329,6 @@
   "text.autoconfig.starhud.option.speedSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.speedSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.speedSettings.color": "Color",
+  "text.autoconfig.starhud.option.speedSettings.useFullSpeed": "Use Full Speed",
   "text.autoconfig.starhud.option.speedSettings.additionalString": "Extra Label"
 }
