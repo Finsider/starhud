@@ -121,6 +121,7 @@
   "text.autoconfig.starhud.option.generalSettings.hudSettings.textPadding" : "HUD-Text Abstand",
   "text.autoconfig.starhud.option.generalSettings.hudSettings.iconInfoGap" : "Abstand zwischen Icon und Info",
   "text.autoconfig.starhud.option.generalSettings.hudSettings.drawBackgroundRounded" : "Hintergrund abgerundet zeichnen",
+  "text.autoconfig.starhud.option.generalSettings.hudSettings.hideHudWithDebugMenu" : "HUD mit Debug-Menü ausblenden",
 
   "text.autoconfig.starhud.category.hudList" : "Gruppe",
   "text.autoconfig.starhud.option.hudList.groupedHuds" : "Liste gruppierter HUDs",

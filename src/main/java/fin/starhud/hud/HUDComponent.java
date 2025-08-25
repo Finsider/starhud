@@ -20,6 +20,7 @@ public class HUDComponent {
     private static HUDComponent instance;
 
     private static final Logger LOGGER = Main.LOGGER;
+    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private GeneralSettings.HUDSettings HUD_SETTINGS;
 
     // Registered HUDs by ID
@@ -165,7 +166,7 @@ public class HUDComponent {
             lastCollect = now;
         }
 
-        if (!MinecraftClient.getInstance().getDebugHud().shouldShowDebugHud()) {
+        if (!HUD_SETTINGS.hideHudWithDebugMenu || !CLIENT.getDebugHud().shouldShowDebugHud()) {
             for (AbstractHUD hud : renderedHUDs) {
                 if (!hud.render(context)) {
                     LOGGER.warn("{} is collected but still failed! Removing from rendered hud.", hud.getName());
