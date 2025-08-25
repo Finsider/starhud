@@ -55,7 +55,7 @@ public class GeneralSettings {
         @Comment("Either draw the background rounded or rectangle")
         public boolean drawBackgroundRounded = true;
 
-        @Comment("Hide the hud when the debug menu is open")
+        @Comment("Hide the HUD while the debug (F3) menu is open")
         public boolean hideHudWithDebugMenu = true;
     }
 }
