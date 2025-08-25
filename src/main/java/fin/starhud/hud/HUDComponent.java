@@ -6,6 +6,7 @@ import fin.starhud.config.GroupedHUDSettings;
 import fin.starhud.config.HUDList;
 import fin.starhud.hud.implementation.*;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.MinecraftClient;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -164,10 +165,12 @@ public class HUDComponent {
             lastCollect = now;
         }
 
-        for (AbstractHUD hud : renderedHUDs) {
-            if (!hud.render(context)) {
-                LOGGER.warn("{} is collected but still failed! Removing from rendered hud.", hud.getName());
-                invalidHUDs.add(hud);
+        if (!MinecraftClient.getInstance().getDebugHud().shouldShowDebugHud()) {
+            for (AbstractHUD hud : renderedHUDs) {
+                if (!hud.render(context)) {
+                    LOGGER.warn("{} is collected but still failed! Removing from rendered hud.", hud.getName());
+                    invalidHUDs.add(hud);
+                }
             }
         }
 
