@@ -15,7 +15,7 @@ public class ZCoordinateHUD extends AbstractCoordinateHUD {
 
     @Override
     public int getCoord() {
-        return (int) CLIENT.player.getPos().z;
+        return (int) CLIENT.player.getEntityPos().z;
     }
 
     @Override

@@ -1,7 +1,7 @@
 {
   "text.autoconfig.starhud.title": "StarHUD Einstellungen",
 
-  "category.starhud" : "StarHUD",
+  "key.category.starhud.category" : "StarHUD",
   "key.starhud.open_edithud": "HUD Bearbeitung öffnen",
   "key.starhud.toggle_hud": "HUD im Spiel umschalten",
 

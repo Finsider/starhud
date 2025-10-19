@@ -20,13 +20,13 @@ public class NetherXCoordinate extends AbstractCoordinateHUD {
 
     @Override
     public boolean shouldRender() {
-        return super.shouldRender() && (CLIENT.player.getWorld().getRegistryKey() == World.OVERWORLD || CLIENT.player.getWorld().getRegistryKey() == World.NETHER);
+        return super.shouldRender() && (CLIENT.player.getEntityWorld().getRegistryKey() == World.OVERWORLD || CLIENT.player.getEntityWorld().getRegistryKey() == World.NETHER);
     }
 
     @Override
     public int getCoord() {
-        World world = CLIENT.player.getWorld();
-        Vec3d pos = CLIENT.player.getPos();
+        World world = CLIENT.player.getEntityWorld();
+        Vec3d pos = CLIENT.player.getEntityPos();
 
         if (world.getRegistryKey() == World.NETHER) {
             return (int) (pos.x * 8);

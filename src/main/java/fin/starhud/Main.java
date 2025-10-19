@@ -16,6 +16,7 @@ public class Main implements ClientModInitializer {
 
     public static Settings settings;
 
+    public static KeyBinding.Category keyCategory;
     public static KeyBinding openEditHUDKey;
     public static KeyBinding toggleHUDKey;
 
