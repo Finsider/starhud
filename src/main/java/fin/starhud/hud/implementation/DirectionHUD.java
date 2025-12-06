@@ -53,10 +53,10 @@ public class DirectionHUD extends AbstractHUD {
 
     @Override
     public boolean collectHUDInformation() {
+        var camera = CLIENT.getCameraEntity();
+        if (camera == null) return false;
 
-        if (CLIENT.cameraEntity == null) return false;
-
-        float yaw = Math.round(MathHelper.wrapDegrees(CLIENT.cameraEntity.getYaw()) * 10.0F) / 10.0F;
+        float yaw = Math.round(MathHelper.wrapDegrees(camera.getYaw()) * 10.0F) / 10.0F;
         yawStr = Float.toString(yaw);
         int yawWidth = CLIENT.textRenderer.getWidth(yawStr) - 1;
 
