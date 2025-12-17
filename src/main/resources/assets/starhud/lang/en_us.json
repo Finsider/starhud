@@ -25,6 +25,9 @@
   "starhud.help.key.group_ungroup": "[G]",
   "starhud.help.info.group_ungroup": "Group / Ungroup",
 
+  "starhud.help.key.clamp_all": "[⇧ Shift + C]",
+  "starhud.help.info.clamp_all": "Clamp Every HUD Rendered",
+
   "starhud.screen.field.x": "X",
   "starhud.screen.field.y": "Y",
   "starhud.screen.field.scale": "Scale",
@@ -36,6 +39,7 @@
   "starhud.screen.button.y_direction": "Y Direction: %s",
   "starhud.screen.button.display": "Display: %s",
   "starhud.screen.button.background": "Background: %s",
+  "starhud.screen.button.clamp_pos": "C",
 
   "starhud.screen.button.x_alignment_na": "X Alignment: N/A",
   "starhud.screen.button.y_alignment_na": "Y Alignment: N/A",
@@ -58,6 +62,7 @@
   "starhud.screen.tooltip.help": "Help",
   "starhud.screen.tooltip.more_options": "More Options",
   "starhud.screen.tooltip.child_alignment": "Child Alignment",
+  "starhud.screen.tooltip.clamp_pos": "Fix every HUD Position if any of them goes out of bound.",
 
   "starhud.screen.alignment.vertical": "Vertical",
   "starhud.screen.alignment.horizontal": "Horizontal",

@@ -38,7 +38,7 @@ public abstract class AbstractHUD implements HUDInterface {
         if (!isInGroup()) {
             setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
             setScale(getSettings().getScale());
-            clampPos();
+            // clampPos(); remove auto clamping for now, very silly when window size changes frequently.
         }
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     // collect what is needed for the hud to render.
-    // the true purpose of collectData is to collect the width and height during data collection,
+    // the true purpose of collectHUDInformation is to collect the width and height during data collection,
     // this is to ensure that the width and height can be used before the rendering
     // returns false if the HUD cannot be rendered
     // returns true if the HUD is ready to be rendered.
