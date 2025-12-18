@@ -424,10 +424,12 @@ public class EditHUDScreen extends Screen {
                     hud.groupSettings.alignVertical = !hud.groupSettings.alignVertical;
 
                     groupAlignmentButton.setMessage(Text.translatable(
-                            hud.groupSettings.alignVertical ? "starhud.screen.alignment.vertical" : "starhud.screen.alignment.horizontal"
+                            hud.groupSettings.alignVertical ? "starhud.screen.button.group_alignment.vertical" : "starhud.screen.button.group_alignment.horizontal"
                     ));
                 }
-        ).dimensions(xGroupAlignmentButton, yBottomGroup, terminatorWidth, SQUARE_WIDGET_LENGTH).build();
+        )
+                .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.group_alignment")))
+                .dimensions(xGroupAlignmentButton, yBottomGroup, terminatorWidth, SQUARE_WIDGET_LENGTH).build();
 
         moreOptionButtons.add(alignmentXButton);
         moreOptionButtons.add(alignmentYButton);
@@ -588,7 +590,7 @@ public class EditHUDScreen extends Screen {
                 );
 
                 groupAlignmentButton.setMessage(Text.translatable(
-                        hud.groupSettings.alignVertical ? "starhud.screen.alignment.vertical" : "starhud.screen.alignment.horizontal"
+                        hud.groupSettings.alignVertical ? "starhud.screen.button.group_alignment.vertical" : "starhud.screen.button.group_alignment.horizontal"
                 ));
 
                 childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
