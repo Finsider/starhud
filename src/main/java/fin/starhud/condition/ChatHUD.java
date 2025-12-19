@@ -1,5 +1,6 @@
 package fin.starhud.condition;
 
+import fin.starhud.mixin.accessor.AccessorChatHud;
 import net.minecraft.client.MinecraftClient;
 
 public class ChatHUD {
@@ -10,10 +11,10 @@ public class ChatHUD {
     }
 
     public static int getWidth() {
-        return CLIENT.inGameHud.getChatHud().getWidth();
+        return ((AccessorChatHud) CLIENT.inGameHud.getChatHud()).starhud$getWidth();
     }
 
     public static int getHeight() {
-        return CLIENT.inGameHud.getChatHud().getHeight();
+        return ((AccessorChatHud) CLIENT.inGameHud.getChatHud()).starhud$getHeight();
     }
 }

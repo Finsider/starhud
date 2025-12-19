@@ -11,7 +11,8 @@
     "MixinPlayerListHud",
     "MixinWindow",
     "accessor.AccessorBossBarHud",
-    "accessor.AccessorInGameHUD"
+    "accessor.AccessorInGameHUD",
+    "accessor.AccessorChatHud"
   ],
   "mixins": [
     "MixinLivingEntity",
