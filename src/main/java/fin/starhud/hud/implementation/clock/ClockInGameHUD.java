@@ -1,5 +1,6 @@
 package fin.starhud.hud.implementation.clock;
 
+import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.hud.ClockInGameSettings;
 import fin.starhud.helper.HUDDisplayMode;
@@ -67,8 +68,8 @@ public class ClockInGameHUD extends AbstractHUD {
             cachedMinecraftHours = hours;
 
             cachedMinecraftTimeString = use12Hour ?
-                    buildMinecraftTime12String(hours, minutes) :
-                    buildMinecraftTime24String(hours, minutes);
+                    Helper.buildMinecraftTime12String(hours, minutes) :
+                    Helper.buildMinecraftTime24String(hours, minutes);
 
             cachedStrWidth = CLIENT.textRenderer.getWidth(cachedMinecraftTimeString) - 1;
         }
@@ -119,32 +120,6 @@ public class ClockInGameHUD extends AbstractHUD {
         else if (clientWorld.isRaining()) return 2;
         else if (clientWorld.isNight()) return 1;
         else return 0;
-    }
-
-    private static String buildMinecraftTime24String(int hours, int minutes) {
-        StringBuilder timeBuilder = new StringBuilder();
-
-        if (hours < 10) timeBuilder.append('0');
-        timeBuilder.append(hours).append(':');
-
-        if (minutes < 10) timeBuilder.append('0');
-        timeBuilder.append(minutes);
-
-        return timeBuilder.toString();
-    }
-
-    private static String buildMinecraftTime12String(int hours, int minutes) {
-        StringBuilder timeBuilder = new StringBuilder();
-
-        String period = hours >= 12 ? " PM" : " AM";
-
-        // 01.00 until 12.59 AM / PM
-        hours %= 12;
-        if (hours == 0) hours = 12;
-
-        timeBuilder.append(buildMinecraftTime24String(hours, minutes)).append(period);
-
-        return timeBuilder.toString();
     }
 
     @Override

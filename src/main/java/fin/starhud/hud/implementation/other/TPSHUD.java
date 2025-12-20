@@ -1,5 +1,6 @@
 package fin.starhud.hud.implementation.other;
 
+import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.hud.TPSSettings;
 import fin.starhud.helper.HUDDisplayMode;
@@ -45,7 +46,7 @@ public class TPSHUD extends AbstractHUD {
         displayMode = getSettings().getDisplayMode();
         int width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
 
-        color = (SETTINGS.useDynamicColor ? (AbstractDurabilityHUD.getItemBarColor(4 - step, 4)) : SETTINGS.color) | 0xFF000000;
+        color = (SETTINGS.useDynamicColor ? (Helper.getItemBarColor(4 - step, 4)) : SETTINGS.color) | 0xFF000000;
 
         setWidthHeightColor(width, ICON_HEIGHT, color);
 

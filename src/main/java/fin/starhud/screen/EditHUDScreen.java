@@ -445,18 +445,12 @@ public class EditHUDScreen extends Screen {
         moreOptionTexts.add(scaleField);
 
         for (ButtonWidget bw : moreOptionButtons) {
-            bw.visible = false;
             addDrawableChild(bw);
         }
 
         for (TextFieldWidget tfw : moreOptionTexts) {
-            tfw.visible = false;
             addDrawableChild(tfw);
         }
-
-        gapField.visible = false;
-        groupAlignmentButton.visible = false;
-        childAlignmentButton.visible = false;
 
         addDrawableChild(cancelButton);
         addDrawableChild(helpButton);
@@ -465,11 +459,12 @@ public class EditHUDScreen extends Screen {
 
         addDrawableChild(configScreenButton);
 
+        addDrawableChild(groupUngroupButton);
         addDrawableChild(gapField);
         addDrawableChild(childAlignmentButton);
-        addDrawableChild(groupUngroupButton);
         addDrawableChild(groupAlignmentButton);
 
+        hideMoreOptionsButtons();
         updateFieldsFromSelectedHUD();
         getHelpMaxWidths();
     }
@@ -485,130 +480,6 @@ public class EditHUDScreen extends Screen {
 
         HELP_KEY_MAX_WIDTH = maxKey;
         HELP_INFO_MAX_WIDTH = maxInfo;
-    }
-
-    private void updateFieldsFromSelectedHUD() {
-        super.setFocused(null);
-
-        if (selectedHUDs.isEmpty()) {
-            xField.setText(Text.translatable("starhud.screen.status.na").getString());
-            yField.setText(Text.translatable("starhud.screen.status.na").getString());
-            scaleField.setText(Text.translatable("starhud.screen.status.na").getString());
-
-            alignmentXButton.setMessage(Text.translatable("starhud.screen.button.x_alignment_na"));
-            directionXButton.setMessage(Text.translatable("starhud.screen.button.x_direction_na"));
-            alignmentYButton.setMessage(Text.translatable("starhud.screen.button.y_alignment_na"));
-            directionYButton.setMessage(Text.translatable("starhud.screen.button.y_direction_na"));
-            hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display_na"));
-            drawBackgroundButton.setMessage(Text.translatable("starhud.screen.button.background_na"));
-            shouldRenderButton.setMessage(Text.translatable("starhud.screen.status.na"));
-
-            gapField.setText(Text.translatable("starhud.screen.status.na").getString());
-            groupAlignmentButton.setMessage(Text.translatable("starhud.screen.status.na"));
-            childAlignmentButton.setMessage(Text.translatable("starhud.screen.status.na"));
-
-            gapField.setEditable(false);
-            gapField.visible = false;
-            groupAlignmentButton.visible = false;
-            groupAlignmentButton.active = false;
-            childAlignmentButton.visible = false;
-            childAlignmentButton.active = false;
-
-            for (ButtonWidget bw : moreOptionButtons) {
-                if (bw == clampPosButton) continue;
-                bw.active = false;
-            }
-
-            for (TextFieldWidget tfw : moreOptionTexts) {
-                tfw.setEditable(false);
-            }
-
-            groupUngroupButton.active = false;
-            groupUngroupButton.visible = false;
-
-            canSelectedHUDUngroup = false;
-            canSelectedHUDsGroup = false;
-        } else {
-            AbstractHUD firstHUD = selectedHUDs.getFirst();
-            BaseHUDSettings settings = firstHUD.getSettings();
-            xField.setText(String.valueOf(settings.x));
-            yField.setText(String.valueOf(settings.y));
-            scaleField.setText(String.valueOf(settings.getScale()));
-
-            alignmentXButton.setMessage(Text.translatable("starhud.screen.button.x_alignment", settings.getOriginX().toString()));
-            directionXButton.setMessage(Text.translatable("starhud.screen.button.x_direction", settings.getGrowthDirectionX().toString()));
-            alignmentYButton.setMessage(Text.translatable("starhud.screen.button.y_alignment", settings.getOriginY().toString()));
-            directionYButton.setMessage(Text.translatable("starhud.screen.button.y_direction", settings.getGrowthDirectionY().toString()));
-            hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display", settings.getDisplayMode().toString()));
-            drawBackgroundButton.setMessage(Text.translatable("starhud.screen.button.background", 
-                    settings.drawBackground ? 
-                            Text.translatable("starhud.screen.status.on").getString() : 
-                            Text.translatable("starhud.screen.status.off").getString()));
-            shouldRenderButton.setMessage(settings.shouldRender ? 
-                    Text.translatable("starhud.screen.status.on") : 
-                    Text.translatable("starhud.screen.status.off"));
-
-            for (ButtonWidget bw : moreOptionButtons) {
-                bw.active = true;
-            }
-
-            for (TextFieldWidget tfw : moreOptionTexts) {
-                tfw.setEditable(true);
-            }
-
-            gapField.visible = false;
-            groupAlignmentButton.visible = false;
-            childAlignmentButton.visible = false;
-
-            canSelectedHUDUngroup =  (selectedHUDs.size() == 1 && firstHUD instanceof GroupedHUD && !firstHUD.isInGroup());
-            canSelectedHUDsGroup = (selectedHUDs.size() > 1 && selectedHUDs.stream().noneMatch(AbstractHUD::isInGroup));
-
-            if (canSelectedHUDsGroup) {
-                groupUngroupButton.setMessage(Text.translatable("starhud.screen.button.group"));
-                groupUngroupButton.visible = true;
-                groupUngroupButton.active = true;
-            } else if (canSelectedHUDUngroup) {
-                groupUngroupButton.setMessage(Text.translatable("starhud.screen.button.ungroup"));
-                groupUngroupButton.visible = true;
-                groupUngroupButton.active = true;
-            } else {
-                groupUngroupButton.visible = false;
-                groupUngroupButton.active = false;
-            }
-
-            if (firstHUD instanceof GroupedHUD hud && isMoreOptionActivated) {
-                gapField.visible = true;
-                groupAlignmentButton.visible = true;
-                childAlignmentButton.visible = true;
-
-                gapField.setEditable(true);
-                groupAlignmentButton.active = true;
-                childAlignmentButton.active = true;
-
-                gapField.setText(
-                        Integer.toString(hud.groupSettings.gap)
-                );
-
-                groupAlignmentButton.setMessage(Text.translatable(
-                        hud.groupSettings.alignVertical ? "starhud.screen.button.group_alignment.vertical" : "starhud.screen.button.group_alignment.horizontal"
-                ));
-
-                childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
-
-            }
-
-            if (isMoreOptionActivated) {
-
-                for (ButtonWidget bw : moreOptionButtons) {
-                    bw.visible = true;
-                }
-
-                for (TextFieldWidget tfw : moreOptionTexts) {
-                    tfw.visible = true;
-                }
-
-            }
-        }
     }
 
     @Override
@@ -1332,48 +1203,149 @@ public class EditHUDScreen extends Screen {
     private void onHelpSwitched() {
     }
 
-    private void onMoreOptionSwitched() {
-        if (isMoreOptionActivated) {
+    private void updateFieldsFromSelectedHUD() {
+        super.setFocused(null);
+
+        if (selectedHUDs.isEmpty()) {
+            xField.setText(Text.translatable("starhud.screen.status.na").getString());
+            yField.setText(Text.translatable("starhud.screen.status.na").getString());
+            scaleField.setText(Text.translatable("starhud.screen.status.na").getString());
+
+            alignmentXButton.setMessage(Text.translatable("starhud.screen.button.x_alignment_na"));
+            directionXButton.setMessage(Text.translatable("starhud.screen.button.x_direction_na"));
+            alignmentYButton.setMessage(Text.translatable("starhud.screen.button.y_alignment_na"));
+            directionYButton.setMessage(Text.translatable("starhud.screen.button.y_direction_na"));
+            hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display_na"));
+            drawBackgroundButton.setMessage(Text.translatable("starhud.screen.button.background_na"));
+            shouldRenderButton.setMessage(Text.translatable("starhud.screen.status.na"));
+
+            gapField.setText(Text.translatable("starhud.screen.status.na").getString());
+            groupAlignmentButton.setMessage(Text.translatable("starhud.screen.status.na"));
+            childAlignmentButton.setMessage(Text.translatable("starhud.screen.status.na"));
+
+            gapField.setEditable(false);
+            gapField.visible = false;
+            groupAlignmentButton.visible = false;
+            groupAlignmentButton.active = false;
+            childAlignmentButton.visible = false;
+            childAlignmentButton.active = false;
 
             for (ButtonWidget bw : moreOptionButtons) {
-                bw.visible = true;
+                if (bw == clampPosButton) continue;
+                bw.active = false;
             }
 
             for (TextFieldWidget tfw : moreOptionTexts) {
-                tfw.visible = true;
+                tfw.setEditable(false);
             }
 
-            if (!selectedHUDs.isEmpty() && selectedHUDs.getFirst() instanceof GroupedHUD hud) {
-                gapField.visible = true;
-                groupAlignmentButton.visible = true;
-                childAlignmentButton.visible = true;
+            groupUngroupButton.active = false;
+            groupUngroupButton.visible = false;
 
-                gapField.setEditable(true);
-                groupAlignmentButton.active = true;
-                childAlignmentButton.active = true;
-
-                gapField.setText(
-                        Integer.toString(hud.groupSettings.gap)
-                );
-
-                groupAlignmentButton.setMessage(Text.translatable(
-                        hud.groupSettings.alignVertical ? "starhud.screen.alignment.vertical" : "starhud.screen.alignment.horizontal"
-                ));
-
-                childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
-            }
+            canSelectedHUDUngroup = false;
+            canSelectedHUDsGroup = false;
         } else {
+            AbstractHUD firstHUD = selectedHUDs.getFirst();
+            BaseHUDSettings settings = firstHUD.getSettings();
+            xField.setText(String.valueOf(settings.x));
+            yField.setText(String.valueOf(settings.y));
+            scaleField.setText(String.valueOf(settings.getScale()));
+
+            alignmentXButton.setMessage(Text.translatable("starhud.screen.button.x_alignment", settings.getOriginX().toString()));
+            directionXButton.setMessage(Text.translatable("starhud.screen.button.x_direction", settings.getGrowthDirectionX().toString()));
+            alignmentYButton.setMessage(Text.translatable("starhud.screen.button.y_alignment", settings.getOriginY().toString()));
+            directionYButton.setMessage(Text.translatable("starhud.screen.button.y_direction", settings.getGrowthDirectionY().toString()));
+            hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display", settings.getDisplayMode().toString()));
+            drawBackgroundButton.setMessage(Text.translatable("starhud.screen.button.background",
+                    settings.drawBackground ?
+                            Text.translatable("starhud.screen.status.on").getString() :
+                            Text.translatable("starhud.screen.status.off").getString()));
+            shouldRenderButton.setMessage(settings.shouldRender ?
+                    Text.translatable("starhud.screen.status.on") :
+                    Text.translatable("starhud.screen.status.off"));
+
             for (ButtonWidget bw : moreOptionButtons) {
-                bw.visible = false;
+                bw.active = true;
             }
 
             for (TextFieldWidget tfw : moreOptionTexts) {
-                tfw.visible = false;
+                tfw.setEditable(true);
             }
 
             gapField.visible = false;
             groupAlignmentButton.visible = false;
             childAlignmentButton.visible = false;
+
+            canSelectedHUDUngroup =  (selectedHUDs.size() == 1 && firstHUD instanceof GroupedHUD && !firstHUD.isInGroup());
+            canSelectedHUDsGroup = (selectedHUDs.size() > 1 && selectedHUDs.stream().noneMatch(AbstractHUD::isInGroup));
+
+            if (canSelectedHUDsGroup) {
+                groupUngroupButton.setMessage(Text.translatable("starhud.screen.button.group"));
+                groupUngroupButton.visible = true;
+                groupUngroupButton.active = true;
+            } else if (canSelectedHUDUngroup) {
+                groupUngroupButton.setMessage(Text.translatable("starhud.screen.button.ungroup"));
+                groupUngroupButton.visible = true;
+                groupUngroupButton.active = true;
+            } else {
+                groupUngroupButton.visible = false;
+                groupUngroupButton.active = false;
+            }
+
+            if (isMoreOptionActivated)
+                showMoreOptionsButtons();
+        }
+    }
+
+    private void onMoreOptionSwitched() {
+        if (isMoreOptionActivated) {
+            showMoreOptionsButtons();
+        } else {
+            hideMoreOptionsButtons();
+        }
+    }
+
+    private void hideMoreOptionsButtons() {
+        for (ButtonWidget bw : moreOptionButtons) {
+            bw.visible = false;
+        }
+
+        for (TextFieldWidget tfw : moreOptionTexts) {
+            tfw.visible = false;
+        }
+
+        gapField.visible = false;
+        groupAlignmentButton.visible = false;
+        childAlignmentButton.visible = false;
+    }
+
+    private void showMoreOptionsButtons() {
+        for (ButtonWidget bw : moreOptionButtons) {
+            bw.visible = true;
+        }
+
+        for (TextFieldWidget tfw : moreOptionTexts) {
+            tfw.visible = true;
+        }
+
+        if (!selectedHUDs.isEmpty() && selectedHUDs.getFirst() instanceof GroupedHUD hud) {
+            gapField.visible = true;
+            groupAlignmentButton.visible = true;
+            childAlignmentButton.visible = true;
+
+            gapField.setEditable(true);
+            groupAlignmentButton.active = true;
+            childAlignmentButton.active = true;
+
+            gapField.setText(
+                    Integer.toString(hud.groupSettings.gap)
+            );
+
+            groupAlignmentButton.setMessage(Text.translatable(
+                    hud.groupSettings.alignVertical ? "starhud.screen.button.group_alignment.vertical" : "starhud.screen.button.group_alignment.horizontal"
+            ));
+
+            childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
         }
     }
 }

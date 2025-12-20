@@ -79,14 +79,14 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         stackMaxDamage = stack.getMaxDamage();
 
         hudDisplayMode = getSettings().getDisplayMode();
-        displayMode = durabilitySettings.displayMode;
+        displayMode = durabilitySettings.getDisplayMode();
         drawItem = durabilitySettings.drawItem;
         iconColor = getIconColor();
 
         int width = processWidth();
         int height = drawItem ? ITEM_BACKGROUND_HEIGHT : ICON_BACKGROUND_HEIGHT;
 
-        durabilityColor = getItemBarColor(stackMaxDamage - stackDamage, stackMaxDamage) | 0xFF000000;
+        durabilityColor = Helper.getItemBarColor(stackMaxDamage - stackDamage, stackMaxDamage) | 0xFF000000;
 
         setWidthHeightColor(width, height, iconColor);
 
@@ -113,7 +113,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
 
     public int processWidthItemBar() {
         step = getItemBarStep(stackDamage, stackMaxDamage, 10);
-        durabilityColor = getItemBarColor(step, 10) | 0xFF000000;
+        durabilityColor = Helper.getItemBarColor(step, 10) | 0xFF000000;
 
         return hudDisplayMode.calculateWidth(ITEM_BACKGROUND_WIDTH, BIG_DURABILITY_TEXTURE_WIDTH - 1);
     }
@@ -214,11 +214,6 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
     // get the durability "steps" or progress.
     public static int getItemBarStep(int stackDamage, int stackMaxDamage, int maxStep) {
         return MathHelper.clamp(Math.round(maxStep - (float) stackDamage * maxStep / (float) stackMaxDamage), 0, maxStep);
-    }
-
-    // color transition from pastel (red to green).
-    public static int getItemBarColor(int stackStep, int maxStep) {
-        return MathHelper.hsvToRgb(0.35F * stackStep / (float) maxStep, 0.45F, 0.95F);
     }
 
     public boolean renderDurabilityHUD(DrawContext context, Identifier iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {

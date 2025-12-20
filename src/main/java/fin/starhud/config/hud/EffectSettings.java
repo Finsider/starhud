@@ -13,8 +13,11 @@ public class EffectSettings implements ConfigData {
     @Comment("Render the HUD Vertically, (Recommended to switch Different Type Gap with Same Type Gap if this is toggled.)")
     public boolean drawVertical = false;
 
-    @Comment("Draw the Timer with The Effect Color")
-    public boolean useEffectColor = false;
+    @Comment("Draw the HUD in a clock like fashion instead of a bars.")
+    public boolean drawTimer = false;
+
+    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    public ColorMode colorMode = ColorMode.CUSTOM;
 
     @Comment("Gap between the same type Effect HUD.")
     public int sameTypeGap = 1;
@@ -25,7 +28,21 @@ public class EffectSettings implements ConfigData {
     @ConfigEntry.ColorPicker
     public int infiniteColor = 0xB5D0E8;
 
+    @ConfigEntry.ColorPicker
+    public int customColor = 0xFFFFFF;
+
     public EffectSettings(BaseHUDSettings base) {
         this.base = base;
+    }
+
+    public ColorMode getColorMode() {
+        if (colorMode == null) colorMode = ColorMode.CUSTOM;
+        return colorMode;
+    }
+
+    public enum ColorMode {
+        CUSTOM,
+        EFFECT,
+        DYNAMIC
     }
 }

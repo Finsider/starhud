@@ -1,5 +1,6 @@
 package fin.starhud.hud.implementation.other;
 
+import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.hud.PingSettings;
 import fin.starhud.helper.HUDDisplayMode;
@@ -82,7 +83,7 @@ public class PingHUD extends AbstractHUD {
             }
         }
 
-        color = (SETTINGS.useDynamicColor ? AbstractDurabilityHUD.getItemBarColor(3 - step, 3) : SETTINGS.color) | 0xFF000000;
+        color = (SETTINGS.useDynamicColor ? Helper.getItemBarColor(3 - step, 3) : SETTINGS.color) | 0xFF000000;
         int width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
         setWidthHeightColor(width, ICON_HEIGHT, color);
 

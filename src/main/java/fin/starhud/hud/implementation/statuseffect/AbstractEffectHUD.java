@@ -4,10 +4,10 @@ import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
 import fin.starhud.config.hud.EffectSettings;
+import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.helper.StatusEffectAttribute;
 import fin.starhud.hud.AbstractHUD;
-import fin.starhud.hud.implementation.AbstractDurabilityHUD;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.texture.MissingSprite;
@@ -19,7 +19,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractEffectHUD extends AbstractHUD {
@@ -48,6 +50,19 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     private static final Map<RegistryEntry<StatusEffect>, Identifier> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
 
     private final EffectSettings effectSettings;
+    public int size;
+    private int sameTypeGap;
+    private int iconInfoGap;
+    private boolean drawVertical;
+    private boolean drawTimer;
+
+    private HUDDisplayMode displayMode;
+
+    private final List<String> effectDurationStrings = new ArrayList<>();
+    private final List<Identifier> effectTextures = new ArrayList<>();
+    private final List<Integer> effectWidths = new ArrayList<>();
+    private final List<Integer> effectTextColors = new ArrayList<>();
+    private final List<Float> effectAlphas = new ArrayList<>();
 
     public AbstractEffectHUD(EffectSettings effectSettings) {
         super(effectSettings.base);
@@ -55,12 +70,6 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     }
 
     public abstract boolean isEffectAllowedToRender(RegistryEntry<StatusEffect> registryEntry);
-
-    public int size;
-    private int sameTypeGap;
-    private int iconInfoGap;
-
-    private boolean drawVertical;
 
     @Override
     public boolean shouldRender() {
@@ -71,11 +80,25 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     public boolean collectHUDInformation() {
         if (CLIENT.player == null) return false;
 
+        effectDurationStrings.clear();
+        effectTextColors.clear();
+        effectTextures.clear();
+        effectWidths.clear();
+        effectAlphas.clear();
+
+        drawTimer = effectSettings.drawTimer;
+
+        if (drawTimer)
+            return collectTimerHUDInformation();
+        else
+            return collectBarHUDInformation();
+    }
+
+    public boolean collectBarHUDInformation() {
         size = 0;
-        for (StatusEffectInstance instance : CLIENT.player.getStatusEffects()) {
+        for (StatusEffectInstance instance : CLIENT.player.getStatusEffects())
             if (instance.shouldShowIcon() && isEffectAllowedToRender(instance.getEffectType()))
                 ++size;
-        }
 
         if (size == 0) return false;
 
@@ -92,13 +115,64 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
+    public boolean collectTimerHUDInformation() {
+        drawVertical = effectSettings.drawVertical;
+        sameTypeGap = effectSettings.sameTypeGap;
+        displayMode = effectSettings.base.displayMode;
+
+        int width = -sameTypeGap, height = -sameTypeGap;
+        for (StatusEffectInstance instance : CLIENT.player.getStatusEffects()) {
+            if (instance.shouldShowIcon() && isEffectAllowedToRender(instance.getEffectType())) {
+
+                StatusEffectAttribute statusEffectAttribute = StatusEffectAttribute.getStatusEffectAttribute(instance);
+                int duration = instance.getDuration();
+                String effectTimeStr = buildEffectDurationString(duration);
+                Identifier effectTexture = getStatusEffectTexture(instance.getEffectType());
+                int effectWidth = CLIENT.textRenderer.getWidth(effectTimeStr) - 1;
+                int totalInstanceWidth = displayMode.calculateWidth(13, effectWidth);
+
+                int color = getStatusEffectColor(instance, statusEffectAttribute) | 0xFF000000;
+                float alpha = getStatusEffectAlpha(instance);
+
+                effectDurationStrings.add(effectTimeStr);
+                effectTextures.add(effectTexture);
+                effectWidths.add(totalInstanceWidth);
+                effectTextColors.add(color);
+                effectAlphas.add(alpha);
+
+                if (drawVertical) {
+                    width = Math.max(totalInstanceWidth, width);
+                    height += 13 + sameTypeGap;
+                } else {
+                    height = 13;
+                    width += sameTypeGap + totalInstanceWidth;
+                }
+            }
+        }
+
+        size = effectDurationStrings.size();
+        if (effectDurationStrings.isEmpty()) return false;
+
+        setWidthHeight(width, height);
+
+        return true;
+    }
+
     @Override
     public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
         if (CLIENT.player == null) return false;
+        if (size == 0) return false;
 
+        if (drawTimer)
+            return renderTimerHUD(context, x, y, drawBackground);
+        else
+            return renderBarHUD(context, x, y, drawBackground);
+    }
+
+    public boolean renderBarHUD(DrawContext context, int x, int y, boolean drawBackground) {
         for (StatusEffectInstance statusEffectInstance : CLIENT.player.getStatusEffects()) {
 
-            if (drawStatusEffectHUD(context, statusEffectInstance, x, y, drawBackground)) {
+            if (drawStatusEffectBarHUD(context, statusEffectInstance, x, y, drawBackground)) {
                 if (drawVertical) {
                     y += sameTypeGap;
                 } else {
@@ -111,7 +185,30 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean drawStatusEffectHUD(DrawContext context, StatusEffectInstance statusEffectInstance, int x, int y, boolean drawBackground) {
+    public boolean renderTimerHUD(DrawContext context, int x, int y, boolean drawBackground) {
+        for (int i = 0; i < size; ++i) {
+            drawStatusEffectTimerHUD(
+                    context,
+                    x, y,
+                    effectTextures.get(i),
+                    effectDurationStrings.get(i),
+                    effectWidths.get(i), 13,
+                    effectTextColors.get(i),
+                    ColorHelper.getWhite(effectAlphas.get(i)),
+                    drawBackground
+            );
+
+            if (drawVertical) {
+                y += 13 + sameTypeGap;
+            } else {
+                x += effectWidths.get(i) + sameTypeGap;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean drawStatusEffectBarHUD(DrawContext context, StatusEffectInstance statusEffectInstance, int x, int y, boolean drawBackground) {
         if (!statusEffectInstance.shouldShowIcon())
             return false;
 
@@ -157,16 +254,13 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         }
 
         int duration = statusEffectInstance.getDuration();
-
-        int step, color;
+        int color = getStatusEffectColor(statusEffectInstance, statusEffectAttribute) | 0xFF000000;
+        int step = -1;
         if (statusEffectInstance.isInfinite()) {
             step = 7;
-            color = effectSettings.infiniteColor | 0xFF000000;
         } else {
             int maxDuration = statusEffectAttribute.maxDuration();
-
             step = Helper.getStep(duration, maxDuration, 7);
-            color = (effectSettings.useEffectColor ? registryEntry.value().getColor() : AbstractDurabilityHUD.getItemBarColor(step, 7)) | 0xFF000000;
         }
 
         // draw timer bar
@@ -188,12 +282,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                 color
         );
 
-        float alpha = 1.0F;
-        if (duration <= 200 && !statusEffectInstance.isInfinite()) { // minecraft's status effect blinking.
-            int n = 10 - duration / 20;
-            alpha = MathHelper.clamp((float)duration / 10.0F / 5.0F * 0.5F, 0.0F, 0.5F) + MathHelper.cos((float)duration * (float)Math.PI / 5.0F) * MathHelper.clamp((float)n / 10.0F * 0.25F, 0.0F, 0.25F);
-            alpha = MathHelper.clamp(alpha, 0.0F, 1.0F);
-        }
+        float alpha = getStatusEffectAlpha(statusEffectInstance);
 
         // draw effect texture.
         RenderUtils.drawTextureHUD(
@@ -225,6 +314,64 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
+    public void drawStatusEffectTimerHUD(DrawContext context, int x, int y, Identifier effectTexture, String timeStr, int width, int height, int textColor, int iconColor, boolean drawBackground) {
+
+        // shrink the texture from 18x18 to 9x9.
+        int from = 18;
+        int to = 9;
+        float rat = (float) to / from;
+
+        drawSmallHUD(
+                context,
+                timeStr,
+                x, y,
+                width, height,
+                effectTexture,
+                0.0F, 0.0F,
+                to, to,
+                (int) (from * rat), (int) (from * rat),
+                textColor, iconColor,
+                displayMode,
+                drawBackground
+        );
+    }
+
+    public static boolean drawSmallHUD(DrawContext context, String infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground) {
+        if (infoText == null || iconTexture == null || displayMode == null) return false;
+
+        int padding = HUD_SETTINGS.textPadding;
+        int gap = HUD_SETTINGS.iconInfoGap;
+
+        int iconXOffset = 2, iconYOffset = 2;
+
+        switch (displayMode) {
+            case ICON ->  {
+                if (drawBackground)
+                    RenderUtils.fillRounded(context, x, y, x + 13, y + 13, 0x80000000);
+                RenderUtils.drawTextureHUD(context, iconTexture, x + iconXOffset, y + iconYOffset, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
+            }
+            case INFO ->  {
+                if (drawBackground)
+                    RenderUtils.fillRounded(context, x, y, x + width, y + height, 0x80000000);
+                RenderUtils.drawTextHUD(context, infoText, x + padding, y + 3, color, false);
+            }
+            case BOTH ->  {
+                if (drawBackground) {
+                    if (gap <= 0)
+                        RenderUtils.fillRounded(context, x, y, x + width, y + height, 0x80000000);
+                    else {
+                        RenderUtils.fillRoundedLeftSide(context, x, y, x + 13, y + height, 0x80000000);
+                        RenderUtils.fillRoundedRightSide(context, x + 13 + gap, y, x + width, y + height, 0x80000000);
+                    }
+                }
+                RenderUtils.drawTextureHUD(context, iconTexture, x + iconXOffset, y + iconYOffset, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
+                RenderUtils.drawTextHUD(context, infoText, x + 13 + gap + padding, y + 3, color, false);
+            }
+        }
+
+        return true;
+    }
+
     public int getDynamicWidth(int size) {
         // if we draw the HUD vertically, essentially the width should be the texture width
         return effectSettings.drawVertical ? STATUS_EFFECT_TEXTURE_WIDTH
@@ -245,6 +392,66 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
 
     public int getSameTypeGap() {
         return (effectSettings.drawVertical ? getInstanceHeight(): STATUS_EFFECT_TEXTURE_WIDTH) + effectSettings.sameTypeGap;
+    }
+
+    public int getStatusEffectColor(StatusEffectInstance instance, StatusEffectAttribute attribute) {
+        if (instance.isInfinite())
+            return effectSettings.infiniteColor;
+        else if (instance.isAmbient())
+            return effectSettings.ambientColor;
+        else {
+            return switch (effectSettings.getColorMode()) {
+                case CUSTOM -> effectSettings.customColor;
+                case EFFECT -> instance.getEffectType().value().getColor();
+                case DYNAMIC -> Helper.getItemBarColor(instance.getDuration(), attribute.maxDuration());
+            };
+        }
+    }
+
+    public float getStatusEffectAlpha(StatusEffectInstance instance) {
+        int duration = instance.getDuration();
+        float alpha = 1.0f;
+
+        if (duration <= 200 && !instance.isInfinite()) { // minecraft's status effect blinking.
+            int n = 10 - duration / 20;
+            alpha = MathHelper.clamp((float)duration / 10.0F / 5.0F * 0.5F, 0.0F, 0.5F) + MathHelper.cos((float)duration * (float)Math.PI / 5.0F) * MathHelper.clamp((float)n / 10.0F * 0.25F, 0.0F, 0.25F);
+            alpha = MathHelper.clamp(alpha, 0.0F, 1.0F);
+        }
+
+        return alpha;
+    }
+
+    public String buildEffectDurationString(int duration) {
+        if (duration == -1) return "--:--";
+
+        String l = "", r = "";
+
+        int seconds = duration / 20;
+        int minutes = seconds / 60;
+        int hours = minutes / 60;
+
+        if (hours > 99) return "--:--";
+        else if (hours > 0) {
+
+            if (hours < 10) l = "0";
+            l += hours;
+
+            minutes %= 60;
+            if (minutes < 10) r = "0";
+            r += minutes;
+
+        } else {
+
+            if (minutes < 10) l = "0";
+            l += minutes;
+
+            seconds %= 60;
+            if (seconds < 10) r = "0";
+            r += seconds;
+        }
+
+
+        return l + ':' + r;
     }
 
     public static Identifier getStatusEffectTexture(RegistryEntry<StatusEffect> effect) {
