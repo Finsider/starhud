@@ -17,7 +17,7 @@ public class EffectSettings implements ConfigData {
     public boolean drawTimer = false;
 
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-    public ColorMode colorMode = ColorMode.CUSTOM;
+    public ColorMode colorMode = ColorMode.DYNAMIC;
 
     @Comment("Gap between the same type Effect HUD.")
     public int sameTypeGap = 1;
@@ -31,12 +31,13 @@ public class EffectSettings implements ConfigData {
     @ConfigEntry.ColorPicker
     public int customColor = 0xFFFFFF;
 
-    public EffectSettings(BaseHUDSettings base) {
+    public EffectSettings(BaseHUDSettings base, int customColor) {
         this.base = base;
+        this.customColor = customColor;
     }
 
     public ColorMode getColorMode() {
-        if (colorMode == null) colorMode = ColorMode.CUSTOM;
+        if (colorMode == null) colorMode = ColorMode.DYNAMIC;
         return colorMode;
     }
 

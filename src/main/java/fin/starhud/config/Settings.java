@@ -147,10 +147,16 @@ public class Settings implements ConfigData {
 
     public static class Effect {
         @ConfigEntry.Gui.CollapsibleObject
-        public EffectSettings positiveSettings = new EffectSettings(new BaseHUDSettings(true, -5, 5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN));
+        public EffectSettings positiveSettings = new EffectSettings(
+                new BaseHUDSettings(true, -5, 5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN),
+                0xCFF5D2
+        );
 
         @ConfigEntry.Gui.CollapsibleObject
-        public EffectSettings negativeSettings = new EffectSettings(new BaseHUDSettings(true, -5, 39, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN));
+        public EffectSettings negativeSettings = new EffectSettings(
+                new BaseHUDSettings(true, -5, 39, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN),
+                0xDCE8B5
+        );
     }
 
     @ConfigEntry.Category("targeted")
@@ -247,7 +253,7 @@ public class Settings implements ConfigData {
         if (netherCoordY.base == null) {
             coordSettings.netherY = new CoordSettings(
                     new BaseHUDSettings(false, 5, 100 + 14, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN),
-                    0xf1ae94
+                    0xCFF5D2
             );
         }
 
@@ -298,11 +304,17 @@ public class Settings implements ConfigData {
 
         EffectSettings positive = effectSettings.positiveSettings;
         if (positive.base == null)
-            effectSettings.positiveSettings = new EffectSettings(new BaseHUDSettings(true, -5, 5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN));
+            effectSettings.positiveSettings = new EffectSettings(
+                    new BaseHUDSettings(true, -5, 5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN),
+                    0xAEEDE6
+            );
 
         EffectSettings negative = effectSettings.negativeSettings;
         if (negative.base == null)
-            effectSettings.negativeSettings = new EffectSettings(new BaseHUDSettings(true, -5, 39, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN));
+            effectSettings.negativeSettings = new EffectSettings(
+                    new BaseHUDSettings(true, -5, 39, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN),
+                    0xDCE8B5
+            );
 
         if (targetedCrosshairSettings.base == null)
             targetedCrosshairSettings = new TargetedCrosshairSettings();

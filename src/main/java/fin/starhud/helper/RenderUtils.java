@@ -155,7 +155,7 @@ public class RenderUtils {
     public static void drawTextHUD(DrawContext context, String str, int x, int y, int color, boolean shadow) {
         if (str != null) {
             OrderedText orderedText = OrderedText.styledForwardsVisitedString(str, Style.EMPTY);
-            context.drawText(CLIENT.textRenderer, orderedText, x, y + HUD_SETTINGS.textYOffset, color, shadow);
+            drawTextHUD(context, orderedText, x, y, color, shadow);
         }
     }
 
