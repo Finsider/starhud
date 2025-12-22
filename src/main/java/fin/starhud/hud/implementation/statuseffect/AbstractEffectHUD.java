@@ -55,6 +55,8 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     private int iconInfoGap;
     private boolean drawVertical;
     private boolean drawTimer;
+    private boolean drawHidden;
+    private boolean combineBackground;
 
     private HUDDisplayMode displayMode;
 
@@ -87,6 +89,8 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         effectAlphas.clear();
 
         drawTimer = effectSettings.drawTimer;
+        drawHidden = effectSettings.drawHidden;
+        combineBackground = effectSettings.combineBackground;
 
         if (drawTimer)
             return collectTimerHUDInformation();
@@ -97,7 +101,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     public boolean collectBarHUDInformation() {
         size = 0;
         for (StatusEffectInstance instance : CLIENT.player.getStatusEffects())
-            if (instance.shouldShowIcon() && isEffectAllowedToRender(instance.getEffectType()))
+            if ((instance.shouldShowIcon() || drawHidden) && isEffectAllowedToRender(instance.getEffectType()))
                 ++size;
 
         if (size == 0) return false;
@@ -122,7 +126,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
 
         int width = -sameTypeGap, height = -sameTypeGap;
         for (StatusEffectInstance instance : CLIENT.player.getStatusEffects()) {
-            if (instance.shouldShowIcon() && isEffectAllowedToRender(instance.getEffectType())) {
+            if ((instance.shouldShowIcon() || drawHidden) && isEffectAllowedToRender(instance.getEffectType())) {
 
                 StatusEffectAttribute statusEffectAttribute = StatusEffectAttribute.getStatusEffectAttribute(instance);
                 int duration = instance.getDuration();
@@ -163,6 +167,11 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         if (CLIENT.player == null) return false;
         if (size == 0) return false;
 
+        if (drawBackground && combineBackground) {
+            RenderUtils.fillRounded(context, x, y, x + getWidth(), y + getHeight(), 0x80000000);
+            drawBackground = false; // don't allow instances to draw background if they're combined.
+        }
+
         if (drawTimer)
             return renderTimerHUD(context, x, y, drawBackground);
         else
@@ -170,6 +179,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     }
 
     public boolean renderBarHUD(DrawContext context, int x, int y, boolean drawBackground) {
+
         for (StatusEffectInstance statusEffectInstance : CLIENT.player.getStatusEffects()) {
 
             if (drawStatusEffectBarHUD(context, statusEffectInstance, x, y, drawBackground)) {
@@ -186,6 +196,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     }
 
     public boolean renderTimerHUD(DrawContext context, int x, int y, boolean drawBackground) {
+
         for (int i = 0; i < size; ++i) {
             drawStatusEffectTimerHUD(
                     context,
@@ -209,7 +220,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     }
 
     public boolean drawStatusEffectBarHUD(DrawContext context, StatusEffectInstance statusEffectInstance, int x, int y, boolean drawBackground) {
-        if (!statusEffectInstance.shouldShowIcon())
+        if (!statusEffectInstance.shouldShowIcon() && !drawHidden)
             return false;
 
         RegistryEntry<StatusEffect> registryEntry = statusEffectInstance.getEffectType();

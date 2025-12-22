@@ -10,11 +10,17 @@ public class EffectSettings implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public BaseHUDSettings base;
 
+    @Comment("Draw the HUD in a clock like fashion instead of a bars.")
+    public boolean drawTimer = false;
+
     @Comment("Render the HUD Vertically, (Recommended to switch Different Type Gap with Same Type Gap if this is toggled.)")
     public boolean drawVertical = false;
 
-    @Comment("Draw the HUD in a clock like fashion instead of a bars.")
-    public boolean drawTimer = false;
+    @Comment("Also draw Status Effect that are supposedly Hidden.")
+    public boolean drawHidden = false;
+
+    @Comment("Combine all the hud background.")
+    public boolean combineBackground = false;
 
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public ColorMode colorMode = ColorMode.DYNAMIC;

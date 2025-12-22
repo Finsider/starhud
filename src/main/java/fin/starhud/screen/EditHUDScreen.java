@@ -430,6 +430,7 @@ public class EditHUDScreen extends Screen {
                 .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.group_alignment")))
                 .dimensions(xGroupAlignmentButton, yBottomGroup, terminatorWidth, SQUARE_WIDGET_LENGTH).build();
 
+        moreOptionButtons.clear();
         moreOptionButtons.add(alignmentXButton);
         moreOptionButtons.add(alignmentYButton);
         moreOptionButtons.add(directionXButton);
@@ -439,6 +440,7 @@ public class EditHUDScreen extends Screen {
         moreOptionButtons.add(shouldRenderButton);
         moreOptionButtons.add(clampPosButton);
 
+        moreOptionTexts.clear();
         moreOptionTexts.add(xField);
         moreOptionTexts.add(yField);
         moreOptionTexts.add(scaleField);
@@ -520,7 +522,9 @@ public class EditHUDScreen extends Screen {
             renderDragBox(context);
         }
 
-        // draw all visible hud bounding boxes.
+        // draw all visible hud with bounding boxes.
+        HUDComponent.getInstance().renderAll(context);
+
         renderBoundingBoxes(context, mouseX, mouseY);
     }
 
@@ -543,7 +547,6 @@ public class EditHUDScreen extends Screen {
     }
 
     private void renderBoundingBoxes(DrawContext context, int mouseX, int mouseY) {
-        HUDComponent.getInstance().renderAll(context);
 
         for (AbstractHUD hud : HUDComponent.getInstance().getRenderedHUDs()) {
             if (hud.isScaled()) {
