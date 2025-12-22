@@ -11,6 +11,7 @@ import fin.starhud.hud.GroupedHUD;
 import fin.starhud.hud.HUDComponent;
 import fin.starhud.hud.HUDId;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfigClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
@@ -315,7 +316,7 @@ public class EditHUDScreen extends Screen {
                             isMoreOptionActivated = false;
                             selectedHUDs.clear();
                             if (this.client == null) return;
-                            this.client.setScreen(AutoConfig.getConfigScreen(Settings.class, this).get());
+                            this.client.setScreen(AutoConfigClient.getConfigScreen(Settings.class, this).get());
                         }
                 )
                 .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.config")))
