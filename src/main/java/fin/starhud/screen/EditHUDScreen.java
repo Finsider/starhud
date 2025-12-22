@@ -43,7 +43,6 @@ public class EditHUDScreen extends Screen {
 
     public Screen parent;
 
-    private final Map<String, AbstractHUD> individualHUDs;
     private final Map<String, GroupedHUD> groupedHUDs;
 
     private final Map<String, BaseHUDSettings> oldHUDSettings;
@@ -104,7 +103,6 @@ public class EditHUDScreen extends Screen {
         super(title);
         this.parent = parent;
 
-        individualHUDs = HUDComponent.getInstance().getIndividualHUDs();
         groupedHUDs = HUDComponent.getInstance().getGroupedHUDs();
 
         Map<String, AbstractHUD> HUDMap = HUDComponent.getInstance().getHudMap();
@@ -922,19 +920,9 @@ public class EditHUDScreen extends Screen {
 
         Set<AbstractHUD> boxSelectedHUDs = new HashSet<>();
 
-        for (AbstractHUD hud : individualHUDs.values()) {
-            if (hud.shouldRender() && !hud.getBoundingBox().isEmpty()) {
-                if (hud.intersects(x1, y1, x2, y2)) {
-                    boxSelectedHUDs.add(hud);
-                }
-            }
-        }
-
-        for (AbstractHUD hud : groupedHUDs.values()) {
-            if (!hud.isInGroup() && hud.shouldRender() && !hud.getBoundingBox().isEmpty()) {
-                if (hud.intersects(x1, y1, x2, y2)) {
-                    boxSelectedHUDs.add(hud);
-                }
+        for (AbstractHUD hud : HUDComponent.getInstance().getRenderedHUDs()) {
+            if (hud.intersects(x1, y1, x2, y2)) {
+                boxSelectedHUDs.add(hud);
             }
         }
 
