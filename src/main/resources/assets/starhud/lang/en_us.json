@@ -346,7 +346,7 @@
   "text.autoconfig.starhud.option.speedSettings.useFullSpeed": "Use Full Speed",
   "text.autoconfig.starhud.option.speedSettings.additionalString": "Extra Label",
 
-  "text.autoconfig.starhud.category.player_count": "Speed",
+  "text.autoconfig.starhud.category.player_count": "Player Count",
   "text.autoconfig.starhud.option.playerCountSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.playerCountSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.playerCountSettings.color": "Color",
