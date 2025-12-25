@@ -28,6 +28,11 @@
   "starhud.help.key.clamp_all": "[⇧ Shift + C]",
   "starhud.help.info.clamp_all": "Clamp Every HUD Rendered",
 
+  "starhud.help.key.undo": "[Ctrl + Z]",
+  "starhud.help.info.undo": "Undo Previous Action",
+  "starhud.help.key.redo": "[Ctrl + Y]",
+  "starhud.help.info.redo": "Redo Previously Undone Action",
+
   "starhud.screen.field.x": "X",
   "starhud.screen.field.y": "Y",
   "starhud.screen.field.scale": "Scale",
@@ -350,10 +355,5 @@
   "text.autoconfig.starhud.option.playerCountSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.playerCountSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.playerCountSettings.color": "Color",
-  "text.autoconfig.starhud.option.playerCountSettings.showMaxPlayer": "Show Max Player Count",
-
-  "starhud.help.key.undo": "[Ctrl + Z]",
-  "starhud.help.info.undo": "Undo Previous Action",
-  "starhud.help.key.redo": "[Ctrl + Y]",
-  "starhud.help.info.redo": "Redo Previously Undone Action"
+  "text.autoconfig.starhud.option.playerCountSettings.showMaxPlayer": "Show Max Player Count"
 }

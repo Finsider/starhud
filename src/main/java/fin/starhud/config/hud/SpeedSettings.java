@@ -17,7 +17,7 @@ public class SpeedSettings {
     public int color = 0xb5d0e8;
 
     @Comment("Whether display the ground speed only, or full-3D speed.")
-    public boolean useFullSpeed = false;
+    public boolean useFullSpeed = true;
 
     public String additionalString = " BPS";
 }

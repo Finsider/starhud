@@ -13,7 +13,7 @@ public class PlayerCountSettings {
     public BaseHUDSettings base = new BaseHUDSettings(true, 70, -5, ScreenAlignmentX.LEFT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP);
 
     @ConfigEntry.ColorPicker
-    public int color = 0xb7dff5;
+    public int color = 0xbfdfff;
 
-    public boolean showMaxPlayer = false;
+    public boolean showMaxPlayer = true;
 }

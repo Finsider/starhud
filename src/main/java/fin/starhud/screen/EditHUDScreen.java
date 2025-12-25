@@ -39,12 +39,13 @@ public class EditHUDScreen extends Screen {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final GeneralSettings.EditHUDScreenSettings SETTINGS = Main.settings.generalSettings.screenSettings;
 
-    private static final int PADDING = 25;
-    private static final int WIDGET_WIDTH = 100;
-    private static final int WIDGET_HEIGHT = 20;
-    private static final int TEXT_FIELD_WIDTH = 40;
-    private static final int SQUARE_WIDGET_LENGTH = 20;
-    private static final int GAP = 5;
+    public static final int PADDING = 25;
+    public static final int WIDGET_WIDTH = 100;
+    public static final int WIDGET_HEIGHT = 20;
+    public static final int TEXT_FIELD_WIDTH = 40;
+    public static final int SQUARE_WIDGET_LENGTH = 20;
+    public static final int GAP = 5;
+    public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
 
     public Screen parent;
 
@@ -59,7 +60,6 @@ public class EditHUDScreen extends Screen {
     private boolean dragging = false;
     private final List<AbstractHUD> selectedHUDs = new ArrayList<>();
 
-    private boolean isHelpActivated = false;
     private boolean isMoreOptionActivated = false;
     private boolean canSelectedHUDsGroup = false;
     private boolean canSelectedHUDUngroup = false;
@@ -83,30 +83,11 @@ public class EditHUDScreen extends Screen {
     // special group buttons
     private TextFieldWidget gapField;
     private ButtonWidget groupAlignmentButton;
-    private ButtonWidget groupUngroupButton;
     private ButtonWidget childAlignmentButton;
-
-    private static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
-
-    private record Help(Text key, Text info) {}
-
-    private static final Help[] HELPS = {
-            new Help(Text.translatable("starhud.help.key.move_1"), Text.translatable("starhud.help.info.move_1")),
-            new Help(Text.translatable("starhud.help.key.move_5"), Text.translatable("starhud.help.info.move_5")),
-            new Help(Text.translatable(isMac ? "starhud.help.key.alignment_mac" : "starhud.help.key.alignment_windows"), Text.translatable("starhud.help.info.alignment")),
-            new Help(Text.translatable("starhud.help.key.direction"), Text.translatable("starhud.help.info.direction")),
-            new Help(Text.translatable(isMac ? "starhud.help.key.revert_changes_mac" : "starhud.help.key.revert_changes_windows"), Text.translatable("starhud.help.info.revert_changes")),
-            new Help(Text.translatable("starhud.help.key.group_ungroup"), Text.translatable("starhud.help.info.group_ungroup")),
-            new Help(Text.translatable("starhud.help.key.clamp_all"), Text.translatable("starhud.help.info.clamp_all")),
-            new Help(Text.translatable("starhud.help.key.undo"), Text.translatable("starhud.help.info.undo")),
-            new Help(Text.translatable("starhud.help.key.redo"), Text.translatable("starhud.help.info.redo"))
-    };
-
-    private static int HELP_KEY_MAX_WIDTH;
-    private static int HELP_INFO_MAX_WIDTH;
-    private static final int HELP_HEIGHT = 5 + (HELPS.length * 9) + 5;
+    private ButtonWidget groupUngroupButton;
 
     private final HUDHistory history = new HUDHistory();
+    private final HelpWidget helpWidget = new HelpWidget();
 
     public EditHUDScreen(Text title, Screen parent) {
         super(title);
@@ -275,7 +256,7 @@ public class EditHUDScreen extends Screen {
         ButtonWidget configScreenButton = ButtonWidget.builder(
                         Text.translatable("starhud.screen.button.config"),
                         button -> {
-                            isHelpActivated = false;
+                            helpWidget.setActive(false);
                             isMoreOptionActivated = false;
                             selectedHUDs.clear();
                             if (this.client == null) return;
@@ -290,8 +271,7 @@ public class EditHUDScreen extends Screen {
         ButtonWidget helpButton = ButtonWidget.builder(
                 Text.translatable("starhud.screen.button.help"),
                 button -> {
-                    isHelpActivated = !isHelpActivated;
-                    onHelpSwitched();
+                    helpWidget.setActive(!helpWidget.isActive());
                 }
         )
                 .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.help")))
@@ -476,20 +456,6 @@ public class EditHUDScreen extends Screen {
         hideMoreOptionsButtons();
         updateFieldsFromSelectedHUD();
         updateGroupFieldFromSelectedHUD();
-        getHelpMaxWidths();
-    }
-
-    private void getHelpMaxWidths() {
-        int maxKey = 0;
-        int maxInfo = 0;
-
-        for (Help h : HELPS) {
-            maxKey = Math.max(maxKey, CLIENT.textRenderer.getWidth(h.key));
-            maxInfo = Math.max(maxInfo, CLIENT.textRenderer.getWidth(h.info));
-        }
-
-        HELP_KEY_MAX_WIDTH = maxKey;
-        HELP_INFO_MAX_WIDTH = maxInfo;
     }
 
     @Override
@@ -508,12 +474,11 @@ public class EditHUDScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
 
         // draw help
-        if (isHelpActivated) {
+        if (helpWidget.isActive()) {
             final int CENTER_X = this.width / 2;
             final int CENTER_Y = this.height / 2 + (PADDING / 2);
-            renderHelp(context, CENTER_X, CENTER_Y + GAP);
-            if (!selectedHUDs.isEmpty())
-                renderHUDInformation(context, CENTER_X, CENTER_Y + GAP  + HELP_HEIGHT + GAP);
+            AbstractHUD hud = selectedHUDs.isEmpty() ? null : selectedHUDs.getFirst();
+            helpWidget.render(context, hud, CENTER_X, CENTER_Y + GAP);
         }
 
         // draw X and Y next to their textField.
@@ -610,44 +575,6 @@ public class EditHUDScreen extends Screen {
         if (hud.isHovered(mouseX, mouseY)) {
             context.fill(x, y, x + width, y + height, (color & 0x00FFFFFF) | 0x80000000);
         }
-    }
-
-    private void renderHelp(DrawContext context, int x, int y) {
-        int padding = 5;
-
-        int lineHeight = CLIENT.textRenderer.fontHeight;
-
-        int maxKeyWidth = HELP_KEY_MAX_WIDTH;
-        int maxInfoWidth = HELP_INFO_MAX_WIDTH;
-
-        int width = padding + maxKeyWidth + padding + 1 + padding + maxInfoWidth + padding;
-        int height = padding + (lineHeight * HELPS.length) + padding - 2;
-
-        x -= width / 2;
-        y -= padding;
-
-        context.fill(x, y, x + width, y + height, 0x80000000);
-
-        for (Help h : HELPS) {
-            Text key = h.key;
-            Text info = h.info;
-
-            context.drawText(CLIENT.textRenderer, key, x + padding, y + padding, 0xFFFFFFFF, false);
-            context.drawText(CLIENT.textRenderer, info, x + padding + maxKeyWidth + padding + 1 + padding, y + padding, 0xFFFFFFFF, false);
-
-            y += lineHeight;
-        }
-    }
-
-    private void renderHUDInformation(DrawContext context, int x, int y) {
-        String text = selectedHUDs.getFirst().getName();
-        int textWidth = CLIENT.textRenderer.getWidth(text);
-        int padding = 5;
-
-        x -= (textWidth / 2);
-
-        context.fill(x - padding, y - padding, x + textWidth + padding, y + CLIENT.textRenderer.fontHeight - 2 + padding, 0x80000000);
-        context.drawText(CLIENT.textRenderer, text, x, y, 0xFFFFFFFF, false);
     }
 
     boolean dragSelection = false;
@@ -1264,14 +1191,10 @@ public class EditHUDScreen extends Screen {
         this.client.setScreen(this.parent);
     }
 
-    private void onHelpSwitched() {
-    }
-
     private void updateGroupFieldFromSelectedHUD() {
         super.setFocused(null);
 
         if (selectedHUDs.isEmpty()) {
-            
             canSelectedHUDUngroup = false;
             canSelectedHUDsGroup = false;
             groupUngroupButton.active = false;
@@ -1560,7 +1483,7 @@ public class EditHUDScreen extends Screen {
         return new ReversibleAction(
                 () -> {
                     hud.getSettings().shouldRender = newShouldRender;
-                    hud.update();;
+                    hud.update();
                 },
                 () -> {
                     hud.getSettings().shouldRender = oldShouldRender;
