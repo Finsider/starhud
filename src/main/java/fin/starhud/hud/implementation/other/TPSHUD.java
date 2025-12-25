@@ -8,7 +8,6 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.helper.TPSTracker;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import fin.starhud.hud.implementation.AbstractDurabilityHUD;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;

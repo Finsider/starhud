@@ -238,7 +238,7 @@ public class HUDComponent {
     // grouping function, experimental, may crash.
 
     // hud in huds MUST be ungrouped. not doing so will crash.
-    public void group(List<AbstractHUD> huds) {
+    public GroupedHUDSettings group(List<AbstractHUD> huds) {
         GroupedHUDSettings newSettings = new GroupedHUDSettings();
 
         List<GroupedHUDSettings> groupedHUDs = Main.settings.hudList.groupedHuds;
@@ -267,6 +267,8 @@ public class HUDComponent {
 
         groupedHUDs.add(newSettings);
         HUDComponent.getInstance().updateActiveHUDs();
+
+        return newSettings;
     }
 
     public void unGroup(GroupedHUD groupedHUD) {

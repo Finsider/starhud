@@ -39,7 +39,6 @@
   "starhud.screen.button.y_direction": "Y Direction: %s",
   "starhud.screen.button.display": "Display: %s",
   "starhud.screen.button.background": "Background: %s",
-  "starhud.screen.button.clamp_pos": "C",
 
   "starhud.screen.button.x_alignment_na": "X Alignment: N/A",
   "starhud.screen.button.y_alignment_na": "Y Alignment: N/A",
@@ -62,7 +61,6 @@
   "starhud.screen.tooltip.help": "Help",
   "starhud.screen.tooltip.more_options": "More Options",
   "starhud.screen.tooltip.child_alignment": "Child Alignment",
-  "starhud.screen.tooltip.clamp_pos": "Fix every HUD Position if any of them goes out of bound.",
   "starhud.screen.tooltip.group_alignment": "Group Alignment",
 
   "starhud.screen.button.group_alignment.vertical": "Vertical",
@@ -346,5 +344,9 @@
   "text.autoconfig.starhud.option.speedSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.speedSettings.color": "Color",
   "text.autoconfig.starhud.option.speedSettings.useFullSpeed": "Use Full Speed",
-  "text.autoconfig.starhud.option.speedSettings.additionalString": "Extra Label"
+  "text.autoconfig.starhud.option.speedSettings.additionalString": "Extra Label",
+  "starhud.help.key.undo": "[Ctrl + Z]",
+  "starhud.help.info.undo": "Undo Previous Action",
+  "starhud.help.key.redo": "[Ctrl + Y]",
+  "starhud.help.info.redo": "Redo Previously Undone Action"
 }

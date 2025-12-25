@@ -1,7 +1,7 @@
 package fin.starhud.mixin;
 
-import fin.starhud.helper.Box;
 import fin.starhud.condition.PlayerListHUD;
+import fin.starhud.helper.Box;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.scoreboard.Scoreboard;

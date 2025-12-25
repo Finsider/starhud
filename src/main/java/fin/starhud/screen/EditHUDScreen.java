@@ -22,6 +22,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.input.KeyInput;
 import net.minecraft.text.Text;
+import net.minecraft.util.Pair;
 import org.joml.Vector2d;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -58,6 +59,7 @@ public class EditHUDScreen extends Screen {
     private boolean isMoreOptionActivated = false;
     private boolean canSelectedHUDsGroup = false;
     private boolean canSelectedHUDUngroup = false;
+    private boolean supressFieldEvents = false;
 
     // widgets
     private TextFieldWidget xField;
@@ -70,7 +72,6 @@ public class EditHUDScreen extends Screen {
     private ButtonWidget directionYButton;
     private ButtonWidget hudDisplayButton;
     private ButtonWidget drawBackgroundButton;
-    private ButtonWidget clampPosButton;
 
     private final List<ButtonWidget> moreOptionButtons = new ArrayList<>();
     private final List<TextFieldWidget> moreOptionTexts = new ArrayList<>();
@@ -92,12 +93,16 @@ public class EditHUDScreen extends Screen {
             new Help(Text.translatable("starhud.help.key.direction"), Text.translatable("starhud.help.info.direction")),
             new Help(Text.translatable(isMac ? "starhud.help.key.revert_changes_mac" : "starhud.help.key.revert_changes_windows"), Text.translatable("starhud.help.info.revert_changes")),
             new Help(Text.translatable("starhud.help.key.group_ungroup"), Text.translatable("starhud.help.info.group_ungroup")),
-            new Help(Text.translatable("starhud.help.key.clamp_all"), Text.translatable("starhud.help.info.clamp_all"))
+            new Help(Text.translatable("starhud.help.key.clamp_all"), Text.translatable("starhud.help.info.clamp_all")),
+            new Help(Text.translatable("starhud.help.key.undo"), Text.translatable("starhud.help.info.undo")),
+            new Help(Text.translatable("starhud.help.key.redo"), Text.translatable("starhud.help.info.redo"))
     };
 
     private static int HELP_KEY_MAX_WIDTH;
     private static int HELP_INFO_MAX_WIDTH;
     private static final int HELP_HEIGHT = 5 + (HELPS.length * 9) + 5;
+
+    private final HUDHistory history = new HUDHistory();
 
     public EditHUDScreen(Text title, Screen parent) {
         super(title);
@@ -167,9 +172,8 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    selectedHUD.getSettings().originX = selectedHUD.getSettings().originX.next();
-                    selectedHUD.getSettings().growthDirectionX = selectedHUD.getSettings().growthDirectionX.recommendedScreenAlignment(selectedHUD.getSettings().originX);
-                    selectedHUD.update();
+                    HUDAction act = onAlignmentXChanged(selectedHUD, selectedHUD.getSettings().getOriginX().next());
+                    history.execute(act);
                     alignmentXButton.setMessage(Text.translatable("starhud.screen.button.x_alignment", selectedHUD.getSettings().getOriginX().toString()));
                 }
         ).dimensions(alignmentXButtonX, alignmentXButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
@@ -180,9 +184,8 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    selectedHUD.getSettings().originY = selectedHUD.getSettings().originY.next();
-                    selectedHUD.getSettings().growthDirectionY = selectedHUD.getSettings().growthDirectionY.recommendedScreenAlignment(selectedHUD.getSettings().originY);
-                    selectedHUD.update();
+                    HUDAction act = onAlignmentYChanged(selectedHUD, selectedHUD.getSettings().getOriginY().next());
+                    history.execute(act);
                     alignmentYButton.setMessage(Text.translatable("starhud.screen.button.y_alignment", selectedHUD.getSettings().getOriginY().toString()));
                 }
         ).dimensions(alignmentYButtonX, alignmentXButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
@@ -193,8 +196,8 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    selectedHUD.getSettings().growthDirectionX = selectedHUD.getSettings().growthDirectionX.next();
-                    selectedHUD.update();
+                    HUDAction act = onDirectionXChanged(selectedHUD, selectedHUD.getSettings().getGrowthDirectionX().next());
+                    history.execute(act);
                     directionXButton.setMessage(Text.translatable("starhud.screen.button.x_direction", selectedHUD.getSettings().getGrowthDirectionX().toString()));
                 }
         ).dimensions(alignmentXButtonX, directionXButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
@@ -214,8 +217,8 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    selectedHUD.getSettings().growthDirectionY = selectedHUD.getSettings().growthDirectionY.next();
-                    selectedHUD.update();
+                    HUDAction act = onDirectionYChanged(selectedHUD, selectedHUD.getSettings().getGrowthDirectionY().next());
+                    history.execute(act);
                     directionYButton.setMessage(Text.translatable("starhud.screen.button.y_direction", selectedHUD.getSettings().getGrowthDirectionY().toString()));
                 }
         ).dimensions(alignmentYButtonX, directionXButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
@@ -226,8 +229,8 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    selectedHUD.getSettings().displayMode = selectedHUD.getSettings().displayMode.next();
-                    selectedHUD.update();
+                    HUDAction act = onHUDDisplayModeChanged(selectedHUD, selectedHUD.getSettings().getDisplayMode().next());
+                    history.execute(act);
                     hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display", selectedHUD.getSettings().getDisplayMode().toString()));
                 }
         ).dimensions(alignmentXButtonX, hudDisplayButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
@@ -237,8 +240,8 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    selectedHUD.getSettings().drawBackground = !selectedHUD.getSettings().drawBackground;
-                    selectedHUD.update();
+                    HUDAction act = onDrawBackgroundChanged(selectedHUD, !selectedHUD.getSettings().drawBackground);
+                    history.execute(act);
                     drawBackgroundButton.setMessage(Text.translatable("starhud.screen.button.background", 
                             selectedHUD.getSettings().drawBackground ? 
                                     Text.translatable("starhud.screen.status.on").getString() : 
@@ -246,61 +249,19 @@ public class EditHUDScreen extends Screen {
                 }
         ).dimensions(alignmentYButtonX, hudDisplayButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
-        int wClampPosButton = SQUARE_WIDGET_LENGTH;
-        int hClampPosButton = SQUARE_WIDGET_LENGTH;
-        int xClampPosButton = (this.width - wClampPosButton) / 2;
-        int yClampPosButton = hudDisplayButtonY;
-        clampPosButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.button.clamp_pos"),
-                button -> {
-                    HUDComponent.getInstance().clampAll();
-                }
-        )
-                .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.clamp_pos")))
-                .dimensions(xClampPosButton, yClampPosButton, wClampPosButton, hClampPosButton).build();
-
-
         int shouldRenderButtonX = CENTER_X - (SQUARE_WIDGET_LENGTH / 2);
         shouldRenderButton = ButtonWidget.builder(
                 Text.translatable("starhud.screen.status.na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    selectedHUD.getSettings().shouldRender = !selectedHUD.getSettings().shouldRender;
-                    selectedHUD.update();
+                    HUDAction act = onShouldRenderChanged(selectedHUD, !selectedHUD.getSettings().shouldRender());
+                    history.execute(act);
                     button.setMessage(selectedHUD.getSettings().shouldRender ? 
                             Text.translatable("starhud.screen.status.on") : 
                             Text.translatable("starhud.screen.status.off"));
                 }
         ).dimensions(shouldRenderButtonX, alignmentXButtonY, SQUARE_WIDGET_LENGTH, SQUARE_WIDGET_LENGTH).build();
-
-        xField.setChangedListener(text -> {
-            if (selectedHUDs.isEmpty()) return;
-            AbstractHUD selectedHUD = selectedHUDs.getFirst();
-            try {
-                selectedHUD.getSettings().x = Integer.parseInt(text);
-                selectedHUD.update();
-            } catch (NumberFormatException ignored) {}
-        });
-
-        yField.setChangedListener(text -> {
-            if (selectedHUDs.isEmpty()) return;
-            AbstractHUD selectedHUD = selectedHUDs.getFirst();
-            try {
-                selectedHUD.getSettings().y = Integer.parseInt(text);
-                selectedHUD.update();
-            } catch (NumberFormatException ignored) {}
-        });
-
-        scaleField.setTooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.scale")));
-        scaleField.setChangedListener(text -> {
-            if (selectedHUDs.isEmpty()) return;
-            AbstractHUD selectedHUD = selectedHUDs.getFirst();
-            try {
-                selectedHUD.getSettings().scale = Float.parseFloat(text);
-                selectedHUD.update();
-            } catch (NumberFormatException ignored) {}
-        });
 
         int yBottom = this.height - SQUARE_WIDGET_LENGTH - GAP;
 
@@ -370,13 +331,16 @@ public class EditHUDScreen extends Screen {
                 Text.translatable("starhud.screen.status.na"),
                 button -> {
                     if (canSelectedHUDsGroup) {
-                        HUDComponent.getInstance().group(selectedHUDs);
+                        HUDAction act = onGroupChanged(selectedHUDs);
+                        history.commit(act);
                     } else if (canSelectedHUDUngroup) {
-                        HUDComponent.getInstance().unGroup((GroupedHUD) selectedHUDs.getFirst());
+                        HUDAction act = onUngroupChanged((GroupedHUD) selectedHUDs.getFirst());
+                        history.commit(act);
                     }
 
                     selectedHUDs.clear();
                     updateFieldsFromSelectedHUD();
+                    updateGroupFieldFromSelectedHUD();
                 }
         ).dimensions(xGroupUngroupButton, yBottomGroup, terminatorWidth, SQUARE_WIDGET_LENGTH).build();
 
@@ -391,11 +355,48 @@ public class EditHUDScreen extends Screen {
         );
 
         gapField.setChangedListener(text -> {
+            if (supressFieldEvents) return;
             if (selectedHUDs.isEmpty()) return;
             if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
 
             try {
-                hud.groupSettings.gap = Integer.parseInt(text);
+                int newGap = Integer.parseInt(text);
+                HUDAction act = onGapFieldChanged(hud, hud.groupSettings.gap, newGap);
+                history.execute(act);
+            } catch (NumberFormatException ignored) {}
+        });
+
+        xField.setChangedListener(text -> {
+            if (supressFieldEvents) return;
+            if (selectedHUDs.isEmpty()) return;
+            AbstractHUD hud = selectedHUDs.getFirst();
+            try {
+                int newX = Integer.parseInt(text);
+                HUDAction act = onXFieldChanged(hud, hud.getSettings().getX(), newX);
+                history.execute(act);
+            } catch (NumberFormatException ignored) {}
+        });
+
+        yField.setChangedListener(text -> {
+            if (supressFieldEvents) return;
+            if (selectedHUDs.isEmpty()) return;
+            AbstractHUD hud = selectedHUDs.getFirst();
+            try {
+                int newY = Integer.parseInt(text);
+                HUDAction act = onYFieldChanged(hud, hud.getSettings().getY(), newY);
+                history.execute(act);
+            } catch (NumberFormatException ignored) {}
+        });
+
+        scaleField.setTooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.scale")));
+        scaleField.setChangedListener(text -> {
+            if (supressFieldEvents) return;
+            if (selectedHUDs.isEmpty()) return;
+            AbstractHUD hud = selectedHUDs.getFirst();
+            try {
+                float newScale = Float.parseFloat(text);
+                HUDAction act = onScaleFieldChanged(hud, hud.getSettings().getScale(), newScale);
+                history.execute(act);
             } catch (NumberFormatException ignored) {}
         });
 
@@ -405,7 +406,9 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
-                    hud.groupSettings.childAlignment = hud.groupSettings.getChildAlignment().next();
+
+                    HUDAction act = onChildAlignmentChanged(hud, hud.groupSettings.getChildAlignment().next());
+                    history.execute(act);
 
                     button.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
                 }
@@ -420,7 +423,9 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
-                    hud.groupSettings.alignVertical = !hud.groupSettings.alignVertical;
+
+                    HUDAction act = onGroupAlignmentChanged(hud, !hud.groupSettings.alignVertical);
+                    history.execute(act);
 
                     groupAlignmentButton.setMessage(Text.translatable(
                             hud.groupSettings.alignVertical ? "starhud.screen.button.group_alignment.vertical" : "starhud.screen.button.group_alignment.horizontal"
@@ -438,7 +443,6 @@ public class EditHUDScreen extends Screen {
         moreOptionButtons.add(hudDisplayButton);
         moreOptionButtons.add(drawBackgroundButton);
         moreOptionButtons.add(shouldRenderButton);
-        moreOptionButtons.add(clampPosButton);
 
         moreOptionTexts.clear();
         moreOptionTexts.add(xField);
@@ -467,6 +471,7 @@ public class EditHUDScreen extends Screen {
 
         hideMoreOptionsButtons();
         updateFieldsFromSelectedHUD();
+        updateGroupFieldFromSelectedHUD();
         getHelpMaxWidths();
     }
 
@@ -485,7 +490,6 @@ public class EditHUDScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-
         // draw basic grid for convenience
         if (SETTINGS.drawGrid) {
             final int CENTER_X = this.width / 2;
@@ -679,15 +683,29 @@ public class EditHUDScreen extends Screen {
         return true;
     }
 
+    private boolean sameHUDClicked = false;
+
     private AbstractHUD getHUDAtPosition(double mouseX, double mouseY) {
-        for (AbstractHUD hud : selectedHUDs) {
-            if (hud.isHovered((int) mouseX, (int) mouseY))
+
+        if (!selectedHUDs.isEmpty()) {
+            AbstractHUD hud = selectedHUDs.getFirst();
+            if (hud.isHovered((int) mouseX, (int) mouseY)) {
+                sameHUDClicked = true;
                 return hud;
+            }
+        }
+        sameHUDClicked = false;
+
+        for (AbstractHUD hud : selectedHUDs) {
+            if (hud.isHovered((int) mouseX, (int) mouseY)) {
+                return hud;
+            }
         }
 
         for (AbstractHUD hud : HUDComponent.getInstance().getRenderedHUDs()) {
-            if (hud.isHovered((int) mouseX, (int) mouseY))
+            if (hud.isHovered((int) mouseX, (int) mouseY)) {
                 return hud;
+            }
         }
 
         return null;
@@ -729,14 +747,21 @@ public class EditHUDScreen extends Screen {
 
         // Prepare for potential dragging
         dragging = true;
-        updateFieldsFromSelectedHUD();
+
+        if (!pendingChildClick && !sameHUDClicked) {
+            
+            updateFieldsFromSelectedHUD();
+            updateGroupFieldFromSelectedHUD();
+        }
     }
 
     private void handleEmptySpaceClick() {
         if (!CLIENT.isShiftPressed() && !CLIENT.isCtrlPressed()) {
             // click on empty space - clear selection
             selectedHUDs.clear();
+            
             updateFieldsFromSelectedHUD();
+            updateGroupFieldFromSelectedHUD();
         }
 
         // prepare for drag box selection
@@ -751,17 +776,17 @@ public class EditHUDScreen extends Screen {
         if (click.button() == 0) {
             if (!hasMovedSincePress) {
                 // if mouse hasn't moved since clicked to release, we handle non mouse moved operation
+                dragging = false;
                 handleClickRelease(click.x(), click.y());
             }
 
             // Finalize any drag operations
-            if (dragging) {
+            if (hasMovedSincePress && dragging) {
                 finalizeDragOperation();
             }
 
-            if (dragSelection) {
-                dragSelection = false;
-            }
+            dragging = false;
+            dragSelection = false;
 
             resetMouseState();
             return true;
@@ -779,7 +804,9 @@ public class EditHUDScreen extends Screen {
                 // ctrl click toggle: remove from selection
                 selectedHUDs.remove(pendingToggleHUD);
             }
+            
             updateFieldsFromSelectedHUD();
+            updateGroupFieldFromSelectedHUD();
         }
 
         // Handle single-click deselection for multi-selection
@@ -793,16 +820,22 @@ public class EditHUDScreen extends Screen {
                         break;
                     }
                 }
+
                 if (hoveredChild != null) {
                     selectedHUDs.clear();
                     selectedHUDs.add(hoveredChild);
+                    
                     updateFieldsFromSelectedHUD();
+                    updateGroupFieldFromSelectedHUD();
                 }
+
             } else if (selectedHUDs.contains(clickedHUD) && selectedHUDs.size() > 1) {
                 // Single click on item in multi-selection should select only that item
                 selectedHUDs.clear();
                 selectedHUDs.add(clickedHUD);
+                
                 updateFieldsFromSelectedHUD();
+                updateGroupFieldFromSelectedHUD();
             }
         }
     }
@@ -813,8 +846,21 @@ public class EditHUDScreen extends Screen {
         // Update final positions in text fields
         if (!selectedHUDs.isEmpty()) {
             AbstractHUD selectedHUD = selectedHUDs.getFirst();
+            supressFieldEvents = true;
             xField.setText(String.valueOf(selectedHUD.getSettings().x));
             yField.setText(String.valueOf(selectedHUD.getSettings().y));
+            supressFieldEvents = false;
+
+            List<HUDAction> acts = new ArrayList<>();
+            for (AbstractHUD hud : selectedHUDs) {
+                Pair<Integer, Integer> p = startDragPos.get(hud);
+
+                HUDAction actX = onXFieldChanged(hud, p.getLeft(), selectedHUD.getSettings().x);
+                HUDAction actY = onYFieldChanged(hud, p.getRight(), selectedHUD.getSettings().y);
+                acts.add(actX);
+                acts.add(actY);
+            }
+            history.commit(new CompositeAction(acts));
         }
 
         hudAccumulatedDelta.clear();
@@ -859,12 +905,17 @@ public class EditHUDScreen extends Screen {
         return super.mouseDragged(click, deltaX, deltaY);
     }
 
+    private final Map<AbstractHUD, Pair<Integer, Integer>> startDragPos = new HashMap<>();
+
     private void startDragOperation() {
         // clear any pending toggle since we're now dragging
         pendingToggleHUD = null;
 
         // if moved + has hud selected -> potential hud(s) dragging.
         if (clickedHUD != null && selectedHUDs.contains(clickedHUD)) {
+            for (AbstractHUD hud : selectedHUDs)
+                startDragPos.put(hud, new Pair<>(hud.getSettings().getX(), hud.getSettings().getY()));
+
             dragSelection = false;
         } else { // if moved but no hud selected -> potential drag box
 
@@ -907,8 +958,10 @@ public class EditHUDScreen extends Screen {
 
         if (!selectedHUDs.isEmpty()) {
             AbstractHUD firstSelected = selectedHUDs.getFirst();
+            supressFieldEvents = true;
             xField.setText(String.valueOf(firstSelected.getSettings().x));
             yField.setText(String.valueOf(firstSelected.getSettings().y));
+            supressFieldEvents = false;
         }
     }
 
@@ -929,35 +982,53 @@ public class EditHUDScreen extends Screen {
             }
         }
 
+        boolean changed = false;
+        AbstractHUD oldFirst = null;
+        if (!selectedHUDs.isEmpty())
+            oldFirst = selectedHUDs.getFirst();
+
         // Apply drag box selection based on modifier keys
         if (CLIENT.isShiftPressed()) {
             // shift drag box: Add new items to existing selection
             for (AbstractHUD hud : boxSelectedHUDs) {
                 if (!selectedHUDs.contains(hud)) { // only add if not already selected
                     selectedHUDs.add(hud);
+                    changed = true;
                 }
             }
         } else if (CLIENT.isCtrlPressed()) {
+
             // ctrl drag box: invert items in box
             for (AbstractHUD hud : boxSelectedHUDs) {
                 if (initialDragBoxSelection.contains(hud)) {
                     selectedHUDs.remove(hud); // remove if was initially selected
+                    changed = true;
                 } else if (!selectedHUDs.contains(hud)) {
                     selectedHUDs.add(hud); // add if not currently selected
+                    changed = true;
                 }
             }
         } else {
+
             // click: update selection, remove the ones that didn't get caught, add the one that did get caught
-            selectedHUDs.removeIf(hud -> !boxSelectedHUDs.contains(hud));
+            changed = selectedHUDs.removeIf(hud -> !boxSelectedHUDs.contains(hud));
 
             for (AbstractHUD hud : boxSelectedHUDs) {
                  if (!selectedHUDs.contains(hud)) {
                     selectedHUDs.add(hud); // add if not currently selected
+                     changed = true;
                 }
             }
         }
 
-        updateFieldsFromSelectedHUD();
+        if (changed) {
+            updateGroupFieldFromSelectedHUD();
+
+            if (selectedHUDs.isEmpty() || oldFirst != selectedHUDs.getFirst()) {
+                
+                updateFieldsFromSelectedHUD();
+            }
+        }
     }
 
     public boolean isTextFieldsFocused() {
@@ -973,44 +1044,71 @@ public class EditHUDScreen extends Screen {
 
             boolean handled = false;
 
-            if (!selectedHUDs.isEmpty())
-                for (AbstractHUD hud : selectedHUDs)
-                    if (onKeyPressed(hud, input.key(), input.modifiers()))
-                        handled = true;
+            List<HUDAction> acts = new ArrayList<>();
+
+            if (!selectedHUDs.isEmpty()) {
+                for (AbstractHUD hud : selectedHUDs) {
+                    HUDAction act = onKeyPressed(hud, input.key(), input.modifiers());
+                    if (act == null) break;
+                    acts.add(act);
+                }
+            }
+
+            if (!acts.isEmpty()) {
+                
+                history.execute(acts.size() == 1 ? acts.getFirst() : new CompositeAction(acts));
+                updateFieldsFromSelectedHUD();
+                return true;
+            }
 
             switch (input.key()) {
                 case GLFW.GLFW_KEY_G -> {
+                    
                     if (selectedHUDs.isEmpty()) break;
                     if (selectedHUDs.size() > 1) {
                         if (canSelectedHUDsGroup) {
-                            HUDComponent.getInstance().group(selectedHUDs);
+                            
+                            HUDAction act = onGroupChanged(selectedHUDs);
+                            history.commit(act);
                             selectedHUDs.clear();
                             handled = true;
                         }
                     } else {
                         if (canSelectedHUDUngroup) {
-                            HUDComponent.getInstance().unGroup((GroupedHUD) selectedHUDs.getFirst());
+                            
+                            HUDAction act = onUngroupChanged((GroupedHUD) selectedHUDs.getFirst());
+                            history.commit(act);
                             selectedHUDs.clear();
                             handled = true;
                         }
                     }
                 }
-                case GLFW.GLFW_KEY_R -> {
-                    if (input.hasCtrl()) {
-                        revertChanges();
-                        selectedHUDs.clear();
-                        handled = true;
-                    }
-                }
+
                 case GLFW.GLFW_KEY_C -> {
                     if (input.hasShift()) {
                         HUDComponent.getInstance().clampAll();
                     }
                 }
+
+                case GLFW.GLFW_KEY_Z -> {
+                    if (input.hasCtrl() && history.canUndo()) {
+                        history.undo();
+                        handled = true;
+                    }
+                }
+
+                case GLFW.GLFW_KEY_Y -> {
+                    if (input.hasCtrl() && history.canRedo()) {
+                        history.redo();
+                        handled = true;
+                    }
+                }
             }
 
             if (handled) {
+                
                 updateFieldsFromSelectedHUD();
+                updateGroupFieldFromSelectedHUD();
                 return true;
             }
         }
@@ -1018,11 +1116,11 @@ public class EditHUDScreen extends Screen {
         return super.keyPressed(input);
     }
 
-    public boolean onKeyPressed(AbstractHUD hud, int keyCode, int modifiers) {
+    public HUDAction onKeyPressed(AbstractHUD hud, int keyCode, int modifiers) {
 
         BaseHUDSettings settings = hud.getSettings();
+        HUDAction act = null;
 
-        boolean handled = false;
         boolean isCtrl = isMac
                 ? (modifiers & GLFW.GLFW_MOD_SUPER) != 0
                 : (modifiers & GLFW.GLFW_MOD_CONTROL) != 0;
@@ -1033,74 +1131,45 @@ public class EditHUDScreen extends Screen {
 
         switch (keyCode) {
             case GLFW.GLFW_KEY_LEFT -> {
-                if (isCtrl) {
-                    settings.originX = settings.originX.prev();
-                    settings.growthDirectionX = settings.growthDirectionX.recommendedScreenAlignment(settings.originX);
-                }
-                else if (isAlt) settings.growthDirectionX = settings.growthDirectionX.prev();
-                else settings.x -= step;
-
-                handled = true;
+                if (isCtrl) act = onAlignmentXChanged(hud, settings.getOriginX().prev());
+                else if (isAlt) act = onDirectionXChanged(hud, settings.getGrowthDirectionX().prev());
+                else act = onXFieldChanged(hud, settings.x, settings.x - step);
             }
 
             case GLFW.GLFW_KEY_RIGHT -> {
-                if (isCtrl) {
-                    settings.originX = settings.originX.next();
-                    settings.growthDirectionX = settings.growthDirectionX.recommendedScreenAlignment(settings.originX);
-                }
-                else if (isAlt) settings.growthDirectionX = settings.growthDirectionX.next();
-                else settings.x += step;
-
-                handled = true;
+                if (isCtrl) act = onAlignmentXChanged(hud, settings.getOriginX().next());
+                else if (isAlt) act = onDirectionXChanged(hud, settings.getGrowthDirectionX().next());
+                else act = onXFieldChanged(hud, settings.x, settings.x + step);
             }
 
             case GLFW.GLFW_KEY_UP -> {
-                if (isCtrl) {
-                    settings.originY = settings.originY.prev();
-                    settings.growthDirectionY = settings.growthDirectionY.recommendedScreenAlignment(settings.originY);
-                }
-                else if (isAlt) {
-                    settings.growthDirectionY = settings.growthDirectionY.prev();
-                }
-                else settings.y -= step;
-
-                handled = true;
+                if (isCtrl) act = onAlignmentYChanged(hud, settings.getOriginY().prev());
+                else if (isAlt) act = onDirectionYChanged(hud, settings.getGrowthDirectionY().prev());
+                else act = onYFieldChanged(hud, settings.y, settings.y - step);
             }
 
             case GLFW.GLFW_KEY_DOWN -> {
-                if (isCtrl) {
-                    settings.originY = settings.originY.next();
-                    settings.growthDirectionY = settings.growthDirectionY.recommendedScreenAlignment(settings.originY);
-                }
-                else if (isAlt) settings.growthDirectionY = settings.growthDirectionY.next();
-                else settings.y += step;
-
-                handled = true;
+                if (isCtrl) act = onAlignmentYChanged(hud, settings.getOriginY().next());
+                else if (isAlt) act = onDirectionYChanged(hud, settings.getGrowthDirectionY().next());
+                else act = onYFieldChanged(hud, settings.y, settings.y + step);
             }
 
             case GLFW.GLFW_KEY_MINUS ->  {
                 if (!isShift) {
                     if (settings.scale <= 0) break;
 
-                    settings.scale -= 1;
-                    handled = true;
+                    act = onScaleFieldChanged(hud, settings.scale, settings.scale - 1);
                 }
             }
 
             case GLFW.GLFW_KEY_EQUAL ->  {
                 if (isShift) {
-                    settings.scale += 1;
-                    handled = true;
+                    act = onScaleFieldChanged(hud, settings.scale, settings.scale + 1);
                 }
             }
         }
 
-        if (handled) {
-            hud.update();
-            updateFieldsFromSelectedHUD();
-        }
-
-        return handled;
+        return act;
     }
 
 
@@ -1165,7 +1234,6 @@ public class EditHUDScreen extends Screen {
         AutoConfig.getConfigHolder(Settings.class).save();
     }
 
-
     @Override
     public void close() {
         if (isDirty()) {
@@ -1195,9 +1263,40 @@ public class EditHUDScreen extends Screen {
     private void onHelpSwitched() {
     }
 
+    private void updateGroupFieldFromSelectedHUD() {
+        super.setFocused(null);
+
+        if (selectedHUDs.isEmpty()) {
+            
+            canSelectedHUDUngroup = false;
+            canSelectedHUDsGroup = false;
+            groupUngroupButton.active = false;
+            groupUngroupButton.visible = false;
+        } else {
+            AbstractHUD firstHUD = selectedHUDs.getFirst();
+
+            canSelectedHUDUngroup =  (selectedHUDs.size() == 1 && firstHUD instanceof GroupedHUD && !firstHUD.isInGroup());
+            canSelectedHUDsGroup = (selectedHUDs.size() > 1 && selectedHUDs.stream().noneMatch(AbstractHUD::isInGroup));
+
+            if (canSelectedHUDsGroup) {
+                groupUngroupButton.setMessage(Text.translatable("starhud.screen.button.group"));
+                groupUngroupButton.visible = true;
+                groupUngroupButton.active = true;
+            } else if (canSelectedHUDUngroup) {
+                groupUngroupButton.setMessage(Text.translatable("starhud.screen.button.ungroup"));
+                groupUngroupButton.visible = true;
+                groupUngroupButton.active = true;
+            } else {
+                groupUngroupButton.visible = false;
+                groupUngroupButton.active = false;
+            }
+        }
+    }
+
     private void updateFieldsFromSelectedHUD() {
         super.setFocused(null);
 
+        supressFieldEvents = true;
         if (selectedHUDs.isEmpty()) {
             xField.setText(Text.translatable("starhud.screen.status.na").getString());
             yField.setText(Text.translatable("starhud.screen.status.na").getString());
@@ -1223,26 +1322,18 @@ public class EditHUDScreen extends Screen {
             childAlignmentButton.active = false;
 
             for (ButtonWidget bw : moreOptionButtons) {
-                if (bw == clampPosButton) continue;
                 bw.active = false;
             }
 
             for (TextFieldWidget tfw : moreOptionTexts) {
                 tfw.setEditable(false);
             }
-
-            groupUngroupButton.active = false;
-            groupUngroupButton.visible = false;
-
-            canSelectedHUDUngroup = false;
-            canSelectedHUDsGroup = false;
         } else {
             AbstractHUD firstHUD = selectedHUDs.getFirst();
             BaseHUDSettings settings = firstHUD.getSettings();
             xField.setText(String.valueOf(settings.x));
             yField.setText(String.valueOf(settings.y));
             scaleField.setText(String.valueOf(settings.getScale()));
-
             alignmentXButton.setMessage(Text.translatable("starhud.screen.button.x_alignment", settings.getOriginX().toString()));
             directionXButton.setMessage(Text.translatable("starhud.screen.button.x_direction", settings.getGrowthDirectionX().toString()));
             alignmentYButton.setMessage(Text.translatable("starhud.screen.button.y_alignment", settings.getOriginY().toString()));
@@ -1268,25 +1359,10 @@ public class EditHUDScreen extends Screen {
             groupAlignmentButton.visible = false;
             childAlignmentButton.visible = false;
 
-            canSelectedHUDUngroup =  (selectedHUDs.size() == 1 && firstHUD instanceof GroupedHUD && !firstHUD.isInGroup());
-            canSelectedHUDsGroup = (selectedHUDs.size() > 1 && selectedHUDs.stream().noneMatch(AbstractHUD::isInGroup));
-
-            if (canSelectedHUDsGroup) {
-                groupUngroupButton.setMessage(Text.translatable("starhud.screen.button.group"));
-                groupUngroupButton.visible = true;
-                groupUngroupButton.active = true;
-            } else if (canSelectedHUDUngroup) {
-                groupUngroupButton.setMessage(Text.translatable("starhud.screen.button.ungroup"));
-                groupUngroupButton.visible = true;
-                groupUngroupButton.active = true;
-            } else {
-                groupUngroupButton.visible = false;
-                groupUngroupButton.active = false;
-            }
-
             if (isMoreOptionActivated)
                 showMoreOptionsButtons();
         }
+        supressFieldEvents = false;
     }
 
     private void onMoreOptionSwitched() {
@@ -1329,9 +1405,11 @@ public class EditHUDScreen extends Screen {
             groupAlignmentButton.active = true;
             childAlignmentButton.active = true;
 
+            supressFieldEvents = true;
             gapField.setText(
                     Integer.toString(hud.groupSettings.gap)
             );
+            supressFieldEvents = false;
 
             groupAlignmentButton.setMessage(Text.translatable(
                     hud.groupSettings.alignVertical ? "starhud.screen.button.group_alignment.vertical" : "starhud.screen.button.group_alignment.horizontal"
@@ -1339,5 +1417,298 @@ public class EditHUDScreen extends Screen {
 
             childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
         }
+    }
+
+    private HUDAction onAlignmentXChanged(AbstractHUD hud, ScreenAlignmentX nextAlignment) {
+        ScreenAlignmentX prevAlignment = hud.getSettings().getOriginX();
+
+        if (prevAlignment == nextAlignment) return null;
+
+        GrowthDirectionX prevGrowth = hud.getSettings().getGrowthDirectionX();
+        GrowthDirectionX nextGrowth = hud.getSettings().getGrowthDirectionX().recommendedScreenAlignment(nextAlignment);
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().originX = nextAlignment;
+                    hud.getSettings().growthDirectionX = nextGrowth;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().originX = prevAlignment;
+                    hud.getSettings().growthDirectionX = prevGrowth;
+                    hud.update();
+                }
+        );
+    }
+
+    private HUDAction onAlignmentYChanged(AbstractHUD hud, ScreenAlignmentY nextAlignment) {
+        ScreenAlignmentY prevAlignment = hud.getSettings().getOriginY();
+
+        if (prevAlignment == nextAlignment) return null;
+
+        GrowthDirectionY prevGrowth = hud.getSettings().getGrowthDirectionY();
+        GrowthDirectionY nextGrowth = hud.getSettings().getGrowthDirectionY().recommendedScreenAlignment(nextAlignment);
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().originY = nextAlignment;
+                    hud.getSettings().growthDirectionY = nextGrowth;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().originY = prevAlignment;
+                    hud.getSettings().growthDirectionY = prevGrowth;
+                    hud.update();
+                }
+        );
+    }
+
+    private HUDAction onDirectionXChanged(AbstractHUD hud, GrowthDirectionX nextGrowth) {
+        GrowthDirectionX prevGrowth = hud.getSettings().getGrowthDirectionX();
+
+        if (prevGrowth == nextGrowth) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().growthDirectionX = nextGrowth;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().growthDirectionX = prevGrowth;
+                    hud.update();
+                }
+        );
+    }
+
+    private HUDAction onDirectionYChanged(AbstractHUD hud, GrowthDirectionY nextGrowth) {
+        GrowthDirectionY prevGrowth = hud.getSettings().getGrowthDirectionY();
+
+        if (prevGrowth == nextGrowth) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().growthDirectionY = nextGrowth;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().growthDirectionY = prevGrowth;
+                    hud.update();
+                }
+        );
+    }
+
+    private HUDAction onScaleFieldChanged(AbstractHUD hud, float oldScale, float newScale) {
+
+        if (oldScale == newScale) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().scale = newScale;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().scale = oldScale;
+                    hud.update();
+                }
+        );
+
+    }
+
+    private HUDAction onHUDDisplayModeChanged(AbstractHUD hud, HUDDisplayMode newDisplayMode) {
+        HUDDisplayMode oldDisplayMode = hud.getSettings().getDisplayMode();
+
+        if (oldDisplayMode == newDisplayMode) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().displayMode = newDisplayMode;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().displayMode = oldDisplayMode;
+                    hud.update();
+                }
+        );
+    }
+
+    private HUDAction onDrawBackgroundChanged(AbstractHUD hud, boolean newDrawBackground) {
+        boolean oldDrawBackground = hud.getSettings().drawBackground;
+
+        if (oldDrawBackground == newDrawBackground) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().drawBackground = newDrawBackground;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().drawBackground = oldDrawBackground;
+                    hud.update();
+                }
+        );
+    }
+
+    private HUDAction onShouldRenderChanged(AbstractHUD hud, boolean newShouldRender) {
+        boolean oldShouldRender = hud.getSettings().shouldRender();
+
+        if (oldShouldRender == newShouldRender) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().shouldRender = newShouldRender;
+                    hud.update();;
+                },
+                () -> {
+                    hud.getSettings().shouldRender = oldShouldRender;
+                    hud.update();
+                }
+        );
+    }
+
+    private HUDAction onXFieldChanged(AbstractHUD hud, int oldX, int newX) {
+        if (oldX == newX) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().x = newX;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().x = oldX;
+                    hud.update();
+                }
+        );
+    }
+
+    private HUDAction onYFieldChanged(AbstractHUD hud, int oldY, int newY) {
+        if (oldY == newY) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().y = newY;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().y = oldY;
+                    hud.update();
+                }
+        );
+    }
+
+    private HUDAction onGapFieldChanged(GroupedHUD hud, int oldGap, int newGap) {
+        if (oldGap == newGap) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.groupSettings.gap = newGap;
+                },
+                () -> {
+                    hud.groupSettings.gap = oldGap;
+                }
+        );
+    }
+
+    private HUDAction onChildAlignmentChanged(GroupedHUD hud, GroupedHUDSettings.ChildAlignment newAlignment) {
+        GroupedHUDSettings.ChildAlignment oldAlignment = hud.groupSettings.childAlignment;
+
+        if (oldAlignment == newAlignment) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.groupSettings.childAlignment = newAlignment;
+                },
+                () -> {
+                    hud.groupSettings.childAlignment = oldAlignment;
+                }
+        );
+    }
+
+    private HUDAction onGroupAlignmentChanged(GroupedHUD hud, boolean newAlignment) {
+        boolean oldAlignment = hud.groupSettings.alignVertical;
+
+        if (oldAlignment == newAlignment) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.groupSettings.alignVertical = newAlignment;
+                },
+                () -> {
+                    hud.groupSettings.alignVertical = oldAlignment;
+                }
+        );
+    }
+
+    private HUDAction onGroupChanged(List<AbstractHUD> huds) {
+
+        // we should copy the settings from the first selected hud. so that the position doesn't reset to 0,0.
+
+        List<GroupedHUDSettings> oldGroupedHUDs = new ArrayList<>(Main.settings.hudList.groupedHuds);
+        List<String> oldIndividualHUDs = new ArrayList<>(Main.settings.hudList.individualHudIds);
+
+        GroupedHUDSettings newSettings = HUDComponent.getInstance().group(huds);
+
+        List<GroupedHUDSettings> newGroupedHUDs = new ArrayList<>(Main.settings.hudList.groupedHuds);
+        List<String> newIndividualHUDs = new ArrayList<>(Main.settings.hudList.individualHudIds);
+
+        return new ReversibleAction(
+                () -> {
+                    Main.settings.hudList.groupedHuds.clear();
+                    Main.settings.hudList.individualHudIds.clear();
+                    Main.settings.hudList.groupedHuds.addAll(newGroupedHUDs);
+                    Main.settings.hudList.individualHudIds.addAll(newIndividualHUDs);
+                    HUDComponent.getInstance().updateActiveHUDs();
+
+                    // also update the setting
+                    GroupedHUD newGroup = HUDComponent.getInstance().getGroupedHUDs().get(newSettings.id);
+                    newGroup.groupSettings = newSettings;
+                },
+                () -> {
+                    Main.settings.hudList.groupedHuds.clear();
+                    Main.settings.hudList.individualHudIds.clear();
+                    Main.settings.hudList.groupedHuds.addAll(oldGroupedHUDs);
+                    Main.settings.hudList.individualHudIds.addAll(oldIndividualHUDs);
+                    HUDComponent.getInstance().updateActiveHUDs();
+                }
+        );
+    }
+
+    private HUDAction onUngroupChanged(GroupedHUD hud) {
+        
+        // we should copy the settings from the first selected hud. so that the position doesn't reset to 0,0.
+        GroupedHUDSettings oldSettings = hud.groupSettings.copy();
+
+        List<GroupedHUDSettings> oldGroupedHUDs = new ArrayList<>(Main.settings.hudList.groupedHuds);
+        List<String> oldIndividualHUDs = new ArrayList<>(Main.settings.hudList.individualHudIds);
+
+        HUDComponent.getInstance().unGroup(hud);
+
+        List<GroupedHUDSettings> newGroupedHUDs = new ArrayList<>(Main.settings.hudList.groupedHuds);
+        List<String> newIndividualHUDs = new ArrayList<>(Main.settings.hudList.individualHudIds);
+
+        return new ReversibleAction(
+                () -> {
+                    Main.settings.hudList.groupedHuds.clear();
+                    Main.settings.hudList.individualHudIds.clear();
+                    Main.settings.hudList.groupedHuds.addAll(newGroupedHUDs);
+                    Main.settings.hudList.individualHudIds.addAll(newIndividualHUDs);
+                    HUDComponent.getInstance().updateActiveHUDs();
+                },
+                () -> {
+                    Main.settings.hudList.groupedHuds.clear();
+                    Main.settings.hudList.individualHudIds.clear();
+                    Main.settings.hudList.groupedHuds.addAll(oldGroupedHUDs);
+                    Main.settings.hudList.individualHudIds.addAll(oldIndividualHUDs);
+                    HUDComponent.getInstance().updateActiveHUDs();
+
+                    // also update the setting
+                    GroupedHUD newGroup = HUDComponent.getInstance().getGroupedHUDs().get(oldSettings.id);
+                    newGroup.groupSettings = oldSettings;
+                }
+        );
+    }
+
+    // WIP
+    private HUDAction onConfigScreenClicked() {
+        return null;
     }
 }
