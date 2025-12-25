@@ -15,6 +15,10 @@ public class Other {
         return FabricLoader.getInstance().isModLoaded(arg);
     }
 
+    public static boolean isInSingleplayer(String ignored) {
+        return CLIENT.isInSingleplayer();
+    }
+
     public static boolean isOnServer(String arg) {
         if (arg == null || arg.isEmpty()) return false;
 

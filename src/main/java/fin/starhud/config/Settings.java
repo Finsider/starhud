@@ -167,6 +167,10 @@ public class Settings implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public SpeedSettings speedSettings = new SpeedSettings();
 
+    @ConfigEntry.Category("player_count")
+    @ConfigEntry.Gui.TransitiveObject
+    public PlayerCountSettings playerCountSettings = new PlayerCountSettings();
+
     @Override
     public void validatePostLoad() {
         if (generalSettings.inGameSettings == null)
@@ -321,6 +325,9 @@ public class Settings implements ConfigData {
 
         if (speedSettings.base == null)
             speedSettings = new SpeedSettings();
+
+        if (playerCountSettings.base == null)
+            playerCountSettings = new PlayerCountSettings();
 
         this.hudList.onConfigSaved();
     }

@@ -100,6 +100,12 @@ public enum Condition {
             () -> 0
     ),
 
+    IS_IN_SINGLEPLAYER(
+            Other::isInSingleplayer,
+            () -> 0,
+            () -> 0
+    ),
+
     IS_ON_SERVER(
             Other::isOnServer,
             () -> 0,

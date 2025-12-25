@@ -93,6 +93,7 @@ public class HUDComponent {
         registerHUD(new PingHUD());
         registerHUD(new SpeedHUD());
         registerHUD(new TargetedCrosshairHUD());
+        registerHUD(new PlayerCountHUD());
 
         registerHUD(new PositiveEffectHUD());
         registerHUD(new NegativeEffectHUD());

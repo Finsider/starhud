@@ -345,6 +345,13 @@
   "text.autoconfig.starhud.option.speedSettings.color": "Color",
   "text.autoconfig.starhud.option.speedSettings.useFullSpeed": "Use Full Speed",
   "text.autoconfig.starhud.option.speedSettings.additionalString": "Extra Label",
+
+  "text.autoconfig.starhud.category.player_count": "Speed",
+  "text.autoconfig.starhud.option.playerCountSettings.base.shouldRender": "Show HUD",
+  "text.autoconfig.starhud.option.playerCountSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.playerCountSettings.color": "Color",
+  "text.autoconfig.starhud.option.playerCountSettings.showMaxPlayer": "Show Max Player Count",
+
   "starhud.help.key.undo": "[Ctrl + Z]",
   "starhud.help.info.undo": "Undo Previous Action",
   "starhud.help.key.redo": "[Ctrl + Y]",

@@ -172,6 +172,10 @@ public abstract class AbstractHUD implements HUDInterface {
         return getBoundingBox().getHeight();
     }
 
+    public int getColor() {
+        return getBoundingBox().getColor();
+    }
+
     public float getScale() {
         return getBoundingBox().getScale();
     }
