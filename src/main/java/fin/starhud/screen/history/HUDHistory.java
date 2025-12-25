@@ -1,4 +1,4 @@
-package fin.starhud.screen;
+package fin.starhud.screen.history;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

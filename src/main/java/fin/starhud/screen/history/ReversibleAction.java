@@ -1,4 +1,4 @@
-package fin.starhud.screen;
+package fin.starhud.screen.history;
 
 public class ReversibleAction implements HUDAction {
 
