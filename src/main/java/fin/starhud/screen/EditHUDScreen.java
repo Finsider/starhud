@@ -966,16 +966,16 @@ public class EditHUDScreen extends Screen {
 
             for (AbstractHUD hud : boxSelectedHUDs) {
                  if (!selectedHUDs.contains(hud)) {
-                    selectedHUDs.add(hud); // add if not currently selected
+                     selectedHUDs.add(hud); // add if not currently selected
                      changed = true;
                 }
             }
         }
 
         if (changed) {
-            updateGroupFieldFromSelectedHUD();
             if (selectedHUDs.isEmpty() || oldFirst != selectedHUDs.getFirst()) {
                 updateFieldsFromSelectedHUD();
+                updateGroupFieldFromSelectedHUD();
             }
         }
     }

@@ -2,11 +2,13 @@ package fin.starhud.init;
 
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
+import fin.starhud.helper.AttackTracker;
 import fin.starhud.hud.HUDComponent;
 import fin.starhud.screen.EditHUDScreen;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
@@ -18,6 +20,10 @@ public class EventInit {
     private static final GeneralSettings.InGameHUDSettings SETTINGS = Main.settings.generalSettings.inGameSettings;
 
     public static void init() {
+
+        // register AttackTracker events, for combo and reach.
+        AttackEntityCallback.EVENT.register(AttackTracker::onAttack);
+        ClientTickEvents.END_CLIENT_TICK.register(AttackTracker::onEndTick);
 
         // register keybinding event, on openEditHUDKey pressed -> move screen to edit hud screen.
         ClientTickEvents.END_CLIENT_TICK.register(EventInit::onOpenEditHUDKeyPressed);

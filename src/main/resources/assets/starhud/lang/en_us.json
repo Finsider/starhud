@@ -67,6 +67,7 @@
   "starhud.screen.tooltip.more_options": "More Options",
   "starhud.screen.tooltip.child_alignment": "Child Alignment",
   "starhud.screen.tooltip.group_alignment": "Group Alignment",
+  "starhud.screen.tooltip.child_ordering": "Child Ordering",
 
   "starhud.screen.button.group_alignment.vertical": "Vertical",
   "starhud.screen.button.group_alignment.horizontal": "Horizontal",
@@ -362,5 +363,18 @@
   "text.autoconfig.starhud.option.playerCountSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.playerCountSettings.color": "Color",
   "text.autoconfig.starhud.option.playerCountSettings.showMaxPlayer": "Show Max Player Count",
-  "starhud.screen.tooltip.child_ordering": "Child Ordering"
+
+  "text.autoconfig.starhud.category.combo": "Combo",
+  "text.autoconfig.starhud.option.comboSettings.base.shouldRender": "Show HUD",
+  "text.autoconfig.starhud.option.comboSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.comboSettings.color": "Color",
+  "text.autoconfig.starhud.option.comboSettings.hideInactive": "Hide When Inactive",
+  "text.autoconfig.starhud.option.comboSettings.additionalString": "Extra Label",
+
+  "text.autoconfig.starhud.category.reach": "Reach",
+  "text.autoconfig.starhud.option.reachSettings.base.shouldRender": "Show HUD",
+  "text.autoconfig.starhud.option.reachSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.reachSettings.color": "Color",
+  "text.autoconfig.starhud.option.reachSettings.hideInactive": "Hide When Inactive",
+  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label"
 }

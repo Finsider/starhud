@@ -171,6 +171,14 @@ public class Settings implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public PlayerCountSettings playerCountSettings = new PlayerCountSettings();
 
+    @ConfigEntry.Category("combo")
+    @ConfigEntry.Gui.TransitiveObject
+    public ComboSettings comboSettings = new ComboSettings();
+
+    @ConfigEntry.Category("reach")
+    @ConfigEntry.Gui.TransitiveObject
+    public ReachSettings reachSettings = new ReachSettings();
+
     @Override
     public void validatePostLoad() {
         if (generalSettings.inGameSettings == null)
@@ -328,6 +336,12 @@ public class Settings implements ConfigData {
 
         if (playerCountSettings.base == null)
             playerCountSettings = new PlayerCountSettings();
+
+        if (comboSettings.base == null)
+            comboSettings = new ComboSettings();
+
+        if (reachSettings.base == null)
+            reachSettings = new ReachSettings();
 
         this.hudList.onConfigSaved();
     }
