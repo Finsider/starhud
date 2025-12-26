@@ -84,6 +84,7 @@ public class EditHUDScreen extends Screen {
     private TextFieldWidget gapField;
     private ButtonWidget groupAlignmentButton;
     private ButtonWidget childAlignmentButton;
+    private ButtonWidget childOrderingButton;
     private ButtonWidget groupUngroupButton;
 
     private final HUDHistory history = new HUDHistory();
@@ -329,7 +330,7 @@ public class EditHUDScreen extends Screen {
         ).dimensions(xGroupUngroupButton, yBottomGroup, terminatorWidth, SQUARE_WIDGET_LENGTH).build();
 
         int gapFieldWidth = terminatorWidth / 2;
-        int xGapField = CENTER_X - (gapFieldWidth / 2);
+        int xGapField = CENTER_X - (gapFieldWidth / 2) + terminatorWidth + GAP;
         int yGapField = yBottomGroup + PADDING;
         gapField = new TextFieldWidget(
                 CLIENT.textRenderer,
@@ -397,8 +398,26 @@ public class EditHUDScreen extends Screen {
                     button.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
                 }
         )
-                .dimensions(xChildAlignmentButton, yBottomGroup, terminatorWidth, SQUARE_WIDGET_LENGTH)
+                .dimensions(xChildAlignmentButton, yBottomGroup, terminatorWidth, WIDGET_HEIGHT)
                 .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.child_alignment")))
+                .build();
+        
+        int xChildOrderingButton = xChildAlignmentButton;
+        int yChildOrderingButton = yBottomGroup + GAP + WIDGET_HEIGHT;
+        childOrderingButton = ButtonWidget.builder(
+                Text.translatable("starhud.screen.status.na"),
+                button -> {
+                    if (selectedHUDs.isEmpty()) return;
+                    if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
+                    
+                    HUDAction act = onChildOrderingChanged(hud, hud.groupSettings.getChildOrdering().next());
+                    history.execute(act);
+
+                    button.setMessage(Text.of(hud.groupSettings.getChildOrdering().toString()));
+                }
+        )
+                .dimensions(xChildOrderingButton, yChildOrderingButton, terminatorWidth, WIDGET_HEIGHT)
+                .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.child_ordering")))
                 .build();
 
         int xGroupAlignmentButton = xGroupUngroupButton + terminatorWidth + GAP;
@@ -451,6 +470,7 @@ public class EditHUDScreen extends Screen {
         addDrawableChild(groupUngroupButton);
         addDrawableChild(gapField);
         addDrawableChild(childAlignmentButton);
+        addDrawableChild(childOrderingButton);
         addDrawableChild(groupAlignmentButton);
 
         hideMoreOptionsButtons();
@@ -483,12 +503,12 @@ public class EditHUDScreen extends Screen {
 
         // draw X and Y next to their textField.
         if (xField.isVisible() && yField.isVisible()) {
-            context.drawText(CLIENT.textRenderer, Text.translatable("starhud.screen.label.x").getString(), xField.getX() - 5 - 2 - 3, xField.getY() + 6, 0xFFFFFFFF, true);
-            context.drawText(CLIENT.textRenderer, Text.translatable("starhud.screen.label.y").getString(), yField.getX() + yField.getWidth() + 3, yField.getY() + 6, 0xFFFFFFFF, true);
+            context.drawText(CLIENT.textRenderer, Text.translatable("starhud.screen.label.x"), xField.getX() - 5 - 2 - 3, xField.getY() + 6, 0xFFFFFFFF, true);
+            context.drawText(CLIENT.textRenderer, Text.translatable("starhud.screen.label.y"), yField.getX() + yField.getWidth() + 3, yField.getY() + 6, 0xFFFFFFFF, true);
         }
 
         if (gapField.isVisible()) {
-            context.drawText(CLIENT.textRenderer, Text.translatable("starhud.screen.label.gap").getString(), gapField.getX() - 20 - 3, gapField.getY() + 6, 0xFFFFFFFF, true);
+            context.drawText(CLIENT.textRenderer, Text.translatable("starhud.screen.label.gap"), gapField.getX() - 20 - 3, gapField.getY() + 6, 0xFFFFFFFF, true);
         }
 
         if (dragSelection && hasMovedSincePress) {
@@ -954,9 +974,7 @@ public class EditHUDScreen extends Screen {
 
         if (changed) {
             updateGroupFieldFromSelectedHUD();
-
             if (selectedHUDs.isEmpty() || oldFirst != selectedHUDs.getFirst()) {
-                
                 updateFieldsFromSelectedHUD();
             }
         }
@@ -1240,6 +1258,7 @@ public class EditHUDScreen extends Screen {
             gapField.setText(Text.translatable("starhud.screen.status.na").getString());
             groupAlignmentButton.setMessage(Text.translatable("starhud.screen.status.na"));
             childAlignmentButton.setMessage(Text.translatable("starhud.screen.status.na"));
+            childOrderingButton.setMessage(Text.translatable("starhud.screen.status.na"));
 
             gapField.setEditable(false);
             gapField.visible = false;
@@ -1247,6 +1266,8 @@ public class EditHUDScreen extends Screen {
             groupAlignmentButton.active = false;
             childAlignmentButton.visible = false;
             childAlignmentButton.active = false;
+            childOrderingButton.visible = false;
+            childOrderingButton.active = false;
 
             for (ButtonWidget bw : moreOptionButtons) {
                 bw.active = false;
@@ -1285,6 +1306,7 @@ public class EditHUDScreen extends Screen {
             gapField.visible = false;
             groupAlignmentButton.visible = false;
             childAlignmentButton.visible = false;
+            childOrderingButton.visible = false;
 
             if (isMoreOptionActivated)
                 showMoreOptionsButtons();
@@ -1312,6 +1334,7 @@ public class EditHUDScreen extends Screen {
         gapField.visible = false;
         groupAlignmentButton.visible = false;
         childAlignmentButton.visible = false;
+        childOrderingButton.visible = false;
     }
 
     private void showMoreOptionsButtons() {
@@ -1327,10 +1350,12 @@ public class EditHUDScreen extends Screen {
             gapField.visible = true;
             groupAlignmentButton.visible = true;
             childAlignmentButton.visible = true;
+            childOrderingButton.visible = true;
 
             gapField.setEditable(true);
             groupAlignmentButton.active = true;
             childAlignmentButton.active = true;
+            childOrderingButton.active = true;
 
             supressFieldEvents = true;
             gapField.setText(
@@ -1343,6 +1368,7 @@ public class EditHUDScreen extends Screen {
             ));
 
             childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
+            childOrderingButton.setMessage(Text.of(hud.groupSettings.getChildOrdering().toString()));
         }
     }
 
@@ -1536,7 +1562,7 @@ public class EditHUDScreen extends Screen {
     }
 
     private HUDAction onChildAlignmentChanged(GroupedHUD hud, GroupedHUDSettings.ChildAlignment newAlignment) {
-        GroupedHUDSettings.ChildAlignment oldAlignment = hud.groupSettings.childAlignment;
+        GroupedHUDSettings.ChildAlignment oldAlignment = hud.groupSettings.getChildAlignment();
 
         if (oldAlignment == newAlignment) return null;
 
@@ -1546,6 +1572,21 @@ public class EditHUDScreen extends Screen {
                 },
                 () -> {
                     hud.groupSettings.childAlignment = oldAlignment;
+                }
+        );
+    }
+    
+    private HUDAction onChildOrderingChanged(GroupedHUD hud, GroupedHUDSettings.ChildOrdering newOrdering) {
+        GroupedHUDSettings.ChildOrdering oldOrdering = hud.groupSettings.getChildOrdering();
+
+        if (oldOrdering == newOrdering) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.groupSettings.childOrdering = newOrdering;
+                },
+                () -> {
+                    hud.groupSettings.childOrdering = oldOrdering;
                 }
         );
     }

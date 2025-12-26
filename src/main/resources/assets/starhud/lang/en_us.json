@@ -108,6 +108,12 @@
   "starhud.option.childAlignment.center": "Center",
   "starhud.option.childAlignment.end": "End",
 
+  "starhud.option.childOrdering.none": "None",
+  "starhud.option.childOrdering.width_ascending": "Width, Asc",
+  "starhud.option.childOrdering.width_descending": "Width, Desc",
+  "starhud.option.childOrdering.height_ascending": "Height, Asc",
+  "starhud.option.childOrdering.height_descending": "Height, Desc",
+
   "text.autoconfig.starhud.category.general": "General",
 
   "text.autoconfig.starhud.option.generalSettings.screenSettings" : "Screen Settings",
@@ -355,5 +361,6 @@
   "text.autoconfig.starhud.option.playerCountSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.playerCountSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.playerCountSettings.color": "Color",
-  "text.autoconfig.starhud.option.playerCountSettings.showMaxPlayer": "Show Max Player Count"
+  "text.autoconfig.starhud.option.playerCountSettings.showMaxPlayer": "Show Max Player Count",
+  "starhud.screen.tooltip.child_ordering": "Child Ordering"
 }
