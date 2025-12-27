@@ -936,8 +936,11 @@ public class EditHUDScreen extends Screen {
 
         boolean changed = false;
         AbstractHUD oldFirst = null;
-        if (!selectedHUDs.isEmpty())
+        int oldSize = 0;
+        if (!selectedHUDs.isEmpty()) {
             oldFirst = selectedHUDs.getFirst();
+            oldSize = selectedHUDs.size();
+        }
 
         // Apply drag box selection based on modifier keys
         if (CLIENT.isShiftPressed()) {
@@ -974,9 +977,12 @@ public class EditHUDScreen extends Screen {
         }
 
         if (changed) {
+            int newSize = selectedHUDs.size();
+            if (oldSize != newSize)
+                updateGroupFieldFromSelectedHUD();
+
             if (selectedHUDs.isEmpty() || oldFirst != selectedHUDs.getFirst()) {
                 updateFieldsFromSelectedHUD();
-                updateGroupFieldFromSelectedHUD();
             }
         }
     }
@@ -1056,7 +1062,6 @@ public class EditHUDScreen extends Screen {
             }
 
             if (handled) {
-                
                 updateFieldsFromSelectedHUD();
                 updateGroupFieldFromSelectedHUD();
                 return true;
