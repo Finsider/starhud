@@ -10,12 +10,12 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class ReachSettings {
 
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(true, 150, -5, ScreenAlignmentX.LEFT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP);
+    public BaseHUDSettings base = new BaseHUDSettings(true, 0, -65, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.CENTER, GrowthDirectionY.UP);
 
     @ConfigEntry.ColorPicker
-    public int color = 0xb7dff5;
+    public int color = 0x9fe0b5;
 
-    public boolean hideInactive = false;
+    public boolean hideInactive = true;
 
-    public String additionalString = " Block(s)";
+    public String additionalString = " Blocks";
 }

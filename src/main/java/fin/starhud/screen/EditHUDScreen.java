@@ -260,7 +260,7 @@ public class EditHUDScreen extends Screen {
                             helpWidget.setActive(false);
                             isMoreOptionActivated = false;
                             selectedHUDs.clear();
-                            if (this.client == null) return;
+
                             this.client.setScreen(AutoConfigClient.getConfigScreen(Settings.class, this).get());
                         }
                 )
@@ -516,6 +516,7 @@ public class EditHUDScreen extends Screen {
         }
 
         // draw all visible hud with bounding boxes.
+        HUDComponent.getInstance().collectAll();
         HUDComponent.getInstance().renderAll(context);
 
         renderBoundingBoxes(context, mouseX, mouseY);

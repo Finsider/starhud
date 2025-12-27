@@ -50,6 +50,7 @@ public class EventInit {
         if (MinecraftClient.getInstance().options.hudHidden) return;
         if (MinecraftClient.getInstance().currentScreen instanceof EditHUDScreen) return;
 
+        HUDComponent.getInstance().collectAll();
         HUDComponent.getInstance().renderAll(context);
     }
 

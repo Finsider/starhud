@@ -10,12 +10,12 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class ComboSettings {
 
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(true, 100, -5, ScreenAlignmentX.LEFT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP);
+    public BaseHUDSettings base = new BaseHUDSettings(true, 0, -79, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.CENTER, GrowthDirectionY.UP);
 
     @ConfigEntry.ColorPicker
-    public int color = 0xb7dff5;
+    public int color = 0xff9a76;
 
-    public boolean hideInactive = false;
+    public boolean hideInactive = true;
 
-    public String additionalString = " Hit(s)";
+    public String additionalString = " Hits";
 }
