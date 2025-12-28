@@ -54,6 +54,8 @@ public class BaseHUDSettings implements ConfigData {
     @Comment("Modify HUD Based on Conditions.")
     public List<ConditionalSettings> conditions = new ArrayList<>();
 
+    public BaseHUDSettings() {}
+
     public BaseHUDSettings(boolean shouldRender, int x, int y, ScreenAlignmentX originX, ScreenAlignmentY originY, GrowthDirectionX growthDirectionX, GrowthDirectionY growthDirectionY) {
         this.shouldRender = shouldRender;
         this.x = x;
@@ -191,6 +193,8 @@ public class BaseHUDSettings implements ConfigData {
                 ", growthDirectionY=" + growthDirectionY +
                 ", scale=" + scale +
                 ", conditions=" + conditions +
+                ", displayMode=" + displayMode +
+                ", drawBackground=" + drawBackground +
                 '}';
     }
 
@@ -204,22 +208,12 @@ public class BaseHUDSettings implements ConfigData {
                 && (this.growthDirectionX == other.growthDirectionX)
                 && (this.growthDirectionY == other.growthDirectionY)
                 && (this.scale == other.scale)
+                && (this.conditions.equals(other.conditions))
                 && (this.displayMode == other.displayMode)
                 && (this.drawBackground == other.drawBackground);
     }
 
-    public void copyFrom(BaseHUDSettings other) {
-        this.x = other.x;
-        this.y = other.y;
-        this.originX = other.originX;
-        this.originY = other.originY;
-        this.growthDirectionX = other.growthDirectionX;
-        this.growthDirectionY = other.growthDirectionY;
-        this.scale = other.scale;
-        this.conditions = List.copyOf(other.conditions);
-    }
-
-    public void copySettings(BaseHUDSettings src) {
+    public void copyFrom(BaseHUDSettings src) {
         this.shouldRender = src.shouldRender;
         this.x = src.x;
         this.y = src.y;
@@ -230,6 +224,14 @@ public class BaseHUDSettings implements ConfigData {
         this.scale = src.scale;
         this.displayMode = src.displayMode;
         this.drawBackground = src.drawBackground;
+        this.conditions.clear();
+        this.conditions.addAll(src.conditions);
+    }
+
+    public BaseHUDSettings copy() {
+        BaseHUDSettings newSettings = new BaseHUDSettings();
+        newSettings.copyFrom(this);
+        return newSettings;
     }
 
     public int getGrowthDirectionHorizontal(int dynamicWidth) {
