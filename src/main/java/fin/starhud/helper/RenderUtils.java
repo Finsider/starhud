@@ -3,7 +3,6 @@ package fin.starhud.helper;
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.ItemStack;
