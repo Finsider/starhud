@@ -87,7 +87,7 @@ public class GroupedHUDSettings {
     }
 
     public void copyFrom(GroupedHUDSettings other) {
-        this.base.copySettings(other.base);
+        this.base.copyFrom(other.base);
         this.gap = other.gap;
         this.alignVertical = other.alignVertical;
         this.childAlignment = other.childAlignment;
