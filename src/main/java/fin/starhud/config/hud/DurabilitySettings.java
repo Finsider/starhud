@@ -12,6 +12,12 @@ public class DurabilitySettings {
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public DisplayMode displayMode = DisplayMode.BAR;
 
+    public DisplayMode getDisplayMode() {
+        if (displayMode == null) displayMode = DisplayMode.BAR;
+
+        return displayMode;
+    }
+
     public enum DisplayMode {
         BAR,
         FRACTIONAL,

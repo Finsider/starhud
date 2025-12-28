@@ -147,10 +147,16 @@ public class Settings implements ConfigData {
 
     public static class Effect {
         @ConfigEntry.Gui.CollapsibleObject
-        public EffectSettings positiveSettings = new EffectSettings(new BaseHUDSettings(true, -5, 5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN));
+        public EffectSettings positiveSettings = new EffectSettings(
+                new BaseHUDSettings(true, -5, 5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN),
+                0xCFF5D2
+        );
 
         @ConfigEntry.Gui.CollapsibleObject
-        public EffectSettings negativeSettings = new EffectSettings(new BaseHUDSettings(true, -5, 39, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN));
+        public EffectSettings negativeSettings = new EffectSettings(
+                new BaseHUDSettings(true, -5, 39, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN),
+                0xDCE8B5
+        );
     }
 
     @ConfigEntry.Category("targeted")
@@ -160,6 +166,18 @@ public class Settings implements ConfigData {
     @ConfigEntry.Category("speed")
     @ConfigEntry.Gui.TransitiveObject
     public SpeedSettings speedSettings = new SpeedSettings();
+
+    @ConfigEntry.Category("player_count")
+    @ConfigEntry.Gui.TransitiveObject
+    public PlayerCountSettings playerCountSettings = new PlayerCountSettings();
+
+    @ConfigEntry.Category("combo")
+    @ConfigEntry.Gui.TransitiveObject
+    public ComboSettings comboSettings = new ComboSettings();
+
+    @ConfigEntry.Category("reach")
+    @ConfigEntry.Gui.TransitiveObject
+    public ReachSettings reachSettings = new ReachSettings();
 
     @Override
     public void validatePostLoad() {
@@ -247,7 +265,7 @@ public class Settings implements ConfigData {
         if (netherCoordY.base == null) {
             coordSettings.netherY = new CoordSettings(
                     new BaseHUDSettings(false, 5, 100 + 14, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN),
-                    0xf1ae94
+                    0xCFF5D2
             );
         }
 
@@ -298,17 +316,32 @@ public class Settings implements ConfigData {
 
         EffectSettings positive = effectSettings.positiveSettings;
         if (positive.base == null)
-            effectSettings.positiveSettings = new EffectSettings(new BaseHUDSettings(true, -5, 5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN));
+            effectSettings.positiveSettings = new EffectSettings(
+                    new BaseHUDSettings(true, -5, 5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN),
+                    0xAEEDE6
+            );
 
         EffectSettings negative = effectSettings.negativeSettings;
         if (negative.base == null)
-            effectSettings.negativeSettings = new EffectSettings(new BaseHUDSettings(true, -5, 39, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN));
+            effectSettings.negativeSettings = new EffectSettings(
+                    new BaseHUDSettings(true, -5, 39, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN),
+                    0xDCE8B5
+            );
 
         if (targetedCrosshairSettings.base == null)
             targetedCrosshairSettings = new TargetedCrosshairSettings();
 
         if (speedSettings.base == null)
             speedSettings = new SpeedSettings();
+
+        if (playerCountSettings.base == null)
+            playerCountSettings = new PlayerCountSettings();
+
+        if (comboSettings.base == null)
+            comboSettings = new ComboSettings();
+
+        if (reachSettings.base == null)
+            reachSettings = new ReachSettings();
 
         this.hudList.onConfigSaved();
     }

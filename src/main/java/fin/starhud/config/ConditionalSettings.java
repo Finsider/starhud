@@ -1,6 +1,6 @@
 package fin.starhud.config;
 
-import fin.starhud.helper.Condition;
+import fin.starhud.condition.Condition;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 

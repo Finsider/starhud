@@ -45,6 +45,26 @@ public class HUDList {
                         new ArrayList<>(List.of(HUDId.POSITIVE_EFFECT.toString(), HUDId.NEGATIVE_EFFECT.toString()))
                 )
         );
+        groupedHuds.add(
+                new GroupedHUDSettings(
+                        new BaseHUDSettings(true, 0, 5, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN, false),
+                        3,
+                        3,
+                        false,
+                        0xFFFFFF,
+                        new ArrayList<>(List.of(HUDId.BIOME.toString(), HUDId.CLOCK_INGAME.toString()))
+                )
+        );
+        groupedHuds.add(
+                new GroupedHUDSettings(
+                        new BaseHUDSettings(true, -5, -5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP, false),
+                        4,
+                        3,
+                        false,
+                        0x85f290,
+                        new ArrayList<>(List.of(HUDId.TPS.toString(), HUDId.PING.toString(), HUDId.CLOCK_SYSTEM.toString()))
+                )
+        );
     }
 
 

@@ -26,6 +26,9 @@ public class GroupedHUDSettings {
     @ConfigEntry.Gui.Excluded
     public ChildAlignment childAlignment = ChildAlignment.GROUP;
 
+    @ConfigEntry.Gui.Excluded
+    public ChildOrdering childOrdering = ChildOrdering.NONE;
+
     @ConfigEntry.ColorPicker
     public int boxColor = 0xFFFFFF;
 
@@ -68,20 +71,27 @@ public class GroupedHUDSettings {
         return childAlignment;
     }
 
+    public ChildOrdering getChildOrdering() {
+        if (this.childOrdering == null) this.childOrdering = ChildOrdering.NONE;
+        return this.childOrdering;
+    }
+
     public boolean isEqual(GroupedHUDSettings other) {
         return this.base.isEqual(other.base)
                 && this.gap == other.gap
                 && this.alignVertical == other.alignVertical
                 && this.childAlignment == other.childAlignment
+                && this.childOrdering == other.childOrdering
                 && this.hudIds.equals(other.hudIds)
                 && this.id.equals(other.id);
     }
 
     public void copyFrom(GroupedHUDSettings other) {
-        this.base.copySettings(other.base);
+        this.base.copyFrom(other.base);
         this.gap = other.gap;
         this.alignVertical = other.alignVertical;
         this.childAlignment = other.childAlignment;
+        this.childOrdering = other.childOrdering;
         this.hudIds = new ArrayList<>(other.hudIds);
         this.id = other.id;
     }
@@ -99,6 +109,8 @@ public class GroupedHUDSettings {
                 ", hudIds=" + hudIds +
                 ", gap=" + gap +
                 ", alignVertical=" + alignVertical +
+                ", childAlignment=" + childAlignment +
+                ", childOrdering" + childOrdering +
                 ", boxColor=0x" + Integer.toHexString(boxColor).toUpperCase() +
                 ", base=" + base +
                 ", ptr=" + getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(this)) +
@@ -125,6 +137,29 @@ public class GroupedHUDSettings {
         @Override
         public String toString() {
             return I18n.translate("starhud.option.childAlignment." + name().toLowerCase());
+        }
+    }
+
+    public enum ChildOrdering {
+        NONE,
+        WIDTH_ASCENDING,
+        WIDTH_DESCENDING,
+        HEIGHT_ASCENDING,
+        HEIGHT_DESCENDING;
+
+        public ChildOrdering next() {
+            return switch (this) {
+                case NONE -> WIDTH_ASCENDING;
+                case WIDTH_ASCENDING -> WIDTH_DESCENDING;
+                case WIDTH_DESCENDING -> HEIGHT_ASCENDING;
+                case HEIGHT_ASCENDING -> HEIGHT_DESCENDING;
+                case HEIGHT_DESCENDING -> NONE;
+            };
+        }
+
+        @Override
+        public String toString() {
+            return I18n.translate("starhud.option.childOrdering." + name().toLowerCase());
         }
     }
 }

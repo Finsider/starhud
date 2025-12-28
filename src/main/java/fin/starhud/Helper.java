@@ -65,6 +65,37 @@ public class Helper {
         return new String(chars);
     }
 
+    // color transition from pastel (red to green).
+    public static int getItemBarColor(int stackStep, int maxStep) {
+        return MathHelper.hsvToRgb(0.35F * stackStep / (float) maxStep, 0.45F, 0.95F);
+    }
+
+    public static String buildMinecraftTime24String(int hours, int minutes) {
+        StringBuilder timeBuilder = new StringBuilder();
+
+        if (hours < 10) timeBuilder.append('0');
+        timeBuilder.append(hours).append(':');
+
+        if (minutes < 10) timeBuilder.append('0');
+        timeBuilder.append(minutes);
+
+        return timeBuilder.toString();
+    }
+
+    public static String buildMinecraftTime12String(int hours, int minutes) {
+        StringBuilder timeBuilder = new StringBuilder();
+
+        String period = hours >= 12 ? " PM" : " AM";
+
+        // 01.00 until 12.59 AM / PM
+        hours %= 12;
+        if (hours == 0) hours = 12;
+
+        timeBuilder.append(buildMinecraftTime24String(hours, minutes)).append(period);
+
+        return timeBuilder.toString();
+    }
+
     public static String getModName(Identifier id) {
         String nameSpace = id.getNamespace();
         ModContainer container = FabricLoader.getInstance().getModContainer(nameSpace).orElse(null);

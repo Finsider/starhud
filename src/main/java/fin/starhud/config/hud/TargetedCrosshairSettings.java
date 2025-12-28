@@ -10,7 +10,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class TargetedCrosshairSettings {
 
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(true, 0, 37, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN);
+    public BaseHUDSettings base = new BaseHUDSettings(true, 0, 21, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN);
 
     @ConfigEntry.ColorPicker
     public int modNameColor = 0xddebf5;
