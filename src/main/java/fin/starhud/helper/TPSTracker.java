@@ -36,7 +36,7 @@ public class TPSTracker {
 
         if (CLIENT.getServer() != null) {
             mspt = CLIENT.getServer().getTickTime();
-            tps = (double) Math.round(MathHelper.clamp(1000 / mspt, 0.0F, 20.0F) * 10) / 10;
+            tps = MathHelper.clamp(1000 / mspt, 0.0F, 20.0F);
             return;
         }
 
