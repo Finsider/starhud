@@ -18,7 +18,7 @@ public class NetherYCoordinate extends AbstractCoordinateHUD {
 
     @Override
     public boolean shouldRender() {
-        return super.shouldRender() && (CLIENT.player.getEntityWorld().getRegistryKey() == World.OVERWORLD || CLIENT.player.getEntityWorld().getRegistryKey() == World.NETHER);
+        return super.shouldRender() && (CLIENT.player.getWorld().getRegistryKey() == World.OVERWORLD || CLIENT.player.getWorld().getRegistryKey() == World.NETHER);
     }
 
     @Override

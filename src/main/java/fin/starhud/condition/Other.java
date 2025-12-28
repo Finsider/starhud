@@ -31,14 +31,14 @@ public class Other {
     }
 
     public static boolean isInOverworld(String ignored) {
-        return CLIENT.player != null && CLIENT.player.getEntityWorld().getRegistryKey() == World.OVERWORLD;
+        return CLIENT.player != null && CLIENT.player.getWorld().getRegistryKey() == World.OVERWORLD;
     }
 
     public static boolean isInNether(String ignored) {
-        return CLIENT.player != null && CLIENT.player.getEntityWorld().getRegistryKey() == World.NETHER;
+        return CLIENT.player != null && CLIENT.player.getWorld().getRegistryKey() == World.NETHER;
     }
 
     public static boolean isInEnd(String ignored) {
-        return CLIENT.player != null &&  CLIENT.player.getEntityWorld().getRegistryKey() == World.END;
+        return CLIENT.player != null &&  CLIENT.player.getWorld().getRegistryKey() == World.END;
     }
 }
