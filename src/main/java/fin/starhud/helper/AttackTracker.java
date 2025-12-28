@@ -8,7 +8,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
-import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -49,7 +48,7 @@ public class AttackTracker {
         }
     }
 
-    public static ActionResult onAttack(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult hitResult) {
+    public static ActionResult onAttack(PlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
         if (!world.isClient()) return ActionResult.PASS;
 
         long now = world.getTime(); // ticks
