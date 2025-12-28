@@ -135,6 +135,13 @@ public class RenderUtils {
         }
     }
 
+    public static void drawBorder(DrawContext context, int x, int y, int w, int h, int color) {
+        context.fill(x, y, x + w, y + 1, color);
+        context.fill(x, y, x + 1, y + h, color);
+        context.fill(x, y + h - 1, x + w, y + h, color);
+        context.fill(x + w - 1, y, x + w, y + h, color);
+    }
+
     public static void drawTextureAlphaColor(DrawContext context, Identifier identifier, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, int color) {
 
         float alpha = (color >> 24 & 0xFF) / 255.0F;
@@ -183,7 +190,7 @@ public class RenderUtils {
     public static void drawTextHUD(DrawContext context, String str, int x, int y, int color, boolean shadow) {
         if (str != null) {
             OrderedText orderedText = OrderedText.styledForwardsVisitedString(str, Style.EMPTY);
-            context.drawText(CLIENT.textRenderer, orderedText, x, y + HUD_SETTINGS.textYOffset, color, shadow);
+            drawTextHUD(context, orderedText, x, y, color, shadow);
         }
     }
 

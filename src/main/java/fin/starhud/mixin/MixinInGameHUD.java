@@ -1,12 +1,11 @@
 package fin.starhud.mixin;
 
 import fin.starhud.Main;
-import fin.starhud.helper.condition.HeldItemTooltip;
-import fin.starhud.helper.condition.ScoreboardHUD;
+import fin.starhud.condition.HeldItemTooltip;
 import fin.starhud.hud.HUDComponent;
 import fin.starhud.hud.HUDId;
-import fin.starhud.hud.implementation.NegativeEffectHUD;
-import fin.starhud.hud.implementation.PositiveEffectHUD;
+import fin.starhud.hud.implementation.statuseffect.NegativeEffectHUD;
+import fin.starhud.hud.implementation.statuseffect.PositiveEffectHUD;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;

@@ -1,7 +1,7 @@
 {
   "text.autoconfig.starhud.title": "StarHUD Configuration",
 
-  "category.starhud" : "StarHUD",
+  "key.category.starhud.category" : "StarHUD",
   "key.starhud.open_edithud": "Open HUD Edit Screen",
   "key.starhud.toggle_hud": "Toggle HUD In Game",
 
@@ -24,6 +24,14 @@
 
   "starhud.help.key.group_ungroup": "[G]",
   "starhud.help.info.group_ungroup": "Group / Ungroup",
+
+  "starhud.help.key.clamp_all": "[⇧ Shift + C]",
+  "starhud.help.info.clamp_all": "Clamp Every HUD Rendered",
+
+  "starhud.help.key.undo": "[Ctrl + Z]",
+  "starhud.help.info.undo": "Undo Previous Action",
+  "starhud.help.key.redo": "[Ctrl + Y]",
+  "starhud.help.info.redo": "Redo Previously Undone Action",
 
   "starhud.screen.field.x": "X",
   "starhud.screen.field.y": "Y",
@@ -58,9 +66,11 @@
   "starhud.screen.tooltip.help": "Help",
   "starhud.screen.tooltip.more_options": "More Options",
   "starhud.screen.tooltip.child_alignment": "Child Alignment",
+  "starhud.screen.tooltip.group_alignment": "Group Alignment",
+  "starhud.screen.tooltip.child_ordering": "Child Ordering",
 
-  "starhud.screen.alignment.vertical": "Vertical",
-  "starhud.screen.alignment.horizontal": "Horizontal",
+  "starhud.screen.button.group_alignment.vertical": "Vertical",
+  "starhud.screen.button.group_alignment.horizontal": "Horizontal",
 
   "starhud.screen.status.on": "ON",
   "starhud.screen.status.off": "OFF",
@@ -89,15 +99,21 @@
   "starhud.option.screenAlignmentY.middle": "Middle",
   "starhud.option.screenAlignmentY.bottom": "Bottom",
 
-  "starhud.option.hudDisplayMode.icon": "Icon Only",
-  "starhud.option.hudDisplayMode.info": "Info Only",
-  "starhud.option.hudDisplayMode.both": "Both",
+  "starhud.option.hudDisplayMode.icon": "Icon",
+  "starhud.option.hudDisplayMode.info": "Info",
+  "starhud.option.hudDisplayMode.both": "Icon & Info",
 
   "starhud.option.childAlignment.group": "Group",
   "starhud.option.childAlignment.child": "Child",
   "starhud.option.childAlignment.start": "Start",
   "starhud.option.childAlignment.center": "Center",
   "starhud.option.childAlignment.end": "End",
+
+  "starhud.option.childOrdering.none": "None",
+  "starhud.option.childOrdering.width_ascending": "Width, Asc",
+  "starhud.option.childOrdering.width_descending": "Width, Desc",
+  "starhud.option.childOrdering.height_ascending": "Height, Asc",
+  "starhud.option.childOrdering.height_descending": "Height, Desc",
 
   "text.autoconfig.starhud.category.general": "General",
 
@@ -296,22 +312,32 @@
   "text.autoconfig.starhud.option.effectSettings.positiveSettings": "Positive Effect HUD",
   "text.autoconfig.starhud.option.effectSettings.positiveSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.effectSettings.positiveSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.effectSettings.positiveSettings.drawTimer": "Draw Clock",
   "text.autoconfig.starhud.option.effectSettings.positiveSettings.drawVertical": "Draw Vertically",
+  "text.autoconfig.starhud.option.effectSettings.positiveSettings.drawHidden": "Draw Hidden Effect",
+  "text.autoconfig.starhud.option.effectSettings.positiveSettings.combineBackground": "Combine Background",
+  "text.autoconfig.starhud.option.effectSettings.positiveSettings.colorMode": "Color Mode",
   "text.autoconfig.starhud.option.effectSettings.positiveSettings.useEffectColor": "Use Status Effect Color on Timer",
   "text.autoconfig.starhud.option.effectSettings.positiveSettings.differentTypeGap": "Different Type Gap",
   "text.autoconfig.starhud.option.effectSettings.positiveSettings.sameTypeGap": "Same Type Gap",
   "text.autoconfig.starhud.option.effectSettings.positiveSettings.ambientColor": "Ambient Effect Color",
   "text.autoconfig.starhud.option.effectSettings.positiveSettings.infiniteColor": "Infinite Duration Color",
+  "text.autoconfig.starhud.option.effectSettings.positiveSettings.customColor": "Custom Color",
 
   "text.autoconfig.starhud.option.effectSettings.negativeSettings": "Negative Effect HUD",
   "text.autoconfig.starhud.option.effectSettings.negativeSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.effectSettings.negativeSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.effectSettings.negativeSettings.drawTimer": "Draw Clock",
   "text.autoconfig.starhud.option.effectSettings.negativeSettings.drawVertical": "Draw Vertically",
+  "text.autoconfig.starhud.option.effectSettings.negativeSettings.drawHidden": "Draw Hidden Effect",
+  "text.autoconfig.starhud.option.effectSettings.negativeSettings.combineBackground": "Combine Background",
+  "text.autoconfig.starhud.option.effectSettings.negativeSettings.colorMode": "Color Mode",
   "text.autoconfig.starhud.option.effectSettings.negativeSettings.useEffectColor": "Use Status Effect Color on Timer",
   "text.autoconfig.starhud.option.effectSettings.negativeSettings.differentTypeGap": "Different Type Gap",
   "text.autoconfig.starhud.option.effectSettings.negativeSettings.sameTypeGap": "Same Type Gap",
   "text.autoconfig.starhud.option.effectSettings.negativeSettings.ambientColor": "Ambient Effect Color",
   "text.autoconfig.starhud.option.effectSettings.negativeSettings.infiniteColor": "Infinite Duration Color",
+  "text.autoconfig.starhud.option.effectSettings.negativeSettings.customColor": "Custom Color",
 
   "text.autoconfig.starhud.category.targeted": "Targeted",
   "text.autoconfig.starhud.option.targetedCrosshairSettings.base.shouldRender": "Show HUD",
@@ -330,5 +356,25 @@
   "text.autoconfig.starhud.option.speedSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.speedSettings.color": "Color",
   "text.autoconfig.starhud.option.speedSettings.useFullSpeed": "Use Full Speed",
-  "text.autoconfig.starhud.option.speedSettings.additionalString": "Extra Label"
+  "text.autoconfig.starhud.option.speedSettings.additionalString": "Extra Label",
+
+  "text.autoconfig.starhud.category.player_count": "Player Count",
+  "text.autoconfig.starhud.option.playerCountSettings.base.shouldRender": "Show HUD",
+  "text.autoconfig.starhud.option.playerCountSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.playerCountSettings.color": "Color",
+  "text.autoconfig.starhud.option.playerCountSettings.showMaxPlayer": "Show Max Player Count",
+
+  "text.autoconfig.starhud.category.combo": "Combo",
+  "text.autoconfig.starhud.option.comboSettings.base.shouldRender": "Show HUD",
+  "text.autoconfig.starhud.option.comboSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.comboSettings.color": "Color",
+  "text.autoconfig.starhud.option.comboSettings.hideInactive": "Hide When Inactive",
+  "text.autoconfig.starhud.option.comboSettings.additionalString": "Extra Label",
+
+  "text.autoconfig.starhud.category.reach": "Reach",
+  "text.autoconfig.starhud.option.reachSettings.base.shouldRender": "Show HUD",
+  "text.autoconfig.starhud.option.reachSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.reachSettings.color": "Color",
+  "text.autoconfig.starhud.option.reachSettings.hideInactive": "Hide When Inactive",
+  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label"
 }
