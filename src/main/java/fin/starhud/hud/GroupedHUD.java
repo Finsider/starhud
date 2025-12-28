@@ -7,6 +7,7 @@ import net.minecraft.client.gui.DrawContext;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -92,6 +93,23 @@ public class GroupedHUD extends AbstractHUD {
             }
         } else
             return false;
+
+        switch (groupSettings.childOrdering) {
+            case WIDTH_ASCENDING -> renderedHUDs.sort(
+                    Comparator.comparingInt(AbstractHUD::getWidth)
+            );
+            case WIDTH_DESCENDING -> renderedHUDs.sort(
+                    Comparator.comparingInt(AbstractHUD::getWidth)
+                            .reversed()
+            );
+            case HEIGHT_ASCENDING -> renderedHUDs.sort(
+                    Comparator.comparingInt(AbstractHUD::getHeight)
+            );
+            case HEIGHT_DESCENDING -> renderedHUDs.sort(
+                    Comparator.comparingInt(AbstractHUD::getHeight)
+                            .reversed()
+            );
+        }
 
         int xOffset = 0, yOffset = 0;
         for (AbstractHUD hud : renderedHUDs) {

@@ -3,6 +3,7 @@ package fin.starhud.helper;
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.ItemStack;
@@ -135,6 +136,13 @@ public class RenderUtils {
         }
     }
 
+    public static void drawBorder(DrawContext context, int x, int y, int w, int h, int color) {
+        context.fill(x, y, x + w, y + 1, color);
+        context.fill(x, y, x + 1, y + h, color);
+        context.fill(x, y + h - 1, x + w, y + h, color);
+        context.fill(x + w - 1, y, x + w, y + h, color);
+    }
+
     // for easier version porting.
 
     public static void drawTextureHUD(DrawContext context, Identifier identifier, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, int color) {
@@ -148,7 +156,7 @@ public class RenderUtils {
     public static void drawTextHUD(DrawContext context, String str, int x, int y, int color, boolean shadow) {
         if (str != null) {
             OrderedText orderedText = OrderedText.styledForwardsVisitedString(str, Style.EMPTY);
-            context.drawText(CLIENT.textRenderer, orderedText, x, y + HUD_SETTINGS.textYOffset, color, shadow);
+            drawTextHUD(context, orderedText, x, y, color, shadow);
         }
     }
 

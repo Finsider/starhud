@@ -4,7 +4,24 @@ import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
 import fin.starhud.config.GroupedHUDSettings;
 import fin.starhud.config.HUDList;
-import fin.starhud.hud.implementation.*;
+import fin.starhud.helper.HUDDisplayMode;
+import fin.starhud.hud.implementation.armor.BootsHUD;
+import fin.starhud.hud.implementation.armor.ChestplateHUD;
+import fin.starhud.hud.implementation.armor.HelmetHUD;
+import fin.starhud.hud.implementation.armor.LeggingsHUD;
+import fin.starhud.hud.implementation.clock.ClockInGameHUD;
+import fin.starhud.hud.implementation.clock.ClockSystemHUD;
+import fin.starhud.hud.implementation.coordinate.nether.NetherXCoordinate;
+import fin.starhud.hud.implementation.coordinate.nether.NetherYCoordinate;
+import fin.starhud.hud.implementation.coordinate.nether.NetherZCoordinate;
+import fin.starhud.hud.implementation.coordinate.normal.XCoordinateHUD;
+import fin.starhud.hud.implementation.coordinate.normal.YCoordinateHUD;
+import fin.starhud.hud.implementation.coordinate.normal.ZCoordinateHUD;
+import fin.starhud.hud.implementation.hand.LeftHandHUD;
+import fin.starhud.hud.implementation.hand.RightHandHUD;
+import fin.starhud.hud.implementation.other.*;
+import fin.starhud.hud.implementation.statuseffect.NegativeEffectHUD;
+import fin.starhud.hud.implementation.statuseffect.PositiveEffectHUD;
 import net.minecraft.client.gui.DrawContext;
 import org.slf4j.Logger;
 
@@ -76,6 +93,9 @@ public class HUDComponent {
         registerHUD(new PingHUD());
         registerHUD(new SpeedHUD());
         registerHUD(new TargetedCrosshairHUD());
+        registerHUD(new PlayerCountHUD());
+        registerHUD(new ComboHUD());
+        registerHUD(new ReachHUD());
 
         registerHUD(new PositiveEffectHUD());
         registerHUD(new NegativeEffectHUD());
@@ -155,15 +175,6 @@ public class HUDComponent {
     private final List<AbstractHUD> invalidHUDs = new ArrayList<>();
 
     public void renderAll(DrawContext context) {
-
-        long now = System.nanoTime();
-        long intervalNanos = (long) (HUD_SETTINGS.dataCollectionInterval * 1_000_000_000L);
-
-        if (now - lastCollect >= intervalNanos) {
-            collectAll();
-            lastCollect = now;
-        }
-
         for (AbstractHUD hud : renderedHUDs) {
             if (!hud.render(context)) {
                 LOGGER.warn("{} is collected but still failed! Removing from rendered hud.", hud.getName());
@@ -178,6 +189,15 @@ public class HUDComponent {
     }
 
     public void collectAll() {
+
+        long now = System.nanoTime();
+        long intervalNanos = (long) (HUD_SETTINGS.dataCollectionInterval * 1_000_000_000L);
+
+        if (now - lastCollect < intervalNanos)
+            return;
+
+        lastCollect = now;
+
         renderedHUDs.clear();
         for (AbstractHUD hud : individualHUDs.values()) {
             if (hud.shouldRender() && hud.collect()) {
@@ -211,6 +231,64 @@ public class HUDComponent {
     public void removeActiveHUDs() {
         individualHUDs.clear();
         groupedHUDs.clear();
+    }
+
+    public void clampAll() {
+        for (AbstractHUD hud : renderedHUDs)
+            hud.clampPos();
+    }
+
+    // grouping function, experimental, may crash.
+
+    // hud in huds MUST be ungrouped. not doing so will crash.
+    public GroupedHUDSettings group(List<AbstractHUD> huds) {
+        GroupedHUDSettings newSettings = new GroupedHUDSettings();
+
+        List<GroupedHUDSettings> groupedHUDs = Main.settings.hudList.groupedHuds;
+        List<String> individualHUDs = Main.settings.hudList.individualHudIds;
+
+        // remove hud from individualHUDs, and add hud to the group via settings.
+        for (AbstractHUD hud : huds) {
+            if (hud.isInGroup()) {
+                throw new IllegalStateException("HUD " + hud.getId() + " is already in a group.");
+            }
+
+            if (!(hud instanceof GroupedHUD))
+                individualHUDs.remove(hud.getId());
+            newSettings.hudIds.add(hud.getId());
+            hud.setGroupId(newSettings.id);
+
+//            LOGGER.info("{} added to {}", hud.getName(), newSettings.id);
+        }
+
+        // we should copy the settings from the first selected hud. so that the position doesn't reset to 0,0.
+        AbstractHUD firstHUD = huds.getFirst();
+        newSettings.base.copyFrom(firstHUD.getSettings());
+        newSettings.base.drawBackground = false;
+        newSettings.base.displayMode = HUDDisplayMode.BOTH;
+        newSettings.boxColor = firstHUD.getBoundingBox().getColor() & 0x00FFFFFF;
+
+        groupedHUDs.add(newSettings);
+        HUDComponent.getInstance().updateActiveHUDs();
+
+        return newSettings;
+    }
+
+    public void unGroup(GroupedHUD groupedHUD) {
+        List<AbstractHUD> huds = groupedHUD.huds;
+
+        List<GroupedHUDSettings> groupedHUDs = Main.settings.hudList.groupedHuds;
+        List<String> individualHUDs = Main.settings.hudList.individualHudIds;
+
+        for (AbstractHUD hud : huds) {
+            if (!(hud instanceof GroupedHUD))
+                individualHUDs.add(hud.getId());
+            hud.setGroupId(null);
+//            LOGGER.info("{} removed from {}", hud.getName(), groupedHUD.groupSettings.id);
+        }
+
+        groupedHUDs.removeIf(a -> a.id.equals(groupedHUD.groupSettings.id));
+        HUDComponent.getInstance().updateActiveHUDs();
     }
 
     public String generateNextGroupId() {
