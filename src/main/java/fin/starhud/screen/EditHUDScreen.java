@@ -99,25 +99,12 @@ public class EditHUDScreen extends Screen {
 
         oldHUDSettings = new HashMap<>();
         for (AbstractHUD p : HUDMap.values()) {
-            BaseHUDSettings settings = p.getSettings();
-            oldHUDSettings.put(p.getId(), new BaseHUDSettings(settings.shouldRender, settings.x, settings.y, settings.originX, settings.originY, settings.growthDirectionX, settings.growthDirectionY, settings.scale, settings.displayMode, settings.drawBackground));
+            oldHUDSettings.put(p.getId(), p.getSettings().copy());
         }
 
         oldGroupedHUDSettings = new HashMap<>();
         for (GroupedHUD p : groupedHUDs.values()) {
-            BaseHUDSettings settings = p.getSettings();
-            oldGroupedHUDSettings.put(
-                    p.getId(),
-                    new GroupedHUDSettings(
-                            new BaseHUDSettings(settings.shouldRender, settings.x, settings.y, settings.originX, settings.originY,  settings.growthDirectionX, settings.growthDirectionY, settings.scale, settings.displayMode, settings.drawBackground),
-                            p.getId(),
-                            p.groupSettings.gap,
-                            p.groupSettings.alignVertical,
-                            p.groupSettings.getChildAlignment(),
-                            p.groupSettings.boxColor,
-                            p.groupSettings.hudIds
-                    )
-            );
+            oldGroupedHUDSettings.put(p.getId(), p.groupSettings.copy());
         }
 
         oldIndividualHudIds = List.copyOf(Main.settings.hudList.individualHudIds);
@@ -1168,7 +1155,7 @@ public class EditHUDScreen extends Screen {
             AbstractHUD hud = HUDComponent.getInstance().getHUD(id);
             BaseHUDSettings original = oldHUDSettings.get(id.toString());
             if (original != null) {
-                hud.getSettings().copySettings(original);
+                hud.getSettings().copyFrom(original);
 //                LOGGER.info("Reverting {} Settings", hud.getName());
             } else {
                 LOGGER.warn("Original Settings is not found! for {}", hud.getName());
