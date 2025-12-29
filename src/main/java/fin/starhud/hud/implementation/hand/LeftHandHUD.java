@@ -1,7 +1,7 @@
 package fin.starhud.hud.implementation.hand;
 
 import fin.starhud.Main;
-import fin.starhud.config.hud.HandSettings;
+import fin.starhud.config.hud.hand.HandSettings;
 import fin.starhud.hud.HUDId;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;

@@ -1,7 +1,7 @@
 package fin.starhud.hud.implementation.statuseffect;
 
 import fin.starhud.Main;
-import fin.starhud.config.hud.EffectSettings;
+import fin.starhud.config.hud.statuseffect.EffectSettings;
 import fin.starhud.hud.HUDId;
 import net.minecraft.entity.effect.StatusEffect;
 

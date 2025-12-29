@@ -3,7 +3,7 @@ package fin.starhud.hud.implementation.other;
 import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
-import fin.starhud.config.hud.TargetedCrosshairSettings;
+import fin.starhud.config.hud.other.TargetedCrosshairSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;

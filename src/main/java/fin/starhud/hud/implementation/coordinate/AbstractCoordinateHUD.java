@@ -1,6 +1,6 @@
 package fin.starhud.hud.implementation.coordinate;
 
-import fin.starhud.config.hud.CoordSettings;
+import fin.starhud.config.hud.coordinate.CoordSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;

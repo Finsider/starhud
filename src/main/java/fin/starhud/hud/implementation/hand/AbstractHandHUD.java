@@ -1,6 +1,8 @@
 package fin.starhud.hud.implementation.hand;
 
-import fin.starhud.config.hud.HandSettings;
+import fin.starhud.Main;
+import fin.starhud.config.Settings;
+import fin.starhud.config.hud.hand.HandSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.implementation.AbstractDurabilityHUD;
@@ -18,6 +20,9 @@ import java.util.Objects;
 
 public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
 
+    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Settings.Hand SETTINGS = Main.settings.handSettings;
+
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
 
@@ -27,16 +32,12 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
     private static final int ITEM_TEXTURE_WIDTH = 3 + 16 + 3;
     private static final int ITEM_TEXTURE_HEIGHT = 3 + 16 + 3;
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
-
-    private final HandSettings handSettings;
     private final Arm arm;
     private final Identifier ICON_TEXTURE;
 
     public AbstractHandHUD(HandSettings handSettings, Arm arm, Identifier ICON_TEXTURE) {
-        super(handSettings.base, handSettings.durabilitySettings);
+        super(handSettings.base, SETTINGS.durabilitySettings);
 
-        this.handSettings = handSettings;
         this.arm = arm;
         this.ICON_TEXTURE = ICON_TEXTURE;
     }
@@ -67,9 +68,9 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         if (item.isEmpty())
             return false;
 
-        showDurability = handSettings.showDurability;
-        showCount = handSettings.showCount;
-        drawItem = handSettings.durabilitySettings.drawItem;
+        showDurability = SETTINGS.showDurability;
+        showCount = SETTINGS.showCount;
+        drawItem = SETTINGS.durabilitySettings.drawItem;
         displayMode = getSettings().getDisplayMode();
 
         isItemDamagable = item.isDamageable();

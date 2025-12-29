@@ -1,7 +1,7 @@
 package fin.starhud.hud.implementation.other;
 
 import fin.starhud.Main;
-import fin.starhud.config.hud.DirectionSettings;
+import fin.starhud.config.hud.other.DirectionSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
