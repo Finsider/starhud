@@ -1,4 +1,4 @@
-package fin.starhud.config.hud;
+package fin.starhud.config.hud.other;
 
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.helper.GrowthDirectionX;
@@ -13,9 +13,9 @@ public class BiomeSettings {
     public BaseHUDSettings base = new BaseHUDSettings(true, 0, 5, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN);
 
     @ConfigEntry.Gui.CollapsibleObject
-    public DimensionColorSetting color = new DimensionColorSetting();
+    public DimensionColorSettings color = new DimensionColorSettings();
 
-    public static class DimensionColorSetting {
+    public static class DimensionColorSettings {
         @ConfigEntry.ColorPicker
         public int overworld = 0xFFFFFF;
         @ConfigEntry.ColorPicker

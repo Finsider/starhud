@@ -1,7 +1,7 @@
 package fin.starhud.hud.implementation.other;
 
 import fin.starhud.Main;
-import fin.starhud.config.hud.PlayerCountSettings;
+import fin.starhud.config.hud.other.PlayerCountSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;

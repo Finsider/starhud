@@ -1,4 +1,4 @@
-package fin.starhud.config.hud;
+package fin.starhud.config.hud.hand;
 
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.helper.GrowthDirectionX;
@@ -11,12 +11,6 @@ public class HandSettings {
 
     @ConfigEntry.Gui.TransitiveObject
     public BaseHUDSettings base;
-
-    @ConfigEntry.Gui.TransitiveObject
-    public DurabilitySettings durabilitySettings = new DurabilitySettings();
-
-    public boolean showCount = true;
-    public boolean showDurability = true;
 
     @ConfigEntry.ColorPicker
     public int color;

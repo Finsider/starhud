@@ -1,4 +1,4 @@
-package fin.starhud.config.hud;
+package fin.starhud.config.hud.other;
 
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.helper.GrowthDirectionX;

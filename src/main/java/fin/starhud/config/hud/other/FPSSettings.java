@@ -1,4 +1,4 @@
-package fin.starhud.config.hud;
+package fin.starhud.config.hud.other;
 
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.helper.GrowthDirectionX;
@@ -7,14 +7,13 @@ import fin.starhud.helper.ScreenAlignmentX;
 import fin.starhud.helper.ScreenAlignmentY;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-public class TPSSettings {
+public class FPSSettings {
+
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(true, -116, -5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP);
+    public BaseHUDSettings base = new BaseHUDSettings(true, 5, -5, ScreenAlignmentX.LEFT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP);
 
     @ConfigEntry.ColorPicker
-    public int color = 0xb5ead7;
+    public int color = 0xb7dff5;
 
-    public boolean useDynamicColor = true;
-
-    public String additionalString = " TPS";
+    public String additionalString = " FPS";
 }
