@@ -1,7 +1,7 @@
 package fin.starhud.hud.implementation.coordinate.nether;
 
 import fin.starhud.Main;
-import fin.starhud.config.hud.CoordSettings;
+import fin.starhud.config.hud.coordinate.CoordSettings;
 import fin.starhud.hud.HUDId;
 import fin.starhud.hud.implementation.coordinate.AbstractCoordinateHUD;
 import net.minecraft.client.MinecraftClient;

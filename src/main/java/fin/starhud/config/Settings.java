@@ -1,6 +1,13 @@
 package fin.starhud.config;
 
-import fin.starhud.config.hud.*;
+import fin.starhud.config.hud.DurabilitySettings;
+import fin.starhud.config.hud.armor.ArmorSettings;
+import fin.starhud.config.hud.clock.ClockInGameSettings;
+import fin.starhud.config.hud.clock.ClockSystemSettings;
+import fin.starhud.config.hud.coordinate.CoordSettings;
+import fin.starhud.config.hud.hand.HandSettings;
+import fin.starhud.config.hud.other.*;
+import fin.starhud.config.hud.statuseffect.EffectSettings;
 import fin.starhud.helper.GrowthDirectionX;
 import fin.starhud.helper.GrowthDirectionY;
 import fin.starhud.helper.ScreenAlignmentX;
@@ -8,6 +15,7 @@ import fin.starhud.helper.ScreenAlignmentY;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config.Gui.Background("cloth-config2:transparent")
 @Config(name = "starhud")
@@ -21,9 +29,73 @@ public class Settings implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public HUDList hudList = new HUDList();
 
+    @ConfigEntry.Category("fps")
+    @ConfigEntry.Gui.TransitiveObject
+    public FPSSettings fpsSettings = new FPSSettings();
+
     @ConfigEntry.Category("armor")
     @ConfigEntry.Gui.TransitiveObject
     public Armor armorSettings = new Armor();
+
+    @ConfigEntry.Category("hand")
+    @ConfigEntry.Gui.TransitiveObject
+    public Hand handSettings = new Hand();
+
+    @ConfigEntry.Category("coord")
+    @ConfigEntry.Gui.TransitiveObject
+    public Coord coordSettings = new Coord();
+
+    @ConfigEntry.Category("effect")
+    @ConfigEntry.Gui.TransitiveObject
+    public Effect effectSettings = new Effect();
+
+    @ConfigEntry.Category("direction")
+    @ConfigEntry.Gui.TransitiveObject
+    public DirectionSettings directionSettings = new DirectionSettings();
+
+    @ConfigEntry.Category("ping")
+    @ConfigEntry.Gui.TransitiveObject
+    public PingSettings pingSettings = new PingSettings();
+
+    @ConfigEntry.Category("tps")
+    @ConfigEntry.Gui.TransitiveObject
+    public TPSSettings tpsSettings = new TPSSettings();
+
+    @ConfigEntry.Category("player_count")
+    @ConfigEntry.Gui.TransitiveObject
+    public PlayerCountSettings playerCountSettings = new PlayerCountSettings();
+
+    @ConfigEntry.Category("clock")
+    @ConfigEntry.Gui.TransitiveObject
+    public Clock clockSettings = new Clock();
+
+    @ConfigEntry.Category("combo")
+    @ConfigEntry.Gui.TransitiveObject
+    public ComboSettings comboSettings = new ComboSettings();
+
+    @ConfigEntry.Category("reach")
+    @ConfigEntry.Gui.TransitiveObject
+    public ReachSettings reachSettings = new ReachSettings();
+
+    @ConfigEntry.Category("speed")
+    @ConfigEntry.Gui.TransitiveObject
+    public SpeedSettings speedSettings = new SpeedSettings();
+
+    @ConfigEntry.Category("biome")
+    @ConfigEntry.Gui.TransitiveObject
+    public BiomeSettings biomeSettings = new BiomeSettings();
+
+    @ConfigEntry.Category("day")
+    @ConfigEntry.Gui.TransitiveObject
+    public DaySettings daySettings = new DaySettings();
+
+    @ConfigEntry.Category("targeted")
+    @ConfigEntry.Gui.TransitiveObject
+    public TargetedCrosshairSettings targetedCrosshairSettings = new TargetedCrosshairSettings();
+
+    @ConfigEntry.Category("inventory")
+    @ConfigEntry.Gui.TransitiveObject
+    public InventorySettings inventorySettings = new InventorySettings();
 
     public static class Armor {
         @ConfigEntry.Gui.CollapsibleObject
@@ -45,19 +117,10 @@ public class Settings implements ConfigData {
         public ArmorSettings boots = new ArmorSettings(
                 new BaseHUDSettings(true, 5, 14 * 3, ScreenAlignmentX.LEFT, ScreenAlignmentY.MIDDLE, GrowthDirectionX.RIGHT, GrowthDirectionY.MIDDLE)
         );
+
+        @ConfigEntry.Gui.TransitiveObject
+        public DurabilitySettings durabilitySettings = new DurabilitySettings();
     }
-
-    @ConfigEntry.Category("fps")
-    @ConfigEntry.Gui.TransitiveObject
-    public FPSSettings fpsSettings = new FPSSettings();
-
-    @ConfigEntry.Category("tps")
-    @ConfigEntry.Gui.TransitiveObject
-    public TPSSettings tpsSettings = new TPSSettings();
-
-    @ConfigEntry.Category("coord")
-    @ConfigEntry.Gui.TransitiveObject
-    public Coord coordSettings = new Coord();
 
     public static class Coord {
         @ConfigEntry.Gui.CollapsibleObject
@@ -97,54 +160,6 @@ public class Settings implements ConfigData {
         );
     }
 
-    @ConfigEntry.Category("direction")
-    @ConfigEntry.Gui.TransitiveObject
-    public DirectionSettings directionSettings = new DirectionSettings();
-
-    @ConfigEntry.Category("ping")
-    @ConfigEntry.Gui.TransitiveObject
-    public PingSettings pingSettings = new PingSettings();
-
-    @ConfigEntry.Category("clock")
-    @ConfigEntry.Gui.TransitiveObject
-    public Clock clockSettings = new Clock();
-
-    public static class Clock {
-        @ConfigEntry.Gui.CollapsibleObject
-        public ClockSystemSettings systemSetting = new ClockSystemSettings();
-
-        @ConfigEntry.Gui.CollapsibleObject
-        public ClockInGameSettings inGameSetting = new ClockInGameSettings();
-    }
-
-    @ConfigEntry.Category("day")
-    @ConfigEntry.Gui.TransitiveObject
-    public DaySettings daySettings = new DaySettings();
-
-    @ConfigEntry.Category("biome")
-    @ConfigEntry.Gui.TransitiveObject
-    public BiomeSettings biomeSettings = new BiomeSettings();
-
-    @ConfigEntry.Category("inventory")
-    @ConfigEntry.Gui.TransitiveObject
-    public InventorySettings inventorySettings = new InventorySettings();
-
-    @ConfigEntry.Category("hand")
-    @ConfigEntry.Gui.TransitiveObject
-    public Hand handSettings = new Hand();
-
-    public static class Hand {
-        @ConfigEntry.Gui.CollapsibleObject
-        public HandSettings leftHandSettings = new HandSettings(true, -96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP,0xffb3b3);
-
-        @ConfigEntry.Gui.CollapsibleObject
-        public HandSettings rightHandSettings = new HandSettings(true, 96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
-    }
-
-    @ConfigEntry.Category("effect")
-    @ConfigEntry.Gui.TransitiveObject
-    public Effect effectSettings = new Effect();
-
     public static class Effect {
         @ConfigEntry.Gui.CollapsibleObject
         public EffectSettings positiveSettings = new EffectSettings(
@@ -157,27 +172,55 @@ public class Settings implements ConfigData {
                 new BaseHUDSettings(true, -5, 39, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN),
                 0xDCE8B5
         );
+
+        @Comment("Draw the HUD in a clock like fashion instead of a bars.")
+        public boolean drawTimer = false;
+
+        @Comment("Also draw Status Effect that are supposedly Hidden.")
+        public boolean drawHidden = false;
+
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        public ColorMode colorMode = ColorMode.DYNAMIC;
+
+        @ConfigEntry.ColorPicker
+        public int ambientColor = 0xd5feef;
+
+        @ConfigEntry.ColorPicker
+        public int infiniteColor = 0xB5D0E8;
+
+        public ColorMode getColorMode() {
+            if (colorMode == null) colorMode = ColorMode.DYNAMIC;
+            return colorMode;
+        }
+
+        public enum ColorMode {
+            CUSTOM,
+            EFFECT,
+            DYNAMIC
+        }
     }
 
-    @ConfigEntry.Category("targeted")
-    @ConfigEntry.Gui.TransitiveObject
-    public TargetedCrosshairSettings targetedCrosshairSettings = new TargetedCrosshairSettings();
+    public static class Hand {
+        @ConfigEntry.Gui.CollapsibleObject
+        public HandSettings leftHandSettings = new HandSettings(true, -96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP,0xffb3b3);
 
-    @ConfigEntry.Category("speed")
-    @ConfigEntry.Gui.TransitiveObject
-    public SpeedSettings speedSettings = new SpeedSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        public HandSettings rightHandSettings = new HandSettings(true, 96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
 
-    @ConfigEntry.Category("player_count")
-    @ConfigEntry.Gui.TransitiveObject
-    public PlayerCountSettings playerCountSettings = new PlayerCountSettings();
+        @ConfigEntry.Gui.TransitiveObject
+        public DurabilitySettings durabilitySettings = new DurabilitySettings();
 
-    @ConfigEntry.Category("combo")
-    @ConfigEntry.Gui.TransitiveObject
-    public ComboSettings comboSettings = new ComboSettings();
+        public boolean showCount = true;
+        public boolean showDurability = true;
+    }
 
-    @ConfigEntry.Category("reach")
-    @ConfigEntry.Gui.TransitiveObject
-    public ReachSettings reachSettings = new ReachSettings();
+    public static class Clock {
+        @ConfigEntry.Gui.CollapsibleObject
+        public ClockSystemSettings systemSetting = new ClockSystemSettings();
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public ClockInGameSettings inGameSetting = new ClockInGameSettings();
+    }
 
     @Override
     public void validatePostLoad() {
@@ -192,8 +235,6 @@ public class Settings implements ConfigData {
             armorSettings.helmet = new ArmorSettings(
                     new BaseHUDSettings(true, 5, 0, ScreenAlignmentX.LEFT, ScreenAlignmentY.MIDDLE, GrowthDirectionX.RIGHT, GrowthDirectionY.MIDDLE)
             );
-        } else if (helmet.durabilitySettings == null) {
-            armorSettings.helmet.durabilitySettings = new DurabilitySettings();
         }
 
         ArmorSettings chestplate = armorSettings.chestplate;
@@ -201,8 +242,6 @@ public class Settings implements ConfigData {
             armorSettings.chestplate = new ArmorSettings(
                     new BaseHUDSettings(true, 5, 14, ScreenAlignmentX.LEFT, ScreenAlignmentY.MIDDLE, GrowthDirectionX.RIGHT, GrowthDirectionY.MIDDLE)
             );
-        } else if (chestplate.durabilitySettings == null) {
-            armorSettings.chestplate.durabilitySettings = new DurabilitySettings();
         }
 
         ArmorSettings leggings = armorSettings.leggings;
@@ -210,8 +249,6 @@ public class Settings implements ConfigData {
             armorSettings.leggings = new ArmorSettings(
                     new BaseHUDSettings(true, 5, 14 * 2, ScreenAlignmentX.LEFT, ScreenAlignmentY.MIDDLE, GrowthDirectionX.RIGHT, GrowthDirectionY.MIDDLE)
             );
-        } else if (leggings.durabilitySettings == null) {
-            armorSettings.leggings.durabilitySettings = new DurabilitySettings();
         }
 
         ArmorSettings boots = armorSettings.boots;
@@ -219,8 +256,10 @@ public class Settings implements ConfigData {
             armorSettings.boots = new ArmorSettings(
                     new BaseHUDSettings(true, 5, 14 * 3, ScreenAlignmentX.LEFT, ScreenAlignmentY.MIDDLE, GrowthDirectionX.RIGHT, GrowthDirectionY.MIDDLE)
             );
-        } else if (boots.durabilitySettings == null) {
-            armorSettings.boots.durabilitySettings = new DurabilitySettings();
+        }
+
+        if (armorSettings.durabilitySettings == null) {
+            armorSettings.durabilitySettings = new DurabilitySettings();
         }
 
         if (fpsSettings.base == null)
@@ -303,15 +342,15 @@ public class Settings implements ConfigData {
         HandSettings leftHand = handSettings.leftHandSettings;
         if (leftHand.base == null) {
             handSettings.leftHandSettings = new HandSettings(true, -96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP, 0xffb3b3);
-        } else if (leftHand.durabilitySettings == null) {
-            handSettings.leftHandSettings.durabilitySettings = new DurabilitySettings();
         }
 
         HandSettings rightHand = handSettings.rightHandSettings;
         if (rightHand.base == null) {
             handSettings.rightHandSettings = new HandSettings(true, 96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
-        } else if (rightHand.durabilitySettings == null) {
-            handSettings.rightHandSettings.durabilitySettings = new DurabilitySettings();
+        }
+
+        if (handSettings.durabilitySettings == null) {
+            handSettings.durabilitySettings = new DurabilitySettings();
         }
 
         EffectSettings positive = effectSettings.positiveSettings;
