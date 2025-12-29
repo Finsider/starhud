@@ -57,6 +57,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
 
     private DurabilitySettings.DisplayMode displayMode = null;
     private boolean drawItem;
+    private boolean useDynamicColor;
 
     private HUDDisplayMode hudDisplayMode = null;
 
@@ -81,12 +82,13 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         hudDisplayMode = getSettings().getDisplayMode();
         displayMode = durabilitySettings.getDisplayMode();
         drawItem = durabilitySettings.drawItem;
+        useDynamicColor = durabilitySettings.useDynamicColor;
         iconColor = getIconColor();
 
         int width = processWidth();
         int height = drawItem ? ITEM_BACKGROUND_HEIGHT : ICON_BACKGROUND_HEIGHT;
 
-        durabilityColor = Helper.getItemBarColor(stackMaxDamage - stackDamage, stackMaxDamage) | 0xFF000000;
+        durabilityColor = (useDynamicColor ? Helper.getItemBarColor(stackMaxDamage - stackDamage, stackMaxDamage) : getIconColor()) | 0xFF000000;
 
         setWidthHeightColor(width, height, iconColor);
 

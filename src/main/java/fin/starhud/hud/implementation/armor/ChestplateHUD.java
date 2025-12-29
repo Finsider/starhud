@@ -1,7 +1,7 @@
 package fin.starhud.hud.implementation.armor;
 
 import fin.starhud.Main;
-import fin.starhud.config.hud.ArmorSettings;
+import fin.starhud.config.hud.armor.ArmorSettings;
 import fin.starhud.hud.HUDId;
 import net.minecraft.util.Identifier;
 

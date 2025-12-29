@@ -17,6 +17,7 @@ import fin.starhud.screen.history.HUDAction;
 import fin.starhud.screen.history.HUDHistory;
 import fin.starhud.screen.history.ReversibleAction;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfigClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ConfirmScreen;
@@ -247,7 +248,7 @@ public class EditHUDScreen extends Screen {
                             isMoreOptionActivated = false;
                             selectedHUDs.clear();
 
-                            this.client.setScreen(AutoConfig.getConfigScreen(Settings.class, this).get());
+                            this.client.setScreen(AutoConfigClient.getConfigScreen(Settings.class, this).get());
                         }
                 )
                 .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.config")))

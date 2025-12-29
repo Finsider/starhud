@@ -1,7 +1,7 @@
 package fin.starhud.hud.implementation.clock;
 
 import fin.starhud.Main;
-import fin.starhud.config.hud.ClockSystemSettings;
+import fin.starhud.config.hud.clock.ClockSystemSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;

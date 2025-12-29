@@ -1,18 +1,17 @@
-package fin.starhud.config.hud;
+package fin.starhud.config.hud.armor;
 
 import fin.starhud.config.BaseHUDSettings;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-public class CoordSettings {
+public class ArmorSettings {
 
     @ConfigEntry.Gui.TransitiveObject
     public BaseHUDSettings base;
 
     @ConfigEntry.ColorPicker
-    public int color;
+    public int color = 0xD0DAED;
 
-    public CoordSettings(BaseHUDSettings base, int color) {
+    public ArmorSettings(BaseHUDSettings base) {
         this.base = base;
-        this.color = color;
     }
 }
