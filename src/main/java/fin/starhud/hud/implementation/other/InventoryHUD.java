@@ -2,7 +2,7 @@ package fin.starhud.hud.implementation.other;
 
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
-import fin.starhud.config.hud.InventorySettings;
+import fin.starhud.config.hud.other.InventorySettings;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;

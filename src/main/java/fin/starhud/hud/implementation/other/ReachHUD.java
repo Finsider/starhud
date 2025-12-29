@@ -1,7 +1,7 @@
 package fin.starhud.hud.implementation.other;
 
 import fin.starhud.Main;
-import fin.starhud.config.hud.ReachSettings;
+import fin.starhud.config.hud.other.ReachSettings;
 import fin.starhud.helper.AttackTracker;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;

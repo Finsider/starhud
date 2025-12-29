@@ -3,7 +3,8 @@ package fin.starhud.hud.implementation.statuseffect;
 import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
-import fin.starhud.config.hud.EffectSettings;
+import fin.starhud.config.Settings;
+import fin.starhud.config.hud.statuseffect.EffectSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.helper.StatusEffectAttribute;
@@ -28,6 +29,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final GeneralSettings.HUDSettings HUD_SETTINGS = Main.settings.generalSettings.hudSettings;
+    private static final Settings.Effect SETTINGS = Main.settings.effectSettings;
 
     private static final Identifier STATUS_EFFECT_BAR_TEXTURE = Identifier.of("starhud", "hud/effect_bar.png");
     private static final Identifier STATUS_EFFECT_BAR_BACKGROUND_TEXTURE = Identifier.of("starhud", "hud/effect_bar_background.png");
@@ -96,8 +98,8 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         effectAmbients.clear();
         effectAmplifiers.clear();
 
-        drawTimer = effectSettings.drawTimer;
-        drawHidden = effectSettings.drawHidden;
+        drawTimer = SETTINGS.drawTimer;
+        drawHidden = SETTINGS.drawHidden;
         combineBackground = effectSettings.combineBackground;
 
         if (drawTimer)
@@ -424,11 +426,11 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
 
     public int getStatusEffectColor(StatusEffectInstance instance, StatusEffectAttribute attribute) {
         if (instance.isInfinite())
-            return effectSettings.infiniteColor;
+            return SETTINGS.infiniteColor;
         else if (instance.isAmbient())
-            return effectSettings.ambientColor;
+            return SETTINGS.ambientColor;
         else {
-            return switch (effectSettings.getColorMode()) {
+            return switch (SETTINGS.getColorMode()) {
                 case CUSTOM -> effectSettings.customColor;
                 case EFFECT -> instance.getEffectType().value().getColor();
                 case DYNAMIC -> Helper.getItemBarColor(instance.getDuration(), attribute.maxDuration());

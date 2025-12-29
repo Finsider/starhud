@@ -1,7 +1,7 @@
 package fin.starhud.hud.implementation.other;
 
 import fin.starhud.Main;
-import fin.starhud.config.hud.SpeedSettings;
+import fin.starhud.config.hud.other.SpeedSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
