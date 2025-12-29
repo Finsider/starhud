@@ -1,6 +1,8 @@
 package fin.starhud.hud.implementation.armor;
 
-import fin.starhud.config.hud.ArmorSettings;
+import fin.starhud.Main;
+import fin.starhud.config.hud.DurabilitySettings;
+import fin.starhud.config.hud.armor.ArmorSettings;
 import fin.starhud.hud.implementation.AbstractDurabilityHUD;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -12,6 +14,7 @@ import net.minecraft.util.Identifier;
 public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
 
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final DurabilitySettings DURABILITY_SETTINGS = Main.settings.armorSettings.durabilitySettings;
 
     private final ArmorSettings SETTINGS;
     private final Identifier TEXTURE;
@@ -23,7 +26,7 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
     private static final int ICON_HEIGHT = 13;
 
     public AbstractArmorHUD(ArmorSettings armorSettings, Identifier armorTexture, int armorIndex) {
-        super(armorSettings.base, armorSettings.durabilitySettings);
+        super(armorSettings.base, DURABILITY_SETTINGS);
         this.SETTINGS = armorSettings;
         this.TEXTURE = armorTexture;
         this.armorIndex = armorIndex;

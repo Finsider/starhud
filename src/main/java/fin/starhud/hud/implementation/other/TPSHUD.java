@@ -2,7 +2,7 @@ package fin.starhud.hud.implementation.other;
 
 import fin.starhud.Helper;
 import fin.starhud.Main;
-import fin.starhud.config.hud.TPSSettings;
+import fin.starhud.config.hud.other.TPSSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.helper.TPSTracker;
