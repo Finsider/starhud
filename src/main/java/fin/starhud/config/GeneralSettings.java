@@ -20,18 +20,35 @@ public class GeneralSettings {
         public boolean drawGrid = true;
 
         @ConfigEntry.ColorPicker(allowAlpha = true)
+        public int gridColor = 0x20A8E6E6;
+
+        @ConfigEntry.ColorPicker(allowAlpha = true)
         public int selectedBoxColor = 0x8087ceeb;
 
         @ConfigEntry.ColorPicker(allowAlpha = true)
         public int selectedGroupBoxColor = 0x80Fc7871;
 
-        @ConfigEntry.ColorPicker(allowAlpha = true)
-        public int gridColor = 0x20A8E6E6;
-
         @ConfigEntry.ColorPicker
         public int dragBoxColor = 0xa8d8ea;
 
-        public int gridEdgePadding = 5;
+        @ConfigEntry.ColorPicker(allowAlpha = true)
+        public int snapColor = 0xffA8E6E6;
+
+        public int snapPadding = 30;
+
+        public int snapThreshold = 5;
+
+        public int getSnapPadding() {
+            if (snapPadding < 0)
+                snapPadding = 0;
+            return this.snapPadding;
+        }
+
+        public int getSnapThreshold() {
+            if (snapThreshold < 1)
+                snapThreshold = 5;
+            return snapThreshold;
+        }
     }
 
     public static class InGameHUDSettings {
@@ -41,6 +58,9 @@ public class GeneralSettings {
     }
 
     public static class HUDSettings {
+
+        @Comment("Set the scale to 0 for default GUI Scale.")
+        public float globalScale = 0.0f;
 
         @Comment("The Interval between each data collection, the higher the longer it takes for the hud to update.")
         public float dataCollectionInterval = 0.1F;
@@ -54,5 +74,13 @@ public class GeneralSettings {
 
         @Comment("Either draw the background rounded or rectangle")
         public boolean drawBackgroundRounded = true;
+
+        public float getGlobalScale() {
+            if (this.globalScale < 0) {
+                this.globalScale = 0;
+            }
+
+            return this.globalScale;
+        }
     }
 }
