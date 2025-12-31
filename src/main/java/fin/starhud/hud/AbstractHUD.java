@@ -16,6 +16,9 @@ public abstract class AbstractHUD implements HUDInterface {
     private int totalXOffset;
     private int totalYOffset;
 
+    private int startDragX;
+    private int startDragY;
+
     protected final Box boundingBox = new Box(-1, -1, -1, -1);
 
     public String groupId = null;
@@ -36,9 +39,7 @@ public abstract class AbstractHUD implements HUDInterface {
         baseY = getSettings().getCalculatedPosY();
 
         if (!isInGroup()) {
-            setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
-            setScale(getSettings().getScale());
-            // clampPos(); remove auto clamping for now, very silly when window size changes frequently.
+            updatePos();
         }
     }
 
@@ -48,14 +49,13 @@ public abstract class AbstractHUD implements HUDInterface {
             return renderHUD(context, getX(), getY(), shouldDrawBackground());
 
         // this is so we can change the scale for one hud but not the others.
-        context.getMatrices().push();
+        context.getMatrices().pushMatrix();
         scaleHUD(context);
 
-        try {
-            return renderHUD(context, getX(), getY(), shouldDrawBackground());
-        } finally {
-            context.getMatrices().pop();
-        }
+        boolean result = renderHUD(context, getX(), getY(), shouldDrawBackground());
+        context.getMatrices().popMatrix();
+
+        return result;
     }
 
     @Override
@@ -65,8 +65,7 @@ public abstract class AbstractHUD implements HUDInterface {
 
         modifyXY();
 
-        setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
-        setScale(getSettings().getScale());
+        updatePos();
         return true;
     }
 
@@ -85,8 +84,15 @@ public abstract class AbstractHUD implements HUDInterface {
     public abstract String getName();
 
     public void scaleHUD(DrawContext context) {
-        float scaleFactor = getScale()  / (float) MinecraftClient.getInstance().getWindow().getScaleFactor();
-        context.getMatrices().scale(scaleFactor, scaleFactor, scaleFactor);
+        float scaleFactor = getScale();
+        context.getMatrices().translate(getX(), getY());
+        context.getMatrices().scale(scaleFactor, scaleFactor);
+        context.getMatrices().translate(-getX(), -getY());
+    }
+
+    public void updatePos() {
+        setScale(getSettings().getScale());
+        setXY(baseX + totalXOffset - getGrowthDirectionHorizontal((int) (getWidth() * getScale())), baseY + totalYOffset - getGrowthDirectionVertical((int) (getHeight() * getScale())));
     }
 
     public void modifyXY() {
@@ -105,7 +111,7 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     public boolean isScaled() {
-        return getScale() != 0 && (getScale() != MinecraftClient.getInstance().getWindow().getScaleFactor());
+        return true;
     }
 
     public boolean isInGroup() {
@@ -172,6 +178,14 @@ public abstract class AbstractHUD implements HUDInterface {
         return getBoundingBox().getHeight();
     }
 
+    public int getTrueWidth() {
+        return (int) (getWidth() * getScale());
+    }
+
+    public int getTrueHeight() {
+        return (int) (getHeight() * getScale());
+    }
+
     public int getColor() {
         return getBoundingBox().getColor();
     }
@@ -197,73 +211,71 @@ public abstract class AbstractHUD implements HUDInterface {
         this.boundingBox.setBoundingBox(x, y, width, height);
     }
 
-    public boolean isHovered(int mouseX, int mouseY) {
+    public void setStartDragX(int startDragX) {
+        this.startDragX = startDragX;
+    }
+
+    public void setStartDragY(int startDragY) {
+        this.startDragY = startDragY;
+    }
+
+    public int getStartDragX() {
+        return this.startDragX;
+    }
+
+    public int getStartDragY() {
+        return this.startDragY;
+    }
+
+    public boolean isHovered(double mouseX, double mouseY) {
+        final float scale = MinecraftClient.getInstance().getWindow().getScaleFactor();
+
+        mouseX = (int) (mouseX * scale);
+        mouseY = (int) (mouseY * scale);
+
         int x = getX();
         int y = getY();
-        int width = getWidth();
-        int height = getHeight();
+        int width = getTrueWidth();
+        int height = getTrueHeight();
 
-        if (isScaled()) {
-            float scale = (float) MinecraftClient.getInstance().getWindow().getScaleFactor() / getScale();
+        return (mouseX >= x && mouseX <= (x + width))
+                && (mouseY >= y && mouseY <= (y + height));
 
-            int scaledMouseX = (int) (mouseX * scale);
-            int scaledMouseY = (int) (mouseY * scale);
-            return scaledMouseX >= x && scaledMouseX <= x + width &&
-                    scaledMouseY >= y && scaledMouseY <= y + height;
-        } else {
-            return (mouseX >= x && mouseX <= (x + width))
-                    && (mouseY >= y && mouseY <= (y + height));
-        }
     }
 
     public boolean intersects(int x1, int y1, int x2, int y2) {
+        final float scale = MinecraftClient.getInstance().getWindow().getScaleFactor();
+
+        x1 = (int) (x1 * scale);
+        y1 = (int) (y1 * scale);
+        x2 = (int) (x2 * scale);
+        y2 = (int) (y2 * scale);
+
         int hudLeft   = getX();
         int hudTop    = getY();
-        int hudRight  = getX() + getWidth();
-        int hudBottom = getY() + getHeight();
+        int hudRight  = getX() + getTrueWidth();
+        int hudBottom = getY() + getTrueHeight();
 
-        if (isScaled()) {
-            float scaleFactor = (float) (MinecraftClient.getInstance().getWindow().getScaleFactor() / getScale());
-
-            int scaledX1 = (int) (x1 * scaleFactor);
-            int scaledY1 = (int) (y1 * scaleFactor);
-            int scaledX2 = (int) (x2 * scaleFactor);
-            int scaledY2 = (int) (y2 * scaleFactor);
-
-            return hudRight >= Math.min(scaledX1, scaledX2) &&
-                    hudLeft  <= Math.max(scaledX1, scaledX2) &&
-                    hudBottom >= Math.min(scaledY1, scaledY2) &&
-                    hudTop    <= Math.max(scaledY1, scaledY2);
-        } else {
-            return hudRight >= Math.min(x1, x2) &&
-                    hudLeft  <= Math.max(x1, x2) &&
-                    hudBottom >= Math.min(y1, y2) &&
-                    hudTop    <= Math.max(y1, y2);
-        }
+        return hudRight >= Math.min(x1, x2) &&
+                hudLeft  <= Math.max(x1, x2) &&
+                hudBottom >= Math.min(y1, y2) &&
+                hudTop    <= Math.max(y1, y2);
     }
 
     // dont go out of bounds please
     public void clampPos() {
-        int scaledWidth = MinecraftClient.getInstance().getWindow().getScaledWidth();
-        int scaledHeight = MinecraftClient.getInstance().getWindow().getScaledHeight();
+        int windowWidth = MinecraftClient.getInstance().getWindow().getWidth();
+        int windowHeight = MinecraftClient.getInstance().getWindow().getHeight();
 
         int x1 = 0;
         int y1 = 0;
-        int x2 = scaledWidth;
-        int y2 = scaledHeight;
-
-        if (isScaled()) {
-            float scaleFactor = (float) (MinecraftClient.getInstance().getWindow().getScaleFactor() / getScale());
-            x1 = (int) (x1 * scaleFactor);
-            y1 = (int) (y1 * scaleFactor);
-            x2 = (int) (x2 * scaleFactor);
-            y2 = (int) (y2 * scaleFactor);
-        }
+        int x2 = windowWidth;
+        int y2 = windowHeight;
 
         int hudLeft   = getX();
         int hudTop    = getY();
-        int hudRight  = hudLeft + getWidth();
-        int hudBottom = hudTop + getHeight();
+        int hudRight  = hudLeft + getTrueWidth();
+        int hudBottom = hudTop + getTrueHeight();
 
         int xOffset = 0, yOffset = 0;
 
@@ -285,7 +297,7 @@ public abstract class AbstractHUD implements HUDInterface {
 
             baseX = getSettings().getCalculatedPosX();
             baseY = getSettings().getCalculatedPosY();
-            setXY(baseX + totalXOffset - getGrowthDirectionHorizontal(getWidth()), baseY + totalYOffset - getGrowthDirectionVertical(getHeight()));
+            updatePos();
         }
     }
 }

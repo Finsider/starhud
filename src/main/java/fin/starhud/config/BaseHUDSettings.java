@@ -1,5 +1,7 @@
 package fin.starhud.config;
 
+import fin.starhud.Helper;
+import fin.starhud.Main;
 import fin.starhud.helper.*;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
@@ -174,6 +176,10 @@ public class BaseHUDSettings implements ConfigData {
     public float getScale() {
         if (scale < 0)
             scale = 0;
+
+        if (scale == 0)
+            return Helper.getGlobalScale();
+
         return scale;
     }
 
@@ -245,22 +251,22 @@ public class BaseHUDSettings implements ConfigData {
     // get the scaled factor
     // this can either make your HUD bigger or smaller.
     public float getScaledFactor() {
-        return this.getScale() <= 0 ? 1 : (float) MinecraftClient.getInstance().getWindow().getScaleFactor() / this.getScale();
+        return this.getScale() <= 0 ? 1 : MinecraftClient.getInstance().getWindow().getScaleFactor() / this.getScale();
     }
 
     // this shifts your HUD based on your x point, and alignment on X axis, and place them accordingly in your screen.
     public int getCalculatedPosX() {
         Window window = MinecraftClient.getInstance().getWindow();
-        int scaledWidth = (window == null ? 0 : window.getScaledWidth());
+        int scaledWidth = (window == null ? 0 : window.getWidth());
 
-        return this.getX() + (int) (this.getOriginX().getAlignmentPos(scaledWidth) * getScaledFactor());
+        return this.getX() + (this.getOriginX().getAlignmentPos(scaledWidth));
     }
 
     // this also shifts your HUD based on your y point, and alignment on Y axis, and place them accordingly in your screen.
     public int getCalculatedPosY() {
         Window window = MinecraftClient.getInstance().getWindow();
-        int scaledHeight = (window == null ? 0 : window.getScaledHeight());
+        int scaledHeight = (window == null ? 0 : window.getHeight());
 
-        return this.getY() + (int) (this.getOriginY().getAlignmentPos(scaledHeight) * getScaledFactor());
+        return this.getY() + (this.getOriginY().getAlignmentPos(scaledHeight));
     }
 }
