@@ -5,6 +5,7 @@ import fin.starhud.config.GeneralSettings;
 import fin.starhud.config.GroupedHUDSettings;
 import fin.starhud.config.HUDList;
 import fin.starhud.helper.HUDDisplayMode;
+import fin.starhud.helper.PixelPlacement;
 import fin.starhud.hud.implementation.armor.BootsHUD;
 import fin.starhud.hud.implementation.armor.ChestplateHUD;
 import fin.starhud.hud.implementation.armor.HelmetHUD;
@@ -22,6 +23,7 @@ import fin.starhud.hud.implementation.hand.RightHandHUD;
 import fin.starhud.hud.implementation.other.*;
 import fin.starhud.hud.implementation.statuseffect.NegativeEffectHUD;
 import fin.starhud.hud.implementation.statuseffect.PositiveEffectHUD;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import org.slf4j.Logger;
 
@@ -175,6 +177,8 @@ public class HUDComponent {
     private final List<AbstractHUD> invalidHUDs = new ArrayList<>();
 
     public void renderAll(DrawContext context) {
+        PixelPlacement.start(context);
+
         for (AbstractHUD hud : renderedHUDs) {
             if (!hud.render(context)) {
                 LOGGER.warn("{} is collected but still failed! Removing from rendered hud.", hud.getName());
@@ -186,6 +190,8 @@ public class HUDComponent {
             renderedHUDs.removeAll(invalidHUDs);
             invalidHUDs.clear();
         }
+
+        PixelPlacement.end(context);
     }
 
     public void collectAll() {

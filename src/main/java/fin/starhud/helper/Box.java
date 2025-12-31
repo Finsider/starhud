@@ -1,6 +1,10 @@
 package fin.starhud.helper;
 
+import net.minecraft.client.MinecraftClient;
+
 public class Box {
+    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+
     private int x, y, width, height, color;
     private float scale;
 
@@ -69,6 +73,8 @@ public class Box {
     }
 
     public void setScale(float scale) {
+        if (scale == 0)
+            scale = CLIENT.getWindow().getScaleFactor();
         this.scale = scale;
     }
 
@@ -91,14 +97,14 @@ public class Box {
     }
 
     public void setWidthHeight(int width, int height) {
-        this.width = width;
-        this.height = height;
+        setWidth(width);
+        setHeight(height);
     }
 
     public void setWidthHeightColor(int width, int height, int color) {
-        this.width = width;
-        this.height = height;
-        this.color = color;
+        setWidth(width);
+        setHeight(height);
+        setColor(color);
     }
 
     public void setBoundingBox(int x, int y, int width, int height, int color) {

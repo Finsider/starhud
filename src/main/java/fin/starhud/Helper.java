@@ -1,12 +1,17 @@
 package fin.starhud;
 
+import fin.starhud.config.GeneralSettings;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 
 public class Helper {
+
+    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final GeneralSettings.HUDSettings HUD_SETTINGS = Main.settings.generalSettings.hudSettings;
 
     private static final char[] superscripts = "⁰¹²³⁴⁵⁶⁷⁸⁹".toCharArray();
     private static final char[] subscripts = "₀₁₂₃₄₅₆₇₈₉".toCharArray();
@@ -65,9 +70,23 @@ public class Helper {
         return new String(chars);
     }
 
+    public static boolean withinRange(int u, int v, int range) {
+        int left = v - range;
+        int right = v + range;
+
+        return left <= u && u <= right;
+    }
+
     // color transition from pastel (red to green).
     public static int getItemBarColor(int stackStep, int maxStep) {
         return MathHelper.hsvToRgb(0.35F * stackStep / (float) maxStep, 0.45F, 0.95F);
+    }
+
+    public static float getGlobalScale() {
+        if (HUD_SETTINGS.getGlobalScale() == 0) {
+            return CLIENT.getWindow().getScaleFactor();
+        }
+        return HUD_SETTINGS.getGlobalScale();
     }
 
     public static String buildMinecraftTime24String(int hours, int minutes) {
