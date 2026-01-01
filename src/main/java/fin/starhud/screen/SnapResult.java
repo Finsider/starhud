@@ -17,14 +17,17 @@ public class SnapResult {
     int configX, configY;
     boolean snappedX, snappedY;
     Integer snapLineX, snapLineY; // Screen positions of the snap lines
+    Integer snapDeltaX, snapDeltaY;
 
-    SnapResult(int configX, int configY, boolean snappedX, boolean snappedY, Integer snapLineX, Integer snapLineY) {
+    SnapResult(int configX, int configY, boolean snappedX, boolean snappedY, Integer snapLineX, Integer snapLineY, Integer snapDeltaX, Integer snapDeltaY) {
         this.configX = configX;
         this.configY = configY;
         this.snappedX = snappedX;
         this.snappedY = snappedY;
         this.snapLineX = snapLineX;
         this.snapLineY = snapLineY;
+        this.snapDeltaX = snapDeltaX;
+        this.snapDeltaY = snapDeltaY;
     }
 
     public void render(DrawContext context, int color) {
@@ -53,16 +56,19 @@ public class SnapResult {
     }
 
 
-    public static SnapResult getSnap(AbstractHUD hud) {
+    public static SnapResult getSnap(AbstractHUD hud, int deltaX, int deltaY) {
         final int threshold = SETTINGS.getSnapThreshold();
         final int padding = SETTINGS.getSnapPadding();
         final int screenWidth = CLIENT.getWindow().getWidth();
         final int screenHeight = CLIENT.getWindow().getHeight();
 
-        final int screenX = hud.getX();
-        final int screenY = hud.getY();
+        final int screenX = hud.getX() + deltaX;
+        final int screenY = hud.getY() + deltaY;
         final int w = hud.getTrueWidth();
         final int h = hud.getTrueHeight();
+
+        int finalConfigX = hud.getSettings().x + deltaX;
+        int finalConfigY = hud.getSettings().y + deltaY;
 
         Integer snapScreenX = null, snapScreenY = null;
         Integer snapLineX = null, snapLineY = null; // Track where to draw the line
@@ -171,17 +177,16 @@ public class SnapResult {
             }
         }
 
-        int finalConfigX = hud.getSettings().x;
-        int finalConfigY = hud.getSettings().y;
-
+        Integer screenDeltaX = null;
+        Integer screenDeltaY = null;
         if (snapScreenX != null) {
-            int screenDeltaX = snapScreenX - screenX;
-            finalConfigX = hud.getSettings().x + screenDeltaX;
+            screenDeltaX = snapScreenX - screenX;
+            finalConfigX += screenDeltaX;
         }
 
         if (snapScreenY != null) {
-            int screenDeltaY = snapScreenY - screenY;
-            finalConfigY = hud.getSettings().y + screenDeltaY;
+            screenDeltaY = snapScreenY - screenY;
+            finalConfigY += screenDeltaY;
         }
 
         return new SnapResult(
@@ -190,7 +195,9 @@ public class SnapResult {
                 snapScreenX != null,
                 snapScreenY != null,
                 snapLineX,
-                snapLineY
+                snapLineY,
+                screenDeltaX,
+                screenDeltaY
         );
     }
 }
