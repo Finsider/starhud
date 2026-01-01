@@ -1,7 +1,6 @@
 package fin.starhud.config;
 
 import fin.starhud.Helper;
-import fin.starhud.Main;
 import fin.starhud.helper.*;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;

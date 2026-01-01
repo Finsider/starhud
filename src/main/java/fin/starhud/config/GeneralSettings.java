@@ -21,6 +21,9 @@ public class GeneralSettings {
 
         public boolean drawBorder = true;
         public boolean drawGrid = true;
+        public boolean drawDarkBackground = false;
+
+        public int darkOpacity = 50;
 
         @ConfigEntry.ColorPicker(allowAlpha = true)
         public int gridColor = 0x20A8E6E6;
@@ -34,8 +37,8 @@ public class GeneralSettings {
         @ConfigEntry.ColorPicker
         public int dragBoxColor = 0xa8d8ea;
 
-        @ConfigEntry.ColorPicker(allowAlpha = true)
-        public int snapColor = 0xffA8E6E6;
+        @ConfigEntry.ColorPicker
+        public int snapColor = 0xA8E6E6;
 
         public int snapPadding = 30;
 
@@ -51,6 +54,13 @@ public class GeneralSettings {
             if (snapThreshold < 1)
                 snapThreshold = 5;
             return snapThreshold;
+        }
+
+        public int getDarkOpacity() {
+            if (darkOpacity < 0 || darkOpacity > 100)
+                darkOpacity = 50;
+
+            return darkOpacity;
         }
     }
 
