@@ -2,7 +2,7 @@ package fin.starhud.hud;
 
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.config.ConditionalSettings;
-import fin.starhud.helper.Box;
+import fin.starhud.helper.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 
@@ -18,6 +18,10 @@ public abstract class AbstractHUD implements HUDInterface {
 
     private int startDragX;
     private int startDragY;
+    private ScreenAlignmentX startDragAlignmentX;
+    private ScreenAlignmentY startDragAlignmentY;
+    private GrowthDirectionX startDragGrowthX;
+    private GrowthDirectionY startDragGrowthY;
 
     protected final Box boundingBox = new Box(-1, -1, -1, -1);
 
@@ -219,12 +223,53 @@ public abstract class AbstractHUD implements HUDInterface {
         this.startDragY = startDragY;
     }
 
+    public void setStartDragAlignmentX(ScreenAlignmentX startDragAlignmentX) {
+        this.startDragAlignmentX = startDragAlignmentX;
+    }
+
+    public void setStartDragAlignmentY(ScreenAlignmentY startDragAlignmentY) {
+        this.startDragAlignmentY = startDragAlignmentY;
+    }
+
+    public void setStartDragGrowthX(GrowthDirectionX startDragGrowthX) {
+        this.startDragGrowthX = startDragGrowthX;
+    }
+
+    public void setStartDragGrowthY(GrowthDirectionY startDragGrowthY) {
+        this.startDragGrowthY = startDragGrowthY;
+    }
+
     public int getStartDragX() {
         return this.startDragX;
     }
 
     public int getStartDragY() {
         return this.startDragY;
+    }
+
+    public ScreenAlignmentX getStartDragAlignmentX() {
+        return startDragAlignmentX;
+    }
+
+    public ScreenAlignmentY getStartDragAlignmentY() {
+        return startDragAlignmentY;
+    }
+
+    public GrowthDirectionX getStartDragGrowthX() {
+        return startDragGrowthX;
+    }
+
+    public GrowthDirectionY getStartDragGrowthY() {
+        return startDragGrowthY;
+    }
+
+    public void setupStartDrag() {
+        setStartDragX(getSettings().getX());
+        setStartDragY(getSettings().getY());
+        setStartDragAlignmentX(getSettings().getOriginX());
+        setStartDragAlignmentY(getSettings().getOriginY());
+        setStartDragGrowthX(getSettings().getGrowthDirectionX());
+        setStartDragGrowthY(getSettings().getGrowthDirectionY());
     }
 
     public boolean isHovered(double mouseX, double mouseY) {

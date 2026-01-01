@@ -20,8 +20,6 @@ public class HUDHistory {
     public void commit(HUDAction action) {
         if (action == null) return;
 
-
-
         undoStack.push(action);
         redoStack.clear();
 
