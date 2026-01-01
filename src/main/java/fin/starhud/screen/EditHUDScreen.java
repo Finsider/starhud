@@ -27,6 +27,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.ColorHelper;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
@@ -146,7 +147,7 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    HUDAction act = onAlignmentXChanged(selectedHUD, selectedHUD.getSettings().getOriginX(), selectedHUD.getSettings().getOriginX().next());
+                    HUDAction act = onAlignmentXChangedWithRecommendation(selectedHUD, selectedHUD.getSettings().getOriginX().next());
                     history.execute(act);
                     alignmentXButton.setMessage(Text.translatable("starhud.screen.button.x_alignment", selectedHUD.getSettings().getOriginX().toString()));
                 }
@@ -158,7 +159,7 @@ public class EditHUDScreen extends Screen {
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
-                    HUDAction act = onAlignmentYChanged(selectedHUD, selectedHUD.getSettings().getOriginY(), selectedHUD.getSettings().getOriginY().next());
+                    HUDAction act = onAlignmentYChangedWithRecommendation(selectedHUD, selectedHUD.getSettings().getOriginY().next());
                     history.execute(act);
                     alignmentYButton.setMessage(Text.translatable("starhud.screen.button.y_alignment", selectedHUD.getSettings().getOriginY().toString()));
                 }
@@ -489,6 +490,13 @@ public class EditHUDScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+
+        if (SETTINGS.drawDarkBackground) {
+            final float alpha = (float) SETTINGS.getDarkOpacity() / 100;
+            final int color = ColorHelper.channelFromFloat(alpha) << 24;
+            context.fill(0, 0, this.width, this.height, color);
+        }
+
         // draw basic grid for convenience
         if (SETTINGS.drawGrid) {
             renderGrid(context);
@@ -496,7 +504,7 @@ public class EditHUDScreen extends Screen {
 
         // draw Snapping Line
         if (snapResult != null && (snapResult.snappedX || snapResult.snappedY)) {
-            snapResult.render(context, SETTINGS.snapColor);
+            snapResult.render(context);
         }
 
         super.render(context, mouseX, mouseY, delta);
@@ -1236,25 +1244,25 @@ public class EditHUDScreen extends Screen {
 
         switch (keyCode) {
             case GLFW.GLFW_KEY_LEFT -> {
-                if (isCtrl) act = onAlignmentXChanged(hud, settings.getOriginX(), settings.getOriginX().prev());
+                if (isCtrl) act = onAlignmentXChangedWithRecommendation(hud, settings.getOriginX().prev());
                 else if (isAlt) act = onDirectionXChanged(hud, settings.getGrowthDirectionX(), settings.getGrowthDirectionX().prev());
                 else act = onXFieldChanged(hud, settings.x, settings.x - step);
             }
 
             case GLFW.GLFW_KEY_RIGHT -> {
-                if (isCtrl) act = onAlignmentXChanged(hud, settings.getOriginX(), settings.getOriginX().next());
+                if (isCtrl) act = onAlignmentXChangedWithRecommendation(hud, settings.getOriginX().next());
                 else if (isAlt) act = onDirectionXChanged(hud, settings.getGrowthDirectionX(), settings.getGrowthDirectionX().next());
                 else act = onXFieldChanged(hud, settings.x, settings.x + step);
             }
 
             case GLFW.GLFW_KEY_UP -> {
-                if (isCtrl) act = onAlignmentYChanged(hud, settings.getOriginY(), settings.getOriginY().prev());
+                if (isCtrl) act = onAlignmentYChangedWithRecommendation(hud, settings.getOriginY().prev());
                 else if (isAlt) act = onDirectionYChanged(hud, settings.getGrowthDirectionY(), settings.getGrowthDirectionY().prev());
                 else act = onYFieldChanged(hud, settings.y, settings.y - step);
             }
 
             case GLFW.GLFW_KEY_DOWN -> {
-                if (isCtrl) act = onAlignmentYChanged(hud, settings.getOriginY(), settings.getOriginY().next());
+                if (isCtrl) act = onAlignmentYChangedWithRecommendation(hud, settings.getOriginY().next());
                 else if (isAlt) act = onDirectionYChanged(hud, settings.getGrowthDirectionY(), settings.getGrowthDirectionY().next());
                 else act = onYFieldChanged(hud, settings.y, settings.y + step);
             }
@@ -1526,6 +1534,50 @@ public class EditHUDScreen extends Screen {
             childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
             childOrderingButton.setMessage(Text.of(hud.groupSettings.getChildOrdering().toString()));
         }
+    }
+
+    private HUDAction onAlignmentXChangedWithRecommendation(AbstractHUD hud, ScreenAlignmentX nextAlignment) {
+        ScreenAlignmentX prevAlignment = hud.getSettings().getOriginX();
+
+        if (prevAlignment == nextAlignment) return null;
+
+        GrowthDirectionX prevGrowth = hud.getSettings().getGrowthDirectionX();
+        GrowthDirectionX nextGrowth = hud.getSettings().getGrowthDirectionX().recommendedScreenAlignment(nextAlignment);
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().originX = nextAlignment;
+                    hud.getSettings().growthDirectionX = nextGrowth;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().originX = prevAlignment;
+                    hud.getSettings().growthDirectionX = prevGrowth;
+                    hud.update();
+                }
+        );
+    }
+
+    private HUDAction onAlignmentYChangedWithRecommendation(AbstractHUD hud, ScreenAlignmentY nextAlignment) {
+        ScreenAlignmentY prevAlignment = hud.getSettings().getOriginY();
+
+        if (prevAlignment == nextAlignment) return null;
+
+        GrowthDirectionY prevGrowth = hud.getSettings().getGrowthDirectionY();
+        GrowthDirectionY nextGrowth = hud.getSettings().getGrowthDirectionY().recommendedScreenAlignment(nextAlignment);
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().originY = nextAlignment;
+                    hud.getSettings().growthDirectionY = nextGrowth;
+                    hud.update();
+                },
+                () -> {
+                    hud.getSettings().originY = prevAlignment;
+                    hud.getSettings().growthDirectionY = prevGrowth;
+                    hud.update();
+                }
+        );
     }
 
     private HUDAction onAlignmentXChanged(AbstractHUD hud, ScreenAlignmentX prevAlignment, ScreenAlignmentX nextAlignment) {
