@@ -17,7 +17,6 @@ public class HelpWidget {
             new Help(Text.translatable("starhud.help.key.move_5"), Text.translatable("starhud.help.info.move_5")),
             new Help(Text.translatable(isMac ? "starhud.help.key.alignment_mac" : "starhud.help.key.alignment_windows"), Text.translatable("starhud.help.info.alignment")),
             new Help(Text.translatable("starhud.help.key.direction"), Text.translatable("starhud.help.info.direction")),
-            new Help(Text.translatable(isMac ? "starhud.help.key.revert_changes_mac" : "starhud.help.key.revert_changes_windows"), Text.translatable("starhud.help.info.revert_changes")),
             new Help(Text.translatable("starhud.help.key.group_ungroup"), Text.translatable("starhud.help.info.group_ungroup")),
             new Help(Text.translatable("starhud.help.key.clamp_all"), Text.translatable("starhud.help.info.clamp_all")),
             new Help(Text.translatable("starhud.help.key.undo"), Text.translatable("starhud.help.info.undo")),
