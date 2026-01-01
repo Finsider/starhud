@@ -3,7 +3,6 @@ package fin.starhud.screen;
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
 import fin.starhud.helper.PixelPlacement;
-import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDComponent;
 import net.minecraft.client.MinecraftClient;
@@ -30,27 +29,22 @@ public class SnapResult {
         this.snapDeltaY = snapDeltaY;
     }
 
-    public void render(DrawContext context, int color) {
+    public void render(DrawContext context) {
 
         PixelPlacement.start(context);
 
         int screenWidth = MinecraftClient.getInstance().getWindow().getWidth();
         int screenHeight = MinecraftClient.getInstance().getWindow().getHeight();
-        int padding = SETTINGS.getSnapPadding();
-
-        if ((snappedX && snapLineX != null && (snapLineX == padding || snapLineX == screenWidth - padding)) || (snappedY && snapLineY != null && (snapLineY == padding || snapLineY == screenHeight - padding)) ) {
-            RenderUtils.drawBorder(context, padding, padding, screenWidth - (padding * 2), screenHeight - (padding * 2), color);
-        }
+        int color = SETTINGS.snapColor | 0xFF000000;
 
         // Draw vertical snap line
-        if (snappedX && snapLineX != null && (snapLineX != padding && snapLineX != screenWidth - padding)) {
+        if (snappedX && snapLineX != null) {
             context.fill(snapLineX, 0, snapLineX + 1, screenHeight, color);
         }
         // Draw horizontal snap line
-        if (snappedY && snapLineY != null && (snapLineY != padding && snapLineY != screenHeight - padding)) {
+        if (snappedY && snapLineY != null) {
             context.fill(0, snapLineY, screenWidth, snapLineY + 1, color);
         }
-
 
         PixelPlacement.end(context);
     }
