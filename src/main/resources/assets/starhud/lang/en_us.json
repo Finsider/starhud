@@ -18,10 +18,6 @@
   "starhud.help.key.direction": "[⌥ Alt + Arrows]",
   "starhud.help.info.direction": "Change Growth Direction",
 
-  "starhud.help.key.revert_changes_mac": "[⌘ Cmd + R]",
-  "starhud.help.key.revert_changes_windows": "[Ctrl + R]",
-  "starhud.help.info.revert_changes": "Revert All Changes",
-
   "starhud.help.key.group_ungroup": "[G]",
   "starhud.help.info.group_ungroup": "Group / Ungroup",
 
@@ -125,7 +121,9 @@
   "text.autoconfig.starhud.option.generalSettings.screenSettings.selectedGroupBoxColor" : "Selected Group Box Color",
   "text.autoconfig.starhud.option.generalSettings.screenSettings.gridColor" : "Grid Color",
   "text.autoconfig.starhud.option.generalSettings.screenSettings.dragBoxColor" : "Drag Selection Color",
-  "text.autoconfig.starhud.option.generalSettings.screenSettings.gridEdgePadding" : "Grid Edge Padding",
+  "text.autoconfig.starhud.option.generalSettings.screenSettings.snapColor" : "Snapping Line Color",
+  "text.autoconfig.starhud.option.generalSettings.screenSettings.snapPadding" : "Grid Border Padding",
+  "text.autoconfig.starhud.option.generalSettings.screenSettings.snapThreshold" : "Snapping Threshold",
 
   "text.autoconfig.starhud.option.generalSettings.inGameSettings" : "In-Game Settings",
   "text.autoconfig.starhud.option.generalSettings.inGameSettings.shouldBatchHUDWithImmediatelyFast" : "Batch HUD With ImmediatelyFast",
