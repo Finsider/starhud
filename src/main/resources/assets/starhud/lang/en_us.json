@@ -117,6 +117,8 @@
   "text.autoconfig.starhud.option.generalSettings.screenSettings.shouldBatchHUDWithImmediatelyFast" : "Batch HUD With ImmediatelyFast",
   "text.autoconfig.starhud.option.generalSettings.screenSettings.drawBorder" : "Draw Border",
   "text.autoconfig.starhud.option.generalSettings.screenSettings.drawGrid" : "Draw Grid",
+  "text.autoconfig.starhud.option.generalSettings.screenSettings.drawDarkBackground" : "Draw Dark Background",
+  "text.autoconfig.starhud.option.generalSettings.screenSettings.darkOpacity" : "Black Opacity (%)",
   "text.autoconfig.starhud.option.generalSettings.screenSettings.selectedBoxColor" : "Selected HUD Box Color",
   "text.autoconfig.starhud.option.generalSettings.screenSettings.selectedGroupBoxColor" : "Selected Group Box Color",
   "text.autoconfig.starhud.option.generalSettings.screenSettings.gridColor" : "Grid Color",
@@ -130,6 +132,7 @@
   "text.autoconfig.starhud.option.generalSettings.inGameSettings.disableHUDRendering" : "Disable HUD Rendering",
 
   "text.autoconfig.starhud.option.generalSettings.hudSettings" : "HUD Settings",
+  "text.autoconfig.starhud.option.generalSettings.hudSettings.globalScale" : "Global HUD Scale",
   "text.autoconfig.starhud.option.generalSettings.hudSettings.dataCollectionInterval" : "Data Collection Interval",
   "text.autoconfig.starhud.option.generalSettings.hudSettings.textYOffset" : "HUD Text Y Offset",
   "text.autoconfig.starhud.option.generalSettings.hudSettings.textPadding" : "HUD Text Padding",
