@@ -308,7 +308,7 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     // dont go out of bounds please
-    public void clampPos() {
+    public boolean clampPos() {
         int windowWidth = MinecraftClient.getInstance().getWindow().getWidth();
         int windowHeight = MinecraftClient.getInstance().getWindow().getHeight();
 
@@ -343,6 +343,10 @@ public abstract class AbstractHUD implements HUDInterface {
             baseX = getSettings().getCalculatedPosX();
             baseY = getSettings().getCalculatedPosY();
             updatePos();
+
+            return true;
         }
+
+        return false;
     }
 }
