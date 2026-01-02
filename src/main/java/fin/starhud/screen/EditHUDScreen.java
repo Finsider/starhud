@@ -49,13 +49,13 @@ public class EditHUDScreen extends Screen {
 
     public Screen parent;
 
-    private final Map<String, GroupedHUD> groupedHUDs;
+    private final Map<String, GroupedHUD> groupedHUDs = HUDComponent.getInstance().getGroupedHUDs();
 
-    private final Map<String, BaseHUDSettings> oldHUDSettings;
-    private final Map<String, GroupedHUDSettings> oldGroupedHUDSettings;
+    private final Map<String, BaseHUDSettings> oldHUDSettings = new HashMap<>();
+    private final Map<String, GroupedHUDSettings> oldGroupedHUDSettings = new HashMap<>();
 
-    private final List<String> oldIndividualHudIds;
-    private final List<GroupedHUDSettings> oldGroupedHUDs;
+    private final List<String> oldIndividualHudIds = new ArrayList<>();
+    private final List<GroupedHUDSettings> oldGroupedHUDs = new ArrayList<>();
 
     private boolean dragging = false;
     private final List<AbstractHUD> selectedHUDs = new ArrayList<>();
@@ -96,22 +96,7 @@ public class EditHUDScreen extends Screen {
         super(title);
         this.parent = parent;
 
-        groupedHUDs = HUDComponent.getInstance().getGroupedHUDs();
-
-        Map<String, AbstractHUD> HUDMap = HUDComponent.getInstance().getHudMap();
-
-        oldHUDSettings = new HashMap<>();
-        for (AbstractHUD p : HUDMap.values()) {
-            oldHUDSettings.put(p.getId(), p.getSettings().copy());
-        }
-
-        oldGroupedHUDSettings = new HashMap<>();
-        for (GroupedHUD p : groupedHUDs.values()) {
-            oldGroupedHUDSettings.put(p.getId(), p.groupSettings.copy());
-        }
-
-        oldIndividualHudIds = List.copyOf(Main.settings.hudList.individualHudIds);
-        oldGroupedHUDs = List.copyOf(Main.settings.hudList.groupedHuds);
+        saveCurrentState();
     }
 
     @Override
@@ -1169,7 +1154,6 @@ public class EditHUDScreen extends Screen {
             }
 
             if (!acts.isEmpty()) {
-                
                 history.execute(acts.size() == 1 ? acts.getFirst() : new CompositeAction(acts));
                 updateFieldsFromSelectedHUD();
                 return true;
@@ -1177,7 +1161,6 @@ public class EditHUDScreen extends Screen {
 
             switch (input.key()) {
                 case GLFW.GLFW_KEY_G -> {
-                    
                     if (selectedHUDs.isEmpty()) break;
                     if (selectedHUDs.size() > 1) {
                         if (canSelectedHUDsGroup) {
@@ -1201,6 +1184,7 @@ public class EditHUDScreen extends Screen {
                 case GLFW.GLFW_KEY_C -> {
                     if (input.hasShift()) {
                         HUDComponent.getInstance().clampAll();
+                        handled = true;
                     }
                 }
 
@@ -1215,6 +1199,12 @@ public class EditHUDScreen extends Screen {
                     if (input.hasCtrl() && history.canRedo()) {
                         history.redo();
                         handled = true;
+                    }
+                }
+
+                case GLFW.GLFW_KEY_S -> {
+                    if (input.hasCtrl()) {
+                        saveCurrentState();
                     }
                 }
             }
@@ -1285,6 +1275,25 @@ public class EditHUDScreen extends Screen {
         return act;
     }
 
+    private void saveCurrentState() {
+        Map<String, AbstractHUD> HUDMap = HUDComponent.getInstance().getHudMap();
+
+        oldHUDSettings.clear();
+        oldGroupedHUDSettings.clear();
+        oldIndividualHudIds.clear();
+        oldGroupedHUDs.clear();
+
+        for (AbstractHUD p : HUDMap.values()) {
+            oldHUDSettings.put(p.getId(), p.getSettings().copy());
+        }
+
+        for (GroupedHUD p : groupedHUDs.values()) {
+            oldGroupedHUDSettings.put(p.getId(), p.groupSettings.copy());
+        }
+
+        oldIndividualHudIds.addAll(Main.settings.hudList.individualHudIds);
+        oldGroupedHUDs.addAll(Main.settings.hudList.groupedHuds);
+    }
 
     private boolean isDirty() {
         List<String> individualIds = Main.settings.hudList.individualHudIds;
