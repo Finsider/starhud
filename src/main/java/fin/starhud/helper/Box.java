@@ -8,6 +8,10 @@ public class Box {
     private int x, y, width, height, color;
     private float scale;
 
+    public Box() {
+        this(-1, -1, -1, -1, -1, -1);
+    }
+
     public Box(int x, int y, int width, int height, float scale, int color) {
         this.x = x;
         this.y = y;
