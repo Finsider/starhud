@@ -89,6 +89,7 @@ public class EditHUDScreen extends Screen {
 
     private final HUDHistory history = new HUDHistory();
     private final HelpWidget helpWidget = new HelpWidget();
+    private final ActionBar actionBar = new ActionBar();
     private SnapResult snapResult;
 
 
@@ -500,6 +501,12 @@ public class EditHUDScreen extends Screen {
             final int CENTER_Y = this.height / 2 + (PADDING / 2);
             AbstractHUD hud = selectedHUDs.isEmpty() ? null : selectedHUDs.getFirst();
             helpWidget.render(context, hud, CENTER_X, CENTER_Y + GAP);
+        }
+
+        if (actionBar.isActive()) {
+            final int CENTER_X = this.width / 2;
+            final int Y = this.height - 50;
+            actionBar.render(context, CENTER_X, Y);
         }
 
         // draw X and Y next to their textField.
@@ -1164,7 +1171,6 @@ public class EditHUDScreen extends Screen {
                     if (selectedHUDs.isEmpty()) break;
                     if (selectedHUDs.size() > 1) {
                         if (canSelectedHUDsGroup) {
-                            
                             HUDAction act = onGroupChanged(selectedHUDs);
                             history.commit(act);
                             selectedHUDs.clear();
@@ -1172,7 +1178,6 @@ public class EditHUDScreen extends Screen {
                         }
                     } else {
                         if (canSelectedHUDUngroup) {
-                            
                             HUDAction act = onUngroupChanged((GroupedHUD) selectedHUDs.getFirst());
                             history.commit(act);
                             selectedHUDs.clear();
@@ -1183,7 +1188,11 @@ public class EditHUDScreen extends Screen {
 
                 case GLFW.GLFW_KEY_C -> {
                     if (input.hasShift()) {
-                        HUDComponent.getInstance().clampAll();
+                        int clampCount = HUDComponent.getInstance().clampAll();
+                        if (clampCount > 0)
+                            actionBar.setText(Text.translatable("starhud.screen.action.clamp_all_found", clampCount));
+                        else
+                            actionBar.setText(Text.translatable("starhud.screen.action.clamp_all_not_found"));
                         handled = true;
                     }
                 }
@@ -1205,6 +1214,7 @@ public class EditHUDScreen extends Screen {
                 case GLFW.GLFW_KEY_S -> {
                     if (input.hasCtrl()) {
                         saveCurrentState();
+                        actionBar.setText(Text.translatable("starhud.screen.action.save"));
                     }
                 }
             }
@@ -1375,6 +1385,13 @@ public class EditHUDScreen extends Screen {
         } else {
             onClose();
         }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        actionBar.tick();
     }
 
     public void onClose() {
