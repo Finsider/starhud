@@ -238,9 +238,13 @@ public class HUDComponent {
         groupedHUDs.clear();
     }
 
-    public void clampAll() {
+    public int clampAll() {
+        int cnt = 0;
         for (AbstractHUD hud : renderedHUDs)
-            hud.clampPos();
+            if (hud.clampPos())
+                cnt++;
+
+        return cnt;
     }
 
     // grouping function, experimental, may crash.

@@ -362,5 +362,8 @@
   "text.autoconfig.starhud.option.reachSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.reachSettings.color": "Color",
   "text.autoconfig.starhud.option.reachSettings.hideInactive": "Hide When Inactive",
-  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label"
+  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label",
+  "starhud.screen.action.save": "Saved Current State!",
+  "starhud.screen.action.clamp_all_found": "Found %s HUD Clamped!",
+  "starhud.screen.action.clamp_all_not_found": "No HUD Clamped!"
 }
