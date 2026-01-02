@@ -938,7 +938,9 @@ public class EditHUDScreen extends Screen {
     private int beforeBoxX = -1;
     private int beforeBoxY = -1;
 
-    private void dragSelectedMultipleHUD(double deltaX, double deltaY) {
+    private void dragSelectedHUDs(double mouseX, double mouseY, double deltaX, double deltaY) {
+        if (selectedHUDs.isEmpty()) return;
+
         final float guiScale = this.client.getWindow().getScaleFactor();
 
         final int totalDeltaX = (int) ((dragCurrentX - dragStartX) * guiScale);
@@ -963,7 +965,7 @@ public class EditHUDScreen extends Screen {
         beforeBoxX = selectedHUDBox.getX();
         beforeBoxY = selectedHUDBox.getY();
 
-        if (dx != 0 || dy != 0)
+        if (dx != 0 || dy != 0) {
             for (AbstractHUD hud : selectedHUDs) {
                 if (hud.isInGroup()) continue;
 
@@ -973,14 +975,9 @@ public class EditHUDScreen extends Screen {
 
                 updateHUDAlignment(hud);
             }
-    }
 
-    private void dragSelectedHUDs(double mouseX, double mouseY, double deltaX, double deltaY) {
-        if (selectedHUDs.isEmpty()) return;
-
-        dragSelectedMultipleHUD(deltaX, deltaY);
-
-        updateFieldsFromSelectedHUD();
+            updateFieldsFromSelectedHUD();
+        }
     }
 
 
