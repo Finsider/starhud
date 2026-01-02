@@ -16,14 +16,11 @@ public class SnapResult {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
     private static final GeneralSettings.EditHUDScreenSettings SETTINGS = Main.settings.generalSettings.screenSettings;
 
-    int configX, configY;
     boolean snappedX, snappedY;
     Integer snapLineX, snapLineY; // Screen positions of the snap lines
     Integer snapDeltaX, snapDeltaY;
 
-    SnapResult(int configX, int configY, boolean snappedX, boolean snappedY, Integer snapLineX, Integer snapLineY, Integer snapDeltaX, Integer snapDeltaY) {
-        this.configX = configX;
-        this.configY = configY;
+    SnapResult(boolean snappedX, boolean snappedY, Integer snapLineX, Integer snapLineY, Integer snapDeltaX, Integer snapDeltaY) {
         this.snappedX = snappedX;
         this.snappedY = snappedY;
         this.snapLineX = snapLineX;
@@ -181,153 +178,6 @@ public class SnapResult {
         }
 
         return new SnapResult(
-                -1,
-                -1,
-                snapScreenX != null,
-                snapScreenY != null,
-                snapLineX,
-                snapLineY,
-                screenDeltaX,
-                screenDeltaY
-        );
-    }
-
-    public static SnapResult getSnap(AbstractHUD hud, int deltaX, int deltaY) {
-        final int threshold = SETTINGS.getSnapThreshold();
-        final int padding = SETTINGS.getSnapPadding();
-        final int screenWidth = CLIENT.getWindow().getWidth();
-        final int screenHeight = CLIENT.getWindow().getHeight();
-
-        final int screenX = hud.getX() + deltaX;
-        final int screenY = hud.getY() + deltaY;
-        final int w = hud.getTrueWidth();
-        final int h = hud.getTrueHeight();
-
-        int finalConfigX = hud.getSettings().x + deltaX;
-        int finalConfigY = hud.getSettings().y + deltaY;
-
-        Integer snapScreenX = null, snapScreenY = null;
-        Integer snapLineX = null, snapLineY = null; // Track where to draw the line
-        int minDistX = threshold, minDistY = threshold;
-
-        final int left = screenX;
-        final int right = screenX + w;
-        final int centerX = screenX + w / 2;
-        final int top = screenY;
-        final int bottom = screenY + h;
-        final int centerY = screenY + h / 2;
-
-        final int canvasLeft = padding;
-        final int canvasRight = screenWidth - padding;
-        final int canvasCenterX = screenWidth / 2;
-        final int canvasTop = padding;
-        final int canvasBottom = screenHeight - padding;
-        final int canvasCenterY = screenHeight / 2;
-
-        // Check canvas bounds - X axis
-        int[][] xCanvasCandidates = {
-                {left, canvasLeft},
-                {right, canvasRight},
-                {left,canvasCenterX}, {centerX, canvasCenterX}, {right, canvasCenterX}
-        };
-
-        for (int[] candidate : xCanvasCandidates) {
-            int point = candidate[0];
-            int target = candidate[1];
-            int dist = Math.abs(point - target);
-            if (dist < minDistX) {
-                minDistX = dist;
-                snapScreenX = target - (point - screenX);
-                snapLineX = target;
-            }
-        }
-
-        // Check canvas bounds - Y axis
-        int[][] yCanvasCandidates = {
-                {top, canvasTop},
-                {bottom, canvasBottom},
-                {top, canvasCenterY}, {centerY, canvasCenterY}, {bottom, canvasCenterY}
-        };
-
-        for (int[] candidate : yCanvasCandidates) {
-            int point = candidate[0];
-            int target = candidate[1];
-            int dist = Math.abs(point - target);
-            if (dist < minDistY) {
-                minDistY = dist;
-                snapScreenY = target - (point - screenY);
-                snapLineY = target;
-            }
-        }
-
-        // Check other HUDs
-        for (AbstractHUD other : HUDComponent.getInstance().getRenderedHUDs()) {
-            if (other == hud) continue;
-
-            final int oScreenX = other.getX();
-            final int oScreenY = other.getY();
-            final int oW = other.getTrueWidth();
-            final int oH = other.getTrueHeight();
-
-            final int oLeft = oScreenX;
-            final int oRight = oScreenX + oW;
-            final int oCenterX = oScreenX + oW / 2;
-            final int oTop = oScreenY;
-            final int oBottom = oScreenY + oH;
-            final int oCenterY = oScreenY + oH / 2;
-
-            // X-axis snapping
-            int[][] xCandidates = {
-                    {left, oLeft}, {left, oRight},
-                    {right, oLeft}, {right, oRight},
-                    {centerX, oCenterX}
-            };
-
-            for (int[] candidate : xCandidates) {
-                int point = candidate[0];
-                int target = candidate[1];
-                int dist = Math.abs(point - target);
-                if (dist < minDistX) {
-                    minDistX = dist;
-                    snapScreenX = target - (point - screenX);
-                    snapLineX = target;
-                }
-            }
-
-            // Y-axis snapping
-            int[][] yCandidates = {
-                    {top, oTop}, {top, oBottom},
-                    {bottom, oTop}, {bottom, oBottom},
-                    {centerY, oCenterY}
-            };
-
-            for (int[] candidate : yCandidates) {
-                int point = candidate[0];
-                int target = candidate[1];
-                int dist = Math.abs(point - target);
-                if (dist < minDistY) {
-                    minDistY = dist;
-                    snapScreenY = target - (point - screenY);
-                    snapLineY = target;
-                }
-            }
-        }
-
-        Integer screenDeltaX = null;
-        Integer screenDeltaY = null;
-        if (snapScreenX != null) {
-            screenDeltaX = snapScreenX - screenX;
-            finalConfigX += screenDeltaX;
-        }
-
-        if (snapScreenY != null) {
-            screenDeltaY = snapScreenY - screenY;
-            finalConfigY += screenDeltaY;
-        }
-
-        return new SnapResult(
-                finalConfigX,
-                finalConfigY,
                 snapScreenX != null,
                 snapScreenY != null,
                 snapLineX,
