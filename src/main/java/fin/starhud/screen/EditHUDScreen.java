@@ -90,6 +90,7 @@ public class EditHUDScreen extends Screen {
     private final HUDHistory history = new HUDHistory();
     private final HelpWidget helpWidget = new HelpWidget();
     private final ActionBar actionBar = new ActionBar();
+    private final Box selectedHUDBox = new Box();
     private SnapResult snapResult;
 
 
@@ -509,6 +510,10 @@ public class EditHUDScreen extends Screen {
             actionBar.render(context, CENTER_X, Y);
         }
 
+        if (!selectedHUDBox.isEmpty() && selectedHUDs.size() > 1) {
+            renderSelectedHUDBox(context);
+        }
+
         // draw X and Y next to their textField.
         if (xField.isVisible() && yField.isVisible()) {
             context.drawText(CLIENT.textRenderer, Text.translatable("starhud.screen.label.x"), xField.getX() - 5 - 2 - 3, xField.getY() + 6, 0xFFFFFFFF, true);
@@ -528,6 +533,21 @@ public class EditHUDScreen extends Screen {
         HUDComponent.getInstance().renderAll(context);
 
         renderBoundingBoxes(context, mouseX, mouseY);
+    }
+
+    private void renderSelectedHUDBox(DrawContext context) {
+        int x = selectedHUDBox.getX();
+        int y = selectedHUDBox.getY();
+        int w = selectedHUDBox.getWidth();
+        int h = selectedHUDBox.getHeight();
+
+        if (w < 0 || h < 0) return;
+
+        PixelPlacement.start(context);
+
+        RenderUtils.drawBorder(context, x, y, w, h, -1);
+
+        PixelPlacement.end(context);
     }
 
     private void renderDragBox(DrawContext context) {
@@ -739,6 +759,12 @@ public class EditHUDScreen extends Screen {
             dragging = false;
             dragSelection = false;
 
+            if (!selectedHUDs.isEmpty()) {
+                updateSelectedHUDBox();
+            } else {
+                selectedHUDBox.setEmpty(true);
+            }
+
             resetMouseState();
             return true;
         }
@@ -788,52 +814,6 @@ public class EditHUDScreen extends Screen {
                 updateFieldsFromSelectedHUD();
                 updateGroupFieldFromSelectedHUD();
             }
-        }
-    }
-
-    private void finalizeDragOperation() {
-        dragging = false;
-
-        unsnappedConfigX = 0;
-        unsnappedConfigY = 0;
-        snapResult = null;
-
-        // Update final positions in text fields
-        if (!selectedHUDs.isEmpty()) {
-            AbstractHUD selectedHUD = selectedHUDs.getFirst();
-            supressFieldEvents = true;
-            xField.setText(String.valueOf(selectedHUD.getSettings().x));
-            yField.setText(String.valueOf(selectedHUD.getSettings().y));
-            supressFieldEvents = false;
-
-            List<HUDAction> acts = new ArrayList<>();
-            for (AbstractHUD hud : selectedHUDs) {
-                HUDAction actX = onXFieldChanged(hud, hud.getStartDragX(), hud.getSettings().x);
-                HUDAction actY = onYFieldChanged(hud, hud.getStartDragY(), hud.getSettings().y);
-
-                HUDAction actAlignmentX = onAlignmentXChanged(hud, hud.getStartDragAlignmentX(), hud.getSettings().getOriginX());
-                HUDAction actAlignmentY = onAlignmentYChanged(hud, hud.getStartDragAlignmentY(), hud.getSettings().getOriginY());
-
-                HUDAction actGrowthX = onDirectionXChanged(hud, hud.getStartDragGrowthX(), hud.getSettings().getGrowthDirectionX());
-                HUDAction actGrowthY = onDirectionYChanged(hud, hud.getStartDragGrowthY(), hud.getSettings().getGrowthDirectionY());
-
-                if (actX != null)
-                    acts.add(actX);
-                if (actY != null)
-                    acts.add(actY);
-
-                if (actAlignmentX != null)
-                    acts.add(actAlignmentX);
-                if (actAlignmentY != null)
-                    acts.add(actAlignmentY);
-
-                if (actGrowthX != null)
-                    acts.add(actGrowthX);
-                if (actGrowthY != null)
-                    acts.add(actGrowthY);
-            }
-            if (!acts.isEmpty())
-                history.commit(new CompositeAction(acts));
         }
     }
 
@@ -888,11 +868,14 @@ public class EditHUDScreen extends Screen {
             }
 
             dragSelection = false;
-
             snapResult = null;
-            AbstractHUD hud = selectedHUDs.getFirst();
-            unsnappedConfigX = hud.getSettings().x;
-            unsnappedConfigY = hud.getSettings().y;
+
+            updateSelectedHUDBox();
+            startBoxX = selectedHUDBox.getX();
+            startBoxY = selectedHUDBox.getY();
+            beforeBoxX = startBoxX;
+            beforeBoxY = startBoxY;
+
         } else { // if moved but no hud selected -> potential drag box
 
             dragging = false;
@@ -906,73 +889,96 @@ public class EditHUDScreen extends Screen {
         }
     }
 
-    private int unsnappedConfigX = 0;  // Where the HUD WOULD be without snapping
-    private int unsnappedConfigY = 0;
+    private void finalizeDragOperation() {
+        dragging = false;
 
-    private void dragSelectedSingleHUD(double deltaX, double deltaY) {
-        AbstractHUD hud = selectedHUDs.getFirst();
-        if (hud.isInGroup()) return;
+        snapResult = null;
 
-        final float guiScale = this.client.getWindow().getScaleFactor();
+        // Update final positions in text fields
+        if (!selectedHUDs.isEmpty()) {
+            AbstractHUD selectedHUD = selectedHUDs.getFirst();
+            supressFieldEvents = true;
+            xField.setText(String.valueOf(selectedHUD.getSettings().x));
+            yField.setText(String.valueOf(selectedHUD.getSettings().y));
+            supressFieldEvents = false;
 
-        final int scaledDeltaX = (int) (deltaX * guiScale);
-        final int scaledDeltaY = (int) (deltaY * guiScale);
+            List<HUDAction> acts = new ArrayList<>();
+            for (AbstractHUD hud : selectedHUDs) {
+                HUDAction actX = onXFieldChanged(hud, hud.getStartDragX(), hud.getSettings().x);
+                HUDAction actY = onYFieldChanged(hud, hud.getStartDragY(), hud.getSettings().y);
 
-        unsnappedConfigX += scaledDeltaX;
-        unsnappedConfigY += scaledDeltaY;
+                HUDAction actAlignmentX = onAlignmentXChanged(hud, hud.getStartDragAlignmentX(), hud.getSettings().getOriginX());
+                HUDAction actAlignmentY = onAlignmentYChanged(hud, hud.getStartDragAlignmentY(), hud.getSettings().getOriginY());
 
-        final int dx = unsnappedConfigX - hud.getSettings().x;
-        final int dy = unsnappedConfigY - hud.getSettings().y;
+                HUDAction actGrowthX = onDirectionXChanged(hud, hud.getStartDragGrowthX(), hud.getSettings().getGrowthDirectionX());
+                HUDAction actGrowthY = onDirectionYChanged(hud, hud.getStartDragGrowthY(), hud.getSettings().getGrowthDirectionY());
 
-        // Check if unsnapped position would snap
-        snapResult = SnapResult.getSnap(hud, dx, dy);
+                if (actX != null)
+                    acts.add(actX);
+                if (actY != null)
+                    acts.add(actY);
 
-        // Apply snapped or unsnapped position
-        if (snapResult.snappedX) {
-            hud.getSettings().x = snapResult.configX;
-        } else {
-            hud.getSettings().x = unsnappedConfigX;
-        }
+                if (actAlignmentX != null)
+                    acts.add(actAlignmentX);
+                if (actAlignmentY != null)
+                    acts.add(actAlignmentY);
 
-        if (snapResult.snappedY) {
-            hud.getSettings().y = snapResult.configY;
-        } else {
-            hud.getSettings().y = unsnappedConfigY;
-        }
-
-        hud.update();
-
-        boolean alignmentChanged = updateHUDAlignment(hud);
-        if (alignmentChanged) {
-            unsnappedConfigX = hud.getSettings().x;
-            unsnappedConfigY = hud.getSettings().y;
+                if (actGrowthX != null)
+                    acts.add(actGrowthX);
+                if (actGrowthY != null)
+                    acts.add(actGrowthY);
+            }
+            if (!acts.isEmpty())
+                history.commit(new CompositeAction(acts));
         }
     }
+
+    private int startBoxX = -1;
+    private int startBoxY = -1;
+    private int beforeBoxX = -1;
+    private int beforeBoxY = -1;
 
     private void dragSelectedMultipleHUD(double deltaX, double deltaY) {
         final float guiScale = this.client.getWindow().getScaleFactor();
 
-        final int scaledDeltaX = (int) (deltaX * guiScale);
-        final int scaledDeltaY = (int) (deltaY * guiScale);
+        final int totalDeltaX = (int) ((dragCurrentX - dragStartX) * guiScale);
+        final int totalDeltaY = (int) ((dragCurrentY - dragStartY) * guiScale);
 
-        for (AbstractHUD hud : selectedHUDs) {
-            if (hud.isInGroup()) continue;
+        selectedHUDBox.setX(startBoxX + totalDeltaX);
+        selectedHUDBox.setY(startBoxY + totalDeltaY);
 
-            hud.getSettings().x += scaledDeltaX;
-            hud.getSettings().y += scaledDeltaY;
-            hud.update();
+        snapResult = SnapResult.getSnap(selectedHUDBox, selectedHUDs);
 
-            updateHUDAlignment(hud);
+        if (snapResult.snappedX) {
+            selectedHUDBox.setX(selectedHUDBox.getX() + snapResult.snapDeltaX);
         }
+
+        if (snapResult.snappedY) {
+            selectedHUDBox.setY(selectedHUDBox.getY() + snapResult.snapDeltaY);
+        }
+
+        int dx = selectedHUDBox.getX() - beforeBoxX;
+        int dy = selectedHUDBox.getY() - beforeBoxY;
+
+        beforeBoxX = selectedHUDBox.getX();
+        beforeBoxY = selectedHUDBox.getY();
+
+        if (dx != 0 || dy != 0)
+            for (AbstractHUD hud : selectedHUDs) {
+                if (hud.isInGroup()) continue;
+
+                hud.getSettings().x += dx;
+                hud.getSettings().y += dy;
+                hud.update();
+
+                updateHUDAlignment(hud);
+            }
     }
 
     private void dragSelectedHUDs(double mouseX, double mouseY, double deltaX, double deltaY) {
         if (selectedHUDs.isEmpty()) return;
 
-        if (selectedHUDs.size() == 1)
-            dragSelectedSingleHUD(deltaX, deltaY);
-        else
-            dragSelectedMultipleHUD(deltaX, deltaY);
+        dragSelectedMultipleHUD(deltaX, deltaY);
 
         updateFieldsFromSelectedHUD();
     }
@@ -991,21 +997,27 @@ public class EditHUDScreen extends Screen {
         GrowthDirectionX oldGrowthX = settings.getGrowthDirectionX();
         GrowthDirectionY oldGrowthY = settings.getGrowthDirectionY();
 
-        final int hudX = hud.getX() + (hud.getTrueWidth() / 2);
-        final int hudY = hud.getY() + (hud.getTrueHeight() / 2);
+        final boolean oddWidth = hud.getTrueWidth() % 2 == 1;
+        final int halfWidth = hud.getTrueWidth() / 2;
+
+        final boolean oddHeight = hud.getTrueHeight() % 2 == 1;
+        final int halfHeight = hud.getTrueHeight() / 2;
+
+        final int hudX = hud.getX() + halfWidth;
+        final int hudY = hud.getY() + halfHeight;
 
         int additionalX = -1;
         switch (oldGrowthX) {
-            case RIGHT -> additionalX = -hud.getTrueWidth() / 2;
+            case RIGHT -> additionalX = -halfWidth;
             case CENTER -> additionalX = 0;
-            case LEFT -> additionalX = hud.getTrueWidth() / 2;
+            case LEFT -> additionalX = halfWidth + (oddWidth ? 1 : 0);
         }
 
         int additionalY = -1;
         switch (oldGrowthY) {
-            case DOWN -> additionalY = -hud.getTrueHeight() / 2;
+            case DOWN -> additionalY = -halfHeight;
             case MIDDLE -> additionalY = 0;
-            case UP -> additionalY = hud.getTrueHeight() / 2;
+            case UP -> additionalY = halfHeight + (oddHeight ? 1 : 0);
         }
 
         // Determine new horizontal alignment based on which third of screen HUD is in
@@ -1163,6 +1175,7 @@ public class EditHUDScreen extends Screen {
             if (!acts.isEmpty()) {
                 history.execute(acts.size() == 1 ? acts.getFirst() : new CompositeAction(acts));
                 updateFieldsFromSelectedHUD();
+                updateSelectedHUDBox();
                 return true;
             }
 
@@ -1222,6 +1235,7 @@ public class EditHUDScreen extends Screen {
             if (handled) {
                 updateFieldsFromSelectedHUD();
                 updateGroupFieldFromSelectedHUD();
+                updateSelectedHUDBox();
                 return true;
             }
         }
@@ -1283,6 +1297,29 @@ public class EditHUDScreen extends Screen {
         }
 
         return act;
+    }
+
+    private void updateSelectedHUDBox() {
+        int x1 = Integer.MAX_VALUE, y1 = Integer.MAX_VALUE, x2 = Integer.MIN_VALUE, y2 = Integer.MIN_VALUE;
+
+        for (AbstractHUD hud : selectedHUDs) {
+            int hx1 = hud.getX();
+            int hy1 = hud.getY();
+            int hx2 = hx1 + hud.getTrueWidth();
+            int hy2 = hy1 + hud.getTrueHeight();
+
+            x1 = Math.min(x1, hx1);
+            y1 = Math.min(y1, hy1);
+            x2 = Math.max(x2, hx2);
+            y2 = Math.max(y2, hy2);
+        }
+
+        int x = x1;
+        int y = y1;
+        int w = x2 - x1;
+        int h = y2 - y1;
+
+        selectedHUDBox.setBoundingBox(x, y, w, h);
     }
 
     private void saveCurrentState() {
