@@ -134,11 +134,11 @@ public class GroupedHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
-        return renderHUD(context, x, y, drawBackground, false);
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+        return renderHUD(context, x, y, drawBackground, false, drawTextShadow);
     }
 
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean parentDrewBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean parentDrewBackground, boolean drawTextShadow) {
 
         int hudX = getX();
         int hudY = getY();
@@ -170,9 +170,9 @@ public class GroupedHUD extends AbstractHUD {
             hud.setXY((int) (hudX + (xOffset * scale)), (int) (hudY + (yOffset * scale)));
 
             if (hud instanceof GroupedHUD group) {
-                group.renderHUD(context, x + xOffset, y + yOffset, childShouldDrawBackground, thisDrewBackground);
+                group.renderHUD(context, x + xOffset, y + yOffset, childShouldDrawBackground, thisDrewBackground, drawTextShadow);
             } else {
-                hud.renderHUD(context, x + xOffset, y + yOffset, childShouldDrawBackground);
+                hud.renderHUD(context, x + xOffset, y + yOffset, childShouldDrawBackground, drawTextShadow);
             }
         }
 
