@@ -381,5 +381,7 @@
   "text.autoconfig.starhud.option.reachSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.reachSettings.color": "Color",
   "text.autoconfig.starhud.option.reachSettings.hideInactive": "Hide When Inactive",
-  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label"
+  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label",
+  "starhud.screen.button.shadow_na": "Text Shadow: N/A",
+  "starhud.screen.button.shadow": "Text Shadow: %s"
 }

@@ -75,7 +75,7 @@ public class PlayerCountHUD extends AbstractHUD  {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth(), h = getHeight(), c = getColor();
 
@@ -90,7 +90,8 @@ public class PlayerCountHUD extends AbstractHUD  {
                 ICON_WIDTH, ICON_HEIGHT,
                 c,
                 displayMode,
-                drawBackground
+                drawBackground,
+                drawTextShadow
         );
     }
 
