@@ -4,9 +4,12 @@ import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.compat.ImmediatelyFastCompat;
 import fin.starhud.config.GeneralSettings;
+import fin.starhud.config.Settings;
 import fin.starhud.helper.AttackTracker;
 import fin.starhud.hud.HUDComponent;
 import fin.starhud.screen.EditHUDScreen;
+import me.shedaniel.autoconfig.AutoConfig;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
@@ -27,6 +30,8 @@ public class EventInit {
         // register keybinding event, on openEditHUDKey pressed -> move screen to edit hud screen.
         ClientTickEvents.END_CLIENT_TICK.register(EventInit::onOpenEditHUDKeyPressed);
         ClientTickEvents.END_CLIENT_TICK.register(EventInit::onToggleHUDKeyPressed);
+
+        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> AutoConfig.getConfigHolder(Settings.class).save());
 
         // register hud element into before hotbar. I hope this was safe enough.
         HudRenderCallback.EVENT.register(EventInit::onHUDRender);
