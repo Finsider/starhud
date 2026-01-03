@@ -77,7 +77,7 @@ public class PingHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();
@@ -93,7 +93,8 @@ public class PingHUD extends AbstractHUD {
                 ICON_WIDTH, ICON_HEIGHT,
                 color,
                 displayMode,
-                drawBackground
+                drawBackground,
+                drawTextShadow
         );
     }
 

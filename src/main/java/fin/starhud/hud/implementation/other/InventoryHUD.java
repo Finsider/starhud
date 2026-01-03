@@ -81,7 +81,7 @@ public class InventoryHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         if (drawVertical) {
             return drawInventoryVertical(context, x, y, drawBackground);
         } else {

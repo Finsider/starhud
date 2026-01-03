@@ -98,11 +98,11 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
-        return renderHandHUD(context, x, y, drawBackground);
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+        return renderHandHUD(context, x, y, drawBackground, drawTextShadow);
     }
 
-    public boolean renderHandHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHandHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         // either draw the durability or the amount of item in the inventory.
         if (showDurability && isItemDamagable) {
             return renderDurabilityHUD(
@@ -112,25 +112,26 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
                     0.0F, 0.0F,
                     TEXTURE_WIDTH, TEXTURE_HEIGHT,
                     ICON_WIDTH, ICON_HEIGHT,
-                    drawBackground
+                    drawBackground,
+                    drawTextShadow
             );
         } else if (showCount) {
-            return renderStackCountHUD(context, x, y, drawBackground);
+            return renderStackCountHUD(context, x, y, drawBackground, drawTextShadow);
         }
 
         return false;
     }
 
-    private boolean renderStackCountHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    private boolean renderStackCountHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         if (drawItem) {
-            return renderStackCountItemHUD(context, x, y, drawBackground);
+            return renderStackCountItemHUD(context, x, y, drawBackground, drawTextShadow);
         } else {
-            return renderStackCountIconHUD(context, x, y, drawBackground);
+            return renderStackCountIconHUD(context, x, y, drawBackground, drawTextShadow);
         }
     }
 
-    private boolean renderStackCountItemHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    private boolean renderStackCountItemHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return RenderUtils.drawItemHUD(
                 context,
                 amountStr,
@@ -139,11 +140,12 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
                 item,
                 iconColor,
                 displayMode,
-                drawBackground
+                drawBackground,
+                drawTextShadow
         );
     }
 
-    private boolean renderStackCountIconHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    private boolean renderStackCountIconHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return RenderUtils.drawSmallHUD(
                 context,
                 amountStr,
@@ -155,7 +157,8 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
                 ICON_WIDTH, ICON_HEIGHT,
                 iconColor,
                 displayMode,
-                drawBackground
+                drawBackground,
+                drawTextShadow
         );
     }
 

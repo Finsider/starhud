@@ -11,10 +11,13 @@ import fin.starhud.helper.StatusEffectAttribute;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.texture.MissingSprite;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
@@ -46,7 +49,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     private static final int STATUS_EFFECT_BAR_TEXTURE_WIDTH = 21;
     private static final int STATUS_EFFECT_BAR_TEXTURE_HEIGHT = 3;
 
-    private static final Map<StatusEffect, Identifier> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
+    private static final Map<RegistryEntry<StatusEffect>, Identifier> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
 
     private final EffectSettings effectSettings;
     public int size;
@@ -74,7 +77,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         this.effectSettings = effectSettings;
     }
 
-    public abstract boolean isEffectAllowedToRender(StatusEffect registryEntry);
+    public abstract boolean isEffectAllowedToRender(RegistryEntry<StatusEffect> registryEntry);
 
     @Override
     public boolean shouldRender() {
@@ -197,7 +200,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         if (CLIENT.player == null) return false;
         if (size == 0) return false;
 
@@ -207,7 +210,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         }
 
         if (drawTimer)
-            return renderTimerHUD(context, x, y, drawBackground);
+            return renderTimerHUD(context, x, y, drawBackground, drawTextShadow);
         else
             return renderBarHUD(context, x, y, drawBackground);
     }
@@ -238,7 +241,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean renderTimerHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderTimerHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         for (int i = 0; i < size; ++i) {
             drawStatusEffectTimerHUD(
@@ -248,8 +251,9 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                     effectDurationStrings.get(i),
                     effectWidths.get(i), 13,
                     effectColors.get(i),
-                    getWhite(effectAlphas.get(i)),
-                    drawBackground
+                    ColorHelper.getWhite(effectAlphas.get(i)),
+                    drawBackground,
+                    drawTextShadow
             );
 
             if (drawVertical) {
@@ -325,7 +329,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                 0,0,
                 18, 18,
                 18,18,
-                getWhite(alpha)
+                ColorHelper.getWhite(alpha)
         );
 
         if (amplifier.isEmpty()) return true;
@@ -341,7 +345,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
-    public void drawStatusEffectTimerHUD(DrawContext context, int x, int y, Identifier effectTexture, String timeStr, int width, int height, int textColor, int iconColor, boolean drawBackground) {
+    public void drawStatusEffectTimerHUD(DrawContext context, int x, int y, Identifier effectTexture, String timeStr, int width, int height, int textColor, int iconColor, boolean drawBackground, boolean drawTextShadow) {
 
         // shrink the texture from 18x18 to 9x9.
         int from = 18;
@@ -359,11 +363,12 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                 (int) (from * rat), (int) (from * rat),
                 textColor, iconColor,
                 displayMode,
-                drawBackground
+                drawBackground,
+                drawTextShadow
         );
     }
 
-    public static boolean drawSmallHUD(DrawContext context, String infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground) {
+    public static boolean drawSmallHUD(DrawContext context, String infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (infoText == null || iconTexture == null || displayMode == null) return false;
 
         int padding = HUD_SETTINGS.textPadding;
@@ -380,7 +385,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
             case INFO ->  {
                 if (drawBackground)
                     RenderUtils.fillRounded(context, x, y, x + width, y + height, 0x80000000);
-                RenderUtils.drawTextHUD(context, infoText, x + padding, y + 3, color, false);
+                RenderUtils.drawTextHUD(context, infoText, x + padding, y + 3, color, drawTextShadow);
             }
             case BOTH ->  {
                 if (drawBackground) {
@@ -392,7 +397,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                     }
                 }
                 RenderUtils.drawTextureHUD(context, iconTexture, x + iconXOffset, y + iconYOffset, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
-                RenderUtils.drawTextHUD(context, infoText, x + 13 + gap + padding, y + 3, color, false);
+                RenderUtils.drawTextHUD(context, infoText, x + 13 + gap + padding, y + 3, color, drawTextShadow);
             }
         }
 
@@ -429,7 +434,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         else {
             return switch (SETTINGS.getColorMode()) {
                 case CUSTOM -> effectSettings.customColor;
-                case EFFECT -> instance.getEffectType().getColor();
+                case EFFECT -> instance.getEffectType().value().getColor();
                 case DYNAMIC -> Helper.getItemBarColor(instance.getDuration(), attribute.maxDuration());
             };
         }
@@ -481,14 +486,13 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return l + ':' + r;
     }
 
-    public int getWhite(float alpha) {
-        return (Math.round(alpha * 255) << 24) | 0xFFFFFF;
-    }
-
-    public static Identifier getStatusEffectTexture(StatusEffect effect) {
-        return STATUS_EFFECT_TEXTURE_MAP.computeIfAbsent(effect, e -> {
-            Identifier id = Registries.STATUS_EFFECT.getId(e);
-            return new Identifier(id.getNamespace(), "textures/mob_effect/" + id.getPath() + ".png");
-        });
+    public static Identifier getStatusEffectTexture(RegistryEntry<StatusEffect> effect) {
+        return STATUS_EFFECT_TEXTURE_MAP.computeIfAbsent(
+                effect,
+                e -> e.getKey()
+                        .map(RegistryKey::getValue)
+                        .map(id -> Identifier.of(id.getNamespace(), "textures/mob_effect/" + id.getPath() + ".png"))
+                        .orElseGet(MissingSprite::getMissingSpriteId)
+        );
     }
 }

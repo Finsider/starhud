@@ -173,17 +173,17 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         if (hitResultType == null)
             return false;
         return switch (hitResultType) {
-            case BLOCK -> renderBlockInfoHUD(context, x, y, drawBackground);
-            case ENTITY -> renderEntityInfoHUD(context, x, y, drawBackground);
+            case BLOCK -> renderBlockInfoHUD(context, x, y, drawBackground, drawTextShadow);
+            case ENTITY -> renderEntityInfoHUD(context, x, y, drawBackground, drawTextShadow);
             default -> false;
         };
     }
 
-    public boolean renderBlockInfoHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderBlockInfoHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         if (displayMode == null || cachedBlockName == null || cachedBlockModName == null || blockStack == null)
             return false;
@@ -203,8 +203,8 @@ public class TargetedCrosshairHUD extends AbstractHUD {
             case INFO -> {
                 if (drawBackground)
                     RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
-                RenderUtils.drawTextHUD(context, cachedBlockName, x + padding, y + 3, targetedNameColor, false);
-                RenderUtils.drawTextHUD(context, cachedBlockModName, x + padding, y + h - 3 - 7, modNameColor, false);
+                RenderUtils.drawTextHUD(context, cachedBlockName, x + padding, y + 3, targetedNameColor, drawTextShadow);
+                RenderUtils.drawTextHUD(context, cachedBlockModName, x + padding, y + h - 3 - 7, modNameColor, drawTextShadow);
             }
             case BOTH -> {
                 if (drawBackground) {
@@ -237,7 +237,7 @@ public class TargetedCrosshairHUD extends AbstractHUD {
                         cachedBlockName,
                         x + ICON_WIDTH + gap + padding, y + 3,
                         SETTINGS.targetedNameColor | 0xFF000000,
-                        false
+                        drawTextShadow
                 );
                 RenderUtils.drawTextHUD(
                         context,
@@ -245,7 +245,7 @@ public class TargetedCrosshairHUD extends AbstractHUD {
                         x + ICON_WIDTH + gap + padding,
                         y + ICON_HEIGHT - 3 - 7,
                         SETTINGS.modNameColor | 0xFF000000,
-                        false
+                        drawTextShadow
                 );
             }
         }
@@ -253,7 +253,7 @@ public class TargetedCrosshairHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean renderEntityInfoHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderEntityInfoHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         if (displayMode == null || cachedEntityName == null || cachedEntityModName == null)
             return false;
@@ -273,8 +273,8 @@ public class TargetedCrosshairHUD extends AbstractHUD {
             case INFO -> {
                 if (drawBackground)
                     RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
-                RenderUtils.drawTextHUD(context, cachedEntityName, x + padding, y + 3, targetedNameColor, false);
-                RenderUtils.drawTextHUD(context, cachedEntityModName, x + padding, y + h - 3 - 7, modNameColor, false);
+                RenderUtils.drawTextHUD(context, cachedEntityName, x + padding, y + 3, targetedNameColor, drawTextShadow);
+                RenderUtils.drawTextHUD(context, cachedEntityModName, x + padding, y + h - 3 - 7, modNameColor, drawTextShadow);
             }
             case BOTH -> {
                 if (drawBackground) {
@@ -315,14 +315,14 @@ public class TargetedCrosshairHUD extends AbstractHUD {
                         cachedEntityName,
                         x + ICON_WIDTH + gap + padding, y + 3,
                         targetedNameColor,
-                        false
+                        drawTextShadow
                 );
                 RenderUtils.drawTextHUD(
                         context,
                         cachedEntityModName,
                         x + ICON_WIDTH + gap + padding, y + ICON_HEIGHT - 3 - 7,
                         SETTINGS.modNameColor | 0xFF000000,
-                        false
+                        drawTextShadow
                 );
             }
         }
