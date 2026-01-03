@@ -27,7 +27,7 @@ public class HUDList {
     public HUDList() {
         groupedHuds.add(
                 new GroupedHUDSettings(
-                        new BaseHUDSettings(true, 5, 0, ScreenAlignmentX.LEFT, ScreenAlignmentY.MIDDLE, GrowthDirectionX.RIGHT, GrowthDirectionY.MIDDLE, false),
+                        new BaseHUDSettings(true, 24, 0, ScreenAlignmentX.LEFT, ScreenAlignmentY.MIDDLE, GrowthDirectionX.RIGHT, GrowthDirectionY.MIDDLE, false),
                         1,
                         1,
                         true,
@@ -37,7 +37,7 @@ public class HUDList {
         );
         groupedHuds.add(
                 new GroupedHUDSettings(
-                        new BaseHUDSettings(true, -5, 5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN, false),
+                        new BaseHUDSettings(true, -24, 24, ScreenAlignmentX.RIGHT, ScreenAlignmentY.TOP, GrowthDirectionX.LEFT, GrowthDirectionY.DOWN, false),
                         2,
                         2,
                         true,
@@ -47,7 +47,7 @@ public class HUDList {
         );
         groupedHuds.add(
                 new GroupedHUDSettings(
-                        new BaseHUDSettings(true, 0, 5, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN, false),
+                        new BaseHUDSettings(true, 0, 24, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN, false),
                         3,
                         3,
                         false,
@@ -57,12 +57,32 @@ public class HUDList {
         );
         groupedHuds.add(
                 new GroupedHUDSettings(
-                        new BaseHUDSettings(true, -5, -5, ScreenAlignmentX.RIGHT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP, false),
+                        new BaseHUDSettings(true, -24, -24, ScreenAlignmentX.RIGHT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP, false),
                         4,
                         3,
                         false,
                         0x85f290,
                         new ArrayList<>(List.of(HUDId.TPS.toString(), HUDId.PING.toString(), HUDId.CLOCK_SYSTEM.toString()))
+                )
+        );
+        groupedHuds.add(
+                new GroupedHUDSettings(
+                        new BaseHUDSettings(true, 24, 24, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN, false),
+                        5,
+                        1,
+                        true,
+                        0xfc7871,
+                        new ArrayList<>(List.of(HUDId.X_COORDINATE.toString(), HUDId.Y_COORDINATE.toString(), HUDId.Z_COORDINATE.toString(), HUDId.DIRECTION.toString()))
+                )
+        );
+        groupedHuds.add(
+                new GroupedHUDSettings(
+                        new BaseHUDSettings(true, 0, -171, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.CENTER, GrowthDirectionY.UP, false),
+                        6,
+                        1,
+                        true,
+                        0xff9a76,
+                        new ArrayList<>(List.of(HUDId.COMBO.toString(), HUDId.REACH.toString()))
                 )
         );
     }
