@@ -18,14 +18,14 @@ public class RenderUtils {
     private static final int ITEM_HUD_ICON_WIDTH = 22;
     private static final int ITEM_HUD_ICON_HEIGHT = 22;
 
-    public static boolean drawSmallHUD(DrawContext context, String infoStr, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground) {
+    public static boolean drawSmallHUD(DrawContext context, String infoStr, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (iconTexture == null || infoStr == null || displayMode == null) return false;
 
         OrderedText orderedText = OrderedText.styledForwardsVisitedString(infoStr, Style.EMPTY);
-        return drawSmallHUD(context, orderedText, x, y, width, height, iconTexture, u, v, textureWidth, textureHeight, iconWidth, iconHeight, color, iconColor, displayMode, drawBackground);
+        return drawSmallHUD(context, orderedText, x, y, width, height, iconTexture, u, v, textureWidth, textureHeight, iconWidth, iconHeight, color, iconColor, displayMode, drawBackground, drawTextShadow);
     }
 
-    public static boolean drawSmallHUD(DrawContext context, OrderedText infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground) {
+    public static boolean drawSmallHUD(DrawContext context, OrderedText infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (infoText == null || iconTexture == null || displayMode == null) return false;
 
         int padding = HUD_SETTINGS.textPadding;
@@ -40,7 +40,7 @@ public class RenderUtils {
             case INFO ->  {
                 if (drawBackground)
                     fillRounded(context, x, y, x + width, y + height, 0x80000000);
-                drawTextHUD(context, infoText, x + padding, y + 3, color, false);
+                drawTextHUD(context, infoText, x + padding, y + 3, color, drawTextShadow);
             }
             case BOTH ->  {
                 if (drawBackground) {
@@ -52,27 +52,27 @@ public class RenderUtils {
                     }
                 }
                 drawTextureHUD(context, iconTexture, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
-                drawTextHUD(context, infoText, x + iconWidth + gap + padding, y + 3, color, false);
+                drawTextHUD(context, infoText, x + iconWidth + gap + padding, y + 3, color, drawTextShadow);
             }
         }
 
         return true;
     }
 
-    public static boolean drawSmallHUD(DrawContext context, String infoStr, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, HUDDisplayMode displayMode, boolean drawBackground) {
+    public static boolean drawSmallHUD(DrawContext context, String infoStr, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (infoStr == null || iconTexture == null || displayMode == null) return false;
 
         OrderedText orderedText = OrderedText.styledForwardsVisitedString(infoStr, Style.EMPTY);
-        return drawSmallHUD(context, orderedText, x, y, width, height, iconTexture, u, v, textureWidth, textureHeight, iconWidth, iconHeight, color, color, displayMode, drawBackground);
+        return drawSmallHUD(context, orderedText, x, y, width, height, iconTexture, u, v, textureWidth, textureHeight, iconWidth, iconHeight, color, color, displayMode, drawBackground, drawTextShadow);
     }
 
-    public static boolean drawSmallHUD(DrawContext context, OrderedText infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, HUDDisplayMode displayMode, boolean drawBackground) {
+    public static boolean drawSmallHUD(DrawContext context, OrderedText infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (infoText == null || iconTexture == null || displayMode == null) return false;
 
-        return drawSmallHUD(context, infoText, x, y, width, height, iconTexture, u, v, textureWidth, textureHeight, iconWidth, iconHeight, color, color, displayMode, drawBackground);
+        return drawSmallHUD(context, infoText, x, y, width, height, iconTexture, u, v, textureWidth, textureHeight, iconWidth, iconHeight, color, color, displayMode, drawBackground, drawTextShadow);
     }
 
-    public static boolean drawItemHUD(DrawContext context, String str, int x, int y, int width, int height, ItemStack itemAsIcon, int textColor, HUDDisplayMode displayMode, boolean drawBackground) {
+    public static boolean drawItemHUD(DrawContext context, String str, int x, int y, int width, int height, ItemStack itemAsIcon, int textColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (str == null || itemAsIcon == null || displayMode == null) return false;
 
         int padding = HUD_SETTINGS.textPadding;
@@ -87,7 +87,7 @@ public class RenderUtils {
             case INFO -> {
                 if (drawBackground)
                     fillRounded(context, x, y, x + width, y + height, 0x80000000);
-                drawTextHUD(context, str, x + padding, y + 7, textColor, false);
+                drawTextHUD(context, str, x + padding, y + 7, textColor, drawTextShadow);
             }
             case BOTH -> {
                 if (drawBackground) {
@@ -100,7 +100,7 @@ public class RenderUtils {
                 }
 
                 context.drawItem(itemAsIcon, x + 3, y + 3);
-                drawTextHUD(context, str, x + ITEM_HUD_ICON_WIDTH + gap + padding, y + 7, textColor, false);
+                drawTextHUD(context, str, x + ITEM_HUD_ICON_WIDTH + gap + padding, y + 7, textColor, drawTextShadow);
             }
         }
 
