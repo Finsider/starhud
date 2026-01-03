@@ -845,7 +845,7 @@ public class EditHUDScreen extends Screen {
             dragCurrentX = click.x();
             dragCurrentY = click.y();
 
-            if (dragging && !selectedHUDs.isEmpty()) { // if we've moved and there are selected huds, we drag them, obviously
+            if (dragging && !selectedHUDs.isEmpty() && !selectedHUDs.getFirst().isInGroup()) { // if we've moved and there are selected huds, we drag them, obviously
                 dragSelectedHUDs(click.x(), click.y(), deltaX, deltaY);
                 return true;
             } else if (dragSelection) { // otherwise it's just drag box
@@ -1227,6 +1227,22 @@ public class EditHUDScreen extends Screen {
                         actionBar.setText(Text.translatable("starhud.screen.action.save"));
                     }
                 }
+
+                case GLFW.GLFW_KEY_R -> {
+                    if (input.hasCtrl() && input.hasShift()) {
+                        this.client.setScreen(new ConfirmScreen(
+                                result -> {
+                                    if (result) {
+                                        AutoConfig.getConfigHolder(Settings.class).resetToDefault();
+                                        actionBar.setText(Text.translatable("starhud.screen.action.reset"));
+                                    }
+                                    this.client.setScreen(this);
+                                },
+                                Text.translatable("starhud.screen.dialog.reset_title"),
+                                Text.translatable("starhud.screen.dialog.reset_message")
+                        ));
+                    }
+                }
             }
 
             if (handled) {
@@ -1300,6 +1316,8 @@ public class EditHUDScreen extends Screen {
         int x1 = Integer.MAX_VALUE, y1 = Integer.MAX_VALUE, x2 = Integer.MIN_VALUE, y2 = Integer.MIN_VALUE;
 
         for (AbstractHUD hud : selectedHUDs) {
+            if (hud.isInGroup()) continue;
+
             int hx1 = hud.getX();
             int hy1 = hud.getY();
             int hx2 = hx1 + hud.getTrueWidth();
