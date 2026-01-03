@@ -473,27 +473,6 @@ public class EditHUDScreen extends Screen {
         updateGroupFieldFromSelectedHUD();
     }
 
-    public void renderGrid(DrawContext context) {
-
-        final Window WINDOW = this.client.getWindow();
-        final int screenWidth = WINDOW.getWidth();
-        final int screenHeight = WINDOW.getHeight();
-        final int snapPadding = SETTINGS.getSnapPadding();
-        final int color = SETTINGS.gridColor;
-
-        final int CENTER_X = screenWidth / 2;
-        final int CENTER_Y = screenHeight / 2;
-
-        PixelPlacement.start(context);
-
-        if (snapPadding > 0)
-            RenderUtils.drawBorder(context, snapPadding, snapPadding, screenWidth - (snapPadding * 2), screenHeight - (snapPadding * 2), color);
-        context.drawHorizontalLine((snapPadding + 1), screenWidth - (snapPadding + 2), CENTER_Y, color);
-        context.drawVerticalLine(CENTER_X, (snapPadding), screenHeight - (snapPadding + 1), color);
-
-        PixelPlacement.end(context);
-    }
-
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 
@@ -554,6 +533,27 @@ public class EditHUDScreen extends Screen {
         }
     }
 
+    public void renderGrid(DrawContext context) {
+
+        final Window WINDOW = this.client.getWindow();
+        final int screenWidth = WINDOW.getWidth();
+        final int screenHeight = WINDOW.getHeight();
+        final int snapPadding = SETTINGS.getSnapPadding();
+        final int color = SETTINGS.gridColor;
+
+        final int CENTER_X = screenWidth / 2;
+        final int CENTER_Y = screenHeight / 2;
+
+        PixelPlacement.start(context);
+
+        if (snapPadding > 0)
+            RenderUtils.drawBorder(context, snapPadding, snapPadding, screenWidth - (snapPadding * 2), screenHeight - (snapPadding * 2), color);
+        context.drawHorizontalLine((snapPadding + 1), screenWidth - (snapPadding + 2), CENTER_Y, color);
+        context.drawVerticalLine(CENTER_X, (snapPadding), screenHeight - (snapPadding + 1), color);
+
+        PixelPlacement.end(context);
+    }
+
     private void renderSelectedHUDBox(DrawContext context) {
         int x = selectedHUDBox.getX();
         int y = selectedHUDBox.getY();
@@ -561,6 +561,9 @@ public class EditHUDScreen extends Screen {
         int h = selectedHUDBox.getHeight();
 
         if (w < 0 || h < 0) return;
+
+        System.out.println("x: " + x + ", y: " + y + ", w: " + w + ", h: " + h);
+
 
         PixelPlacement.start(context);
 
@@ -1229,6 +1232,7 @@ public class EditHUDScreen extends Screen {
                 case GLFW.GLFW_KEY_Z -> {
                     if (input.hasCtrl() && history.canUndo()) {
                         history.undo();
+                        selectedHUDs.clear();
                         handled = true;
                     }
                 }
@@ -1236,6 +1240,7 @@ public class EditHUDScreen extends Screen {
                 case GLFW.GLFW_KEY_Y -> {
                     if (input.hasCtrl() && history.canRedo()) {
                         history.redo();
+                        selectedHUDs.clear();
                         handled = true;
                     }
                 }
@@ -1334,6 +1339,7 @@ public class EditHUDScreen extends Screen {
     private void updateSelectedHUDBox() {
         int x1 = Integer.MAX_VALUE, y1 = Integer.MAX_VALUE, x2 = Integer.MIN_VALUE, y2 = Integer.MIN_VALUE;
 
+        boolean updated = false;
         for (AbstractHUD hud : selectedHUDs) {
             if (hud.isInGroup()) continue;
 
@@ -1346,6 +1352,8 @@ public class EditHUDScreen extends Screen {
             y1 = Math.min(y1, hy1);
             x2 = Math.max(x2, hx2);
             y2 = Math.max(y2, hy2);
+
+            updated = true;
         }
 
         int x = x1;
@@ -1353,7 +1361,10 @@ public class EditHUDScreen extends Screen {
         int w = x2 - x1;
         int h = y2 - y1;
 
-        selectedHUDBox.setBoundingBox(x, y, w, h);
+        if (updated)
+            selectedHUDBox.setBoundingBox(x, y, w, h);
+        else
+            selectedHUDBox.setEmpty(true);
     }
 
     private void saveCurrentState() {
