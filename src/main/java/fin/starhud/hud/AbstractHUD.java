@@ -102,11 +102,11 @@ public abstract class AbstractHUD implements HUDInterface {
     public void modifyXY() {
         int xOffset = 0, yOffset = 0;
 
-        float scaleFactor = getSettings().getScaledFactor();
+        float guiScale = MinecraftClient.getInstance().getWindow().getScaleFactor();
         for (ConditionalSettings condition : baseHUDSettings.getConditions()) {
             if (condition.renderMode != ConditionalSettings.RenderMode.HIDE && condition.isConditionMet()) {
-                xOffset += condition.getXOffset(scaleFactor);
-                yOffset += condition.getYOffset(scaleFactor);
+                xOffset += condition.getXOffset(guiScale);
+                yOffset += condition.getYOffset(guiScale);
             }
         }
 
