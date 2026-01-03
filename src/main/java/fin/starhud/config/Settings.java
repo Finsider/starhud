@@ -202,10 +202,10 @@ public class Settings implements ConfigData{
 
     public static class Hand {
         @ConfigEntry.Gui.CollapsibleObject
-        public HandSettings leftHandSettings = new HandSettings(true, -96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP,0xffb3b3);
+        public HandSettings leftHandSettings = new HandSettings(true, -12, -120, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP,0xffb3b3);
 
         @ConfigEntry.Gui.CollapsibleObject
-        public HandSettings rightHandSettings = new HandSettings(true, 96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
+        public HandSettings rightHandSettings = new HandSettings(true, 12, -120, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
 
         @ConfigEntry.Gui.TransitiveObject
         public DurabilitySettings durabilitySettings = new DurabilitySettings();
@@ -341,12 +341,12 @@ public class Settings implements ConfigData{
 
         HandSettings leftHand = handSettings.leftHandSettings;
         if (leftHand.base == null) {
-            handSettings.leftHandSettings = new HandSettings(true, -96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP, 0xffb3b3);
+            handSettings.leftHandSettings = new HandSettings(true, -12, -120, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP, 0xffb3b3);
         }
 
         HandSettings rightHand = handSettings.rightHandSettings;
         if (rightHand.base == null) {
-            handSettings.rightHandSettings = new HandSettings(true, 96, -25, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
+            handSettings.rightHandSettings = new HandSettings(true, 12, -120, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP, 0x87ceeb);
         }
 
         if (handSettings.durabilitySettings == null) {

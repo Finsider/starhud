@@ -504,12 +504,6 @@ public class EditHUDScreen extends Screen {
             helpWidget.render(context, hud, CENTER_X, CENTER_Y + GAP);
         }
 
-        if (actionBar.isActive()) {
-            final int CENTER_X = this.width / 2;
-            final int Y = this.height - 50;
-            actionBar.render(context, CENTER_X, Y);
-        }
-
         if (!selectedHUDBox.isEmpty() && selectedHUDs.size() > 1) {
             renderSelectedHUDBox(context);
         }
@@ -533,6 +527,12 @@ public class EditHUDScreen extends Screen {
         HUDComponent.getInstance().renderAll(context);
 
         renderBoundingBoxes(context, mouseX, mouseY);
+
+        if (actionBar.isActive()) {
+            final int CENTER_X = this.width / 2;
+            final int Y = this.height - 50;
+            actionBar.render(context, CENTER_X, Y);
+        }
     }
 
     private void renderSelectedHUDBox(DrawContext context) {
