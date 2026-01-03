@@ -19,8 +19,10 @@ public class HelpWidget {
             new Help(Text.translatable("starhud.help.key.direction"), Text.translatable("starhud.help.info.direction")),
             new Help(Text.translatable("starhud.help.key.group_ungroup"), Text.translatable("starhud.help.info.group_ungroup")),
             new Help(Text.translatable("starhud.help.key.clamp_all"), Text.translatable("starhud.help.info.clamp_all")),
-            new Help(Text.translatable("starhud.help.key.undo"), Text.translatable("starhud.help.info.undo")),
-            new Help(Text.translatable("starhud.help.key.redo"), Text.translatable("starhud.help.info.redo"))
+            new Help(Text.translatable(isMac ? "starhud.help.key.undo_mac" : "starhud.help.key.undo_windows"), Text.translatable("starhud.help.info.undo")),
+            new Help(Text.translatable(isMac ? "starhud.help.key.redo_mac" : "starhud.help.key.redo_windows"), Text.translatable("starhud.help.info.redo")),
+            new Help(Text.translatable(isMac ? "starhud.help.key.save_mac" : "starhud.help.key.save_windows"), Text.translatable("starhud.help.info.save")),
+            new Help(Text.translatable(isMac ? "starhud.help.key.reset_mac" : "starhud.help.key.reset_windows"), Text.translatable("starhud.help.info.reset"))
     };
 
     private static int HELP_KEY_MAX_WIDTH;
