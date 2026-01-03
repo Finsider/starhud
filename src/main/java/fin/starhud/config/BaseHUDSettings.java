@@ -48,6 +48,9 @@ public class BaseHUDSettings implements ConfigData {
     @ConfigEntry.Gui.Excluded
     public boolean drawBackground = true;
 
+    @ConfigEntry.Gui.Excluded
+    public boolean drawTextShadow = false;
+
     @Comment("Set to 0 or below for default GUI Scale")
     @ConfigEntry.Gui.Excluded
     public float scale = 0;
@@ -200,6 +203,7 @@ public class BaseHUDSettings implements ConfigData {
                 ", conditions=" + conditions +
                 ", displayMode=" + displayMode +
                 ", drawBackground=" + drawBackground +
+                ", drawTextShadow=" + drawTextShadow +
                 '}';
     }
 
@@ -215,7 +219,8 @@ public class BaseHUDSettings implements ConfigData {
                 && (this.scale == other.scale)
                 && (this.conditions.equals(other.conditions))
                 && (this.displayMode == other.displayMode)
-                && (this.drawBackground == other.drawBackground);
+                && (this.drawBackground == other.drawBackground)
+                && (this.drawTextShadow == other.drawTextShadow);
     }
 
     public void copyFrom(BaseHUDSettings src) {
@@ -229,6 +234,7 @@ public class BaseHUDSettings implements ConfigData {
         this.scale = src.scale;
         this.displayMode = src.displayMode;
         this.drawBackground = src.drawBackground;
+        this.drawTextShadow = src.drawTextShadow;
         this.conditions.clear();
         this.conditions.addAll(src.conditions);
     }

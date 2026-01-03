@@ -218,18 +218,18 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         return MathHelper.clamp(Math.round(maxStep - (float) stackDamage * maxStep / (float) stackMaxDamage), 0, maxStep);
     }
 
-    public boolean renderDurabilityHUD(DrawContext context, Identifier iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public boolean renderDurabilityHUD(DrawContext context, Identifier iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, boolean drawTextShadow) {
         if (drawItem) {
-            return renderDurabilityItem(context, x , y, drawBackground);
+            return renderDurabilityItem(context, x , y, drawBackground, drawTextShadow);
         } else {
-            return renderDurabilityIcon(context, iconTexture, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
+            return renderDurabilityIcon(context, iconTexture, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, drawTextShadow);
         }
     }
 
-    public boolean renderDurabilityItem(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderDurabilityItem(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         if (displayMode == null) return false;
         return switch (displayMode) {
-            case FRACTIONAL, VALUE_ONLY, PERCENTAGE -> RenderUtils.drawItemHUD(context, str, x, y, getWidth(), getHeight(), stack, durabilityColor, hudDisplayMode, drawBackground);
+            case FRACTIONAL, VALUE_ONLY, PERCENTAGE -> RenderUtils.drawItemHUD(context, str, x, y, getWidth(), getHeight(), stack, durabilityColor, hudDisplayMode, drawBackground, drawTextShadow);
             case BAR -> renderDurabilityItemBar(context, x, y, drawBackground);
             case COMPACT -> renderDurabilityItemCompact(context, x, y, drawBackground);
         };
@@ -294,12 +294,12 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean renderDurabilityIcon(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public boolean renderDurabilityIcon(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, boolean drawTextShadow) {
         if (displayMode == null) return false;
         return switch (displayMode) {
-            case FRACTIONAL -> renderDurabilityIconFractional(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
+            case FRACTIONAL -> renderDurabilityIconFractional(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, drawTextShadow);
             case BAR -> renderDurabilityIconBar(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
-            case VALUE_ONLY, PERCENTAGE -> RenderUtils.drawSmallHUD(context, str, x, y, getWidth(), getHeight(), ICON, u, v, textureWidth, textureHeight, iconWidth, iconHeight, durabilityColor, iconColor, hudDisplayMode, drawBackground);
+            case VALUE_ONLY, PERCENTAGE -> RenderUtils.drawSmallHUD(context, str, x, y, getWidth(), getHeight(), ICON, u, v, textureWidth, textureHeight, iconWidth, iconHeight, durabilityColor, iconColor, hudDisplayMode, drawBackground, drawTextShadow);
             case COMPACT -> renderDurabilityIconCompact(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground);
         };
     }
@@ -349,7 +349,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
     }
 
     // example render: ¹²³⁴/₅₆₇₈
-    public boolean renderDurabilityIconFractional(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public boolean renderDurabilityIconFractional(DrawContext context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, boolean drawTextShadow) {
         if (ICON == null || str == null || str2 == null || hudDisplayMode == null) return false;
         int w = getWidth();
         int h = getHeight();
@@ -366,8 +366,8 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
             case INFO -> {
                 if (drawBackground)
                     RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
-                RenderUtils.drawTextHUD(context, str, x + padding, y + 3, durabilityColor, false);
-                RenderUtils.drawTextHUD(context, str2, x + padding + remainingTextWidth, y + 3 - 1, durabilityColor, false);
+                RenderUtils.drawTextHUD(context, str, x + padding, y + 3, durabilityColor, drawTextShadow);
+                RenderUtils.drawTextHUD(context, str2, x + padding + remainingTextWidth, y + 3 - 1, durabilityColor, drawTextShadow);
             }
             case BOTH ->  {
 
@@ -381,8 +381,8 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
                 }
                 RenderUtils.drawTextureHUD(context, ICON, x, y, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
 
-                RenderUtils.drawTextHUD(context, str, x + iconWidth + gap + padding, y + 3, durabilityColor, false);
-                RenderUtils.drawTextHUD(context, str2, x + iconWidth + gap + padding + remainingTextWidth, y + 3 - 1, durabilityColor, false);
+                RenderUtils.drawTextHUD(context, str, x + iconWidth + gap + padding, y + 3, durabilityColor, drawTextShadow);
+                RenderUtils.drawTextHUD(context, str2, x + iconWidth + gap + padding + remainingTextWidth, y + 3 - 1, durabilityColor, drawTextShadow);
             }
         }
 

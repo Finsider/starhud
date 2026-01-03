@@ -200,7 +200,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         if (CLIENT.player == null) return false;
         if (size == 0) return false;
 
@@ -210,7 +210,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         }
 
         if (drawTimer)
-            return renderTimerHUD(context, x, y, drawBackground);
+            return renderTimerHUD(context, x, y, drawBackground, drawTextShadow);
         else
             return renderBarHUD(context, x, y, drawBackground);
     }
@@ -241,7 +241,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean renderTimerHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderTimerHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         for (int i = 0; i < size; ++i) {
             drawStatusEffectTimerHUD(
@@ -252,7 +252,8 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                     effectWidths.get(i), 13,
                     effectColors.get(i),
                     ColorHelper.getWhite(effectAlphas.get(i)),
-                    drawBackground
+                    drawBackground,
+                    drawTextShadow
             );
 
             if (drawVertical) {
@@ -344,7 +345,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
-    public void drawStatusEffectTimerHUD(DrawContext context, int x, int y, Identifier effectTexture, String timeStr, int width, int height, int textColor, int iconColor, boolean drawBackground) {
+    public void drawStatusEffectTimerHUD(DrawContext context, int x, int y, Identifier effectTexture, String timeStr, int width, int height, int textColor, int iconColor, boolean drawBackground, boolean drawTextShadow) {
 
         // shrink the texture from 18x18 to 9x9.
         int from = 18;
@@ -362,11 +363,12 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                 (int) (from * rat), (int) (from * rat),
                 textColor, iconColor,
                 displayMode,
-                drawBackground
+                drawBackground,
+                drawTextShadow
         );
     }
 
-    public static boolean drawSmallHUD(DrawContext context, String infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground) {
+    public static boolean drawSmallHUD(DrawContext context, String infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (infoText == null || iconTexture == null || displayMode == null) return false;
 
         int padding = HUD_SETTINGS.textPadding;
@@ -383,7 +385,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
             case INFO ->  {
                 if (drawBackground)
                     RenderUtils.fillRounded(context, x, y, x + width, y + height, 0x80000000);
-                RenderUtils.drawTextHUD(context, infoText, x + padding, y + 3, color, false);
+                RenderUtils.drawTextHUD(context, infoText, x + padding, y + 3, color, drawTextShadow);
             }
             case BOTH ->  {
                 if (drawBackground) {
@@ -395,7 +397,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                     }
                 }
                 RenderUtils.drawTextureHUD(context, iconTexture, x + iconXOffset, y + iconYOffset, u, v, iconWidth, iconHeight, textureWidth, textureHeight, iconColor);
-                RenderUtils.drawTextHUD(context, infoText, x + 13 + gap + padding, y + 3, color, false);
+                RenderUtils.drawTextHUD(context, infoText, x + 13 + gap + padding, y + 3, color, drawTextShadow);
             }
         }
 

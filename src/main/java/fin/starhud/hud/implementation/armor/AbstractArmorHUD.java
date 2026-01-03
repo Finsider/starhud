@@ -47,7 +47,7 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground) {
+    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return renderDurabilityHUD(
                 context,
                 TEXTURE,
@@ -55,7 +55,8 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
                 0.0F, 0.0F,
                 TEXTURE_WIDTH, TEXTURE_HEIGHT,
                 ICON_WIDTH, ICON_HEIGHT,
-                drawBackground
+                drawBackground,
+                drawTextShadow
         );
     }
 }
