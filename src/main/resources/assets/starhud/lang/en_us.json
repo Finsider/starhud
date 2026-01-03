@@ -24,10 +24,21 @@
   "starhud.help.key.clamp_all": "[⇧ Shift + C]",
   "starhud.help.info.clamp_all": "Clamp Every HUD Rendered",
 
-  "starhud.help.key.undo": "[Ctrl + Z]",
+  "starhud.help.key.undo_windows": "[Ctrl + Z]",
+  "starhud.help.key.undo_mac": "[⌘ Cmd + Z]",
   "starhud.help.info.undo": "Undo Previous Action",
-  "starhud.help.key.redo": "[Ctrl + Y]",
+
+  "starhud.help.key.redo_windows": "[Ctrl + Y]",
+  "starhud.help.key.redo_mac": "[⌘ Cmd + Y]",
   "starhud.help.info.redo": "Redo Previously Undone Action",
+
+  "starhud.help.key.save_windows": "[Ctrl + S]",
+  "starhud.help.key.save_mac": "[⌘ Cmd + S]",
+  "starhud.help.info.save": "Save",
+
+  "starhud.help.key.reset_windows": "[Ctrl + ⇧ Shift + R]",
+  "starhud.help.key.reset_mac": "[⌘ Cmd + ⇧ Shift + R]",
+  "starhud.help.info.reset": "Reset",
 
   "starhud.screen.field.x": "X",
   "starhud.screen.field.y": "Y",
@@ -78,6 +89,14 @@
 
   "starhud.screen.dialog.discard_title": "Discard Changes?",
   "starhud.screen.dialog.discard_message": "You have unsaved changes. Do you want to discard them?",
+
+  "starhud.screen.dialog.reset_title": "Reset Settings?",
+  "starhud.screen.dialog.reset_message": "This will reset all the settings to their default values.\nThis action cannot be undone and a restart is required!",
+
+  "starhud.screen.action.save": "Saved Current State!",
+  "starhud.screen.action.clamp_all_found": "Found %s HUD Clamped!",
+  "starhud.screen.action.clamp_all_not_found": "No HUD Clamped!",
+  "starhud.screen.action.reset": "Settings Reset! Restart Required!",
 
   "starhud.option.growthDirectionX.left": "Left",
   "starhud.option.growthDirectionX.center": "Center",
@@ -362,8 +381,5 @@
   "text.autoconfig.starhud.option.reachSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.reachSettings.color": "Color",
   "text.autoconfig.starhud.option.reachSettings.hideInactive": "Hide When Inactive",
-  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label",
-  "starhud.screen.action.save": "Saved Current State!",
-  "starhud.screen.action.clamp_all_found": "Found %s HUD Clamped!",
-  "starhud.screen.action.clamp_all_not_found": "No HUD Clamped!"
+  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label"
 }
