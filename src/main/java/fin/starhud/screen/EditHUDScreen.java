@@ -76,6 +76,7 @@ public class EditHUDScreen extends Screen {
     private ButtonWidget directionYButton;
     private ButtonWidget hudDisplayButton;
     private ButtonWidget drawBackgroundButton;
+    private ButtonWidget drawTextShadowButton;
 
     private final List<ButtonWidget> moreOptionButtons = new ArrayList<>();
     private final List<TextFieldWidget> moreOptionTexts = new ArrayList<>();
@@ -185,7 +186,7 @@ public class EditHUDScreen extends Screen {
                 }
         ).dimensions(alignmentYButtonX, directionXButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
-        int hudDisplayButtonY = directionXButtonY - PADDING;
+        int hudDisplayButtonY = directionXButtonY - PADDING - PADDING;
         hudDisplayButton = ButtonWidget.builder(
                 Text.translatable("starhud.screen.button.display_na"),
                 button -> {
@@ -196,6 +197,23 @@ public class EditHUDScreen extends Screen {
                     hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display", selectedHUD.getSettings().getDisplayMode().toString()));
                 }
         ).dimensions(alignmentXButtonX, hudDisplayButtonY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
+
+        int drawTextShadowY = directionXButtonY - PADDING;
+        drawTextShadowButton = ButtonWidget.builder(
+                Text.translatable("starhud.screen.button.shadow_na"),
+                button -> {
+                    if (selectedHUDs.isEmpty()) return;
+                    AbstractHUD hud = selectedHUDs.getFirst();
+                    HUDAction act = onDrawTextShadowChanged(hud, !hud.getSettings().drawTextShadow);
+                    history.execute(act);
+                    drawTextShadowButton.setMessage(Text.translatable("starhud.screen.button.shadow",
+                            hud.getSettings().drawTextShadow ?
+                                    Text.translatable("starhud.screen.status.on").getString() :
+                                    Text.translatable("starhud.screen.status.off").getString()
+                            ));
+
+                }
+        ).dimensions(alignmentXButtonX, drawTextShadowY, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
         drawBackgroundButton = ButtonWidget.builder(
                 Text.translatable("starhud.screen.button.background_na"),
@@ -421,6 +439,7 @@ public class EditHUDScreen extends Screen {
         moreOptionButtons.add(directionYButton);
         moreOptionButtons.add(hudDisplayButton);
         moreOptionButtons.add(drawBackgroundButton);
+        moreOptionButtons.add(drawTextShadowButton);
         moreOptionButtons.add(shouldRenderButton);
 
         moreOptionTexts.clear();
@@ -1495,6 +1514,7 @@ public class EditHUDScreen extends Screen {
             directionYButton.setMessage(Text.translatable("starhud.screen.button.y_direction_na"));
             hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display_na"));
             drawBackgroundButton.setMessage(Text.translatable("starhud.screen.button.background_na"));
+            drawTextShadowButton.setMessage(Text.translatable("starhud.screen.button.shadow_na"));
             shouldRenderButton.setMessage(Text.translatable("starhud.screen.status.na"));
 
             gapField.setText(Text.translatable("starhud.screen.status.na").getString());
@@ -1533,6 +1553,11 @@ public class EditHUDScreen extends Screen {
                     settings.drawBackground ?
                             Text.translatable("starhud.screen.status.on").getString() :
                             Text.translatable("starhud.screen.status.off").getString()));
+            drawTextShadowButton.setMessage(Text.translatable("starhud.screen.button.shadow",
+                    settings.drawTextShadow ?
+                            Text.translatable("starhud.screen.status.on").getString() :
+                            Text.translatable("starhud.screen.status.off").getString()
+            ));
             shouldRenderButton.setMessage(settings.shouldRender ?
                     Text.translatable("starhud.screen.status.on") :
                     Text.translatable("starhud.screen.status.off"));
@@ -1752,6 +1777,21 @@ public class EditHUDScreen extends Screen {
         );
     }
 
+    private HUDAction onDrawTextShadowChanged(AbstractHUD hud, boolean newDrawTextShadow) {
+        boolean oldDrawTextShadow = hud.getSettings().drawTextShadow;
+
+        if (oldDrawTextShadow == newDrawTextShadow) return null;
+
+        return new ReversibleAction(
+                () -> {
+                    hud.getSettings().drawTextShadow = newDrawTextShadow;
+                },
+                () -> {
+                    hud.getSettings().drawTextShadow = newDrawTextShadow;
+                }
+        );
+    }
+
     private HUDAction onDrawBackgroundChanged(AbstractHUD hud, boolean newDrawBackground) {
         boolean oldDrawBackground = hud.getSettings().drawBackground;
 
@@ -1760,11 +1800,9 @@ public class EditHUDScreen extends Screen {
         return new ReversibleAction(
                 () -> {
                     hud.getSettings().drawBackground = newDrawBackground;
-                    hud.update();
                 },
                 () -> {
                     hud.getSettings().drawBackground = oldDrawBackground;
-                    hud.update();
                 }
         );
     }

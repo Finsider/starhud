@@ -50,13 +50,13 @@ public abstract class AbstractHUD implements HUDInterface {
     @Override
     public boolean render(DrawContext context) {
         if (!isScaled())
-            return renderHUD(context, getX(), getY(), shouldDrawBackground());
+            return renderHUD(context, getX(), getY(), shouldDrawBackground(), shouldDrawTextShadow());
 
         // this is so we can change the scale for one hud but not the others.
         context.getMatrices().pushMatrix();
         scaleHUD(context);
 
-        boolean result = renderHUD(context, getX(), getY(), shouldDrawBackground());
+        boolean result = renderHUD(context, getX(), getY(), shouldDrawBackground(), shouldDrawTextShadow());
         context.getMatrices().popMatrix();
 
         return result;
@@ -83,7 +83,7 @@ public abstract class AbstractHUD implements HUDInterface {
     // this is where the hud is rendered. Where we put the rendering logic.
     // it is highly discouraged to put information collecting in this function.
     // for information collecting please refer to collectHUDInformation()
-    public abstract boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground);
+    public abstract boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow);
 
     public abstract String getName();
 
@@ -144,6 +144,10 @@ public abstract class AbstractHUD implements HUDInterface {
 
     public boolean shouldDrawBackground() {
         return getSettings().drawBackground;
+    }
+
+    public boolean shouldDrawTextShadow() {
+        return getSettings().drawTextShadow;
     }
 
     // bounding box attribute will return 0 if HUD is not rendered once.
