@@ -19,7 +19,7 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config.Gui.Background("cloth-config2:transparent")
 @Config(name = "starhud")
-public class Settings implements ConfigData {
+public class Settings implements ConfigData{
 
     @ConfigEntry.Category("general")
     @ConfigEntry.Gui.TransitiveObject
