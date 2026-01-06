@@ -79,7 +79,7 @@ public class SpeedHUD extends AbstractHUD {
 
     @Override
     public String getName() {
-        return "Speed HUD";
+        return "Speed Counter HUD";
     }
 
     @Override
