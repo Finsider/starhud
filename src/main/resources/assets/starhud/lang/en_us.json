@@ -51,6 +51,7 @@
   "starhud.screen.button.y_direction": "Y Direction: %s",
   "starhud.screen.button.display": "Display: %s",
   "starhud.screen.button.background": "Background: %s",
+  "starhud.screen.button.shadow": "Text Shadow: %s",
 
   "starhud.screen.button.x_alignment_na": "X Alignment: N/A",
   "starhud.screen.button.y_alignment_na": "Y Alignment: N/A",
@@ -58,6 +59,7 @@
   "starhud.screen.button.y_direction_na": "Y Direction: N/A",
   "starhud.screen.button.display_na": "Display: N/A",
   "starhud.screen.button.background_na": "Background: N/A",
+  "starhud.screen.button.shadow_na": "Text Shadow: N/A",
 
   "starhud.screen.button.group": "Group",
   "starhud.screen.button.ungroup": "Ungroup",
@@ -84,7 +86,7 @@
   "starhud.screen.status.na": "N/A",
 
   "starhud.screen.label.x": "X:",
-  "starhud.screen.label.y": ":Y",
+  "starhud.screen.label.y": "Y:",
   "starhud.screen.label.gap": "GAP:",
 
   "starhud.screen.dialog.discard_title": "Discard Changes?",
@@ -116,7 +118,7 @@
 
   "starhud.option.hudDisplayMode.icon": "Icon",
   "starhud.option.hudDisplayMode.info": "Info",
-  "starhud.option.hudDisplayMode.both": "Icon & Info",
+  "starhud.option.hudDisplayMode.both": "Icon, Info",
 
   "starhud.option.childAlignment.group": "Group",
   "starhud.option.childAlignment.child": "Child",
@@ -356,7 +358,7 @@
   "text.autoconfig.starhud.option.targetedCrosshairSettings.entityColors.player": "Player Color",
   "text.autoconfig.starhud.option.targetedCrosshairSettings.entityColors.unknown": "Unknown Entity Color",
 
-  "text.autoconfig.starhud.category.speed": "Speed",
+  "text.autoconfig.starhud.category.speed": "Speed Counter",
   "text.autoconfig.starhud.option.speedSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.speedSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.speedSettings.color": "Color",
@@ -381,7 +383,5 @@
   "text.autoconfig.starhud.option.reachSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.reachSettings.color": "Color",
   "text.autoconfig.starhud.option.reachSettings.hideInactive": "Hide When Inactive",
-  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label",
-  "starhud.screen.button.shadow_na": "Text Shadow: N/A",
-  "starhud.screen.button.shadow": "Text Shadow: %s"
+  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label"
 }
