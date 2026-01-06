@@ -165,14 +165,15 @@ public class GroupedHUD extends AbstractHUD {
 
             // if grouped hud decided to draw background, child shouldn't.
             boolean childShouldDrawBackground = !thisDrewBackground && hud.shouldDrawBackground();
+            boolean childShouldDrawTextShadow = drawTextShadow || hud.shouldDrawTextShadow();
 
             hud.setScale(scale);
             hud.setXY((int) (hudX + (xOffset * scale)), (int) (hudY + (yOffset * scale)));
 
             if (hud instanceof GroupedHUD group) {
-                group.renderHUD(context, x + xOffset, y + yOffset, childShouldDrawBackground, thisDrewBackground, drawTextShadow);
+                group.renderHUD(context, x + xOffset, y + yOffset, childShouldDrawBackground, thisDrewBackground, childShouldDrawTextShadow);
             } else {
-                hud.renderHUD(context, x + xOffset, y + yOffset, childShouldDrawBackground, drawTextShadow);
+                hud.renderHUD(context, x + xOffset, y + yOffset, childShouldDrawBackground, childShouldDrawTextShadow);
             }
         }
 
