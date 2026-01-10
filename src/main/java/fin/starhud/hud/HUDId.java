@@ -28,6 +28,7 @@ public enum HUDId {
     PING,
     SPEED,
     INVENTORY,
+    INVENTORY_SPACE,
     TARGETED_CROSSHAIR,
     PLAYER_COUNT,
     COMBO,

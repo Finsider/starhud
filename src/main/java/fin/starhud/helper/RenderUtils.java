@@ -72,7 +72,7 @@ public class RenderUtils {
         return drawSmallHUD(context, infoText, x, y, width, height, iconTexture, u, v, textureWidth, textureHeight, iconWidth, iconHeight, color, color, displayMode, drawBackground, drawTextShadow);
     }
 
-    public static boolean drawItemHUD(DrawContext context, String str, int x, int y, int width, int height, ItemStack itemAsIcon, int textColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
+    public static boolean drawItemHUD(DrawContext context, OrderedText str, int x, int y, int width, int height, ItemStack itemAsIcon, int textColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (str == null || itemAsIcon == null || displayMode == null) return false;
 
         int padding = HUD_SETTINGS.textPadding;
@@ -105,6 +105,12 @@ public class RenderUtils {
         }
 
         return true;
+    }
+
+    public static boolean drawItemHUD(DrawContext context, String str, int x, int y, int width, int height, ItemStack itemAsIcon, int textColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
+        if (str == null) return false;
+        OrderedText orderedText = OrderedText.styledForwardsVisitedString(str, Style.EMPTY);
+        return drawItemHUD(context, orderedText, x, y, width, height, itemAsIcon, textColor, displayMode, drawBackground, drawTextShadow);
     }
 
     public static void fillRoundedRightSide(DrawContext context, int x1, int y1, int x2, int y2, int color) {
