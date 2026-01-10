@@ -75,6 +75,7 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     private int height;
     private HitResult.Type hitResultType;
     private HUDDisplayMode displayMode;
+    private TargetedCrosshairSettings.InformationMode informationMode;
 
     @Override
     public boolean collectHUDInformation() {
@@ -83,6 +84,9 @@ public class TargetedCrosshairHUD extends AbstractHUD {
         hitResultType = CLIENT.crosshairTarget.getType();
 
         if (hitResultType == null) return false;
+
+        displayMode = getSettings().getDisplayMode();
+        informationMode = SETTINGS.getInformationMode();
 
         return switch (hitResultType) {
             case BLOCK -> collectDataBlock();
@@ -100,7 +104,6 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     private int modNameColor;
 
     public boolean collectDataBlock() {
-        displayMode = getSettings().getDisplayMode();
 
         if (CLIENT.world == null) return false;
 
@@ -124,7 +127,11 @@ public class TargetedCrosshairHUD extends AbstractHUD {
 
             int blockNameWidth = CLIENT.textRenderer.getWidth(cachedBlockName);
             int modNameWidth = CLIENT.textRenderer.getWidth(cachedBlockModName);
-            cachedBlockMaxWidth = Math.max(modNameWidth, blockNameWidth) - 1;
+            switch (informationMode) {
+                case TARGETED_NAME -> cachedBlockMaxWidth = blockNameWidth - 1;
+                case MOD_NAME -> cachedBlockMaxWidth = modNameWidth - 1;
+                default -> cachedBlockMaxWidth = Math.max(blockNameWidth, modNameWidth) - 1;
+            }
         }
 
         targetedNameColor = SETTINGS.targetedNameColor | 0xFF000000;
@@ -143,7 +150,6 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     private int cachedIndex = -1;
 
     public boolean collectDataEntity() {
-        displayMode = getSettings().getDisplayMode();
 
         if (!(CLIENT.crosshairTarget instanceof EntityHitResult entityHitResult))
             return false;
@@ -157,7 +163,12 @@ public class TargetedCrosshairHUD extends AbstractHUD {
 
             int entityNameWidth = CLIENT.textRenderer.getWidth(cachedEntityName);
             int modNameWidth = CLIENT.textRenderer.getWidth(cachedEntityModName);
-            cachedEntityMaxWidth = Math.max(entityNameWidth, modNameWidth) - 1;
+
+            switch (informationMode) {
+                case TARGETED_NAME -> cachedEntityMaxWidth = entityNameWidth - 1;
+                case MOD_NAME -> cachedEntityMaxWidth = modNameWidth - 1;
+                default -> cachedEntityMaxWidth = Math.max(entityNameWidth, modNameWidth) - 1;
+            }
 
             cachedIndex = getEntityIconIndex(targetedEntity);
         }
@@ -205,6 +216,15 @@ public class TargetedCrosshairHUD extends AbstractHUD {
                     RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
                 RenderUtils.drawTextHUD(context, cachedBlockName, x + padding, y + 3, targetedNameColor, drawTextShadow);
                 RenderUtils.drawTextHUD(context, cachedBlockModName, x + padding, y + h - 3 - 7, modNameColor, drawTextShadow);
+
+                switch (informationMode) {
+                    case TARGETED_NAME -> RenderUtils.drawTextHUD(context, cachedBlockName, x + padding, y + 7, targetedNameColor, drawTextShadow);
+                    case MOD_NAME -> RenderUtils.drawTextHUD(context, cachedBlockModName, x + padding, y + 7, modNameColor, drawTextShadow);
+                    case BOTH -> {
+                        RenderUtils.drawTextHUD(context, cachedBlockName, x + padding, y + 3, targetedNameColor, drawTextShadow);
+                        RenderUtils.drawTextHUD(context, cachedBlockModName, x + padding, y + h - 3 - 7, modNameColor, drawTextShadow);
+                    }
+                }
             }
             case BOTH -> {
                 if (drawBackground) {
@@ -232,21 +252,14 @@ public class TargetedCrosshairHUD extends AbstractHUD {
                 }
 
                 context.drawItem(blockStack, x + 3, y + 3);
-                RenderUtils.drawTextHUD(
-                        context,
-                        cachedBlockName,
-                        x + ICON_WIDTH + gap + padding, y + 3,
-                        SETTINGS.targetedNameColor | 0xFF000000,
-                        drawTextShadow
-                );
-                RenderUtils.drawTextHUD(
-                        context,
-                        cachedBlockModName,
-                        x + ICON_WIDTH + gap + padding,
-                        y + ICON_HEIGHT - 3 - 7,
-                        SETTINGS.modNameColor | 0xFF000000,
-                        drawTextShadow
-                );
+                switch (informationMode) {
+                    case TARGETED_NAME -> RenderUtils.drawTextHUD(context, cachedBlockName, x + ICON_WIDTH + gap + padding, y + 7, targetedNameColor, drawTextShadow);
+                    case MOD_NAME -> RenderUtils.drawTextHUD(context, cachedBlockModName, x + ICON_WIDTH + gap + padding, y + 7, modNameColor, drawTextShadow);
+                    case BOTH -> {
+                        RenderUtils.drawTextHUD(context, cachedBlockName, x + ICON_WIDTH + gap + padding, y + 3, targetedNameColor, drawTextShadow);
+                        RenderUtils.drawTextHUD(context, cachedBlockModName, x + ICON_WIDTH + gap + padding, y + h - 3 - 7, modNameColor, drawTextShadow);
+                    }
+                }
             }
         }
 
@@ -273,8 +286,15 @@ public class TargetedCrosshairHUD extends AbstractHUD {
             case INFO -> {
                 if (drawBackground)
                     RenderUtils.fillRounded(context, x, y, x + w, y + h, 0x80000000);
-                RenderUtils.drawTextHUD(context, cachedEntityName, x + padding, y + 3, targetedNameColor, drawTextShadow);
-                RenderUtils.drawTextHUD(context, cachedEntityModName, x + padding, y + h - 3 - 7, modNameColor, drawTextShadow);
+
+                switch (informationMode) {
+                    case TARGETED_NAME -> RenderUtils.drawTextHUD(context, cachedEntityName, x + padding, y + 7, targetedNameColor, drawTextShadow);
+                    case MOD_NAME -> RenderUtils.drawTextHUD(context, cachedEntityModName, x + padding, y + 7, modNameColor, drawTextShadow);
+                    case BOTH -> {
+                        RenderUtils.drawTextHUD(context, cachedEntityName, x + padding, y + 3, targetedNameColor, drawTextShadow);
+                        RenderUtils.drawTextHUD(context, cachedEntityModName, x + padding, y + h - 3 - 7, modNameColor, drawTextShadow);
+                    }
+                }
             }
             case BOTH -> {
                 if (drawBackground) {
@@ -310,20 +330,14 @@ public class TargetedCrosshairHUD extends AbstractHUD {
                         targetedNameColor
                 );
 
-                RenderUtils.drawTextHUD(
-                        context,
-                        cachedEntityName,
-                        x + ICON_WIDTH + gap + padding, y + 3,
-                        targetedNameColor,
-                        drawTextShadow
-                );
-                RenderUtils.drawTextHUD(
-                        context,
-                        cachedEntityModName,
-                        x + ICON_WIDTH + gap + padding, y + ICON_HEIGHT - 3 - 7,
-                        SETTINGS.modNameColor | 0xFF000000,
-                        drawTextShadow
-                );
+                switch (informationMode) {
+                    case TARGETED_NAME -> RenderUtils.drawTextHUD(context, cachedEntityName, x + ICON_WIDTH + gap + padding, y + 7, targetedNameColor, drawTextShadow);
+                    case MOD_NAME -> RenderUtils.drawTextHUD(context, cachedEntityModName, x + ICON_WIDTH + gap + padding, y + 7, targetedNameColor, drawTextShadow);
+                    case BOTH -> {
+                        RenderUtils.drawTextHUD(context, cachedEntityName, x + ICON_WIDTH + gap + padding, y + 3, targetedNameColor, drawTextShadow);
+                        RenderUtils.drawTextHUD(context, cachedEntityModName, x + ICON_WIDTH + gap + padding, y + h - 3 - 7, modNameColor, drawTextShadow);
+                    }
+                }
             }
         }
 
