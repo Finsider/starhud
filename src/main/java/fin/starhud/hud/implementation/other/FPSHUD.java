@@ -38,7 +38,6 @@ public class FPSHUD extends AbstractHUD {
     }
 
     private String fpsStr;
-    private int color;
     private HUDDisplayMode displayMode;
 
     @Override
@@ -50,7 +49,7 @@ public class FPSHUD extends AbstractHUD {
 
         int width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
 
-        color = FPS_SETTINGS.color | 0xFF000000;
+        int color = FPS_SETTINGS.color | 0xFF000000;
 
         setWidthHeightColor(width, TEXTURE_HEIGHT, color);
 
@@ -62,6 +61,7 @@ public class FPSHUD extends AbstractHUD {
 
         int w = getWidth();
         int h = getHeight();
+        int c = getColor();
 
         return RenderUtils.drawSmallHUD(
                 context,
@@ -72,7 +72,7 @@ public class FPSHUD extends AbstractHUD {
                 0.0F, 0.0F,
                 TEXTURE_WIDTH, TEXTURE_HEIGHT,
                 ICON_WIDTH, ICON_HEIGHT,
-                color,
+                c,
                 displayMode,
                 drawBackground,
                 drawTextShadow
