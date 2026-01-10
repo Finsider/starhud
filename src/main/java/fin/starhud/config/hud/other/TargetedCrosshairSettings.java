@@ -12,6 +12,9 @@ public class TargetedCrosshairSettings {
     @ConfigEntry.Gui.TransitiveObject
     public BaseHUDSettings base = new BaseHUDSettings(true, 0, 69, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN);
 
+    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    public InformationMode informationMode = InformationMode.BOTH;
+
     @ConfigEntry.ColorPicker
     public int modNameColor = 0xddebf5;
 
@@ -20,6 +23,18 @@ public class TargetedCrosshairSettings {
 
     @ConfigEntry.Gui.CollapsibleObject
     public Colors entityColors = new Colors();
+
+    public InformationMode getInformationMode() {
+        if (informationMode == null)
+            informationMode = InformationMode.BOTH;
+        return informationMode;
+    }
+
+    public enum InformationMode {
+        TARGETED_NAME,
+        MOD_NAME,
+        BOTH
+    }
 
     public static class Colors {
         @ConfigEntry.ColorPicker
