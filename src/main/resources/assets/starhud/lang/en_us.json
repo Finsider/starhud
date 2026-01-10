@@ -349,6 +349,7 @@
   "text.autoconfig.starhud.category.targeted": "Targeted",
   "text.autoconfig.starhud.option.targetedCrosshairSettings.base.shouldRender": "Show HUD",
   "text.autoconfig.starhud.option.targetedCrosshairSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.targetedCrosshairSettings.informationMode": "Information Display Mode",
   "text.autoconfig.starhud.option.targetedCrosshairSettings.modNameColor": "Mod Name Color",
   "text.autoconfig.starhud.option.targetedCrosshairSettings.targetedNameColor": "Targeted Name Color",
   "text.autoconfig.starhud.option.targetedCrosshairSettings.entityColors": "Entity Colors",
@@ -383,5 +384,12 @@
   "text.autoconfig.starhud.option.reachSettings.base.conditions": "Conditions",
   "text.autoconfig.starhud.option.reachSettings.color": "Color",
   "text.autoconfig.starhud.option.reachSettings.hideInactive": "Hide When Inactive",
-  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label"
+  "text.autoconfig.starhud.option.reachSettings.additionalString": "Extra Label",
+
+  "text.autoconfig.starhud.category.inventory_space": "Inventory Space",
+  "text.autoconfig.starhud.option.inventorySpaceSettings.base.shouldRender": "Show HUD",
+  "text.autoconfig.starhud.option.inventorySpaceSettings.base.conditions": "Conditions",
+  "text.autoconfig.starhud.option.inventorySpaceSettings.color": "Color",
+  "text.autoconfig.starhud.option.inventorySpaceSettings.showRemaining": "Show Remaining",
+  "text.autoconfig.starhud.option.inventorySpaceSettings.showMaxSlot": "Show Max Slot"
 }
