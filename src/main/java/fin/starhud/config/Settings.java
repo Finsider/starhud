@@ -97,6 +97,10 @@ public class Settings implements ConfigData{
     @ConfigEntry.Gui.TransitiveObject
     public InventorySettings inventorySettings = new InventorySettings();
 
+    @ConfigEntry.Category("inventory_space")
+    @ConfigEntry.Gui.TransitiveObject
+    public InventorySpaceSettings inventorySpaceSettings = new InventorySpaceSettings();
+
     public static class Armor {
         @ConfigEntry.Gui.CollapsibleObject
         public ArmorSettings helmet = new ArmorSettings(
@@ -381,6 +385,9 @@ public class Settings implements ConfigData{
 
         if (reachSettings.base == null)
             reachSettings = new ReachSettings();
+
+        if (inventorySpaceSettings.base == null)
+            inventorySpaceSettings = new InventorySpaceSettings();
 
         this.hudList.onConfigSaved();
     }
