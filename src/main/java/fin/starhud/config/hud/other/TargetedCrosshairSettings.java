@@ -10,7 +10,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class TargetedCrosshairSettings {
 
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(true, 0, 69, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN);
+    public BaseHUDSettings base = new BaseHUDSettings(true, 0, 56, ScreenAlignmentX.CENTER, ScreenAlignmentY.TOP, GrowthDirectionX.CENTER, GrowthDirectionY.DOWN);
 
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public InformationMode informationMode = InformationMode.BOTH;

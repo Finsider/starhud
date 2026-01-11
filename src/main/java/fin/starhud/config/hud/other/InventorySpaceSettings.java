@@ -9,7 +9,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
 public class InventorySpaceSettings {
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(false, 5, -19, ScreenAlignmentX.LEFT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.RIGHT, GrowthDirectionY.UP);
+    public BaseHUDSettings base = new BaseHUDSettings(false, -24, -56, ScreenAlignmentX.RIGHT, ScreenAlignmentY.BOTTOM, GrowthDirectionX.LEFT, GrowthDirectionY.UP);
 
     @ConfigEntry.ColorPicker
     public int color = 0xD8B58A;
