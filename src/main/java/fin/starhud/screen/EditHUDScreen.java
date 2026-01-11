@@ -513,9 +513,6 @@ public class EditHUDScreen extends Screen {
 
         if (w < 0 || h < 0) return;
 
-        System.out.println("x: " + x + ", y: " + y + ", w: " + w + ", h: " + h);
-
-
         PixelPlacement.start(context);
 
         RenderUtils.drawBorder(context, x, y, w, h, -1);
@@ -525,7 +522,7 @@ public class EditHUDScreen extends Screen {
 
     private void renderDragBox(DrawContext context) {
 
-        float guiScale = this.client.getWindow().getScaleFactor();
+        double guiScale = this.client.getWindow().getScaleFactor();
 
         int x1 = (int) (Math.min(dragStartX, dragCurrentX) * guiScale);
         int y1 = (int) (Math.min(dragStartY, dragCurrentY) * guiScale);
@@ -914,7 +911,7 @@ public class EditHUDScreen extends Screen {
     private void dragSelectedHUDs(double mouseX, double mouseY, double deltaX, double deltaY) {
         if (selectedHUDs.isEmpty()) return;
 
-        final float guiScale = this.client.getWindow().getScaleFactor();
+        final double guiScale = this.client.getWindow().getScaleFactor();
 
         final int totalDeltaX = (int) ((dragCurrentX - dragStartX) * guiScale);
         final int totalDeltaY = (int) ((dragCurrentY - dragStartY) * guiScale);
