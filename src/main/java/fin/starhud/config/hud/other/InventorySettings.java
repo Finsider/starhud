@@ -10,7 +10,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class InventorySettings {
 
     @ConfigEntry.Gui.TransitiveObject
-    public BaseHUDSettings base = new BaseHUDSettings(false, -5, 0, ScreenAlignmentX.RIGHT, ScreenAlignmentY.MIDDLE, GrowthDirectionX.LEFT, GrowthDirectionY.MIDDLE);
+    public BaseHUDSettings base = new BaseHUDSettings(false, -24, 0, ScreenAlignmentX.RIGHT, ScreenAlignmentY.MIDDLE, GrowthDirectionX.LEFT, GrowthDirectionY.MIDDLE);
 
     public boolean drawVertical = true;
 
