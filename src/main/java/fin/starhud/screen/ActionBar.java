@@ -1,9 +1,9 @@
 package fin.starhud.screen;
 
+import fin.starhud.Helper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.ColorHelper;
 
 public class ActionBar {
 
@@ -19,7 +19,7 @@ public class ActionBar {
                 CLIENT.textRenderer,
                 text,
                 centerX, y,
-                ColorHelper.getWhite(alpha)
+                Helper.getWhite(alpha)
         );
     }
 

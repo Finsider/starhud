@@ -251,7 +251,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                     effectDurationStrings.get(i),
                     effectWidths.get(i), 13,
                     effectColors.get(i),
-                    ColorHelper.getWhite(effectAlphas.get(i)),
+                    Helper.getWhite(effectAlphas.get(i)),
                     drawBackground,
                     drawTextShadow
             );
@@ -329,7 +329,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                 0,0,
                 18, 18,
                 18,18,
-                ColorHelper.getWhite(alpha)
+                Helper.getWhite(alpha)
         );
 
         if (amplifier.isEmpty()) return true;
