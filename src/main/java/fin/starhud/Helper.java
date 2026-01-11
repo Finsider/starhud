@@ -128,4 +128,8 @@ public class Helper {
     public static int getStep(int curr, int max, int maxStep) {
         return MathHelper.clamp(Math.round((float) curr * maxStep / (float) max), 0, maxStep);
     }
+
+    public static int getWhite(float alpha) {
+        return (Math.round(alpha * 255) << 24) | 0xFFFFFF;
+    }
 }
