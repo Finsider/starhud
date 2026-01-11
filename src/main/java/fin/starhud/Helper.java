@@ -84,7 +84,7 @@ public class Helper {
 
     public static float getGlobalScale() {
         if (HUD_SETTINGS.getGlobalScale() == 0) {
-            return CLIENT.getWindow().getScaleFactor();
+            return (float) CLIENT.getWindow().getScaleFactor();
         }
         return HUD_SETTINGS.getGlobalScale();
     }
