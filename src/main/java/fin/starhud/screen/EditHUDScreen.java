@@ -516,9 +516,6 @@ public class EditHUDScreen extends Screen {
 
         if (w < 0 || h < 0) return;
 
-        System.out.println("x: " + x + ", y: " + y + ", w: " + w + ", h: " + h);
-
-
         PixelPlacement.start(context);
 
         RenderUtils.drawBorder(context, x, y, w, h, -1);
