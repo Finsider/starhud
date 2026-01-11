@@ -70,7 +70,7 @@ public class GeneralSettings {
     public static class HUDSettings {
 
         @Comment("Set the scale to 0 for default GUI Scale.")
-        public float globalScale = 0.0f;
+        public float globalScale = 2.0f;
 
         @Comment("The Interval between each data collection, the higher the longer it takes for the hud to update.")
         public float dataCollectionInterval = 0.1F;
