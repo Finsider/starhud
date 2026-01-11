@@ -16,4 +16,9 @@ public class MixinWindow {
     public void onScaleChanged(double scaleFactor, CallbackInfo ci) {
         HUDComponent.getInstance().updateAll();
     }
+
+    @Inject(method = "onWindowSizeChanged", at = @At("TAIL"))
+    public void onWindowSizeChanged(long window, int width, int height, CallbackInfo ci) {
+        HUDComponent.getInstance().updateAll();
+    }
 }
