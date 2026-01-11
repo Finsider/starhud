@@ -256,7 +256,7 @@ public class BaseHUDSettings implements ConfigData {
     // get the scaled factor
     // this can either make your HUD bigger or smaller.
     public float getScaledFactor() {
-        return this.getScale() <= 0 ? 1 : MinecraftClient.getInstance().getWindow().getScaleFactor() / this.getScale();
+        return this.getScale() <= 0 ? 1 : (float) (MinecraftClient.getInstance().getWindow().getScaleFactor() / this.getScale());
     }
 
     // this shifts your HUD based on your x point, and alignment on X axis, and place them accordingly in your screen.
