@@ -1,5 +1,6 @@
 package fin.starhud.screen;
 
+import fin.starhud.Helper;
 import fin.starhud.Main;
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.config.GeneralSettings;
@@ -130,7 +131,7 @@ public class EditHUDScreen extends Screen {
                 Text.translatable("starhud.screen.button.display_na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
-                    AbstractHUD selectedHUD = selectedHUDs.getFirst();
+                    AbstractHUD selectedHUD = selectedHUDs.get(0);
                     HUDAction act = onHUDDisplayModeChanged(selectedHUD, selectedHUD.getSettings().getDisplayMode().next());
                     history.execute(act);
                     hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display", selectedHUD.getSettings().getDisplayMode().toString()));
@@ -144,7 +145,7 @@ public class EditHUDScreen extends Screen {
                 Text.translatable("starhud.screen.status.na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
-                    AbstractHUD selectedHUD = selectedHUDs.getFirst();
+                    AbstractHUD selectedHUD = selectedHUDs.get(0);
                     HUDAction act = onShouldRenderChanged(selectedHUD, !selectedHUD.getSettings().shouldRender());
                     history.execute(act);
                     button.setMessage(selectedHUD.getSettings().shouldRender ?
@@ -157,7 +158,7 @@ public class EditHUDScreen extends Screen {
                 Text.translatable("starhud.screen.button.shadow_na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
-                    AbstractHUD hud = selectedHUDs.getFirst();
+                    AbstractHUD hud = selectedHUDs.get(0);
                     HUDAction act = onDrawTextShadowChanged(hud, !hud.getSettings().drawTextShadow);
                     history.execute(act);
                     drawTextShadowButton.setMessage(Text.translatable("starhud.screen.button.shadow",
@@ -174,7 +175,7 @@ public class EditHUDScreen extends Screen {
                 Text.translatable("starhud.screen.button.background_na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
-                    AbstractHUD selectedHUD = selectedHUDs.getFirst();
+                    AbstractHUD selectedHUD = selectedHUDs.get(0);
                     HUDAction act = onDrawBackgroundChanged(selectedHUD, !selectedHUD.getSettings().drawBackground);
                     history.execute(act);
                     drawBackgroundButton.setMessage(Text.translatable("starhud.screen.button.background",
@@ -266,7 +267,7 @@ public class EditHUDScreen extends Screen {
                         HUDAction act = onGroupChanged(selectedHUDs);
                         history.commit(act);
                     } else if (canSelectedHUDUngroup) {
-                        HUDAction act = onUngroupChanged((GroupedHUD) selectedHUDs.getFirst());
+                        HUDAction act = onUngroupChanged((GroupedHUD) selectedHUDs.get(0));
                         history.commit(act);
                     }
 
@@ -292,7 +293,7 @@ public class EditHUDScreen extends Screen {
         gapField.setChangedListener(text -> {
             if (supressFieldEvents) return;
             if (selectedHUDs.isEmpty()) return;
-            if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
+            if (!(selectedHUDs.get(0) instanceof GroupedHUD hud)) return;
 
             try {
                 int newGap = Integer.parseInt(text);
@@ -304,7 +305,7 @@ public class EditHUDScreen extends Screen {
         xField.setChangedListener(text -> {
             if (supressFieldEvents) return;
             if (selectedHUDs.isEmpty()) return;
-            AbstractHUD hud = selectedHUDs.getFirst();
+            AbstractHUD hud = selectedHUDs.get(0);
             try {
                 int newX = Integer.parseInt(text);
                 HUDAction act = onXFieldChanged(hud, hud.getSettings().getX(), newX);
@@ -315,7 +316,7 @@ public class EditHUDScreen extends Screen {
         yField.setChangedListener(text -> {
             if (supressFieldEvents) return;
             if (selectedHUDs.isEmpty()) return;
-            AbstractHUD hud = selectedHUDs.getFirst();
+            AbstractHUD hud = selectedHUDs.get(0);
             try {
                 int newY = Integer.parseInt(text);
                 HUDAction act = onYFieldChanged(hud, hud.getSettings().getY(), newY);
@@ -327,7 +328,7 @@ public class EditHUDScreen extends Screen {
         scaleField.setChangedListener(text -> {
             if (supressFieldEvents) return;
             if (selectedHUDs.isEmpty()) return;
-            AbstractHUD hud = selectedHUDs.getFirst();
+            AbstractHUD hud = selectedHUDs.get(0);
             try {
                 float newScale = Float.parseFloat(text);
                 HUDAction act = onScaleFieldChanged(hud, hud.getSettings().getScale(), newScale);
@@ -340,7 +341,7 @@ public class EditHUDScreen extends Screen {
                 Text.translatable("starhud.screen.status.na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
-                    if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
+                    if (!(selectedHUDs.get(0) instanceof GroupedHUD hud)) return;
 
                     HUDAction act = onChildAlignmentChanged(hud, hud.groupSettings.getChildAlignment().next());
                     history.execute(act);
@@ -357,7 +358,7 @@ public class EditHUDScreen extends Screen {
                 Text.translatable("starhud.screen.status.na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
-                    if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
+                    if (!(selectedHUDs.get(0) instanceof GroupedHUD hud)) return;
                     
                     HUDAction act = onChildOrderingChanged(hud, hud.groupSettings.getChildOrdering().next());
                     history.execute(act);
@@ -374,7 +375,7 @@ public class EditHUDScreen extends Screen {
                 Text.translatable("starhud.screen.status.na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
-                    if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
+                    if (!(selectedHUDs.get(0) instanceof GroupedHUD hud)) return;
 
                     HUDAction act = onGroupAlignmentChanged(hud, !hud.groupSettings.alignVertical);
                     history.execute(act);
@@ -429,7 +430,7 @@ public class EditHUDScreen extends Screen {
 
         if (SETTINGS.drawDarkBackground) {
             final float alpha = (float) SETTINGS.getDarkOpacity() / 100;
-            final int color = ColorHelper.channelFromFloat(alpha) << 24;
+            final int color = Helper.channelFromFloat(alpha) << 24;
             context.fill(0, 0, this.width, this.height, color);
         }
 
@@ -449,7 +450,7 @@ public class EditHUDScreen extends Screen {
         if (helpWidget.isActive()) {
             final int CENTER_X = this.width / 2;
             final int CENTER_Y = this.height / 2 + (PADDING / 2);
-            AbstractHUD hud = selectedHUDs.isEmpty() ? null : selectedHUDs.getFirst();
+            AbstractHUD hud = selectedHUDs.isEmpty() ? null : selectedHUDs.get(0);
             helpWidget.render(context, hud, CENTER_X, CENTER_Y + GAP);
         }
 
@@ -629,7 +630,7 @@ public class EditHUDScreen extends Screen {
     private AbstractHUD getHUDAtPosition(double mouseX, double mouseY) {
 
         if (!selectedHUDs.isEmpty()) {
-            AbstractHUD hud = selectedHUDs.getFirst();
+            AbstractHUD hud = selectedHUDs.get(0);
             if (hud.isHovered(mouseX, mouseY)) {
                 sameHUDClicked = true;
                 return hud;
@@ -815,7 +816,7 @@ public class EditHUDScreen extends Screen {
             dragCurrentX = mouseX;
             dragCurrentY = mouseY;
 
-            if (dragging && !selectedHUDs.isEmpty() && !selectedHUDs.getFirst().isInGroup()) { // if we've moved and there are selected huds, we drag them, obviously
+            if (dragging && !selectedHUDs.isEmpty() && !selectedHUDs.get(0).isInGroup()) { // if we've moved and there are selected huds, we drag them, obviously
                 dragSelectedHUDs(mouseX, mouseY, deltaX, deltaY);
                 return true;
             } else if (dragSelection) { // otherwise it's just drag box
@@ -866,7 +867,7 @@ public class EditHUDScreen extends Screen {
 
         // Update final positions in text fields
         if (!selectedHUDs.isEmpty()) {
-            AbstractHUD selectedHUD = selectedHUDs.getFirst();
+            AbstractHUD selectedHUD = selectedHUDs.get(0);
             supressFieldEvents = true;
             xField.setText(String.valueOf(selectedHUD.getSettings().x));
             yField.setText(String.valueOf(selectedHUD.getSettings().y));
@@ -1067,7 +1068,7 @@ public class EditHUDScreen extends Screen {
         AbstractHUD oldFirst = null;
         int oldSize = 0;
         if (!selectedHUDs.isEmpty()) {
-            oldFirst = selectedHUDs.getFirst();
+            oldFirst = selectedHUDs.get(0);
             oldSize = selectedHUDs.size();
         }
 
@@ -1110,7 +1111,7 @@ public class EditHUDScreen extends Screen {
             if (oldSize != newSize)
                 updateGroupFieldFromSelectedHUD();
 
-            if (selectedHUDs.isEmpty() || oldFirst != selectedHUDs.getFirst()) {
+            if (selectedHUDs.isEmpty() || oldFirst != selectedHUDs.get(0)) {
                 updateFieldsFromSelectedHUD();
             }
         }
@@ -1144,7 +1145,7 @@ public class EditHUDScreen extends Screen {
             }
 
             if (!acts.isEmpty()) {
-                history.execute(acts.size() == 1 ? acts.getFirst() : new CompositeAction(acts));
+                history.execute(acts.size() == 1 ? acts.get(0) : new CompositeAction(acts));
                 updateFieldsFromSelectedHUD();
                 updateSelectedHUDBox();
                 return true;
@@ -1162,7 +1163,7 @@ public class EditHUDScreen extends Screen {
                         }
                     } else {
                         if (canSelectedHUDUngroup) {
-                            HUDAction act = onUngroupChanged((GroupedHUD) selectedHUDs.getFirst());
+                            HUDAction act = onUngroupChanged((GroupedHUD) selectedHUDs.get(0));
                             history.commit(act);
                             selectedHUDs.clear();
                             handled = true;
@@ -1442,7 +1443,7 @@ public class EditHUDScreen extends Screen {
             groupUngroupButton.active = false;
             groupUngroupButton.visible = false;
         } else {
-            AbstractHUD firstHUD = selectedHUDs.getFirst();
+            AbstractHUD firstHUD = selectedHUDs.get(0);
 
             canSelectedHUDUngroup =  (selectedHUDs.size() == 1 && firstHUD instanceof GroupedHUD && !firstHUD.isInGroup());
             canSelectedHUDsGroup = (selectedHUDs.size() > 1 && selectedHUDs.stream().noneMatch(AbstractHUD::isInGroup));
@@ -1500,7 +1501,7 @@ public class EditHUDScreen extends Screen {
                 tfw.setEditable(false);
             }
         } else {
-            AbstractHUD firstHUD = selectedHUDs.getFirst();
+            AbstractHUD firstHUD = selectedHUDs.get(0);
             BaseHUDSettings settings = firstHUD.getSettings();
             xField.setText(String.valueOf(settings.x));
             yField.setText(String.valueOf(settings.y));
@@ -1570,7 +1571,7 @@ public class EditHUDScreen extends Screen {
             tfw.visible = true;
         }
 
-        if (!selectedHUDs.isEmpty() && selectedHUDs.getFirst() instanceof GroupedHUD hud) {
+        if (!selectedHUDs.isEmpty() && selectedHUDs.get(0) instanceof GroupedHUD hud) {
             gapField.visible = true;
             groupAlignmentButton.visible = true;
             childAlignmentButton.visible = true;

@@ -14,6 +14,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.texture.MissingSprite;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
@@ -49,7 +50,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     private static final int STATUS_EFFECT_BAR_TEXTURE_WIDTH = 21;
     private static final int STATUS_EFFECT_BAR_TEXTURE_HEIGHT = 3;
 
-    private static final Map<RegistryEntry<StatusEffect>, Identifier> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
+    private static final Map<StatusEffect, Identifier> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
 
     private final EffectSettings effectSettings;
     public int size;
@@ -77,7 +78,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         this.effectSettings = effectSettings;
     }
 
-    public abstract boolean isEffectAllowedToRender(RegistryEntry<StatusEffect> registryEntry);
+    public abstract boolean isEffectAllowedToRender(StatusEffect registryEntry);
 
     @Override
     public boolean shouldRender() {
@@ -434,7 +435,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         else {
             return switch (SETTINGS.getColorMode()) {
                 case CUSTOM -> effectSettings.customColor;
-                case EFFECT -> instance.getEffectType().value().getColor();
+                case EFFECT -> instance.getEffectType().getColor();
                 case DYNAMIC -> Helper.getItemBarColor(instance.getDuration(), attribute.maxDuration());
             };
         }
@@ -486,13 +487,10 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return l + ':' + r;
     }
 
-    public static Identifier getStatusEffectTexture(RegistryEntry<StatusEffect> effect) {
-        return STATUS_EFFECT_TEXTURE_MAP.computeIfAbsent(
-                effect,
-                e -> e.getKey()
-                        .map(RegistryKey::getValue)
-                        .map(id -> Identifier.of(id.getNamespace(), "textures/mob_effect/" + id.getPath() + ".png"))
-                        .orElseGet(MissingSprite::getMissingSpriteId)
-        );
+    public static Identifier getStatusEffectTexture(StatusEffect effect) {
+        return STATUS_EFFECT_TEXTURE_MAP.computeIfAbsent(effect, e -> {
+            Identifier id = Registries.STATUS_EFFECT.getId(e);
+            return new Identifier(id.getNamespace(), "textures/mob_effect/" + id.getPath() + ".png");
+        });
     }
 }

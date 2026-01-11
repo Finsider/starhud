@@ -132,4 +132,8 @@ public class Helper {
     public static int getWhite(float alpha) {
         return (Math.round(alpha * 255) << 24) | 0xFFFFFF;
     }
+
+    public static int channelFromFloat(float value) {
+        return Math.min(255, Math.max(0, (int)(value * 255.0f + 0.5f)));
+    }
 }
