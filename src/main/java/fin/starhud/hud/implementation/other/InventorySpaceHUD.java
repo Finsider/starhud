@@ -36,11 +36,11 @@ public class InventorySpaceHUD extends AbstractHUD {
         displayMode = getSettings().getDisplayMode();
 
         int filledSlot = 0;
-        for (ItemStack stack : CLIENT.player.getInventory().getMainStacks())
+        for (ItemStack stack : CLIENT.player.getInventory().main)
             if (!stack.isEmpty())
                 ++filledSlot;
 
-        int maxSlot = CLIENT.player.getInventory().getMainStacks().size();
+        int maxSlot = CLIENT.player.getInventory().main.size();
         int emptySlot = maxSlot - filledSlot;
 
         int slot = SETTINGS.showRemaining ? emptySlot : filledSlot;
