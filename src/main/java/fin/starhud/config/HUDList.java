@@ -65,26 +65,6 @@ public class HUDList {
                         new ArrayList<>(List.of(HUDId.TPS.toString(), HUDId.PING.toString(), HUDId.CLOCK_SYSTEM.toString()))
                 )
         );
-        groupedHuds.add(
-                new GroupedHUDSettings(
-                        new BaseHUDSettings(true, 24, 24, ScreenAlignmentX.LEFT, ScreenAlignmentY.TOP, GrowthDirectionX.RIGHT, GrowthDirectionY.DOWN, false),
-                        5,
-                        1,
-                        true,
-                        0xfc7871,
-                        new ArrayList<>(List.of(HUDId.X_COORDINATE.toString(), HUDId.Y_COORDINATE.toString(), HUDId.Z_COORDINATE.toString(), HUDId.DIRECTION.toString()))
-                )
-        );
-        groupedHuds.add(
-                new GroupedHUDSettings(
-                        new BaseHUDSettings(true, 0, -171, ScreenAlignmentX.CENTER, ScreenAlignmentY.BOTTOM, GrowthDirectionX.CENTER, GrowthDirectionY.UP, false),
-                        6,
-                        1,
-                        true,
-                        0xff9a76,
-                        new ArrayList<>(List.of(HUDId.COMBO.toString(), HUDId.REACH.toString()))
-                )
-        );
     }
 
 
