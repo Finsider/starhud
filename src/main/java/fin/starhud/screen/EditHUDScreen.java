@@ -490,8 +490,8 @@ public class EditHUDScreen extends Screen {
     public void renderGrid(DrawContext context) {
 
         final Window WINDOW = this.client.getWindow();
-        final int screenWidth = WINDOW.getWidth();
-        final int screenHeight = WINDOW.getHeight();
+        final int screenWidth = WINDOW.getFramebufferWidth();
+        final int screenHeight = WINDOW.getFramebufferHeight();
         final int snapPadding = SETTINGS.getSnapPadding();
         final int color = SETTINGS.gridColor;
 
@@ -955,8 +955,8 @@ public class EditHUDScreen extends Screen {
 
 
     private boolean updateHUDAlignment(AbstractHUD hud) {
-        final int screenWidth = this.client.getWindow().getWidth();
-        final int screenHeight = this.client.getWindow().getHeight();
+        final int screenWidth = this.client.getWindow().getFramebufferWidth();
+        final int screenHeight = this.client.getWindow().getFramebufferHeight();
 
         BaseHUDSettings settings = hud.getSettings();
 

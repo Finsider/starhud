@@ -10,15 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Window.class)
 public class MixinWindow {
 
-    // we update our HUD when the scaleWidth / scaleHeight is changed.
-    // although quite silly, but This is the best performance we can get.
-    @Inject(method = "setScaleFactor", at = @At("TAIL"))
-    public void onScaleChanged(int scaleFactor, CallbackInfo ci) {
-        HUDComponent.getInstance().updateAll();
-    }
-
-    @Inject(method = "onWindowSizeChanged", at = @At("TAIL"))
-    public void onWindowSizeChanged(long window, int width, int height, CallbackInfo ci) {
+    @Inject(method = "onFramebufferSizeChanged", at = @At("TAIL"))
+    public void onFramebufferSizeChanged(long window, int width, int height, CallbackInfo ci) {
         HUDComponent.getInstance().updateAll();
     }
 }

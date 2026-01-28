@@ -33,8 +33,8 @@ public class SnapResult {
 
         PixelPlacement.start(context);
 
-        int screenWidth = MinecraftClient.getInstance().getWindow().getWidth();
-        int screenHeight = MinecraftClient.getInstance().getWindow().getHeight();
+        int screenWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
+        int screenHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
         int color = SETTINGS.snapColor | 0xFF000000;
 
         // Draw vertical snap line
@@ -52,8 +52,8 @@ public class SnapResult {
     public static SnapResult getSnap(Box selectedHUDBox, List<AbstractHUD> selectedHUDs) {
         final int threshold = SETTINGS.getSnapThreshold();
         final int padding = SETTINGS.getSnapPadding();
-        final int screenWidth = CLIENT.getWindow().getWidth();
-        final int screenHeight = CLIENT.getWindow().getHeight();
+        final int screenWidth = CLIENT.getWindow().getFramebufferWidth();
+        final int screenHeight = CLIENT.getWindow().getFramebufferHeight();
 
         final int screenX = selectedHUDBox.getX();
         final int screenY = selectedHUDBox.getY();
