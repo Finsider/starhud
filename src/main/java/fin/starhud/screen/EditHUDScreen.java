@@ -1,5 +1,6 @@
 package fin.starhud.screen;
 
+import com.mojang.blaze3d.platform.Window;
 import fin.starhud.Main;
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.config.GeneralSettings;
@@ -16,18 +17,17 @@ import fin.starhud.screen.history.HUDHistory;
 import fin.starhud.screen.history.ReversibleAction;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.AutoConfigClient;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ConfirmScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.input.KeyInput;
-import net.minecraft.client.util.Window;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.ColorHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.ConfirmScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.ARGB;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
@@ -36,7 +36,7 @@ import java.util.*;
 public class EditHUDScreen extends Screen {
 
     private static final Logger LOGGER = Main.LOGGER;
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final GeneralSettings.EditHUDScreenSettings SETTINGS = Main.settings.generalSettings.screenSettings;
 
     public static final int PADDING = 25;
@@ -66,23 +66,23 @@ public class EditHUDScreen extends Screen {
     private boolean supressFieldEvents = false;
 
     // widgets
-    private TextFieldWidget xField;
-    private TextFieldWidget yField;
-    private TextFieldWidget scaleField;
-    private ButtonWidget shouldRenderButton;
-    private ButtonWidget hudDisplayButton;
-    private ButtonWidget drawBackgroundButton;
-    private ButtonWidget drawTextShadowButton;
+    private EditBox xField;
+    private EditBox yField;
+    private EditBox scaleField;
+    private Button shouldRenderButton;
+    private Button hudDisplayButton;
+    private Button drawBackgroundButton;
+    private Button drawTextShadowButton;
 
-    private final List<ButtonWidget> moreOptionButtons = new ArrayList<>();
-    private final List<TextFieldWidget> moreOptionTexts = new ArrayList<>();
+    private final List<Button> moreOptionButtons = new ArrayList<>();
+    private final List<EditBox> moreOptionTexts = new ArrayList<>();
 
     // special group buttons
-    private TextFieldWidget gapField;
-    private ButtonWidget groupAlignmentButton;
-    private ButtonWidget childAlignmentButton;
-    private ButtonWidget childOrderingButton;
-    private ButtonWidget groupUngroupButton;
+    private EditBox gapField;
+    private Button groupAlignmentButton;
+    private Button childAlignmentButton;
+    private Button childOrderingButton;
+    private Button groupUngroupButton;
 
     private final HUDHistory history = new HUDHistory();
     private final HelpWidget helpWidget = new HelpWidget();
@@ -91,7 +91,7 @@ public class EditHUDScreen extends Screen {
     private SnapResult snapResult;
 
 
-    public EditHUDScreen(Text title, Screen parent) {
+    public EditHUDScreen(Component title, Screen parent) {
         super(title);
         this.parent = parent;
 
@@ -111,92 +111,92 @@ public class EditHUDScreen extends Screen {
         int rightX = CENTER_X + (SQUARE_WIDGET_LENGTH / 2) + GAP;
 
         int yFieldX = CENTER_X - TEXT_FIELD_WIDTH - (SQUARE_WIDGET_LENGTH / 2) - GAP;
-        yField = new TextFieldWidget(
-                CLIENT.textRenderer,
+        yField = new EditBox(
+                CLIENT.font,
                 yFieldX, y1,
                 TEXT_FIELD_WIDTH,
                 WIDGET_HEIGHT,
-                Text.translatable("starhud.screen.field.y")
+                Component.translatable("starhud.screen.field.y")
         );
 
         int xFieldX = leftX + GAP + GAP + GAP;
-        xField = new TextFieldWidget(
-                CLIENT.textRenderer,
+        xField = new EditBox(
+                CLIENT.font,
                 xFieldX, y1,
                 TEXT_FIELD_WIDTH,
                 WIDGET_HEIGHT,
-                Text.translatable("starhud.screen.field.x")
+                Component.translatable("starhud.screen.field.x")
         );
 
         int hudDisplayButtonX = CENTER_X + (SQUARE_WIDGET_LENGTH / 2) + GAP;
-        hudDisplayButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.button.display_na"),
+        hudDisplayButton = Button.builder(
+                Component.translatable("starhud.screen.button.display_na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
                     HUDAction act = onHUDDisplayModeChanged(selectedHUD, selectedHUD.getSettings().getDisplayMode().next());
                     history.execute(act);
-                    hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display", selectedHUD.getSettings().getDisplayMode().toString()));
+                    hudDisplayButton.setMessage(Component.translatable("starhud.screen.button.display", selectedHUD.getSettings().getDisplayMode().toString()));
                 }
-        ).dimensions(hudDisplayButtonX, y1, WIDGET_WIDTH, WIDGET_HEIGHT).build();
+        ).bounds(hudDisplayButtonX, y1, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
         int y2 = y1 - PADDING;
 
         int shouldRenderButtonX = CENTER_X - (SQUARE_WIDGET_LENGTH / 2);
-        shouldRenderButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.status.na"),
+        shouldRenderButton = Button.builder(
+                Component.translatable("starhud.screen.status.na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
                     HUDAction act = onShouldRenderChanged(selectedHUD, !selectedHUD.getSettings().shouldRender());
                     history.execute(act);
                     button.setMessage(selectedHUD.getSettings().shouldRender ?
-                            Text.translatable("starhud.screen.status.on") :
-                            Text.translatable("starhud.screen.status.off"));
+                            Component.translatable("starhud.screen.status.on") :
+                            Component.translatable("starhud.screen.status.off"));
                 }
-        ).dimensions(shouldRenderButtonX, y2, SQUARE_WIDGET_LENGTH, SQUARE_WIDGET_LENGTH).build();
+        ).bounds(shouldRenderButtonX, y2, SQUARE_WIDGET_LENGTH, SQUARE_WIDGET_LENGTH).build();
 
-        drawTextShadowButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.button.shadow_na"),
+        drawTextShadowButton = Button.builder(
+                Component.translatable("starhud.screen.button.shadow_na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD hud = selectedHUDs.getFirst();
                     HUDAction act = onDrawTextShadowChanged(hud, !hud.getSettings().drawTextShadow);
                     history.execute(act);
-                    drawTextShadowButton.setMessage(Text.translatable("starhud.screen.button.shadow",
+                    drawTextShadowButton.setMessage(Component.translatable("starhud.screen.button.shadow",
                             hud.getSettings().drawTextShadow ?
-                                    Text.translatable("starhud.screen.status.on").getString() :
-                                    Text.translatable("starhud.screen.status.off").getString()
+                                    Component.translatable("starhud.screen.status.on").getString() :
+                                    Component.translatable("starhud.screen.status.off").getString()
                     ));
 
                 }
-        ).dimensions(leftX, y2, WIDGET_WIDTH, WIDGET_HEIGHT).build();
+        ).bounds(leftX, y2, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
 
-        drawBackgroundButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.button.background_na"),
+        drawBackgroundButton = Button.builder(
+                Component.translatable("starhud.screen.button.background_na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     AbstractHUD selectedHUD = selectedHUDs.getFirst();
                     HUDAction act = onDrawBackgroundChanged(selectedHUD, !selectedHUD.getSettings().drawBackground);
                     history.execute(act);
-                    drawBackgroundButton.setMessage(Text.translatable("starhud.screen.button.background",
+                    drawBackgroundButton.setMessage(Component.translatable("starhud.screen.button.background",
                             selectedHUD.getSettings().drawBackground ?
-                                    Text.translatable("starhud.screen.status.on").getString() :
-                                    Text.translatable("starhud.screen.status.off").getString()));
+                                    Component.translatable("starhud.screen.status.on").getString() :
+                                    Component.translatable("starhud.screen.status.off").getString()));
                 }
-        ).dimensions(rightX, y2, WIDGET_WIDTH, WIDGET_HEIGHT).build();
+        ).bounds(rightX, y2, WIDGET_WIDTH, WIDGET_HEIGHT).build();
 
         int y3 = y2 - PADDING;
 
         int scaleFieldWidth = SQUARE_WIDGET_LENGTH + 6;
         int scaleFieldX = CENTER_X - (scaleFieldWidth / 2);
-        scaleField = new TextFieldWidget(
-                CLIENT.textRenderer,
+        scaleField = new EditBox(
+                CLIENT.font,
                 scaleFieldX, y3,
                 scaleFieldWidth,
                 SQUARE_WIDGET_LENGTH,
-                Text.translatable("starhud.screen.field.scale")
+                Component.translatable("starhud.screen.field.scale")
         );
 
         int yBottom = this.height - SQUARE_WIDGET_LENGTH - GAP;
@@ -204,66 +204,66 @@ public class EditHUDScreen extends Screen {
         int wConfigScreen = SQUARE_WIDGET_LENGTH;
         int hConfigScreen = wConfigScreen;
         int xConfigScreenButton = CENTER_X - (wConfigScreen / 2);
-        ButtonWidget configScreenButton = ButtonWidget.builder(
-                        Text.translatable("starhud.screen.button.config"),
+        Button configScreenButton = Button.builder(
+                        Component.translatable("starhud.screen.button.config"),
                         button -> {
                             helpWidget.setActive(false);
                             isMoreOptionActivated = false;
                             selectedHUDs.clear();
 
-                            this.client.setScreen(AutoConfigClient.getConfigScreen(Settings.class, this).get());
+                            this.minecraft.setScreen(AutoConfigClient.getConfigScreen(Settings.class, this).get());
                         }
                 )
-                .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.config")))
-                .dimensions(xConfigScreenButton, CENTER_Y, wConfigScreen, hConfigScreen)
+                .tooltip(Tooltip.create(Component.translatable("starhud.screen.tooltip.config")))
+                .bounds(xConfigScreenButton, CENTER_Y, wConfigScreen, hConfigScreen)
                 .build();
 
         int xHelpButton = CENTER_X - (GAP/2) - SQUARE_WIDGET_LENGTH;
-        ButtonWidget helpButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.button.help"),
+        Button helpButton = Button.builder(
+                Component.translatable("starhud.screen.button.help"),
                 button -> {
                     helpWidget.setActive(!helpWidget.isActive());
                 }
         )
-                .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.help")))
-                .dimensions(xHelpButton, yBottom, SQUARE_WIDGET_LENGTH, SQUARE_WIDGET_LENGTH)
+                .tooltip(Tooltip.create(Component.translatable("starhud.screen.tooltip.help")))
+                .bounds(xHelpButton, yBottom, SQUARE_WIDGET_LENGTH, SQUARE_WIDGET_LENGTH)
                 .build();
 
         int xMoreOptionButton = CENTER_X + (GAP/2);
-        ButtonWidget moreOptionButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.button.more_options"),
+        Button moreOptionButton = Button.builder(
+                Component.translatable("starhud.screen.button.more_options"),
                 button -> {
                     isMoreOptionActivated = !isMoreOptionActivated;
                     onMoreOptionSwitched();
                 }
         )
-                .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.more_options")))
-                .dimensions(xMoreOptionButton, yBottom, SQUARE_WIDGET_LENGTH, SQUARE_WIDGET_LENGTH)
+                .tooltip(Tooltip.create(Component.translatable("starhud.screen.tooltip.more_options")))
+                .bounds(xMoreOptionButton, yBottom, SQUARE_WIDGET_LENGTH, SQUARE_WIDGET_LENGTH)
                 .build();
 
         int terminatorWidth = 70;
         int xSaveAndQuitButton = xMoreOptionButton + GAP + SQUARE_WIDGET_LENGTH;
-        ButtonWidget saveAndQuitButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.button.save_quit"),
+        Button saveAndQuitButton = Button.builder(
+                Component.translatable("starhud.screen.button.save_quit"),
                 button -> {
                     AutoConfig.getConfigHolder(Settings.class).save();
-                    onClose();
-        }).dimensions(xSaveAndQuitButton, yBottom, terminatorWidth, WIDGET_HEIGHT).build();
+                    onEditHUDClose();
+        }).bounds(xSaveAndQuitButton, yBottom, terminatorWidth, WIDGET_HEIGHT).build();
 
         int xCancelButton = xHelpButton - GAP - terminatorWidth;
 
-        ButtonWidget cancelButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.button.cancel"),
-                button -> close()
-        ).dimensions(xCancelButton, yBottom, terminatorWidth, WIDGET_HEIGHT).build();
+        Button cancelButton = Button.builder(
+                Component.translatable("starhud.screen.button.cancel"),
+                button -> onClose()
+        ).bounds(xCancelButton, yBottom, terminatorWidth, WIDGET_HEIGHT).build();
 
         // special case: grouped hud buttons
 
         int yBottomGroup = CENTER_Y + PADDING;
         int xGroupUngroupButton = CENTER_X - terminatorWidth / 2;
 
-        groupUngroupButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.status.na"),
+        groupUngroupButton = Button.builder(
+                Component.translatable("starhud.screen.status.na"),
                 button -> {
                     if (canSelectedHUDsGroup) {
                         HUDAction act = onGroupChanged(selectedHUDs);
@@ -277,7 +277,7 @@ public class EditHUDScreen extends Screen {
                     updateFieldsFromSelectedHUD();
                     updateGroupFieldFromSelectedHUD();
                 }
-        ).dimensions(xGroupUngroupButton, yBottomGroup, terminatorWidth, SQUARE_WIDGET_LENGTH).build();
+        ).bounds(xGroupUngroupButton, yBottomGroup, terminatorWidth, SQUARE_WIDGET_LENGTH).build();
 
         int yBottomGroup2 = yBottomGroup + PADDING;
         int yBottomGroup3 = yBottomGroup2 + PADDING;
@@ -285,14 +285,14 @@ public class EditHUDScreen extends Screen {
         int gapFieldWidth = terminatorWidth / 2;
         int xGapField = CENTER_X - (gapFieldWidth / 2);
         int yGapField = yBottomGroup3;
-        gapField = new TextFieldWidget(
-                CLIENT.textRenderer,
+        gapField = new EditBox(
+                CLIENT.font,
                 xGapField, yGapField,
                 gapFieldWidth, SQUARE_WIDGET_LENGTH,
-                Text.translatable("starhud.screen.field.gap")
+                Component.translatable("starhud.screen.field.gap")
         );
 
-        gapField.setChangedListener(text -> {
+        gapField.setResponder(text -> {
             if (supressFieldEvents) return;
             if (selectedHUDs.isEmpty()) return;
             if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
@@ -304,7 +304,7 @@ public class EditHUDScreen extends Screen {
             } catch (NumberFormatException ignored) {}
         });
 
-        xField.setChangedListener(text -> {
+        xField.setResponder(text -> {
             if (supressFieldEvents) return;
             if (selectedHUDs.isEmpty()) return;
             AbstractHUD hud = selectedHUDs.getFirst();
@@ -315,7 +315,7 @@ public class EditHUDScreen extends Screen {
             } catch (NumberFormatException ignored) {}
         });
 
-        yField.setChangedListener(text -> {
+        yField.setResponder(text -> {
             if (supressFieldEvents) return;
             if (selectedHUDs.isEmpty()) return;
             AbstractHUD hud = selectedHUDs.getFirst();
@@ -326,8 +326,8 @@ public class EditHUDScreen extends Screen {
             } catch (NumberFormatException ignored) {}
         });
 
-        scaleField.setTooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.scale")));
-        scaleField.setChangedListener(text -> {
+        scaleField.setTooltip(Tooltip.create(Component.translatable("starhud.screen.tooltip.scale")));
+        scaleField.setResponder(text -> {
             if (supressFieldEvents) return;
             if (selectedHUDs.isEmpty()) return;
             AbstractHUD hud = selectedHUDs.getFirst();
@@ -339,8 +339,8 @@ public class EditHUDScreen extends Screen {
         });
 
         int xChildAlignmentButton = CENTER_X - (terminatorWidth / 2);
-        childAlignmentButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.status.na"),
+        childAlignmentButton = Button.builder(
+                Component.translatable("starhud.screen.status.na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
@@ -348,16 +348,16 @@ public class EditHUDScreen extends Screen {
                     HUDAction act = onChildAlignmentChanged(hud, hud.groupSettings.getChildAlignment().next());
                     history.execute(act);
 
-                    button.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
+                    button.setMessage(Component.nullToEmpty(hud.groupSettings.getChildAlignment().toString()));
                 }
         )
-                .dimensions(xChildAlignmentButton, yBottomGroup2, terminatorWidth, WIDGET_HEIGHT)
-                .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.child_alignment")))
+                .bounds(xChildAlignmentButton, yBottomGroup2, terminatorWidth, WIDGET_HEIGHT)
+                .tooltip(Tooltip.create(Component.translatable("starhud.screen.tooltip.child_alignment")))
                 .build();
         
         int xChildOrderingButton = xChildAlignmentButton - GAP  - terminatorWidth;
-        childOrderingButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.status.na"),
+        childOrderingButton = Button.builder(
+                Component.translatable("starhud.screen.status.na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
@@ -365,16 +365,16 @@ public class EditHUDScreen extends Screen {
                     HUDAction act = onChildOrderingChanged(hud, hud.groupSettings.getChildOrdering().next());
                     history.execute(act);
 
-                    button.setMessage(Text.of(hud.groupSettings.getChildOrdering().toString()));
+                    button.setMessage(Component.nullToEmpty(hud.groupSettings.getChildOrdering().toString()));
                 }
         )
-                .dimensions(xChildOrderingButton, yBottomGroup2, terminatorWidth, WIDGET_HEIGHT)
-                .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.child_ordering")))
+                .bounds(xChildOrderingButton, yBottomGroup2, terminatorWidth, WIDGET_HEIGHT)
+                .tooltip(Tooltip.create(Component.translatable("starhud.screen.tooltip.child_ordering")))
                 .build();
 
         int xGroupAlignmentButton = xChildAlignmentButton + terminatorWidth + GAP;
-        groupAlignmentButton = ButtonWidget.builder(
-                Text.translatable("starhud.screen.status.na"),
+        groupAlignmentButton = Button.builder(
+                Component.translatable("starhud.screen.status.na"),
                 button -> {
                     if (selectedHUDs.isEmpty()) return;
                     if (!(selectedHUDs.getFirst() instanceof GroupedHUD hud)) return;
@@ -382,13 +382,13 @@ public class EditHUDScreen extends Screen {
                     HUDAction act = onGroupAlignmentChanged(hud, !hud.groupSettings.alignVertical);
                     history.execute(act);
 
-                    groupAlignmentButton.setMessage(Text.translatable(
+                    groupAlignmentButton.setMessage(Component.translatable(
                             hud.groupSettings.alignVertical ? "starhud.screen.button.group_alignment.vertical" : "starhud.screen.button.group_alignment.horizontal"
                     ));
                 }
         )
-                .tooltip(Tooltip.of(Text.translatable("starhud.screen.tooltip.group_alignment")))
-                .dimensions(xGroupAlignmentButton, yBottomGroup2, terminatorWidth, SQUARE_WIDGET_LENGTH).build();
+                .tooltip(Tooltip.create(Component.translatable("starhud.screen.tooltip.group_alignment")))
+                .bounds(xGroupAlignmentButton, yBottomGroup2, terminatorWidth, SQUARE_WIDGET_LENGTH).build();
 
         moreOptionButtons.clear();
         moreOptionButtons.add(hudDisplayButton);
@@ -401,38 +401,40 @@ public class EditHUDScreen extends Screen {
         moreOptionTexts.add(yField);
         moreOptionTexts.add(scaleField);
 
-        for (ButtonWidget bw : moreOptionButtons) {
-            addDrawableChild(bw);
+        for (Button bw : moreOptionButtons) {
+            addRenderableWidget(bw);
         }
 
-        for (TextFieldWidget tfw : moreOptionTexts) {
-            addDrawableChild(tfw);
+        for (EditBox tfw : moreOptionTexts) {
+            addRenderableWidget(tfw);
         }
 
-        addDrawableChild(cancelButton);
-        addDrawableChild(helpButton);
-        addDrawableChild(moreOptionButton);
-        addDrawableChild(saveAndQuitButton);
+        addRenderableWidget(cancelButton);
+        addRenderableWidget(helpButton);
+        addRenderableWidget(moreOptionButton);
+        addRenderableWidget(saveAndQuitButton);
 
-        addDrawableChild(configScreenButton);
+        addRenderableWidget(configScreenButton);
 
-        addDrawableChild(groupUngroupButton);
-        addDrawableChild(gapField);
-        addDrawableChild(childAlignmentButton);
-        addDrawableChild(childOrderingButton);
-        addDrawableChild(groupAlignmentButton);
+        addRenderableWidget(groupUngroupButton);
+        addRenderableWidget(gapField);
+        addRenderableWidget(childAlignmentButton);
+        addRenderableWidget(childOrderingButton);
+        addRenderableWidget(groupAlignmentButton);
 
         hideMoreOptionsButtons();
         updateFieldsFromSelectedHUD();
         updateGroupFieldFromSelectedHUD();
     }
 
+    //public final void extractRenderStateWithTooltipAndSubtitles(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a)
+
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
 
         if (SETTINGS.drawDarkBackground) {
             final float alpha = (float) SETTINGS.getDarkOpacity() / 100;
-            final int color = ColorHelper.channelFromFloat(alpha) << 24;
+            final int color = ARGB.black(alpha) << 24;
             context.fill(0, 0, this.width, this.height, color);
         }
 
@@ -446,7 +448,7 @@ public class EditHUDScreen extends Screen {
             snapResult.render(context);
         }
 
-        super.render(context, mouseX, mouseY, delta);
+        super.extractRenderState(context, mouseX, mouseY, delta);
 
         // draw help
         if (helpWidget.isActive()) {
@@ -462,12 +464,12 @@ public class EditHUDScreen extends Screen {
 
         // draw X and Y next to their textField.
         if (xField.isVisible() && yField.isVisible()) {
-            context.drawText(CLIENT.textRenderer, Text.translatable("starhud.screen.label.x"), xField.getX() - 5 - 2 - 3, xField.getY() + 6, 0xFFFFFFFF, true);
-            context.drawText(CLIENT.textRenderer, Text.translatable("starhud.screen.label.y"), yField.getX() - 5 - 2 - 3, yField.getY() + 6, 0xFFFFFFFF, true);
+            context.text(CLIENT.font, Component.translatable("starhud.screen.label.x"), xField.getX() - 5 - 2 - 3, xField.getY() + 6, 0xFFFFFFFF, true);
+            context.text(CLIENT.font, Component.translatable("starhud.screen.label.y"), yField.getX() - 5 - 2 - 3, yField.getY() + 6, 0xFFFFFFFF, true);
         }
 
         if (gapField.isVisible()) {
-            context.drawText(CLIENT.textRenderer, Text.translatable("starhud.screen.label.gap"), gapField.getX() - 20 - 3, gapField.getY() + 6, 0xFFFFFFFF, true);
+            context.text(CLIENT.font, Component.translatable("starhud.screen.label.gap"), gapField.getX() - 20 - 3, gapField.getY() + 6, 0xFFFFFFFF, true);
         }
 
         if (dragSelection && hasMovedSincePress) {
@@ -487,11 +489,11 @@ public class EditHUDScreen extends Screen {
         }
     }
 
-    public void renderGrid(DrawContext context) {
+    public void renderGrid(GuiGraphicsExtractor context) {
 
-        final Window WINDOW = this.client.getWindow();
-        final int screenWidth = WINDOW.getFramebufferWidth();
-        final int screenHeight = WINDOW.getFramebufferHeight();
+        final Window WINDOW = this.minecraft.getWindow();
+        final int screenWidth = WINDOW.getWidth();
+        final int screenHeight = WINDOW.getHeight();
         final int snapPadding = SETTINGS.getSnapPadding();
         final int color = SETTINGS.gridColor;
 
@@ -502,13 +504,13 @@ public class EditHUDScreen extends Screen {
 
         if (snapPadding > 0)
             RenderUtils.drawBorder(context, snapPadding, snapPadding, screenWidth - (snapPadding * 2), screenHeight - (snapPadding * 2), color);
-        context.drawHorizontalLine((snapPadding + 1), screenWidth - (snapPadding + 2), CENTER_Y, color);
-        context.drawVerticalLine(CENTER_X, (snapPadding), screenHeight - (snapPadding + 1), color);
+        context.horizontalLine((snapPadding + 1), screenWidth - (snapPadding + 2), CENTER_Y, color);
+        context.verticalLine(CENTER_X, (snapPadding), screenHeight - (snapPadding + 1), color);
 
         PixelPlacement.end(context);
     }
 
-    private void renderSelectedHUDBox(DrawContext context) {
+    private void renderSelectedHUDBox(GuiGraphicsExtractor context) {
         int x = selectedHUDBox.getX();
         int y = selectedHUDBox.getY();
         int w = selectedHUDBox.getWidth();
@@ -523,9 +525,9 @@ public class EditHUDScreen extends Screen {
         PixelPlacement.end(context);
     }
 
-    private void renderDragBox(DrawContext context) {
+    private void renderDragBox(GuiGraphicsExtractor context) {
 
-        float guiScale = this.client.getWindow().getScaleFactor();
+        float guiScale = this.minecraft.getWindow().getGuiScale();
 
         int x1 = (int) (Math.min(dragStartX, dragCurrentX) * guiScale);
         int y1 = (int) (Math.min(dragStartY, dragCurrentY) * guiScale);
@@ -548,7 +550,7 @@ public class EditHUDScreen extends Screen {
         }
     }
 
-    private void renderBoundingBoxes(DrawContext context, int mouseX, int mouseY) {
+    private void renderBoundingBoxes(GuiGraphicsExtractor context, int mouseX, int mouseY) {
 
         PixelPlacement.start(context);
         for (AbstractHUD hud : HUDComponent.getInstance().getRenderedHUDs()) {
@@ -562,7 +564,7 @@ public class EditHUDScreen extends Screen {
         PixelPlacement.end(context);
     }
 
-    private void renderSelectedBox(DrawContext context, AbstractHUD hud) {
+    private void renderSelectedBox(GuiGraphicsExtractor context, AbstractHUD hud) {
         int x = hud.getX();
         int y = hud.getY();
         int width = hud.getTrueWidth();
@@ -576,7 +578,7 @@ public class EditHUDScreen extends Screen {
         }
     }
 
-    private void renderBoundingBox(DrawContext context, AbstractHUD hud, int mouseX, int mouseY) {
+    private void renderBoundingBox(GuiGraphicsExtractor context, AbstractHUD hud, int mouseX, int mouseY) {
         int x = hud.getX();
         int y = hud.getY();
         int width = hud.getTrueWidth();
@@ -600,7 +602,7 @@ public class EditHUDScreen extends Screen {
     private AbstractHUD clickedHUD = null;
 
     @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         if (super.mouseClicked(click, doubled))
             return true;
 
@@ -657,14 +659,14 @@ public class EditHUDScreen extends Screen {
 
     private boolean pendingChildClick;
     private void handleHUDClick(AbstractHUD clickedHUD) {
-        if (CLIENT.isShiftPressed()) {
+        if (CLIENT.hasShiftDown()) {
             // shift click: Add to selection (don't remove if already selected)
             if (!selectedHUDs.contains(clickedHUD)) {
                 selectedHUDs.add(clickedHUD);
             }
             // if already selected, we'll handle potential removal in mouseReleased
             pendingToggleHUD = selectedHUDs.contains(clickedHUD) ? clickedHUD : null;
-        } else if (CLIENT.isCtrlPressed()) {
+        } else if (CLIENT.hasControlDown()) {
             // ctrl click: toggle selection
             if (selectedHUDs.contains(clickedHUD)) {
                 pendingToggleHUD = clickedHUD; // remove on release if no drag
@@ -700,7 +702,7 @@ public class EditHUDScreen extends Screen {
     }
 
     private void handleEmptySpaceClick() {
-        if (!CLIENT.isShiftPressed() && !CLIENT.isCtrlPressed()) {
+        if (!CLIENT.hasShiftDown() && !CLIENT.hasControlDown()) {
             // click on empty space - clear selection
             selectedHUDs.clear();
             
@@ -716,7 +718,7 @@ public class EditHUDScreen extends Screen {
     public AbstractHUD pendingToggleHUD = null;
 
     @Override
-    public boolean mouseReleased(Click click) {
+    public boolean mouseReleased(MouseButtonEvent click) {
         if (click.button() == 0) {
             if (!hasMovedSincePress) {
                 // if mouse hasn't moved since clicked to release, we handle non mouse moved operation
@@ -747,10 +749,10 @@ public class EditHUDScreen extends Screen {
     private void handleClickRelease(double mouseX, double mouseY) {
         // Handle pending toggle operations (for ctrl click and shift click)
         if (pendingToggleHUD != null) {
-            if (CLIENT.isShiftPressed()) {
+            if (CLIENT.hasShiftDown()) {
                 // shift click on already selected: remove from selection
                 selectedHUDs.remove(pendingToggleHUD);
-            } else if (CLIENT.isCtrlPressed()) {
+            } else if (CLIENT.hasControlDown()) {
                 // ctrl click toggle: remove from selection
                 selectedHUDs.remove(pendingToggleHUD);
             }
@@ -760,7 +762,7 @@ public class EditHUDScreen extends Screen {
         }
 
         // Handle single-click deselection for multi-selection
-        if (clickedHUD != null && !CLIENT.isShiftPressed() && !CLIENT.isCtrlPressed()) {
+        if (clickedHUD != null && !CLIENT.hasShiftDown() && !CLIENT.hasControlDown()) {
             if (pendingChildClick && clickedHUD instanceof GroupedHUD group) {
                 AbstractHUD hoveredChild = null;
 
@@ -800,7 +802,7 @@ public class EditHUDScreen extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(Click click, double deltaX, double deltaY) {
+    public boolean mouseDragged(MouseButtonEvent click, double deltaX, double deltaY) {
         if (click.button() != 0) {
             return super.mouseDragged(click, deltaX, deltaY);
         }
@@ -855,7 +857,7 @@ public class EditHUDScreen extends Screen {
 
             // if we clicked on a HUD, but it wasn't selected, and no modifiers,
             // clear selection first
-            if (clickedHUD != null && !CLIENT.isShiftPressed() && !CLIENT.isCtrlPressed()) {
+            if (clickedHUD != null && !CLIENT.hasShiftDown() && !CLIENT.hasControlDown()) {
                 selectedHUDs.clear();
                 initialDragBoxSelection.clear();
             }
@@ -871,8 +873,8 @@ public class EditHUDScreen extends Screen {
         if (!selectedHUDs.isEmpty()) {
             AbstractHUD selectedHUD = selectedHUDs.getFirst();
             supressFieldEvents = true;
-            xField.setText(String.valueOf(selectedHUD.getSettings().x));
-            yField.setText(String.valueOf(selectedHUD.getSettings().y));
+            xField.setValue(String.valueOf(selectedHUD.getSettings().x));
+            yField.setValue(String.valueOf(selectedHUD.getSettings().y));
             supressFieldEvents = false;
 
             List<HUDAction> acts = new ArrayList<>();
@@ -914,7 +916,7 @@ public class EditHUDScreen extends Screen {
     private void dragSelectedHUDs(double mouseX, double mouseY, double deltaX, double deltaY) {
         if (selectedHUDs.isEmpty()) return;
 
-        final float guiScale = this.client.getWindow().getScaleFactor();
+        final float guiScale = this.minecraft.getWindow().getGuiScale();
 
         final int totalDeltaX = (int) ((dragCurrentX - dragStartX) * guiScale);
         final int totalDeltaY = (int) ((dragCurrentY - dragStartY) * guiScale);
@@ -955,8 +957,8 @@ public class EditHUDScreen extends Screen {
 
 
     private boolean updateHUDAlignment(AbstractHUD hud) {
-        final int screenWidth = this.client.getWindow().getFramebufferWidth();
-        final int screenHeight = this.client.getWindow().getFramebufferHeight();
+        final int screenWidth = this.minecraft.getWindow().getWidth();
+        final int screenHeight = this.minecraft.getWindow().getHeight();
 
         BaseHUDSettings settings = hud.getSettings();
 
@@ -1075,7 +1077,7 @@ public class EditHUDScreen extends Screen {
         }
 
         // Apply drag box selection based on modifier keys
-        if (CLIENT.isShiftPressed()) {
+        if (CLIENT.hasShiftDown()) {
             // shift drag box: Add new items to existing selection
             for (AbstractHUD hud : boxSelectedHUDs) {
                 if (!selectedHUDs.contains(hud)) { // only add if not already selected
@@ -1083,7 +1085,7 @@ public class EditHUDScreen extends Screen {
                     changed = true;
                 }
             }
-        } else if (CLIENT.isCtrlPressed()) {
+        } else if (CLIENT.hasControlDown()) {
 
             // ctrl drag box: invert items in box
             for (AbstractHUD hud : boxSelectedHUDs) {
@@ -1124,7 +1126,7 @@ public class EditHUDScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(KeyInput input) {
+    public boolean keyPressed(KeyEvent input) {
         if (isTextFieldsFocused())
             return super.keyPressed(input);
 
@@ -1170,18 +1172,18 @@ public class EditHUDScreen extends Screen {
                 }
 
                 case GLFW.GLFW_KEY_C -> {
-                    if (input.hasShift()) {
+                    if (input.hasShiftDown()) {
                         int clampCount = HUDComponent.getInstance().clampAll();
                         if (clampCount > 0)
-                            actionBar.setText(Text.translatable("starhud.screen.action.clamp_all_found", clampCount));
+                            actionBar.setText(Component.translatable("starhud.screen.action.clamp_all_found", clampCount));
                         else
-                            actionBar.setText(Text.translatable("starhud.screen.action.clamp_all_not_found"));
+                            actionBar.setText(Component.translatable("starhud.screen.action.clamp_all_not_found"));
                         handled = true;
                     }
                 }
 
                 case GLFW.GLFW_KEY_Z -> {
-                    if (input.hasCtrl() && history.canUndo()) {
+                    if (input.hasControlDown() && history.canUndo()) {
                         history.undo();
                         selectedHUDs.clear();
                         handled = true;
@@ -1189,7 +1191,7 @@ public class EditHUDScreen extends Screen {
                 }
 
                 case GLFW.GLFW_KEY_Y -> {
-                    if (input.hasCtrl() && history.canRedo()) {
+                    if (input.hasControlDown() && history.canRedo()) {
                         history.redo();
                         selectedHUDs.clear();
                         handled = true;
@@ -1197,24 +1199,24 @@ public class EditHUDScreen extends Screen {
                 }
 
                 case GLFW.GLFW_KEY_S -> {
-                    if (input.hasCtrl()) {
+                    if (input.hasControlDown()) {
                         saveCurrentState();
-                        actionBar.setText(Text.translatable("starhud.screen.action.save"));
+                        actionBar.setText(Component.translatable("starhud.screen.action.save"));
                     }
                 }
 
                 case GLFW.GLFW_KEY_R -> {
-                    if (input.hasCtrl() && input.hasShift()) {
-                        this.client.setScreen(new ConfirmScreen(
+                    if (input.hasControlDown() && input.hasShiftDown()) {
+                        this.minecraft.setScreen(new ConfirmScreen(
                                 result -> {
                                     if (result) {
                                         AutoConfig.getConfigHolder(Settings.class).resetToDefault();
-                                        actionBar.setText(Text.translatable("starhud.screen.action.reset"));
+                                        actionBar.setText(Component.translatable("starhud.screen.action.reset"));
                                     }
-                                    this.client.setScreen(this);
+                                    this.minecraft.setScreen(this);
                                 },
-                                Text.translatable("starhud.screen.dialog.reset_title"),
-                                Text.translatable("starhud.screen.dialog.reset_message")
+                                Component.translatable("starhud.screen.dialog.reset_title"),
+                                Component.translatable("starhud.screen.dialog.reset_message")
                         ));
                     }
                 }
@@ -1400,23 +1402,22 @@ public class EditHUDScreen extends Screen {
     }
 
     @Override
-    public void close() {
+    public void onClose() {
         if (isDirty()) {
-            if (this.client == null) return;
-            this.client.setScreen(new ConfirmScreen(
+            this.minecraft.setScreen(new ConfirmScreen(
                     result -> {
                         if (result) {
                             revertChanges();
-                            onClose();
+                            onEditHUDClose();
                         } else {
-                            this.client.setScreen(this);
+                            this.minecraft.setScreen(this);
                         }
                     },
-                    Text.translatable("starhud.screen.dialog.discard_title"),
-                    Text.translatable("starhud.screen.dialog.discard_message")
+                    Component.translatable("starhud.screen.dialog.discard_title"),
+                    Component.translatable("starhud.screen.dialog.discard_message")
             ));
         } else {
-            onClose();
+            onEditHUDClose();
         }
     }
 
@@ -1427,9 +1428,8 @@ public class EditHUDScreen extends Screen {
         actionBar.tick();
     }
 
-    public void onClose() {
-        if (this.client == null) return;
-        this.client.setScreen(this.parent);
+    public void onEditHUDClose() {
+        this.minecraft.setScreen(this.parent);
     }
 
     private void updateGroupFieldFromSelectedHUD() {
@@ -1447,15 +1447,15 @@ public class EditHUDScreen extends Screen {
             canSelectedHUDsGroup = (selectedHUDs.size() > 1 && selectedHUDs.stream().noneMatch(AbstractHUD::isInGroup));
 
             if (canSelectedHUDsGroup) {
-                groupUngroupButton.setMessage(Text.translatable("starhud.screen.button.group"));
+                groupUngroupButton.setMessage(Component.translatable("starhud.screen.button.group"));
                 groupUngroupButton.visible = true;
                 groupUngroupButton.active = true;
             } else if (canSelectedHUDUngroup) {
-                groupUngroupButton.setMessage(Text.translatable("starhud.screen.button.ungroup"));
+                groupUngroupButton.setMessage(Component.translatable("starhud.screen.button.ungroup"));
                 groupUngroupButton.visible = true;
                 groupUngroupButton.active = true;
                 hudDisplayButton.active = false;
-                hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display_na"));
+                hudDisplayButton.setMessage(Component.translatable("starhud.screen.button.display_na"));
             } else {
                 groupUngroupButton.visible = false;
                 groupUngroupButton.active = false;
@@ -1468,19 +1468,19 @@ public class EditHUDScreen extends Screen {
 
         supressFieldEvents = true;
         if (selectedHUDs.isEmpty()) {
-            xField.setText(Text.translatable("starhud.screen.status.na").getString());
-            yField.setText(Text.translatable("starhud.screen.status.na").getString());
-            scaleField.setText(Text.translatable("starhud.screen.status.na").getString());
+            xField.setValue(Component.translatable("starhud.screen.status.na").getString());
+            yField.setValue(Component.translatable("starhud.screen.status.na").getString());
+            scaleField.setValue(Component.translatable("starhud.screen.status.na").getString());
 
-            hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display_na"));
-            drawBackgroundButton.setMessage(Text.translatable("starhud.screen.button.background_na"));
-            drawTextShadowButton.setMessage(Text.translatable("starhud.screen.button.shadow_na"));
-            shouldRenderButton.setMessage(Text.translatable("starhud.screen.status.na"));
+            hudDisplayButton.setMessage(Component.translatable("starhud.screen.button.display_na"));
+            drawBackgroundButton.setMessage(Component.translatable("starhud.screen.button.background_na"));
+            drawTextShadowButton.setMessage(Component.translatable("starhud.screen.button.shadow_na"));
+            shouldRenderButton.setMessage(Component.translatable("starhud.screen.status.na"));
 
-            gapField.setText(Text.translatable("starhud.screen.status.na").getString());
-            groupAlignmentButton.setMessage(Text.translatable("starhud.screen.status.na"));
-            childAlignmentButton.setMessage(Text.translatable("starhud.screen.status.na"));
-            childOrderingButton.setMessage(Text.translatable("starhud.screen.status.na"));
+            gapField.setValue(Component.translatable("starhud.screen.status.na").getString());
+            groupAlignmentButton.setMessage(Component.translatable("starhud.screen.status.na"));
+            childAlignmentButton.setMessage(Component.translatable("starhud.screen.status.na"));
+            childOrderingButton.setMessage(Component.translatable("starhud.screen.status.na"));
 
             gapField.setEditable(false);
             gapField.visible = false;
@@ -1491,38 +1491,38 @@ public class EditHUDScreen extends Screen {
             childOrderingButton.visible = false;
             childOrderingButton.active = false;
 
-            for (ButtonWidget bw : moreOptionButtons) {
+            for (Button bw : moreOptionButtons) {
                 bw.active = false;
             }
 
-            for (TextFieldWidget tfw : moreOptionTexts) {
+            for (EditBox tfw : moreOptionTexts) {
                 tfw.setEditable(false);
             }
         } else {
             AbstractHUD firstHUD = selectedHUDs.getFirst();
             BaseHUDSettings settings = firstHUD.getSettings();
-            xField.setText(String.valueOf(settings.x));
-            yField.setText(String.valueOf(settings.y));
-            scaleField.setText(String.valueOf(settings.getScale()));
-            hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display", settings.getDisplayMode().toString()));
-            drawBackgroundButton.setMessage(Text.translatable("starhud.screen.button.background",
+            xField.setValue(String.valueOf(settings.x));
+            yField.setValue(String.valueOf(settings.y));
+            scaleField.setValue(String.valueOf(settings.getScale()));
+            hudDisplayButton.setMessage(Component.translatable("starhud.screen.button.display", settings.getDisplayMode().toString()));
+            drawBackgroundButton.setMessage(Component.translatable("starhud.screen.button.background",
                     settings.drawBackground ?
-                            Text.translatable("starhud.screen.status.on").getString() :
-                            Text.translatable("starhud.screen.status.off").getString()));
-            drawTextShadowButton.setMessage(Text.translatable("starhud.screen.button.shadow",
+                            Component.translatable("starhud.screen.status.on").getString() :
+                            Component.translatable("starhud.screen.status.off").getString()));
+            drawTextShadowButton.setMessage(Component.translatable("starhud.screen.button.shadow",
                     settings.drawTextShadow ?
-                            Text.translatable("starhud.screen.status.on").getString() :
-                            Text.translatable("starhud.screen.status.off").getString()
+                            Component.translatable("starhud.screen.status.on").getString() :
+                            Component.translatable("starhud.screen.status.off").getString()
             ));
             shouldRenderButton.setMessage(settings.shouldRender ?
-                    Text.translatable("starhud.screen.status.on") :
-                    Text.translatable("starhud.screen.status.off"));
+                    Component.translatable("starhud.screen.status.on") :
+                    Component.translatable("starhud.screen.status.off"));
 
-            for (ButtonWidget bw : moreOptionButtons) {
+            for (Button bw : moreOptionButtons) {
                 bw.active = true;
             }
 
-            for (TextFieldWidget tfw : moreOptionTexts) {
+            for (EditBox tfw : moreOptionTexts) {
                 tfw.setEditable(true);
             }
 
@@ -1546,11 +1546,11 @@ public class EditHUDScreen extends Screen {
     }
 
     private void hideMoreOptionsButtons() {
-        for (ButtonWidget bw : moreOptionButtons) {
+        for (Button bw : moreOptionButtons) {
             bw.visible = false;
         }
 
-        for (TextFieldWidget tfw : moreOptionTexts) {
+        for (EditBox tfw : moreOptionTexts) {
             tfw.visible = false;
         }
 
@@ -1561,11 +1561,11 @@ public class EditHUDScreen extends Screen {
     }
 
     private void showMoreOptionsButtons() {
-        for (ButtonWidget bw : moreOptionButtons) {
+        for (Button bw : moreOptionButtons) {
             bw.visible = true;
         }
 
-        for (TextFieldWidget tfw : moreOptionTexts) {
+        for (EditBox tfw : moreOptionTexts) {
             tfw.visible = true;
         }
 
@@ -1581,20 +1581,20 @@ public class EditHUDScreen extends Screen {
             childOrderingButton.active = true;
 
             hudDisplayButton.active = false;
-            hudDisplayButton.setMessage(Text.translatable("starhud.screen.button.display_na"));
+            hudDisplayButton.setMessage(Component.translatable("starhud.screen.button.display_na"));
 
             supressFieldEvents = true;
-            gapField.setText(
+            gapField.setValue(
                     Integer.toString(hud.groupSettings.gap)
             );
             supressFieldEvents = false;
 
-            groupAlignmentButton.setMessage(Text.translatable(
+            groupAlignmentButton.setMessage(Component.translatable(
                     hud.groupSettings.alignVertical ? "starhud.screen.button.group_alignment.vertical" : "starhud.screen.button.group_alignment.horizontal"
             ));
 
-            childAlignmentButton.setMessage(Text.of(hud.groupSettings.getChildAlignment().toString()));
-            childOrderingButton.setMessage(Text.of(hud.groupSettings.getChildOrdering().toString()));
+            childAlignmentButton.setMessage(Component.nullToEmpty(hud.groupSettings.getChildAlignment().toString()));
+            childOrderingButton.setMessage(Component.nullToEmpty(hud.groupSettings.getChildOrdering().toString()));
         }
     }
 

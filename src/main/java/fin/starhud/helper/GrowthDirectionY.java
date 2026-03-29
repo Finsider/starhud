@@ -1,6 +1,7 @@
 package fin.starhud.helper;
 
-import net.minecraft.client.resource.language.I18n;
+
+import net.minecraft.client.resources.language.I18n;
 
 public enum GrowthDirectionY {
     UP,
@@ -41,6 +42,6 @@ public enum GrowthDirectionY {
 
     @Override
     public String toString() {
-        return I18n.translate("starhud.option.growthDirectionY." + name().toLowerCase());
+        return I18n.get("starhud.option.growthDirectionY." + name().toLowerCase());
     }
 }

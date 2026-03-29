@@ -1,14 +1,15 @@
 package fin.starhud.condition;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.client.Minecraft;
+import net.minecraft.tags.FluidTags;
 
 public class AirBubbleBarHUD {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static boolean isShown(String ignored) {
-        return CLIENT.interactionManager != null && CLIENT.player != null && (CLIENT.interactionManager.hasStatusBars() && CLIENT.player.isSubmergedIn(FluidTags.WATER) || CLIENT.player.getAir() < CLIENT.player.getMaxAir());
+        if (CLIENT.gameMode == null || CLIENT.player == null) return false;
+        return CLIENT.gameMode.canHurtPlayer() && CLIENT.player.isEyeInFluid(FluidTags.WATER) || CLIENT.player.getAirSupply() < CLIENT.player.getMaxAirSupply();
     }
 
     public static int getWidth() {

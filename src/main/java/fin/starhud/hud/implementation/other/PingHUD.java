@@ -7,18 +7,18 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.PingMeasurer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.profiler.MultiValueDebugSampleLogImpl;
-import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.multiplayer.PingDebugMonitor;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.debugchart.LocalSampleLogger;
+import net.minecraft.world.level.Level;
 
 public class PingHUD extends AbstractHUD {
 
     private static final PingSettings SETTINGS = Main.settings.pingSettings;
 
-    private static final Identifier PING_TEXTURE = Identifier.of("starhud", "hud/ping.png");
+    private static final Identifier PING_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/ping.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13 * 4;
@@ -26,10 +26,10 @@ public class PingHUD extends AbstractHUD {
     private static final int ICON_HEIGHT = 13;
 
     private static long LAST_PING_UPDATE = -1L;
-    private static World LAST_WORLD = null;
-    private static PingMeasurer cachedPingMeasurer;
+    private static Level LAST_WORLD = null;
+    private static PingDebugMonitor cachedPingMeasurer;
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public PingHUD() {
         super(SETTINGS.base);
@@ -56,27 +56,27 @@ public class PingHUD extends AbstractHUD {
     public boolean collectHUDInformation() {
         displayMode = getSettings().getDisplayMode();
 
-        MultiValueDebugSampleLogImpl pingLog = CLIENT.getDebugHud().getPingLog();
+        LocalSampleLogger pingLog = CLIENT.getDebugOverlay().getPingLogger();
 
         // different world and server checking for PingMeasurer renewal.
-        World currentWorld = CLIENT.world;
-        if (currentWorld != LAST_WORLD) {
-            cachedPingMeasurer = new PingMeasurer(CLIENT.getNetworkHandler(), pingLog);
-            LAST_WORLD = currentWorld;
+        Level currentLevel = CLIENT.level;
+        if (currentLevel != LAST_WORLD) {
+            cachedPingMeasurer = new PingDebugMonitor(CLIENT.getConnection(), pingLog);
+            LAST_WORLD = currentLevel;
         }
 
         // update pingLog every n seconds. Because this is quite expensive.
         long currentTimeMillis = System.currentTimeMillis();
         if (currentTimeMillis - LAST_PING_UPDATE >= 1000 * SETTINGS.updateInterval) {
             LAST_PING_UPDATE = currentTimeMillis;
-            cachedPingMeasurer.ping();
+            cachedPingMeasurer.tick();
 
             // cache string calculations here since ping was just updated
-            int pingLogLen = pingLog.getLength();
+            int pingLogLen = pingLog.size();
             if (pingLogLen > 0) {
                 long currentPing = pingLog.get(pingLogLen - 1);
                 pingStr = currentPing + SETTINGS.additionalString;
-                strWidth = CLIENT.textRenderer.getWidth(pingStr) - 1;
+                strWidth = CLIENT.font.width(pingStr) - 1;
 
                 step = Math.min((int) currentPing / 150, 3);
             }
@@ -90,7 +90,7 @@ public class PingHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();

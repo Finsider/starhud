@@ -7,18 +7,18 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Language;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ public class  BiomeHUD extends AbstractHUD {
 
     private static final BiomeSettings BIOME_SETTINGS = Main.settings.biomeSettings;
 
-    private static final Identifier DIMENSION_TEXTURE = Identifier.of("starhud", "hud/dimension.png");
+    private static final Identifier DIMENSION_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/dimension.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13 * 4;
@@ -34,11 +34,11 @@ public class  BiomeHUD extends AbstractHUD {
     private static final int ICON_WIDTH = 13;
     private static final int ICON_HEIGHT = 13;
 
-    private static OrderedText cachedBiomeNameText;
-    private static RegistryEntry<Biome> cachedBiome;
+    private static FormattedCharSequence cachedBiomeNameText;
+    private static Holder<Biome> cachedBiome;
     private static int cachedTextWidth;
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public BiomeHUD() {
         super(BIOME_SETTINGS.base);
@@ -51,36 +51,36 @@ public class  BiomeHUD extends AbstractHUD {
 
     @Override
     public boolean collectHUDInformation() {
-        TextRenderer textRenderer = CLIENT.textRenderer;
+        Font textRenderer = CLIENT.font;
         displayMode = getSettings().getDisplayMode();
 
-        if (CLIENT.player == null || CLIENT.world == null) return false;
+        if (CLIENT.player == null || CLIENT.level == null) return false;
 
-        BlockPos blockPos = CLIENT.player.getBlockPos();
-        RegistryEntry<Biome> currentBiome = CLIENT.world.getBiome(blockPos);
+        BlockPos blockPos = CLIENT.player.getOnPos();
+        Holder<Biome> currentBiome = CLIENT.level.getBiome(blockPos);
 
         if (cachedBiome != currentBiome) {
-            Optional<RegistryKey<Biome>> biomeKey = currentBiome.getKey();
+            Optional<ResourceKey<Biome>> biomeKey = currentBiome.unwrapKey();
 
             if (biomeKey.isPresent()) {
-                Identifier biomeId = biomeKey.get().getValue();
+                Identifier biomeId = biomeKey.get().identifier();
                 String translatableKey = "biome." + biomeId.getNamespace() + '.' + biomeId.getPath();
 
                 // if it has translation we get the translation, else we just convert it to Pascal Case manually.
-                if (Language.getInstance().hasTranslation(translatableKey))
-                    cachedBiomeNameText = Text.translatable(translatableKey).asOrderedText();
+                if (Language.getInstance().has(translatableKey))
+                    cachedBiomeNameText = Component.translatable(translatableKey).getVisualOrderText();
                 else
-                    cachedBiomeNameText = Text.of(Helper.idNameFormatter(currentBiome.getIdAsString())).asOrderedText();
+                    cachedBiomeNameText = Component.nullToEmpty(Helper.idNameFormatter(currentBiome.getRegisteredName())).getVisualOrderText();
 
             } else {
-                cachedBiomeNameText = Text.of("Unregistered").asOrderedText();
+                cachedBiomeNameText = Component.nullToEmpty("Unregistered").getVisualOrderText();
             }
 
             cachedBiome = currentBiome;
-            cachedTextWidth = textRenderer.getWidth(cachedBiomeNameText) - 1;
+            cachedTextWidth = textRenderer.width(cachedBiomeNameText) - 1;
         }
 
-        dimensionIndex = getDimensionIndex(CLIENT.world.getRegistryKey());
+        dimensionIndex = getDimensionIndex(CLIENT.level.dimension());
         color = getTextColorFromDimension(dimensionIndex) | 0xFF000000;
 
         int width = displayMode.calculateWidth(ICON_WIDTH, cachedTextWidth);
@@ -101,7 +101,7 @@ public class  BiomeHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         return RenderUtils.drawSmallHUD(
                 context,
@@ -121,10 +121,10 @@ public class  BiomeHUD extends AbstractHUD {
 
     }
 
-    private static int getDimensionIndex(RegistryKey<World> registryKey) {
-        if (registryKey == World.OVERWORLD) return 0;
-        else if (registryKey == World.NETHER) return 1;
-        else if (registryKey == World.END) return 2;
+    private static int getDimensionIndex(ResourceKey<Level> registryKey) {
+        if (registryKey == Level.OVERWORLD) return 0;
+        else if (registryKey == Level.NETHER) return 1;
+        else if (registryKey == Level.END) return 2;
         else return 3;
     }
 

@@ -1,13 +1,14 @@
 package fin.starhud.condition;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class ArmorBarHUD {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static boolean isShown(String ignored) {
-        return CLIENT.interactionManager != null && CLIENT.player != null && CLIENT.interactionManager.hasStatusBars() && CLIENT.player.getArmor() > 0;
+        if (CLIENT.gameMode == null || CLIENT.player == null) return false;
+        return CLIENT.gameMode.canHurtPlayer() && CLIENT.player.getArmorValue() > 0;
     }
 
     public static int getWidth() {

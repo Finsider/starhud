@@ -7,22 +7,22 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 
 public class ComboHUD extends AbstractHUD {
 
     private static final ComboSettings SETTINGS = Main.settings.comboSettings;
 
-    private static final Identifier TEXTURE = Identifier.of("starhud", "hud/combo.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/combo.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
     private static final int ICON_WIDTH = 13;
     private static final int ICON_HEIGHT = 13;
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public ComboHUD() {
         super(SETTINGS.base);
@@ -44,7 +44,7 @@ public class ComboHUD extends AbstractHUD {
         }
 
         str = combo + SETTINGS.additionalString;
-        int strWidth = CLIENT.textRenderer.getWidth(str) - 1;
+        int strWidth = CLIENT.font.width(str) - 1;
 
         displayMode = getSettings().getDisplayMode();
 
@@ -58,7 +58,7 @@ public class ComboHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();

@@ -6,9 +6,9 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,9 +16,9 @@ import java.util.Date;
 public class ClockSystemHUD extends AbstractHUD {
 
     private static final ClockSystemSettings CLOCK_SYSTEM_SETTINGS = Main.settings.clockSettings.systemSetting;
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
-    private static final Identifier CLOCK_SYSTEM_TEXTURE = Identifier.of("starhud", "hud/clock_system.png");
+    private static final Identifier CLOCK_SYSTEM_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/clock_system.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
@@ -66,7 +66,7 @@ public class ClockSystemHUD extends AbstractHUD {
                     buildSystemTime12String(currentTime).toUpperCase() :
                     buildSystemTime24String(currentTime);
 
-            cachedStrWidth = CLIENT.textRenderer.getWidth(cachedSystemTimeString) - 1;
+            cachedStrWidth = CLIENT.font.width(cachedSystemTimeString) - 1;
         }
 
         displayMode = getSettings().getDisplayMode();
@@ -80,7 +80,7 @@ public class ClockSystemHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();

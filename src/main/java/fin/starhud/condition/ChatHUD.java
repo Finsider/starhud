@@ -1,20 +1,20 @@
 package fin.starhud.condition;
 
 import fin.starhud.mixin.accessor.AccessorChatHud;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class ChatHUD {
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static boolean isShown(String ignored) {
-        return CLIENT.inGameHud.getChatHud().isChatFocused();
+        return CLIENT.gui.getChat().isChatFocused();
     }
 
     public static int getWidth() {
-        return ((AccessorChatHud) CLIENT.inGameHud.getChatHud()).starhud$getWidth();
+        return ((AccessorChatHud) CLIENT.gui.getChat()).starhud$getWidth();
     }
 
     public static int getHeight() {
-        return ((AccessorChatHud) CLIENT.inGameHud.getChatHud()).starhud$getHeight();
+        return ((AccessorChatHud) CLIENT.gui.getChat()).starhud$getHeight();
     }
 }

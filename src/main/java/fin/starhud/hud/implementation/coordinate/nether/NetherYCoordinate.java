@@ -4,13 +4,13 @@ import fin.starhud.Main;
 import fin.starhud.config.hud.coordinate.CoordSettings;
 import fin.starhud.hud.HUDId;
 import fin.starhud.hud.implementation.coordinate.AbstractCoordinateHUD;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 
 public class NetherYCoordinate extends AbstractCoordinateHUD {
 
     private static final CoordSettings SETTINGS = Main.settings.coordSettings.netherY;
-    private static final Identifier TEXTURE = Identifier.of("starhud", "hud/coordinate_y.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/coordinate_y.png");
 
     public NetherYCoordinate() {
         super(SETTINGS, TEXTURE);
@@ -18,12 +18,12 @@ public class NetherYCoordinate extends AbstractCoordinateHUD {
 
     @Override
     public boolean shouldRender() {
-        return super.shouldRender() && (CLIENT.player.getEntityWorld().getRegistryKey() == World.OVERWORLD || CLIENT.player.getEntityWorld().getRegistryKey() == World.NETHER);
+        return super.shouldRender() && (CLIENT.player.level().dimension() == Level.OVERWORLD || CLIENT.player.level().dimension() == Level.NETHER);
     }
 
     @Override
     public int getCoord() {
-        return (int) CLIENT.player.getEntityPos().y;
+        return (int) CLIENT.player.position().y;
     }
 
     @Override

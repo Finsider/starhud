@@ -1,13 +1,13 @@
 package fin.starhud.condition;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class FoodBarHUD {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static boolean isShown(String ignored) {
-        return CLIENT.interactionManager != null && CLIENT.interactionManager.hasStatusBars();
+        return CLIENT.gameMode != null && CLIENT.gameMode.canHurtPlayer();
     }
 
     public static int getWidth() {

@@ -6,7 +6,7 @@ import fin.starhud.hud.HUDComponent;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import net.minecraft.util.ActionResult;
+import net.minecraft.world.InteractionResult;
 
 public class ConfigInit {
     public static void init() {
@@ -19,9 +19,9 @@ public class ConfigInit {
         holder.registerSaveListener(ConfigInit::onConfigSaved);
     }
 
-    public static ActionResult onConfigSaved(ConfigHolder<Settings> configHolder, Settings settings) {
+    public static InteractionResult onConfigSaved(ConfigHolder<Settings> configHolder, Settings settings) {
         Main.settings.hudList.onConfigSaved();
         HUDComponent.getInstance().updateActiveHUDs();
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 }

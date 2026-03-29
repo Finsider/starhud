@@ -1,13 +1,13 @@
 package fin.starhud.helper;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.UUID;
 
@@ -28,8 +28,8 @@ public class AttackTracker {
         return combo;
     }
 
-    public static void onEndTick(MinecraftClient client) {
-        if (client.world == null) return;
+    public static void onEndTick(Minecraft client) {
+        if (client.level == null) return;
         if (client.player == null) return;
 
         int currentHurtTime = client.player.hurtTime;
@@ -39,7 +39,7 @@ public class AttackTracker {
         }
         lastHurtTime = currentHurtTime;
 
-        long now = client.world.getTime(); // ticks
+        long now = client.level.getGameTime(); // ticks
         if (lastHitTime != -1 && now - lastHitTime >= 4 * 20) { // 4 seconds
             combo = -1;
             reach = -1;
@@ -48,32 +48,32 @@ public class AttackTracker {
         }
     }
 
-    public static ActionResult onAttack(PlayerEntity player, World world, Hand hand, Entity entity, EntityHitResult hitResult) {
-        if (!world.isClient()) return ActionResult.PASS;
+    public static InteractionResult onAttack(Player player, Level world, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
+        if (!world.isClientSide()) return InteractionResult.PASS;
 
-        long now = world.getTime(); // ticks
+        long now = world.getGameTime(); // ticks
 
-        boolean sameTarget = entity.getUuid().equals(entityUuid);
+        boolean sameTarget = entity.getUUID().equals(entityUuid);
         boolean cooldownExpired = now - lastHitTime >= 10;
 
-        if (sameTarget && !cooldownExpired) return ActionResult.PASS;
+        if (sameTarget && !cooldownExpired) return InteractionResult.PASS;
 
-        HitResult target = MinecraftClient.getInstance().crosshairTarget;
+        HitResult target = Minecraft.getInstance().hitResult;
 
         if (target instanceof EntityHitResult ehr) {
-            reach = player.getEyePos().distanceTo(ehr.getPos());
+            reach = player.getEyePosition().distanceTo(ehr.getLocation());
         } else {
-            reach = player.getEyePos().distanceTo(entity.getEntityPos());
+            reach = player.getEyePosition().distanceTo(entity.getEyePosition());
         }
 
         if (sameTarget) {
             ++combo;
         } else {
             combo = 1;
-            entityUuid = entity.getUuid();
+            entityUuid = entity.getUUID();
         }
         lastHitTime = now;
 
-        return ActionResult.PASS;
+        return InteractionResult.PASS;
     }
 }

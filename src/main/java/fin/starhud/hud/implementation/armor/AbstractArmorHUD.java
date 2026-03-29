@@ -4,41 +4,40 @@ import fin.starhud.Main;
 import fin.starhud.config.hud.DurabilitySettings;
 import fin.starhud.config.hud.armor.ArmorSettings;
 import fin.starhud.hud.implementation.AbstractDurabilityHUD;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final DurabilitySettings DURABILITY_SETTINGS = Main.settings.armorSettings.durabilitySettings;
 
     private final ArmorSettings SETTINGS;
     private final Identifier TEXTURE;
-    private final int armorIndex;
+    private EquipmentSlot slot;
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
     private static final int ICON_WIDTH = 13;
     private static final int ICON_HEIGHT = 13;
 
-    public AbstractArmorHUD(ArmorSettings armorSettings, Identifier armorTexture, int armorIndex) {
+    public AbstractArmorHUD(ArmorSettings armorSettings, Identifier armorTexture, EquipmentSlot slot) {
         super(armorSettings.base, DURABILITY_SETTINGS);
         this.SETTINGS = armorSettings;
         this.TEXTURE = armorTexture;
-        this.armorIndex = armorIndex;
+        this.slot = slot;
     }
 
     @Override
     public ItemStack getStack() {
-        EquipmentSlot equipmentSlot = AttributeModifierSlot.ARMOR.getSlots().get(armorIndex);
-
         if (CLIENT.player == null) return null;
 
-        return CLIENT.player.getEquippedStack(equipmentSlot);
+        return CLIENT.player.getItemBySlot(this.slot);
     }
 
     @Override
@@ -47,7 +46,7 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return renderDurabilityHUD(
                 context,
                 TEXTURE,

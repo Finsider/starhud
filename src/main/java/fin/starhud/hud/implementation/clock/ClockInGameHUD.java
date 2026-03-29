@@ -7,16 +7,16 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.resources.Identifier;
 
 public class ClockInGameHUD extends AbstractHUD {
 
     private static final ClockInGameSettings CLOCK_IN_GAME_SETTINGS = Main.settings.clockSettings.inGameSetting;
 
-    private static final Identifier CLOCK_IN_GAME_TEXTURE = Identifier.of("starhud", "hud/clock_ingame.png");
+    private static final Identifier CLOCK_IN_GAME_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/clock_ingame.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13 * 4;
@@ -29,7 +29,7 @@ public class ClockInGameHUD extends AbstractHUD {
     private static int cachedMinecraftHours = -1;
     private static int cachedStrWidth = -1;
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public ClockInGameHUD() {
         super(CLOCK_IN_GAME_SETTINGS.base);
@@ -52,11 +52,11 @@ public class ClockInGameHUD extends AbstractHUD {
 
     @Override
     public boolean collectHUDInformation() {
-        ClientWorld world = CLIENT.world;
+        ClientLevel world = CLIENT.level;
 
         if (world == null) return false;
 
-        long time = world.getTimeOfDay() % 24000;
+        long time = world.getDefaultClockTime() % 24000;
 
         boolean use12Hour = CLOCK_IN_GAME_SETTINGS.use12Hour;
         displayMode = getSettings().getDisplayMode();
@@ -71,7 +71,7 @@ public class ClockInGameHUD extends AbstractHUD {
                     Helper.buildMinecraftTime12String(hours, minutes) :
                     Helper.buildMinecraftTime24String(hours, minutes);
 
-            cachedStrWidth = CLIENT.textRenderer.getWidth(cachedMinecraftTimeString) - 1;
+            cachedStrWidth = CLIENT.font.width(cachedMinecraftTimeString) - 1;
         }
 
         iconIndex = getWeatherOrTime(world);
@@ -85,7 +85,7 @@ public class ClockInGameHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();
@@ -116,10 +116,10 @@ public class ClockInGameHUD extends AbstractHUD {
         };
     }
 
-    private static int getWeatherOrTime(ClientWorld clientWorld) {
-        if (clientWorld.isThundering()) return 3;
-        else if (clientWorld.isRaining()) return 2;
-        else if (clientWorld.isNight()) return 1;
+    private static int getWeatherOrTime(ClientLevel clientLevel) {
+        if (clientLevel.isThundering()) return 3;
+        else if (clientLevel.isRaining()) return 2;
+        else if (clientLevel.isDarkOutside()) return 1;
         else return 0;
     }
 

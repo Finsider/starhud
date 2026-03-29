@@ -7,22 +7,22 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 
 public class ReachHUD extends AbstractHUD {
 
     private static final ReachSettings SETTINGS = Main.settings.reachSettings;
 
-    private static final Identifier TEXTURE = Identifier.of("starhud", "hud/reach.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/reach.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
     private static final int ICON_WIDTH = 13;
     private static final int ICON_HEIGHT = 13;
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public ReachHUD() {
         super(SETTINGS.base);
@@ -45,7 +45,7 @@ public class ReachHUD extends AbstractHUD {
         }
 
         str = reach + SETTINGS.additionalString;
-        int strWidth = CLIENT.textRenderer.getWidth(str) - 1;
+        int strWidth = CLIENT.font.width(str) - 1;
 
         displayMode = getSettings().getDisplayMode();
 
@@ -59,7 +59,7 @@ public class ReachHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();

@@ -6,16 +6,16 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 public class SpeedHUD extends AbstractHUD {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
-    private static final Identifier TEXTURE = Identifier.of("starhud", "hud/speed.png");
+    private static final Minecraft CLIENT = Minecraft.getInstance();
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/speed.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
@@ -38,13 +38,13 @@ public class SpeedHUD extends AbstractHUD {
         if (CLIENT.player == null) return false;
 
         Entity entity = CLIENT.player.getVehicle() != null ? CLIENT.player.getVehicle() : CLIENT.player;
-        Vec3d vel = entity.getVelocity();
+        Vec3 vel = entity.getKnownSpeed();
 
-        double speed = SETTINGS.useFullSpeed ? vel.length() : vel.horizontalLength();
+        double speed = SETTINGS.useFullSpeed ? vel.length() : vel.horizontalDistanceSqr();
         speed = (double) Math.round(speed * 20.0 * 10) / 10;
 
         str = speed + SETTINGS.additionalString;
-        int strWidth = CLIENT.textRenderer.getWidth(str) - 1;
+        int strWidth = CLIENT.font.width(str) - 1;
 
         displayMode = getSettings().getDisplayMode();
         int width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
@@ -56,7 +56,7 @@ public class SpeedHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();

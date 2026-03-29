@@ -3,8 +3,8 @@ package fin.starhud.hud.implementation.statuseffect;
 import fin.starhud.Main;
 import fin.starhud.config.hud.statuseffect.EffectSettings;
 import fin.starhud.hud.HUDId;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.world.effect.MobEffect;
 
 public class NegativeEffectHUD extends AbstractEffectHUD {
 
@@ -15,7 +15,7 @@ public class NegativeEffectHUD extends AbstractEffectHUD {
     }
 
     @Override
-    public boolean isEffectAllowedToRender(RegistryEntry<StatusEffect> registryEntry) {
+    public boolean isEffectAllowedToRender(Holder<MobEffect> registryEntry) {
         return !registryEntry.value().isBeneficial();
     }
 

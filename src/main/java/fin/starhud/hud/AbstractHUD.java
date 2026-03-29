@@ -3,8 +3,8 @@ package fin.starhud.hud;
 import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.config.ConditionalSettings;
 import fin.starhud.helper.*;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public abstract class AbstractHUD implements HUDInterface {
 
@@ -48,16 +48,16 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     @Override
-    public boolean render(DrawContext context) {
+    public boolean render(GuiGraphicsExtractor context) {
         if (!isScaled())
             return renderHUD(context, getX(), getY(), shouldDrawBackground(), shouldDrawTextShadow());
 
         // this is so we can change the scale for one hud but not the others.
-        context.getMatrices().pushMatrix();
+        context.pose().pushMatrix();
         scaleHUD(context);
 
         boolean result = renderHUD(context, getX(), getY(), shouldDrawBackground(), shouldDrawTextShadow());
-        context.getMatrices().popMatrix();
+        context.pose().popMatrix();
 
         return result;
     }
@@ -83,15 +83,15 @@ public abstract class AbstractHUD implements HUDInterface {
     // this is where the hud is rendered. Where we put the rendering logic.
     // it is highly discouraged to put information collecting in this function.
     // for information collecting please refer to collectHUDInformation()
-    public abstract boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow);
+    public abstract boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow);
 
     public abstract String getName();
 
-    public void scaleHUD(DrawContext context) {
+    public void scaleHUD(GuiGraphicsExtractor context) {
         float scaleFactor = getScale();
-        context.getMatrices().translate(getX(), getY());
-        context.getMatrices().scale(scaleFactor, scaleFactor);
-        context.getMatrices().translate(-getX(), -getY());
+        context.pose().translate(getX(), getY());
+        context.pose().scale(scaleFactor, scaleFactor);
+        context.pose().translate(-getX(), -getY());
     }
 
     public void updatePos() {
@@ -102,7 +102,7 @@ public abstract class AbstractHUD implements HUDInterface {
     public void modifyXY() {
         int xOffset = 0, yOffset = 0;
 
-        float guiScale = MinecraftClient.getInstance().getWindow().getScaleFactor();
+        float guiScale = Minecraft.getInstance().getWindow().getGuiScale();
         for (ConditionalSettings condition : baseHUDSettings.getConditions()) {
             if (condition.renderMode != ConditionalSettings.RenderMode.HIDE && condition.isConditionMet()) {
                 xOffset += condition.getXOffset(guiScale);
@@ -277,7 +277,7 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     public boolean isHovered(double mouseX, double mouseY) {
-        final float scale = MinecraftClient.getInstance().getWindow().getScaleFactor();
+        final float scale = Minecraft.getInstance().getWindow().getGuiScale();
 
         mouseX = (int) (mouseX * scale);
         mouseY = (int) (mouseY * scale);
@@ -293,7 +293,7 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     public boolean intersects(int x1, int y1, int x2, int y2) {
-        final float scale = MinecraftClient.getInstance().getWindow().getScaleFactor();
+        final float scale = Minecraft.getInstance().getWindow().getGuiScale();
 
         x1 = (int) (x1 * scale);
         y1 = (int) (y1 * scale);
@@ -313,8 +313,8 @@ public abstract class AbstractHUD implements HUDInterface {
 
     // dont go out of bounds please
     public boolean clampPos() {
-        int windowWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
-        int windowHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
+        int windowWidth = Minecraft.getInstance().getWindow().getWidth();
+        int windowHeight = Minecraft.getInstance().getWindow().getHeight();
 
         int x1 = 0;
         int y1 = 0;

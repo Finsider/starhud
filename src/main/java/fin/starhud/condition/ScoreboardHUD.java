@@ -1,18 +1,18 @@
 package fin.starhud.condition;
 
 import fin.starhud.helper.Box;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.scoreboard.ScoreboardDisplaySlot;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.scores.DisplaySlot;
 
 public class ScoreboardHUD {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     private static final Box boundingBox = new Box(0,0, 0, 0);
 
     public static boolean isShown(String ignored) {
-        if (CLIENT.world == null) return false;
-        return CLIENT.world.getScoreboard().getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR) != null;
+        if (CLIENT.level == null) return false;
+        return CLIENT.level.getScoreboard().getDisplayObjective(DisplaySlot.SIDEBAR) != null;
     }
 
     public static int getWidth() {

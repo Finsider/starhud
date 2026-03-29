@@ -6,20 +6,21 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.server.IntegratedServer;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.ServerInfo;
 
 import java.util.Collection;
 
 public class PlayerCountHUD extends AbstractHUD  {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final PlayerCountSettings SETTINGS = Main.settings.playerCountSettings;
-    private static final Identifier TEXTURE = Identifier.of("starhud", "hud/player_count.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/player_count.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
@@ -38,19 +39,19 @@ public class PlayerCountHUD extends AbstractHUD  {
         if (CLIENT.player == null) return false;
 
         int currentPlayer = -1, maxPlayer = -1;
-        if (CLIENT.isInSingleplayer()) {
-            IntegratedServer server = CLIENT.getServer();
+        if (CLIENT.isSingleplayer()) {
+            IntegratedServer server = CLIENT.getSingleplayerServer();
             if (server == null) return false;
 
-            currentPlayer = server.getCurrentPlayerCount();
-            maxPlayer = server.getMaxPlayerCount();
+            currentPlayer = server.getPlayerCount();
+            maxPlayer = server.getMaxPlayers();
 
         } else {
-            Collection<PlayerListEntry> playerListEntries = CLIENT.player.networkHandler.getListedPlayerListEntries();
+            Collection<PlayerInfo> playerListEntries = CLIENT.player.connection.getListedOnlinePlayers();
             currentPlayer = playerListEntries.size();
 
             if (SETTINGS.showMaxPlayer) {
-                ServerInfo serverInfo = CLIENT.getCurrentServerEntry();
+                ServerData serverInfo = CLIENT.getCurrentServer();
                 if (serverInfo != null && serverInfo.players != null)
                     maxPlayer = serverInfo.players.max();
             }
@@ -62,7 +63,7 @@ public class PlayerCountHUD extends AbstractHUD  {
         if (SETTINGS.showMaxPlayer && maxPlayer > 0)
             str += "/" + maxPlayer;
 
-        int strWidth = CLIENT.textRenderer.getWidth(str) - 1;
+        int strWidth = CLIENT.font.width(str) - 1;
 
         displayMode = getSettings().getDisplayMode();
         int width = displayMode.calculateWidth(ICON_WIDTH, strWidth);
@@ -75,7 +76,7 @@ public class PlayerCountHUD extends AbstractHUD  {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth(), h = getHeight(), c = getColor();
 

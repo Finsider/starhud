@@ -3,7 +3,7 @@ package fin.starhud.hud;
 import fin.starhud.Main;
 import fin.starhud.config.GroupedHUDSettings;
 import fin.starhud.helper.RenderUtils;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -134,11 +134,11 @@ public class GroupedHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return renderHUD(context, x, y, drawBackground, false, drawTextShadow);
     }
 
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean parentDrewBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean parentDrewBackground, boolean drawTextShadow) {
 
         int hudX = getX();
         int hudY = getY();

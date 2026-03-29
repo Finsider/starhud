@@ -1,12 +1,12 @@
 package fin.starhud.config;
 
+import com.mojang.blaze3d.platform.Window;
 import fin.starhud.Helper;
 import fin.starhud.helper.*;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.Window;
+import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -256,21 +256,21 @@ public class BaseHUDSettings implements ConfigData {
     // get the scaled factor
     // this can either make your HUD bigger or smaller.
     public float getScaledFactor() {
-        return this.getScale() <= 0 ? 1 : MinecraftClient.getInstance().getWindow().getScaleFactor() / this.getScale();
+        return this.getScale() <= 0 ? 1 : Minecraft.getInstance().getWindow().getGuiScale() / this.getScale();
     }
 
     // this shifts your HUD based on your x point, and alignment on X axis, and place them accordingly in your screen.
     public int getCalculatedPosX() {
-        Window window = MinecraftClient.getInstance().getWindow();
-        int framebufferWidth = (window == null ? 0 : window.getFramebufferWidth());
+        Window window = Minecraft.getInstance().getWindow();
+        int framebufferWidth = (window == null ? 0 : window.getWidth());
 
         return this.getX() + (this.getOriginX().getAlignmentPos(framebufferWidth));
     }
 
     // this also shifts your HUD based on your y point, and alignment on Y axis, and place them accordingly in your screen.
     public int getCalculatedPosY() {
-        Window window = MinecraftClient.getInstance().getWindow();
-        int framebufferHeight = (window == null ? 0 : window.getFramebufferHeight());
+        Window window = Minecraft.getInstance().getWindow();
+        int framebufferHeight = (window == null ? 0 : window.getHeight());
 
         return this.getY() + (this.getOriginY().getAlignmentPos(framebufferHeight));
     }

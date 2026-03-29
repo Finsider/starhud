@@ -6,15 +6,15 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 
 public class DayHUD extends AbstractHUD {
 
     private static final DaySettings DAY_SETTINGS = Main.settings.daySettings;
 
-    private static final Identifier DAY_TEXTURE = Identifier.of("starhud", "hud/day.png");
+    private static final Identifier DAY_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/day.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
@@ -26,7 +26,7 @@ public class DayHUD extends AbstractHUD {
     private int cachedTextWidth;
     private String cachedDayString;
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public DayHUD() {
         super(DAY_SETTINGS.base);
@@ -55,15 +55,15 @@ public class DayHUD extends AbstractHUD {
 
     @Override
     public boolean collectHUDInformation() {
-        if (CLIENT.world == null) return false;
-        long day = CLIENT.world.getTimeOfDay() / 24000L;
+        if (CLIENT.level == null) return false;
+        long day = CLIENT.level.getDefaultClockTime() / 24000L;
 
         // I cached these because textRendered.getWidth() is expensive.
         // And since day count hardly updates at all, doing this is reasonable.
         if (day != lastDay) {
             lastDay = day;
             cachedDayString = DAY_SETTINGS.additionalString + day;
-            cachedTextWidth = CLIENT.textRenderer.getWidth(cachedDayString) - 1;
+            cachedTextWidth = CLIENT.font.width(cachedDayString) - 1;
         }
 
         displayMode = getSettings().getDisplayMode();
@@ -76,7 +76,7 @@ public class DayHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();

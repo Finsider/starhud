@@ -3,14 +3,14 @@ package fin.starhud;
 import fin.starhud.config.GeneralSettings;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 
 
 public class Helper {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final GeneralSettings.HUDSettings HUD_SETTINGS = Main.settings.generalSettings.hudSettings;
 
     private static final char[] superscripts = "⁰¹²³⁴⁵⁶⁷⁸⁹".toCharArray();
@@ -79,12 +79,12 @@ public class Helper {
 
     // color transition from pastel (red to green).
     public static int getItemBarColor(int stackStep, int maxStep) {
-        return MathHelper.hsvToRgb(0.35F * stackStep / (float) maxStep, 0.45F, 0.95F);
+        return Mth.hsvToRgb(0.35F * stackStep / (float) maxStep, 0.45F, 0.95F);
     }
 
     public static float getGlobalScale() {
         if (HUD_SETTINGS.getGlobalScale() == 0) {
-            return CLIENT.getWindow().getScaleFactor();
+            return CLIENT.getWindow().getGuiScale();
         }
         return HUD_SETTINGS.getGlobalScale();
     }
@@ -122,6 +122,6 @@ public class Helper {
     }
 
     public static int getStep(int curr, int max, int maxStep) {
-        return MathHelper.clamp(Math.round((float) curr * maxStep / (float) max), 0, maxStep);
+        return Math.clamp(Math.round((float) curr * maxStep / (float) max), 0, maxStep);
     }
 }

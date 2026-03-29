@@ -2,16 +2,16 @@ package fin.starhud.condition;
 
 import fin.starhud.helper.Box;
 import fin.starhud.mixin.accessor.AccessorPlayerListHud;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class PlayerListHUD {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static final Box boundingBox = new Box(0,0, 0, 0);
 
     public static boolean isShown(String ignored) {
-        return ((AccessorPlayerListHud) CLIENT.inGameHud.getPlayerListHud()).isVisible();
+        return ((AccessorPlayerListHud) CLIENT.gui.getTabList()).isVisible();
     }
 
     public static int getWidth() {

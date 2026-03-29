@@ -1,10 +1,10 @@
 package fin.starhud.hud;
 
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public interface HUDInterface {
 
-    boolean render(DrawContext context);
+    boolean render(GuiGraphicsExtractor context);
 
     boolean collect();
 

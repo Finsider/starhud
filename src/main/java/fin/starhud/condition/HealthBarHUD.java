@@ -1,18 +1,17 @@
 package fin.starhud.condition;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.player.Player;
 
 public class HealthBarHUD {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     private static int height;
     private static int cachedHeartAmount = -1;
 
     public static boolean isShown(String ignored) {
-        return CLIENT.interactionManager != null && CLIENT.interactionManager.hasStatusBars();
+        return CLIENT.gameMode != null && CLIENT.gameMode.canHurtPlayer();
     }
 
     // assuming 10 health textures + 9 gaps
@@ -23,12 +22,12 @@ public class HealthBarHUD {
     }
 
     public static int getHeight() {
-        PlayerEntity player = CLIENT.player;
+        Player player = CLIENT.player;
 
         if (player == null) return -1;
 
         float maxHealth = player.getMaxHealth();
-        int absorption = MathHelper.ceil(player.getAbsorptionAmount());
+        int absorption = (int) Math.ceil(player.getAbsorptionAmount());
 
         int currentHeartAmount = (int)(maxHealth + absorption);
         if (currentHeartAmount == cachedHeartAmount) {
@@ -37,14 +36,14 @@ public class HealthBarHUD {
         cachedHeartAmount = currentHeartAmount;
 
         // Calculate hearts using the same logic as renderHealthBar
-        int regularHearts = MathHelper.ceil((double)maxHealth / 2.0F);
-        int absorptionHearts = MathHelper.ceil((double)absorption / 2.0F);
-        int totalHearts = regularHearts + absorptionHearts;
+        double regularHearts = Math.ceil((double)maxHealth / 2.0F);
+        double absorptionHearts = Math.ceil((double)absorption / 2.0F);
+        double totalHearts = regularHearts + absorptionHearts;
 
-        int p = MathHelper.ceil((maxHealth + (float)absorption) / 2.0F / 10.0F);
+        int p = (int) Math.ceil((maxHealth + (float)absorption) / 2.0F / 10.0F);
         int lineHeight = Math.max(10 - (p - 2), 3);
 
-        int rows = (totalHearts - 1) / 10 + 1;
+        int rows = (int) (totalHearts - 1) / 10 + 1;
         height = (rows - 1) * lineHeight + 9;
 
         return height;

@@ -6,18 +6,18 @@ import fin.starhud.config.hud.hand.HandSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.implementation.AbstractDurabilityHUD;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Arm;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 // i dont like this one.
 
 public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final Settings.Hand SETTINGS = Main.settings.handSettings;
 
     private static final int TEXTURE_WIDTH = 13;
@@ -29,10 +29,10 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
     private static final int ITEM_TEXTURE_WIDTH = 3 + 16 + 3;
     private static final int ITEM_TEXTURE_HEIGHT = 3 + 16 + 3;
 
-    private final Arm arm;
+    private final HumanoidArm arm;
     private final Identifier ICON_TEXTURE;
 
-    public AbstractHandHUD(HandSettings handSettings, Arm arm, Identifier ICON_TEXTURE) {
+    public AbstractHandHUD(HandSettings handSettings, HumanoidArm arm, Identifier ICON_TEXTURE) {
         super(handSettings.base, SETTINGS.durabilitySettings);
 
         this.arm = arm;
@@ -43,7 +43,7 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
     public ItemStack getStack() {
         if (CLIENT.player == null) return null;
 
-        return CLIENT.player.getStackInArm(arm);
+        return CLIENT.player.getItemHeldByArm(arm);
     }
 
     private ItemStack item;
@@ -70,7 +70,7 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         drawItem = SETTINGS.durabilitySettings.drawItem;
         displayMode = getSettings().getDisplayMode();
 
-        isItemDamagable = item.isDamageable();
+        isItemDamagable = item.isDamageableItem();
 
         if (showDurability && isItemDamagable) {
             return super.collectHUDInformation();
@@ -85,7 +85,7 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
 
         amountStr = Integer.toString(getItemCount(CLIENT.player.getInventory(), item));
 
-        int strWidth = CLIENT.textRenderer.getWidth(amountStr) - 1;
+        int strWidth = CLIENT.font.width(amountStr) - 1;
         int width = displayMode.calculateWidth((drawItem ? ITEM_TEXTURE_WIDTH : ICON_WIDTH), strWidth);
         int height = drawItem ? ITEM_TEXTURE_HEIGHT : ICON_HEIGHT;
 
@@ -95,11 +95,11 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return renderHandHUD(context, x, y, drawBackground, drawTextShadow);
     }
 
-    public boolean renderHandHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHandHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         // either draw the durability or the amount of item in the inventory.
         if (showDurability && isItemDamagable) {
             return renderDurabilityHUD(
@@ -119,7 +119,7 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         return false;
     }
 
-    private boolean renderStackCountHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    private boolean renderStackCountHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         if (drawItem) {
             return renderStackCountItemHUD(context, x, y, drawBackground, drawTextShadow);
@@ -128,7 +128,7 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         }
     }
 
-    private boolean renderStackCountItemHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    private boolean renderStackCountItemHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return RenderUtils.drawItemHUD(
                 context,
                 amountStr,
@@ -142,7 +142,7 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         );
     }
 
-    private boolean renderStackCountIconHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    private boolean renderStackCountIconHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return RenderUtils.drawSmallHUD(
                 context,
                 amountStr,
@@ -159,12 +159,12 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         );
     }
 
-    private static int getItemCount(PlayerInventory inventory, ItemStack stack) {
+    private static int getItemCount(Inventory inventory, ItemStack stack) {
         int stackAmount = 0;
 
-        for (int i = 0; i < inventory.size(); ++i) {
-            ItemStack item = inventory.getStack(i);
-            if (!item.isEmpty() && ItemStack.areItemsAndComponentsEqual(item, stack))
+        for (int i = 0; i < inventory.getContainerSize(); ++i) {
+            ItemStack item = inventory.getItem(i);
+            if (!item.isEmpty() && ItemStack.isSameItemSameComponents(item, stack))
                 stackAmount += item.getCount();
         }
 

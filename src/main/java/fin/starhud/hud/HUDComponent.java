@@ -23,7 +23,7 @@ import fin.starhud.hud.implementation.hand.RightHandHUD;
 import fin.starhud.hud.implementation.other.*;
 import fin.starhud.hud.implementation.statuseffect.NegativeEffectHUD;
 import fin.starhud.hud.implementation.statuseffect.PositiveEffectHUD;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -176,7 +176,7 @@ public class HUDComponent {
 
     private final List<AbstractHUD> invalidHUDs = new ArrayList<>();
 
-    public void renderAll(DrawContext context) {
+    public void renderAll(GuiGraphicsExtractor context) {
         PixelPlacement.start(context);
 
         for (AbstractHUD hud : renderedHUDs) {

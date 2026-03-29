@@ -1,10 +1,10 @@
 package fin.starhud.mixin.accessor;
 
-import net.minecraft.client.gui.hud.ChatHud;
+import net.minecraft.client.gui.components.ChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(ChatHud.class)
+@Mixin(ChatComponent.class)
 public interface AccessorChatHud {
 
     @Invoker("getHeight")

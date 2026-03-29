@@ -1,29 +1,29 @@
 package fin.starhud.screen;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.ColorHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.ARGB;
 
 public class ActionBar {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
-    private Text text;
+    private Component text;
     private int remainingTime;
 
-    public void render(DrawContext context, int centerX, int y) {
+    public void render(GuiGraphicsExtractor context, int centerX, int y) {
         float alpha = Math.min((float) this.remainingTime / 10, 1.0F);
 
-        context.drawCenteredTextWithShadow(
-                CLIENT.textRenderer,
+        context.centeredText(
+                CLIENT.font,
                 text,
                 centerX, y,
-                ColorHelper.getWhite(alpha)
+                ARGB.white(alpha)
         );
     }
 
-    public void setText(Text text) {
+    public void setText(Component text) {
         this.text = text;
         this.remainingTime = 50;
     }

@@ -4,11 +4,11 @@ import fin.starhud.Main;
 import fin.starhud.config.hud.coordinate.CoordSettings;
 import fin.starhud.hud.HUDId;
 import fin.starhud.hud.implementation.coordinate.AbstractCoordinateHUD;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public class ZCoordinateHUD extends AbstractCoordinateHUD {
     private static final CoordSettings SETTINGS = Main.settings.coordSettings.Z;
-    private static final Identifier TEXTURE = Identifier.of("starhud", "hud/coordinate_z.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/coordinate_z.png");
 
     public ZCoordinateHUD() {
         super(SETTINGS, TEXTURE);
@@ -16,7 +16,7 @@ public class ZCoordinateHUD extends AbstractCoordinateHUD {
 
     @Override
     public int getCoord() {
-        return (int) CLIENT.player.getEntityPos().z;
+        return (int) CLIENT.player.position().z;
     }
 
     @Override

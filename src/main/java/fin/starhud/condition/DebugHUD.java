@@ -1,11 +1,11 @@
 package fin.starhud.condition;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class DebugHUD {
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static boolean isShown(String ignored) {
-        return CLIENT.getDebugHud().shouldShowDebugHud();
+        return CLIENT.getDebugOverlay().showDebugScreen();
     }
 }

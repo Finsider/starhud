@@ -1,13 +1,13 @@
 package fin.starhud.condition;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.world.level.Level;
 
 public class Other {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static boolean isModLoaded(String arg) {
         if (arg == null || arg.isEmpty()) return false;
@@ -16,29 +16,29 @@ public class Other {
     }
 
     public static boolean isInSingleplayer(String ignored) {
-        return CLIENT.isInSingleplayer();
+        return CLIENT.isSingleplayer();
     }
 
     public static boolean isOnServer(String arg) {
         if (arg == null || arg.isEmpty()) return false;
 
-        ServerInfo entry = CLIENT.getCurrentServerEntry();
+        ServerData entry = CLIENT.getCurrentServer();
         if (entry == null) return false;
 
-        String serverIP = entry.address.split(":")[0];
+        String serverIP = entry.ip.split(":")[0];
 
         return serverIP.equalsIgnoreCase(arg);
     }
 
     public static boolean isInOverworld(String ignored) {
-        return CLIENT.player != null && CLIENT.player.getEntityWorld().getRegistryKey() == World.OVERWORLD;
+        return CLIENT.player != null && CLIENT.player.level().dimension() == Level.OVERWORLD;
     }
 
     public static boolean isInNether(String ignored) {
-        return CLIENT.player != null && CLIENT.player.getEntityWorld().getRegistryKey() == World.NETHER;
+        return CLIENT.player != null && CLIENT.player.level().dimension() == Level.NETHER;
     }
 
     public static boolean isInEnd(String ignored) {
-        return CLIENT.player != null &&  CLIENT.player.getEntityWorld().getRegistryKey() == World.END;
+        return CLIENT.player != null && CLIENT.player.level().dimension() == Level.END;
     }
 }

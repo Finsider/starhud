@@ -1,6 +1,6 @@
 package fin.starhud.helper;
 
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 public enum ScreenAlignmentY {
     TOP,
@@ -34,6 +34,6 @@ public enum ScreenAlignmentY {
 
     @Override
     public String toString() {
-        return I18n.translate("starhud.option.screenAlignmentY." + name().toLowerCase());
+        return I18n.get("starhud.option.screenAlignmentY." + name().toLowerCase());
     }
 }

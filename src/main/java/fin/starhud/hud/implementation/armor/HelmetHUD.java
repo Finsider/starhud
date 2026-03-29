@@ -3,15 +3,16 @@ package fin.starhud.hud.implementation.armor;
 import fin.starhud.Main;
 import fin.starhud.config.hud.armor.ArmorSettings;
 import fin.starhud.hud.HUDId;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class HelmetHUD extends AbstractArmorHUD {
 
     private static final ArmorSettings SETTINGS = Main.settings.armorSettings.helmet;
-    private static final Identifier TEXTURE = Identifier.of("starhud", "hud/helmet.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/helmet.png");
 
     public HelmetHUD() {
-        super(SETTINGS, TEXTURE, 3);
+        super(SETTINGS, TEXTURE, EquipmentSlot.HEAD);
     }
 
     @Override

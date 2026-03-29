@@ -7,7 +7,7 @@ import fin.starhud.helper.ScreenAlignmentY;
 import fin.starhud.hud.HUDComponent;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,7 +136,7 @@ public class GroupedHUDSettings {
 
         @Override
         public String toString() {
-            return I18n.translate("starhud.option.childAlignment." + name().toLowerCase());
+            return I18n.get("starhud.option.childAlignment." + name().toLowerCase());
         }
     }
 
@@ -159,7 +159,7 @@ public class GroupedHUDSettings {
 
         @Override
         public String toString() {
-            return I18n.translate("starhud.option.childOrdering." + name().toLowerCase());
+            return I18n.get("starhud.option.childOrdering." + name().toLowerCase());
         }
     }
 }

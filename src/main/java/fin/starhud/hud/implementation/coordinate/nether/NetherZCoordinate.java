@@ -4,14 +4,14 @@ import fin.starhud.Main;
 import fin.starhud.config.hud.coordinate.CoordSettings;
 import fin.starhud.hud.HUDId;
 import fin.starhud.hud.implementation.coordinate.AbstractCoordinateHUD;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 public class NetherZCoordinate extends AbstractCoordinateHUD {
 
     private static final CoordSettings SETTINGS = Main.settings.coordSettings.netherZ;
-    private static final Identifier TEXTURE = Identifier.of("starhud", "hud/coordinate_z.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/coordinate_z.png");
 
     public NetherZCoordinate() {
         super(SETTINGS, TEXTURE);
@@ -19,17 +19,17 @@ public class NetherZCoordinate extends AbstractCoordinateHUD {
 
     @Override
     public boolean shouldRender() {
-        return super.shouldRender() && (CLIENT.player.getEntityWorld().getRegistryKey() == World.OVERWORLD || CLIENT.player.getEntityWorld().getRegistryKey() == World.NETHER);
+        return super.shouldRender() && (CLIENT.player.level().dimension() == Level.OVERWORLD || CLIENT.player.level().dimension() == Level.NETHER);
     }
 
     @Override
     public int getCoord() {
-        World world = CLIENT.player.getEntityWorld();
-        Vec3d pos = CLIENT.player.getEntityPos();
+        Level world = CLIENT.player.level();
+        Vec3 pos = CLIENT.player.position();
 
-        if (world.getRegistryKey() == World.NETHER) {
+        if (world.dimension() == Level.NETHER) {
             return (int) (pos.z * 8);
-        } else if (world.getRegistryKey() == World.OVERWORLD) {
+        } else if (world.dimension() == Level.OVERWORLD) {
             return (int) (pos.z / 8);
         } else {
             return (int) pos.z;

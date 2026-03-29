@@ -1,18 +1,18 @@
 package fin.starhud.helper;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public class PixelPlacement {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
-    public static void start(DrawContext context) {
-        context.getMatrices().pushMatrix();
-        context.getMatrices().scale(1.0f / CLIENT.getWindow().getScaleFactor());
+    public static void start(GuiGraphicsExtractor context) {
+        context.pose().pushMatrix();
+        context.pose().scale(1.0f / CLIENT.getWindow().getGuiScale());
     }
 
-    public static void end(DrawContext context) {
-        context.getMatrices().popMatrix();
+    public static void end(GuiGraphicsExtractor context) {
+        context.pose().popMatrix();
     }
 }

@@ -6,17 +6,18 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 
 public class DirectionHUD extends AbstractHUD {
 
     private static final DirectionSettings DIRECTION_SETTINGS = Main.settings.directionSettings;
 
-    private static final Identifier DIRECTION_CARDINAL_TEXTURE = Identifier.of("starhud", "hud/direction.png");
-    private static final Identifier DIRECTION_ORDINAL_TEXTURE = Identifier.of("starhud", "hud/direction_ordinal.png");
+    private static final Identifier DIRECTION_CARDINAL_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/direction.png");
+    private static final Identifier DIRECTION_ORDINAL_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/direction_ordinal.png");
 
     private static final int ORDINAL_TEXTURE_WIDTH = 19;
     private static final int ORDINAL_TEXTURE_HEIGHT = 104;
@@ -28,7 +29,7 @@ public class DirectionHUD extends AbstractHUD {
     private static final int CARDINAL_ICON_WIDTH = 13;
     private static final int CARDINAL_ICON_HEIGHT = 13;
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public DirectionHUD() {
         super(DIRECTION_SETTINGS.base);
@@ -56,9 +57,9 @@ public class DirectionHUD extends AbstractHUD {
         var camera = CLIENT.getCameraEntity();
         if (camera == null) return false;
 
-        float yaw = Math.round(MathHelper.wrapDegrees(camera.getYaw()) * 10.0F) / 10.0F;
+        float yaw = Math.round(Mth.wrapDegrees(camera.getYRot()) * 10.0F) / 10.0F;
         yawStr = Float.toString(yaw);
-        int yawWidth = CLIENT.textRenderer.getWidth(yawStr) - 1;
+        int yawWidth = CLIENT.font.width(yawStr) - 1;
 
         includeOrdinal = DIRECTION_SETTINGS.includeOrdinal;
         displayMode = getSettings().getDisplayMode();
@@ -88,7 +89,7 @@ public class DirectionHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();

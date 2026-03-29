@@ -3,15 +3,16 @@ package fin.starhud.hud.implementation.armor;
 import fin.starhud.Main;
 import fin.starhud.config.hud.armor.ArmorSettings;
 import fin.starhud.hud.HUDId;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class LeggingsHUD extends AbstractArmorHUD {
 
     private static final ArmorSettings SETTINGS = Main.settings.armorSettings.leggings;
-    private static final Identifier TEXTURE = Identifier.of("starhud", "hud/leggings.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/leggings.png");
 
     public LeggingsHUD() {
-        super(SETTINGS, TEXTURE, 1);
+        super(SETTINGS, TEXTURE, EquipmentSlot.LEGS);
     }
 
     @Override

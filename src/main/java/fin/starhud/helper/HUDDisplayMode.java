@@ -2,7 +2,7 @@ package fin.starhud.helper;
 
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 public enum HUDDisplayMode {
     ICON,
@@ -31,6 +31,6 @@ public enum HUDDisplayMode {
 
     @Override
     public String toString() {
-        return I18n.translate("starhud.option.hudDisplayMode." + name().toLowerCase());
+        return I18n.get("starhud.option.hudDisplayMode." + name().toLowerCase());
     }
 }

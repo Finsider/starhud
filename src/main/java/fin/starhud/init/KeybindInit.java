@@ -1,27 +1,27 @@
 package fin.starhud.init;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import fin.starhud.Main;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class KeybindInit {
 
     public static void init() {
-        Main.keyCategory = KeyBinding.Category.create(Identifier.of("starhud", "category"));
+        Main.keyCategory = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("starhud", "category"));
 
-        Main.openEditHUDKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        Main.openEditHUDKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.starhud.open_edithud",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_RIGHT_SHIFT,
                 Main.keyCategory
         ));
 
-        Main.toggleHUDKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        Main.toggleHUDKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.starhud.toggle_hud",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_UNKNOWN,
                 Main.keyCategory
         ));

@@ -1,6 +1,6 @@
 package fin.starhud.helper;
 
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 public enum GrowthDirectionX {
     LEFT,
@@ -41,6 +41,6 @@ public enum GrowthDirectionX {
 
     @Override
     public String toString() {
-        return I18n.translate("starhud.option.growthDirectionX." + name().toLowerCase());
+        return I18n.get("starhud.option.growthDirectionX." + name().toLowerCase());
     }
 }

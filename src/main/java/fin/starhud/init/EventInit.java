@@ -12,11 +12,11 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 public class EventInit {
 
@@ -35,25 +35,25 @@ public class EventInit {
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> AutoConfig.getConfigHolder(Settings.class).save());
 
         // register hud element into before hotbar. I hope this was safe enough.
-        HudElementRegistry.attachElementBefore(VanillaHudElements.HOTBAR, Identifier.of("starhud"), EventInit::onHUDRender);
+        HudElementRegistry.attachElementBefore(VanillaHudElements.HOTBAR, Identifier.withDefaultNamespace("starhud"), EventInit::onHUDRender);
     }
 
-    public static void onOpenEditHUDKeyPressed(MinecraftClient client) {
-        while (Main.openEditHUDKey.wasPressed()) {
-            client.setScreen(new EditHUDScreen(Text.of("Edit HUD"), client.currentScreen));
+    public static void onOpenEditHUDKeyPressed(Minecraft client) {
+        while (Main.openEditHUDKey.consumeClick()) {
+            client.setScreen(new EditHUDScreen(Component.nullToEmpty("Edit HUD"), client.screen));
         }
     }
 
-    public static void onToggleHUDKeyPressed(MinecraftClient client) {
-        while (Main.toggleHUDKey.wasPressed()) {
+    public static void onToggleHUDKeyPressed(Minecraft client) {
+        while (Main.toggleHUDKey.consumeClick()) {
             Main.settings.generalSettings.inGameSettings.disableHUDRendering = !Main.settings.generalSettings.inGameSettings.disableHUDRendering;
         }
     }
 
-    public static void onHUDRender(DrawContext context, RenderTickCounter tickCounter) {
+    public static void onHUDRender(GuiGraphicsExtractor context, DeltaTracker tickCounter) {
         if (SETTINGS.disableHUDRendering) return;
-        if (MinecraftClient.getInstance().options.hudHidden) return;
-        if (MinecraftClient.getInstance().currentScreen instanceof EditHUDScreen) return;
+        if (Minecraft.getInstance().options.hideGui) return;
+        if (Minecraft.getInstance().screen instanceof EditHUDScreen) return;
 
         HUDComponent.getInstance().collectAll();
         HUDComponent.getInstance().renderAll(context);

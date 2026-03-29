@@ -2,16 +2,16 @@ package fin.starhud.condition;
 
 import fin.starhud.helper.Box;
 import fin.starhud.mixin.accessor.AccessorInGameHUD;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class HeldItemTooltip {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static final Box boundingBox = new Box(0,0, 0, 0);
 
     public static boolean isShown(String ignored) {
-        return ((AccessorInGameHUD) CLIENT.inGameHud).getHeldItemTooltipFade() > 0;
+        return ((AccessorInGameHUD) CLIENT.gui).getToolHighlightTimer() > 0;
     }
 
     public static int getWidth() {

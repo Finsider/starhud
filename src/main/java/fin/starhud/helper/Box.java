@@ -1,9 +1,10 @@
 package fin.starhud.helper;
 
-import net.minecraft.client.MinecraftClient;
+
+import net.minecraft.client.Minecraft;
 
 public class Box {
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
 
     private int x, y, width, height, color;
     private float scale;
@@ -78,7 +79,7 @@ public class Box {
 
     public void setScale(float scale) {
         if (scale == 0)
-            scale = CLIENT.getWindow().getScaleFactor();
+            scale = CLIENT.getWindow().getGuiScale();
         this.scale = scale;
     }
 

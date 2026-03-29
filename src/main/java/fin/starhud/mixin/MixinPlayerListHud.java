@@ -2,10 +2,10 @@ package fin.starhud.mixin;
 
 import fin.starhud.condition.PlayerListHUD;
 import fin.starhud.helper.Box;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.PlayerListHud;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.PlayerTabOverlay;
+import net.minecraft.world.scores.Objective;
+import net.minecraft.world.scores.Scoreboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,29 +13,29 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = PlayerListHud.class, priority = 500)
+@Mixin(value = PlayerTabOverlay.class, priority = 500)
 public class MixinPlayerListHud {
 
     @Unique
     private static final Box tempBox = new Box(0,0);
 
     @Inject(
-            method = "render",
+            method = "extractRenderState",
             at = @At("HEAD")
     )
-    private void resetBoundingBox(DrawContext context, int scaledWindowWidth, Scoreboard scoreboard, ScoreboardObjective objective, CallbackInfo ci) {
+    private void resetBoundingBox(GuiGraphicsExtractor graphics, int screenWidth, Scoreboard scoreboard, Objective displayObjective, CallbackInfo ci) {
         PlayerListHUD.boundingBox.setEmpty(true);
     }
 
     @Redirect(
-            method = "render",
+            method = "extractRenderState",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V"
             ),
             require = 0
     )
-    private void captureFillBounds(DrawContext instance, int x1, int y1, int x2, int y2, int color) {
+    private void captureFillBounds(GuiGraphicsExtractor instance, int x1, int y1, int x2, int y2, int color) {
         tempBox.setBoundingBox(x1, y1, x2 - x1, y2 - y1);
         if (PlayerListHUD.boundingBox.isEmpty()) {
             PlayerListHUD.boundingBox.copyFrom(tempBox);

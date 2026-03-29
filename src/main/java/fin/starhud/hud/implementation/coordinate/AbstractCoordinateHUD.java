@@ -4,13 +4,13 @@ import fin.starhud.config.hud.coordinate.CoordSettings;
 import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 
 public abstract class AbstractCoordinateHUD extends AbstractHUD {
 
-    protected static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    protected static final Minecraft CLIENT = Minecraft.getInstance();
 
     public final CoordSettings SETTINGS;
     public final Identifier TEXTURE;
@@ -36,7 +36,7 @@ public abstract class AbstractCoordinateHUD extends AbstractHUD {
     @Override
     public boolean collectHUDInformation() {
         coordStr = Integer.toString(getCoord());
-        int strWidth = CLIENT.textRenderer.getWidth(coordStr) - 1;
+        int strWidth = CLIENT.font.width(coordStr) - 1;
 
         displayMode = getSettings().getDisplayMode();
 
@@ -50,7 +50,7 @@ public abstract class AbstractCoordinateHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(DrawContext context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();

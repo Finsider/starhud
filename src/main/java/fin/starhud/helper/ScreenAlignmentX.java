@@ -1,6 +1,6 @@
 package fin.starhud.helper;
 
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 public enum ScreenAlignmentX {
     LEFT,
@@ -35,6 +35,6 @@ public enum ScreenAlignmentX {
 
     @Override
     public String toString() {
-        return I18n.translate("starhud.option.screenAlignmentX." + name().toLowerCase());
+        return I18n.get("starhud.option.screenAlignmentX." + name().toLowerCase());
     }
 }

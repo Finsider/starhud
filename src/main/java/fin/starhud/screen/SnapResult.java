@@ -6,14 +6,14 @@ import fin.starhud.helper.Box;
 import fin.starhud.helper.PixelPlacement;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDComponent;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 import java.util.List;
 
 public class SnapResult {
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final GeneralSettings.EditHUDScreenSettings SETTINGS = Main.settings.generalSettings.screenSettings;
 
     boolean snappedX, snappedY;
@@ -29,12 +29,12 @@ public class SnapResult {
         this.snapDeltaY = snapDeltaY;
     }
 
-    public void render(DrawContext context) {
+    public void render(GuiGraphicsExtractor context) {
 
         PixelPlacement.start(context);
 
-        int screenWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
-        int screenHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
+        int screenWidth = Minecraft.getInstance().getWindow().getWidth();
+        int screenHeight = Minecraft.getInstance().getWindow().getHeight();
         int color = SETTINGS.snapColor | 0xFF000000;
 
         // Draw vertical snap line
@@ -52,8 +52,8 @@ public class SnapResult {
     public static SnapResult getSnap(Box selectedHUDBox, List<AbstractHUD> selectedHUDs) {
         final int threshold = SETTINGS.getSnapThreshold();
         final int padding = SETTINGS.getSnapPadding();
-        final int screenWidth = CLIENT.getWindow().getFramebufferWidth();
-        final int screenHeight = CLIENT.getWindow().getFramebufferHeight();
+        final int screenWidth = CLIENT.getWindow().getWidth();
+        final int screenHeight = CLIENT.getWindow().getHeight();
 
         final int screenX = selectedHUDBox.getX();
         final int screenY = selectedHUDBox.getY();
