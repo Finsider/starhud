@@ -9,6 +9,7 @@
     "MixinClientPlayNetworkHandler",
     "MixinInGameHUD",
     "MixinPlayerListHud",
+    "MixinStatusEffectOverlay",
     "MixinWindow",
     "accessor.AccessorBossBarHud",
     "accessor.AccessorChatHud",
