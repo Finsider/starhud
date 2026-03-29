@@ -6,6 +6,6 @@ public class DebugHUD {
     private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static boolean isShown(String ignored) {
-        return CLIENT.getDebugOverlay().showDebugScreen();
+        return CLIENT.debugEntries.isOverlayVisible();
     }
 }

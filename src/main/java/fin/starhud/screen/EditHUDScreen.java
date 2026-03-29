@@ -434,7 +434,7 @@ public class EditHUDScreen extends Screen {
 
         if (SETTINGS.drawDarkBackground) {
             final float alpha = (float) SETTINGS.getDarkOpacity() / 100;
-            final int color = ARGB.black(alpha) << 24;
+            final int color = ARGB.as8BitChannel(alpha) << 24;
             context.fill(0, 0, this.width, this.height, color);
         }
 
