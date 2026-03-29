@@ -6,6 +6,6 @@ public class DebugHUD {
     private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
     public static boolean isShown(String ignored) {
-        return CLIENT.debugHudEntryList.isF3Enabled();
+        return CLIENT.getDebugHud().shouldShowDebugHud();
     }
 }
