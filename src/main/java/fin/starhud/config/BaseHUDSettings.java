@@ -262,7 +262,7 @@ public class BaseHUDSettings implements ConfigData {
     // this shifts your HUD based on your x point, and alignment on X axis, and place them accordingly in your screen.
     public int getCalculatedPosX() {
         Window window = MinecraftClient.getInstance().getWindow();
-        int scaledWidth = (window == null ? 0 : window.getWidth());
+        int scaledWidth = (window == null ? 0 : window.getFramebufferWidth());
 
         return this.getX() + (this.getOriginX().getAlignmentPos(scaledWidth));
     }
@@ -270,7 +270,7 @@ public class BaseHUDSettings implements ConfigData {
     // this also shifts your HUD based on your y point, and alignment on Y axis, and place them accordingly in your screen.
     public int getCalculatedPosY() {
         Window window = MinecraftClient.getInstance().getWindow();
-        int scaledHeight = (window == null ? 0 : window.getHeight());
+        int scaledHeight = (window == null ? 0 : window.getFramebufferHeight());
 
         return this.getY() + (this.getOriginY().getAlignmentPos(scaledHeight));
     }
