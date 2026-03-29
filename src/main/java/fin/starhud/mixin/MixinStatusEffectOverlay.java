@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(InGameHud.class)
+@Mixin(value = InGameHud.class, priority = 2000)
 public class MixinStatusEffectOverlay {
 
     // Mixin used to override vanilla effect HUD, I'm not sure whether this can be done using HUDElementRegistry
