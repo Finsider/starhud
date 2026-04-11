@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = InGameHud.class, priority = 2000)
+@Mixin(InGameHud.class)
 public class MixinStatusEffectOverlay {
 
     @Unique
