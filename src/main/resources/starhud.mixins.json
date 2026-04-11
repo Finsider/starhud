@@ -10,7 +10,6 @@
     "MixinInGameHUD",
     "MixinPlayerListHud",
     "MixinStatusEffectOverlay",
-    "MixinWindow",
     "accessor.AccessorBossBarHud",
     "accessor.AccessorChatHud",
     "accessor.AccessorInGameHUD"
