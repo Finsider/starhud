@@ -207,12 +207,14 @@ public class HUDComponent {
         renderedHUDs.clear();
         for (AbstractHUD hud : individualHUDs.values()) {
             if (hud.shouldRender() && hud.collect()) {
+                hud.update();
                 renderedHUDs.add(hud);
             }
         }
 
         for (GroupedHUD group : groupedHUDs.values()) {
             if (!group.isInGroup() && group.shouldRender() && group.collect()) {
+                group.update();
                 renderedHUDs.add(group);
             }
         }
@@ -231,7 +233,6 @@ public class HUDComponent {
     // follow up with the updated config.
     public void updateActiveHUDs() {
         loadActiveHUDsFromConfig();
-        updateAll();
     }
 
     public void removeActiveHUDs() {
