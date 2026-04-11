@@ -104,8 +104,6 @@ public class EditHUDScreen extends Screen {
         final int CENTER_X = this.width / 2;
         final int CENTER_Y = (this.height - WIDGET_HEIGHT) / 2;
 
-        HUDComponent.getInstance().updateAll();
-
         int y1 = CENTER_Y;
         int leftX = CENTER_X - (SQUARE_WIDGET_LENGTH / 2) - GAP - WIDGET_WIDTH;
         int rightX = CENTER_X + (SQUARE_WIDGET_LENGTH / 2) + GAP;
