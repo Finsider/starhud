@@ -3,8 +3,8 @@ package fin.starhud.hud.implementation.hand;
 import fin.starhud.Main;
 import fin.starhud.config.hud.hand.HandSettings;
 import fin.starhud.hud.HUDId;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.HumanoidArm;
 
 public class LeftHandHUD extends AbstractHandHUD {
 

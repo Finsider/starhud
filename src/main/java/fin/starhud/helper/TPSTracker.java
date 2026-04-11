@@ -1,7 +1,6 @@
 package fin.starhud.helper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.item.properties.numeric.Time;
 
 public class TPSTracker {
 

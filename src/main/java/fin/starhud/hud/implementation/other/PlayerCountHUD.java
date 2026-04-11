@@ -12,7 +12,6 @@ import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.ServerInfo;
 
 import java.util.Collection;
 
