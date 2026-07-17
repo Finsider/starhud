@@ -1,0 +1,37 @@
+{
+    "schemaVersion": 1,
+    "id": "starhud",
+    "version": "${version}",
+    "name": "StarHUD",
+    "description": "a mod that provides fancy and fresh HUDs",
+    "authors": [
+        "Finside"
+    ],
+    "contact": {
+        "sources": "https://github.com/Finsider/starhud"
+    },
+    "license": "MIT",
+    "icon": "icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "client": [
+            "fin.starhud.FabricMain"
+        ],
+        "modmenu" : [
+            "fin.starhud.ModMenuIntegration"
+        ]
+    },
+    "mixins": [
+        "starhud.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.16.9",
+        "minecraft": ">=26.2",
+        "java": ">=25",
+        "fabric-api": "*",
+        "cloth-config": "*"
+    },
+    "recommends": {
+        "immediatelyfast": "*"
+    }
+}

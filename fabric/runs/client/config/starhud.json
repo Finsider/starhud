@@ -1,0 +1,732 @@
+{
+  "generalSettings": {
+    "screenSettings": {
+      "drawBorder": true,
+      "drawGrid": true,
+      "drawDarkBackground": true,
+      "darkOpacity": 35,
+      "gridColor": 547940070,
+      "selectedBoxColor": -2138583317,
+      "selectedGroupBoxColor": -2130937743,
+      "dragBoxColor": 11065578,
+      "snapColor": 58879,
+      "snapPadding": 24,
+      "snapThreshold": 8
+    },
+    "inGameSettings": {
+      "disableHUDRendering": false
+    },
+    "hudSettings": {
+      "globalScale": 2.0,
+      "dataCollectionInterval": 0.1,
+      "textYOffset": 0,
+      "textPadding": 5,
+      "iconInfoGap": 1,
+      "drawBackgroundRounded": true
+    }
+  },
+  "hudList": {
+    "individualHudIds": [
+      "X_COORDINATE",
+      "Y_COORDINATE",
+      "Z_COORDINATE",
+      "NETHER_X_COORDINATE",
+      "NETHER_Y_COORDINATE",
+      "NETHER_Z_COORDINATE",
+      "LEFT_HAND",
+      "RIGHT_HAND",
+      "DAY",
+      "DIRECTION",
+      "FPS",
+      "SPEED",
+      "INVENTORY",
+      "INVENTORY_SPACE",
+      "TARGETED_CROSSHAIR",
+      "PLAYER_COUNT",
+      "COMBO",
+      "REACH"
+    ],
+    "groupedHuds": [
+      {
+        "base": {
+          "shouldRender": true,
+          "x": 24,
+          "y": 0,
+          "originX": "LEFT",
+          "originY": "MIDDLE",
+          "growthDirectionX": "RIGHT",
+          "growthDirectionY": "MIDDLE",
+          "displayMode": "BOTH",
+          "drawBackground": false,
+          "drawTextShadow": false,
+          "scale": 0.0,
+          "conditions": []
+        },
+        "gap": 1,
+        "alignVertical": true,
+        "childAlignment": "GROUP",
+        "childOrdering": "NONE",
+        "boxColor": 16777215,
+        "hudIds": [
+          "HELMET",
+          "CHESTPLATE",
+          "LEGGINGS",
+          "BOOTS"
+        ],
+        "id": "group_1"
+      },
+      {
+        "base": {
+          "shouldRender": true,
+          "x": -24,
+          "y": 24,
+          "originX": "RIGHT",
+          "originY": "TOP",
+          "growthDirectionX": "LEFT",
+          "growthDirectionY": "DOWN",
+          "displayMode": "BOTH",
+          "drawBackground": false,
+          "drawTextShadow": false,
+          "scale": 0.0,
+          "conditions": []
+        },
+        "gap": 2,
+        "alignVertical": true,
+        "childAlignment": "GROUP",
+        "childOrdering": "NONE",
+        "boxColor": 14024431,
+        "hudIds": [
+          "POSITIVE_EFFECT",
+          "NEGATIVE_EFFECT"
+        ],
+        "id": "group_2"
+      },
+      {
+        "base": {
+          "shouldRender": true,
+          "x": 0,
+          "y": 24,
+          "originX": "CENTER",
+          "originY": "TOP",
+          "growthDirectionX": "CENTER",
+          "growthDirectionY": "DOWN",
+          "displayMode": "BOTH",
+          "drawBackground": false,
+          "drawTextShadow": false,
+          "scale": 0.0,
+          "conditions": []
+        },
+        "gap": 3,
+        "alignVertical": false,
+        "childAlignment": "GROUP",
+        "childOrdering": "NONE",
+        "boxColor": 16777215,
+        "hudIds": [
+          "BIOME",
+          "CLOCK_INGAME"
+        ],
+        "id": "group_3"
+      },
+      {
+        "base": {
+          "shouldRender": true,
+          "x": -24,
+          "y": -24,
+          "originX": "RIGHT",
+          "originY": "BOTTOM",
+          "growthDirectionX": "LEFT",
+          "growthDirectionY": "UP",
+          "displayMode": "BOTH",
+          "drawBackground": false,
+          "drawTextShadow": false,
+          "scale": 0.0,
+          "conditions": []
+        },
+        "gap": 3,
+        "alignVertical": false,
+        "childAlignment": "GROUP",
+        "childOrdering": "NONE",
+        "boxColor": 8778384,
+        "hudIds": [
+          "TPS",
+          "PING",
+          "CLOCK_SYSTEM"
+        ],
+        "id": "group_4"
+      }
+    ]
+  },
+  "fpsSettings": {
+    "base": {
+      "shouldRender": true,
+      "x": 24,
+      "y": -24,
+      "originX": "LEFT",
+      "originY": "BOTTOM",
+      "growthDirectionX": "RIGHT",
+      "growthDirectionY": "UP",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "color": 12050421,
+    "additionalString": " FPS"
+  },
+  "armorSettings": {
+    "helmet": {
+      "base": {
+        "shouldRender": true,
+        "x": 24,
+        "y": -42,
+        "originX": "LEFT",
+        "originY": "MIDDLE",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "MIDDLE",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 13687533
+    },
+    "chestplate": {
+      "base": {
+        "shouldRender": true,
+        "x": 24,
+        "y": -14,
+        "originX": "LEFT",
+        "originY": "MIDDLE",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "MIDDLE",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 13687533
+    },
+    "leggings": {
+      "base": {
+        "shouldRender": true,
+        "x": 24,
+        "y": 14,
+        "originX": "LEFT",
+        "originY": "MIDDLE",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "MIDDLE",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 13687533
+    },
+    "boots": {
+      "base": {
+        "shouldRender": true,
+        "x": 24,
+        "y": 42,
+        "originX": "LEFT",
+        "originY": "MIDDLE",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "MIDDLE",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 13687533
+    },
+    "durabilitySettings": {
+      "drawItem": false,
+      "useDynamicColor": true,
+      "displayMode": "BAR"
+    }
+  },
+  "handSettings": {
+    "leftHandSettings": {
+      "base": {
+        "shouldRender": true,
+        "x": -12,
+        "y": -120,
+        "originX": "CENTER",
+        "originY": "BOTTOM",
+        "growthDirectionX": "LEFT",
+        "growthDirectionY": "UP",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 16757683
+    },
+    "rightHandSettings": {
+      "base": {
+        "shouldRender": true,
+        "x": 12,
+        "y": -120,
+        "originX": "CENTER",
+        "originY": "BOTTOM",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "UP",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 8900331
+    },
+    "durabilitySettings": {
+      "drawItem": false,
+      "useDynamicColor": true,
+      "displayMode": "BAR"
+    },
+    "showCount": true,
+    "showDurability": true
+  },
+  "coordSettings": {
+    "X": {
+      "base": {
+        "shouldRender": true,
+        "x": 24,
+        "y": 24,
+        "originX": "LEFT",
+        "originY": "TOP",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "DOWN",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 16545905
+    },
+    "Y": {
+      "base": {
+        "shouldRender": true,
+        "x": 24,
+        "y": 52,
+        "originX": "LEFT",
+        "originY": "TOP",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "DOWN",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 10940847
+    },
+    "Z": {
+      "base": {
+        "shouldRender": true,
+        "x": 24,
+        "y": 80,
+        "originX": "LEFT",
+        "originY": "TOP",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "DOWN",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 7135740
+    },
+    "netherX": {
+      "base": {
+        "shouldRender": false,
+        "x": 24,
+        "y": 172,
+        "originX": "LEFT",
+        "originY": "TOP",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "DOWN",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 15243930
+    },
+    "netherY": {
+      "base": {
+        "shouldRender": false,
+        "x": 24,
+        "y": 200,
+        "originX": "LEFT",
+        "originY": "TOP",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "DOWN",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 15838868
+    },
+    "netherZ": {
+      "base": {
+        "shouldRender": false,
+        "x": 24,
+        "y": 228,
+        "originX": "LEFT",
+        "originY": "TOP",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "DOWN",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "color": 16370599
+    }
+  },
+  "effectSettings": {
+    "positiveSettings": {
+      "base": {
+        "shouldRender": true,
+        "x": -24,
+        "y": 24,
+        "originX": "RIGHT",
+        "originY": "TOP",
+        "growthDirectionX": "LEFT",
+        "growthDirectionY": "DOWN",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "drawVertical": false,
+      "combineBackground": false,
+      "sameTypeGap": 1,
+      "customColor": 13628882
+    },
+    "negativeSettings": {
+      "base": {
+        "shouldRender": true,
+        "x": -24,
+        "y": 92,
+        "originX": "RIGHT",
+        "originY": "TOP",
+        "growthDirectionX": "LEFT",
+        "growthDirectionY": "DOWN",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "drawVertical": false,
+      "combineBackground": false,
+      "sameTypeGap": 1,
+      "customColor": 14477493
+    },
+    "drawTimer": false,
+    "drawHidden": false,
+    "colorMode": "DYNAMIC",
+    "ambientColor": 14024431,
+    "infiniteColor": 11915496
+  },
+  "directionSettings": {
+    "base": {
+      "shouldRender": true,
+      "x": 24,
+      "y": 108,
+      "originX": "LEFT",
+      "originY": "TOP",
+      "growthDirectionX": "RIGHT",
+      "growthDirectionY": "DOWN",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "includeOrdinal": false,
+    "directionColor": {
+      "s": 16758197,
+      "sw": 16763827,
+      "w": 16765367,
+      "nw": 14207720,
+      "n": 12044777,
+      "ne": 13949936,
+      "e": 16770484,
+      "se": 16765124
+    }
+  },
+  "pingSettings": {
+    "base": {
+      "shouldRender": true,
+      "x": -128,
+      "y": -24,
+      "originX": "RIGHT",
+      "originY": "BOTTOM",
+      "growthDirectionX": "LEFT",
+      "growthDirectionY": "UP",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "color": 10803425,
+    "useDynamicColor": true,
+    "updateInterval": 5.0,
+    "additionalString": " ms"
+  },
+  "tpsSettings": {
+    "base": {
+      "shouldRender": true,
+      "x": -263,
+      "y": -24,
+      "originX": "RIGHT",
+      "originY": "BOTTOM",
+      "growthDirectionX": "LEFT",
+      "growthDirectionY": "UP",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "color": 11922135,
+    "useDynamicColor": true,
+    "additionalString": " TPS"
+  },
+  "playerCountSettings": {
+    "base": {
+      "shouldRender": false,
+      "x": 24,
+      "y": -56,
+      "originX": "LEFT",
+      "originY": "BOTTOM",
+      "growthDirectionX": "RIGHT",
+      "growthDirectionY": "UP",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "color": 12574719,
+    "showMaxPlayer": true
+  },
+  "clockSettings": {
+    "systemSetting": {
+      "base": {
+        "shouldRender": true,
+        "x": -24,
+        "y": -24,
+        "originX": "RIGHT",
+        "originY": "BOTTOM",
+        "growthDirectionX": "LEFT",
+        "growthDirectionY": "UP",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "use12Hour": false,
+      "color": 16777215
+    },
+    "inGameSetting": {
+      "base": {
+        "shouldRender": true,
+        "x": 3,
+        "y": 24,
+        "originX": "CENTER",
+        "originY": "TOP",
+        "growthDirectionX": "RIGHT",
+        "growthDirectionY": "DOWN",
+        "displayMode": "BOTH",
+        "drawBackground": true,
+        "drawTextShadow": false,
+        "scale": 0.0,
+        "conditions": []
+      },
+      "use12Hour": false,
+      "color": {
+        "day": 16775605,
+        "night": 14076911,
+        "rain": 11915496,
+        "thunder": 9416395
+      }
+    }
+  },
+  "comboSettings": {
+    "base": {
+      "shouldRender": true,
+      "x": 0,
+      "y": -199,
+      "originX": "CENTER",
+      "originY": "BOTTOM",
+      "growthDirectionX": "CENTER",
+      "growthDirectionY": "UP",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "color": 16751222,
+    "hideInactive": true,
+    "additionalString": " Hits"
+  },
+  "reachSettings": {
+    "base": {
+      "shouldRender": true,
+      "x": 0,
+      "y": -171,
+      "originX": "CENTER",
+      "originY": "BOTTOM",
+      "growthDirectionX": "CENTER",
+      "growthDirectionY": "UP",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "color": 10477749,
+    "hideInactive": true,
+    "additionalString": " Blocks"
+  },
+  "speedSettings": {
+    "base": {
+      "shouldRender": false,
+      "x": 171,
+      "y": -24,
+      "originX": "LEFT",
+      "originY": "BOTTOM",
+      "growthDirectionX": "RIGHT",
+      "growthDirectionY": "UP",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "color": 11915496,
+    "useFullSpeed": true,
+    "additionalString": " BPS"
+  },
+  "biomeSettings": {
+    "base": {
+      "shouldRender": true,
+      "x": -3,
+      "y": 24,
+      "originX": "CENTER",
+      "originY": "TOP",
+      "growthDirectionX": "LEFT",
+      "growthDirectionY": "DOWN",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "color": {
+      "overworld": 16777215,
+      "nether": 16545905,
+      "end": 13223907,
+      "custom": 16777215
+    }
+  },
+  "daySettings": {
+    "base": {
+      "shouldRender": false,
+      "x": 24,
+      "y": 140,
+      "originX": "LEFT",
+      "originY": "TOP",
+      "growthDirectionX": "RIGHT",
+      "growthDirectionY": "DOWN",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "color": 16777215,
+    "additionalString": "Day "
+  },
+  "targetedCrosshairSettings": {
+    "base": {
+      "shouldRender": true,
+      "x": 0,
+      "y": 56,
+      "originX": "CENTER",
+      "originY": "TOP",
+      "growthDirectionX": "CENTER",
+      "growthDirectionY": "DOWN",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "informationMode": "BOTH",
+    "modNameColor": 14543861,
+    "targetedNameColor": 16777215,
+    "entityColors": {
+      "hostile": 16164261,
+      "angerable": 16242359,
+      "passive": 13365464,
+      "player": 11065578,
+      "unknown": 12960724
+    }
+  },
+  "inventorySettings": {
+    "base": {
+      "shouldRender": false,
+      "x": -24,
+      "y": 0,
+      "originX": "RIGHT",
+      "originY": "MIDDLE",
+      "growthDirectionX": "LEFT",
+      "growthDirectionY": "MIDDLE",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "drawVertical": true
+  },
+  "inventorySpaceSettings": {
+    "base": {
+      "shouldRender": false,
+      "x": -24,
+      "y": -56,
+      "originX": "RIGHT",
+      "originY": "BOTTOM",
+      "growthDirectionX": "LEFT",
+      "growthDirectionY": "UP",
+      "displayMode": "BOTH",
+      "drawBackground": true,
+      "drawTextShadow": false,
+      "scale": 0.0,
+      "conditions": []
+    },
+    "color": 14202250,
+    "showRemaining": false,
+    "showMaxSlot": true
+  }
+}

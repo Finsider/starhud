@@ -1,0 +1,365 @@
+---- Minecraft Crash Report ----
+// Don't do that.
+
+Time: 2026-07-14 16:12:32
+Description: Render Frame
+
+java.lang.NullPointerException: Cannot read field "player" because "fin.starhud.hud.implementation.hand.AbstractHandHUD.CLIENT" is null
+	at TRANSFORMER/starhud@26.2.0.0/fin.starhud.hud.implementation.hand.AbstractHandHUD.getStack(AbstractHandHUD.java:44) ~[main/:?] {}
+	at TRANSFORMER/starhud@26.2.0.0/fin.starhud.hud.implementation.hand.AbstractHandHUD.collectHUDInformation(AbstractHandHUD.java:64) ~[main/:?] {}
+	at TRANSFORMER/starhud@26.2.0.0/fin.starhud.hud.AbstractHUD.collect(AbstractHUD.java:67) ~[main/:?] {}
+	at TRANSFORMER/starhud@26.2.0.0/fin.starhud.hud.HUDComponent.collectAll(HUDComponent.java:209) ~[main/:?] {}
+	at TRANSFORMER/starhud@26.2.0.0/fin.starhud.init.EventInit.onHUDRender(EventInit.java:70) ~[main/:?] {}
+	at net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:27) ~[bus-8.0.5.jar:?] {}
+	at net.neoforged.bus.EventBus.post(EventBus.java:360) ~[bus-8.0.5.jar:?] {}
+	at net.neoforged.bus.EventBus.post(EventBus.java:328) ~[bus-8.0.5.jar:?] {}
+	at TRANSFORMER/neoforge@26.2.0.1-beta/net.neoforged.neoforge.client.gui.GuiLayerManager.renderInner(GuiLayerManager.java:77) ~[neoforge-26.2.0.1-beta-universal.jar:?] {}
+	at TRANSFORMER/neoforge@26.2.0.1-beta/net.neoforged.neoforge.client.gui.GuiLayerManager.render(GuiLayerManager.java:68) ~[neoforge-26.2.0.1-beta-universal.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.gui.Hud.extractRenderState(Hud.java:237) ~[minecraft-patched-26.2.0.1-beta.jar:?] {neoforge:access_transformer}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.gui.Gui.extractRenderState(Gui.java:159) ~[minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.renderer.GameRenderer.extract(GameRenderer.java:396) ~[minecraft-patched-26.2.0.1-beta.jar:?] {neoforge:access_transformer}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.Minecraft.renderFrame(Minecraft.java:1320) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.Minecraft.runTick(Minecraft.java:1230) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.Minecraft.run(Minecraft.java:928) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.main.Main.main(Main.java:294) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at net.neoforged.fml.startup.Client.main(Client.java:19) [loader-11.0.13.jar:11.0] {}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[?:?] {}
+	at net.neoforged.devlaunch.Main.main(Main.java:57) [DevLaunch-1.0.2.jar:?] {}
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Render thread
+Stacktrace:
+	at TRANSFORMER/starhud@26.2.0.0/fin.starhud.hud.implementation.hand.AbstractHandHUD.getStack(AbstractHandHUD.java:44) ~[main/:?] {}
+	at TRANSFORMER/starhud@26.2.0.0/fin.starhud.hud.implementation.hand.AbstractHandHUD.collectHUDInformation(AbstractHandHUD.java:64) ~[main/:?] {}
+	at TRANSFORMER/starhud@26.2.0.0/fin.starhud.hud.AbstractHUD.collect(AbstractHUD.java:67) ~[main/:?] {}
+	at TRANSFORMER/starhud@26.2.0.0/fin.starhud.hud.HUDComponent.collectAll(HUDComponent.java:209) ~[main/:?] {}
+	at TRANSFORMER/starhud@26.2.0.0/fin.starhud.init.EventInit.onHUDRender(EventInit.java:70) ~[main/:?] {}
+	at net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:27) ~[bus-8.0.5.jar:?] {}
+	at net.neoforged.bus.EventBus.post(EventBus.java:360) ~[bus-8.0.5.jar:?] {}
+	at net.neoforged.bus.EventBus.post(EventBus.java:328) ~[bus-8.0.5.jar:?] {}
+	at TRANSFORMER/neoforge@26.2.0.1-beta/net.neoforged.neoforge.client.gui.GuiLayerManager.renderInner(GuiLayerManager.java:77) ~[neoforge-26.2.0.1-beta-universal.jar:?] {}
+	at TRANSFORMER/neoforge@26.2.0.1-beta/net.neoforged.neoforge.client.gui.GuiLayerManager.render(GuiLayerManager.java:68) ~[neoforge-26.2.0.1-beta-universal.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.gui.Hud.extractRenderState(Hud.java:237) ~[minecraft-patched-26.2.0.1-beta.jar:?] {neoforge:access_transformer}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.gui.Gui.extractRenderState(Gui.java:159) ~[minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.renderer.GameRenderer.extract(GameRenderer.java:396) ~[minecraft-patched-26.2.0.1-beta.jar:?] {neoforge:access_transformer}
+-- Render Frame Details --
+Details:
+	Modules: 
+		ADVAPI32.dll:Advanced Windows 32 Base API:10.0.19041.5678 (WinBuild.160101.0800):Microsoft Corporation
+		AUDIOSES.DLL:Audio Session:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		AVRT.dll:Multimedia Realtime Runtime:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		COMCTL32.dll:User Experience Controls Library:6.10 (WinBuild.160101.0800):Microsoft Corporation
+		COMDLG32.dll:Common Dialogs DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		CRYPT32.dll:Crypto API32:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		CRYPTSP.dll:Cryptographic Service Provider API:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		ColorAdapterClient.dll:Microsoft Color Adapter Client:10.0.19041.5129 (WinBuild.160101.0800):Microsoft Corporation
+		CoreMessaging.dll:Microsoft CoreMessaging Dll:10.0.19041.5486:Microsoft Corporation
+		CoreUIComponents.dll:Microsoft Core UI Components Dll:10.0.19041.3636:Microsoft Corporation
+		DBGHELP.DLL:Windows Image Helper:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		DEVOBJ.dll:Device Information Set DLL:10.0.19041.4355 (WinBuild.160101.0800):Microsoft Corporation
+		DNSAPI.dll:DNS Client API DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		DWrite.dll:Microsoft DirectX Typography Services:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		GDI32.dll:GDI Client DLL:10.0.19041.5737 (WinBuild.160101.0800):Microsoft Corporation
+		GLU32.dll:OpenGL Utility Library DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		IMM32.DLL:Multi-User Windows IMM32 API Client DLL:10.0.19041.5737 (WinBuild.160101.0800):Microsoft Corporation
+		IPHLPAPI.DLL:IP Helper API:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		KERNEL32.DLL:Windows NT BASE API Client DLL:10.0.19041.5072 (WinBuild.160101.0800):Microsoft Corporation
+		KERNELBASE.dll:Windows NT BASE API Client DLL:10.0.19041.5553 (WinBuild.160101.0800):Microsoft Corporation
+		MMDevApi.dll:MMDevice API:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		MSACM32.dll:Microsoft ACM Audio Filter:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		MSCTF.dll:MSCTF Server DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		MSWSOCK.dll:Microsoft Windows Sockets 2.0 Service Provider:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		MpOav.dll:IOfficeAntiVirus Module:4.18.26060.3008 (df1b0eba8e0e68e7272235d6dea4de3285c715b9):Microsoft Corporation
+		NLAapi.dll:Network Location Awareness 2:10.0.19041.4123 (WinBuild.160101.0800):Microsoft Corporation
+		NSI.dll:NSI User-mode interface DLL:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		NTASN1.dll:Microsoft ASN.1 API:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		OLEAUT32.dll:OLEAUT32.DLL:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		OpenAL.dll:Main implementation library:1.25.1:
+		POWRPROF.dll:Power Profile Helper DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		PROPSYS.dll:Microsoft Property System:7.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		PSAPI.DLL:Process Status Helper:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		RPCRT4.dll:Remote Procedure Call Runtime:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		SETUPAPI.dll:Windows Setup API:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		SHCORE.dll:SHCORE:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		SHELL32.dll:Windows Shell Common Dll:10.0.19041.5678 (WinBuild.160101.0800):Microsoft Corporation
+		UMPDC.dll
+		USER32.dll:Multi-User Windows USER API Client DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		USERENV.dll:Userenv:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		USP10.dll:Uniscribe Unicode script processor:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		VCRUNTIME140.dll:Microsoft® C Runtime Library:14.42.34438.0:Microsoft Corporation
+		VERSION.dll:Version Checking and File Installation Libraries:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		WINMM.dll:MCI API DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		WINSTA.dll:Winstation Library:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		WINTRUST.dll:Microsoft Trust Verification APIs:10.0.19041.5737 (WinBuild.160101.0800):Microsoft Corporation
+		WS2_32.dll:Windows Socket 2.0 32-Bit DLL:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		WTSAPI32.dll:Windows Remote Desktop Session Host Server SDK APIs:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		Wldp.dll:Windows Lockdown Policy:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		amsi.dll:Anti-Malware Scan Interface:10.0.19041.4355 (WinBuild.160101.0800):Microsoft Corporation
+		apphelp.dll:Application Compatibility Client Library:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		bcrypt.dll:Windows Cryptographic Primitives Library:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		bcryptPrimitives.dll:Windows Cryptographic Primitives Library:10.0.19041.5007 (WinBuild.160101.0800):Microsoft Corporation
+		cfgmgr32.dll:Configuration Manager DLL:10.0.19041.3996 (WinBuild.160101.0800):Microsoft Corporation
+		clbcatq.dll:COM+ Configuration Catalog:2001.12.10941.16384 (WinBuild.160101.0800):Microsoft Corporation
+		combase.dll:Microsoft COM for Windows:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		cryptbase.dll:Base cryptographic API DLL:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		cryptnet.dll:Crypto Network Related API:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		dbgcore.DLL:Windows Core Debugging Helpers:10.0.19041.4355 (WinBuild.160101.0800):Microsoft Corporation
+		dinput8.dll:Microsoft DirectInput:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		drvstore.dll:Driver Store API:10.0.19041.5369 (WinBuild.160101.0800):Microsoft Corporation
+		dwmapi.dll:Microsoft Desktop Window Manager API:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		dxcore.dll:DXCore:10.0.19041.4474 (WinBuild.160101.0800):Microsoft Corporation
+		dxgi.dll:DirectX Graphics Infrastructure:10.0.19041.5438 (WinBuild.160101.0800):Microsoft Corporation
+		extnet.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+		fastprox.dll:WMI Custom Marshaller:10.0.19041.4355 (WinBuild.160101.0800):Microsoft Corporation
+		freetype.dll:Font Rendering Library:2.14.1:The FreeType Project
+		fwpuclnt.dll:FWP/IPsec User-Mode API:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		gdi32full.dll:GDI Client DLL:10.0.19041.5737 (WinBuild.160101.0800):Microsoft Corporation
+		glfw.dll:GLFW 3.5.0 DLL:3.5.0:GLFW
+		graphics-hook64.dll:OBS Graphics Hook:1.8.7.0:OBS Project
+		icm32.dll:Microsoft Color Management Module (CMM):10.0.19041.5129 (WinBuild.160101.0800):Microsoft Corporation
+		imagehlp.dll:Windows NT Image Helper:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		inputhost.dll:InputHost:10.0.19041.4355 (WinBuild.160101.0800):Microsoft Corporation
+		java.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+		java.exe:Java(TM) Platform SE binary:25.0.2.0:N/A
+		jemalloc.dll
+		jimage.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+		jli.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+		jna18044459757782468421.dll:JNA native library:7.0.2:Java(TM) Native Access (JNA)
+		jvm.dll:Java HotSpot(TM) 64-Bit server VM:25.0.2.0:N/A
+		jvmcicompiler.dll
+		kernel.appcore.dll:AppModel API Host:10.0.19041.3758 (WinBuild.160101.0800):Microsoft Corporation
+		lwjgl.dll
+		lwjgl_opengl.dll
+		lwjgl_stb.dll
+		lwjgl_tinyfd.dll
+		lwjgl_vma.dll
+		management.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+		management_ext.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+		mdnsNSP.dll:Bonjour Namespace Provider:3,1,0,1:Apple Inc.
+		msasn1.dll:ASN.1 Runtime APIs:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		mscms.dll:Microsoft Color Matching System DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		msdmo.dll:DMO Runtime:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		msvcp140.dll:Microsoft® C Runtime Library:14.42.34438.0:Microsoft Corporation
+		msvcp_win.dll:Microsoft® C Runtime Library:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		msvcrt.dll:Windows NT CRT DLL:7.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		napinsp.dll:E-mail Naming Shim Provider:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		ncrypt.dll:Windows NCrypt Router:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		net.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+		nio.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+		ntdll.dll:NT Layer DLL:10.0.19041.4842 (WinBuild.160101.0800):Microsoft Corporation
+		ntmarta.dll:Windows NT MARTA provider:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		nvgpucomp64.dll:NVIDIA GPU Compiler Driver, Version 561.09 :32.0.15.6109:NVIDIA Corporation
+		nvoglv64.dll:NVIDIA Compatible OpenGL ICD:32.0.15.6109:NVIDIA Corporation
+		nvspcap64.dll:NVIDIA Game Proxy:3.28.0.417:NVIDIA Corporation
+		ole32.dll:Microsoft OLE for Windows:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		opengl32.dll:OpenGL Client DLL:10.0.19041.5438 (WinBuild.160101.0800):Microsoft Corporation
+		pdh.dll:Windows Performance Data Helper DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		perfos.dll:Windows System Performance Objects DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		perfproc.dll:Windows System Process Performance Objects DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		pnrpnsp.dll:PNRP Name Space Provider:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		profapi.dll:User Profile Basic API:10.0.19041.5553 (WinBuild.160101.0800):Microsoft Corporation
+		rasadhlp.dll:Remote Access AutoDial Helper:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		resourcepolicyclient.dll:Resource Policy Client:10.0.19041.4355 (WinBuild.160101.0800):Microsoft Corporation
+		rsaenh.dll:Microsoft Enhanced Cryptographic Provider:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		sapi.dll:Speech API:5.3.24006.00 (WinBuild.160101.0800):Microsoft Corporation
+		sechost.dll:Host for SCM/SDDL/LSA Lookup APIs:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		shaderc.dll
+		shlwapi.dll:Shell Light-weight Utility Library:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		spirv-cross.dll
+		sunmscapi.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+		textinputframework.dll:"TextInputFramework.DYNLINK":10.0.19041.5438 (WinBuild.160101.0800):Microsoft Corporation
+		ucrtbase.dll:Microsoft® C Runtime Library:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		uxtheme.dll:Microsoft UxTheme Library:10.0.19041.4529 (WinBuild.160101.0800):Microsoft Corporation
+		vcruntime140_1.dll:Microsoft® C Runtime Library:14.42.34438.0:Microsoft Corporation
+		verify.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+		vulkan-1.dll:Vulkan Loader:1.3.280.0:
+		wbemcomn.dll:WMI:10.0.19041.4355 (WinBuild.160101.0800):Microsoft Corporation
+		wbemprox.dll:WMI:10.0.19041.4474 (WinBuild.160101.0800):Microsoft Corporation
+		wbemsvc.dll:WMI:10.0.19041.4474 (WinBuild.160101.0800):Microsoft Corporation
+		win32u.dll:Win32u:10.0.19041.5737 (WinBuild.160101.0800):Microsoft Corporation
+		windows.storage.dll:Microsoft WinRT Storage API:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		winmmbase.dll:Base Multimedia Extension API DLL:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		winrnr.dll:LDAP RnR Provider DLL:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		wintypes.dll:Windows Base Types DLL:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		wshbth.dll:Windows Sockets Helper DLL:10.0.19041.3636 (WinBuild.160101.0800):Microsoft Corporation
+		wshunix.dll:AF_UNIX Winsock2 Helper DLL:10.0.19041.5438 (WinBuild.160101.0800):Microsoft Corporation
+		xinput1_4.dll:Microsoft Common Controller API:10.0.19041.1 (WinBuild.160101.0800):Microsoft Corporation
+		zip.dll:Java(TM) Platform SE binary:25.0.2.0:N/A
+Stacktrace:
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.Minecraft.runTick(Minecraft.java:1230) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.Minecraft.run(Minecraft.java:928) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.main.Main.main(Main.java:294) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at net.neoforged.fml.startup.Client.main(Client.java:19) [loader-11.0.13.jar:11.0] {}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[?:?] {}
+	at net.neoforged.devlaunch.Main.main(Main.java:57) [DevLaunch-1.0.2.jar:?] {}
+
+
+-- Uptime --
+Details:
+	JVM uptime: 45.534s
+	Wall uptime: 31.468s
+	High-res time: 42.923s
+	Client ticks: 519 ticks / 25.950s
+Stacktrace:
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.Minecraft.fillReport(Minecraft.java:2446) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.Minecraft.emergencySaveAndCrash(Minecraft.java:975) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.Minecraft.run(Minecraft.java:948) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at TRANSFORMER/minecraft@26.2/net.minecraft.client.main.Main.main(Main.java:294) [minecraft-patched-26.2.0.1-beta.jar:?] {}
+	at net.neoforged.fml.startup.Client.main(Client.java:19) [loader-11.0.13.jar:11.0] {}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[?:?] {}
+	at net.neoforged.devlaunch.Main.main(Main.java:57) [DevLaunch-1.0.2.jar:?] {}
+
+
+-- Affected level --
+Details:
+	All players: 1 total; LocalPlayer{name=Dev, id=1, pos=(8.5, -60.0, 10.5), mode=CREATIVE, permission=owner}
+	Chunk stats: 1521, 256
+	Level dimension: minecraft:overworld
+	Level time: 63 game time, 63 day time
+	Level spawn location: World: (0,-60,0), Section: (at 0,4,0 in 0,-4,0; chunk contains blocks 0,-64,0 to 15,319,15), Region: (0,0; contains chunks 0,0 to 31,31, blocks 0,-64,0 to 511,319,511)
+	Server brand: neoforge
+	Server type: Integrated singleplayer server
+	Tracked entity count: 1
+	Client weather: Raining: false, thundering: false
+
+-- Last reload --
+Details:
+	Reload number: 1
+	Reload reason: initial
+	Finished: Yes
+	Packs: vanilla, mod_resources, mod/cloth_config, mod/neoforge, mod/starhud
+
+-- System Details --
+Details:
+	Minecraft Version: 26.2
+	Minecraft Version ID: 26.2
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 25.0.2, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode, sharing), Oracle Corporation
+	Memory: 259165520 bytes (247 MiB) / 580911104 bytes (554 MiB) up to 4263510016 bytes (4066 MiB)
+	Memory (heap): init: 256MiB, used: 304MiB, committed: 554MiB, max: 4066MiB
+	Memory (non-head): init: 007MiB, used: 207MiB, committed: 210MiB, max: 000MiB
+	CPUs: 8
+	Processor Vendor: GenuineIntel
+	Processor Name: Intel(R) Core(TM) i5-8300H CPU @ 2.30GHz
+	Identifier: Intel64 Family 6 Model 158 Stepping 10
+	Microarchitecture: Coffee Lake
+	Frequency (GHz): 2.30
+	Number of physical packages: 1
+	Number of physical CPUs: 4
+	Number of logical CPUs: 8
+	Graphics card #0 name: Intel(R) UHD Graphics 630
+	Graphics card #0 vendor: Intel Corporation
+	Graphics card #0 VRAM (MiB): 1024.00
+	Graphics card #0 deviceId: VideoController1
+	Graphics card #0 versionInfo: 27.20.100.8729
+	Graphics card #1 name: NVIDIA GeForce GTX 1050 Ti
+	Graphics card #1 vendor: NVIDIA
+	Graphics card #1 VRAM (MiB): 4096.00
+	Graphics card #1 deviceId: VideoController2
+	Graphics card #1 versionInfo: 32.0.15.6109
+	Memory slot #0 capacity (MiB): 8192.00
+	Memory slot #0 clockSpeed (GHz): 2.67
+	Memory slot #0 type: DDR4
+	Memory slot #1 capacity (MiB): 8192.00
+	Memory slot #1 clockSpeed (GHz): 2.67
+	Memory slot #1 type: DDR4
+	Virtual memory max (MiB): 23682.30
+	Virtual memory used (MiB): 16448.68
+	Swap memory total (MiB): 7424.00
+	Swap memory used (MiB): 627.92
+	Space in storage for jna.tmpdir (MiB): <path not set>
+	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>
+	Space in storage for io.netty.native.workdir (MiB): <path not set>
+	Space in storage for java.io.tmpdir (MiB): available: 43606.14, total: 243466.23
+	Space in storage for workdir (MiB): available: 687141.63, total: 953288.00
+	Operating System Version: Microsoft Windows 10 (Home) build 19045
+	Process Elevated: false
+	Process Loads: Uptime: 45s, user: 103s (229.29%), kernel: 7s (14.50%), total: 109s (243.78%)
+	Process Virtual Size (MiB): 3070.27
+	Process Resident Size (MiB): 1069.12
+	JVM Flags: 5 total; -XX:ThreadPriorityPolicy=1 -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:-UnlockExperimentalVMOptions
+	Debug Flags: 0 total; 
+	Launched Version: 26.2.0.1-beta
+	Backend library: LWJGL version 3.4.1+2
+	Window size: 854x480
+	Surface Info: acquired, FIFO, 854 x 480
+	GFLW Platform: win32
+	Graphics Device: NVIDIA GeForce GTX 1050 Ti/PCIe/SSE2
+	Graphics Backend: OpenGL
+	Graphics Vendor: NVIDIA Corporation
+	Graphics Drivers: 3.3.0 NVIDIA 561.09
+	Graphics Device Extensions: GL_ARB_multi_draw_indirect, GL_ARB_buffer_storage, GL_ARB_shader_draw_parameters, GL_ARB_base_instance, GL_KHR_debug, GL_ARB_draw_indirect, GL_ARB_clip_control, GL_ARB_vertex_attrib_binding, GL_ARB_direct_state_access, GL_EXT_texture_filter_anisotropic
+	Graphics Device Type: OTHER
+	Graphics Device Features: DeviceFeatures[shaderDrawParameters=true, multiDrawDirectInterleaved=false, multiDrawDirectSeparate=true, multiDrawIndirect=true, drawIndirect=true, nonZeroFirstInstance=true, persistentMapping=true]
+	GL debug messages: 
+	Is Modded: Definitely; Client brand changed to 'neoforge'
+	Universe: 400921fb54442d18
+	Type: Client
+	Transparency: regular
+	Render Distance: 16/16 chunks
+	Narrator config: OFF
+	Narrator status: true
+	Resource Packs: vanilla, mod_resources, mod/cloth_config (incompatible), mod/neoforge (incompatible), mod/starhud (incompatible)
+	Sound Cache: 48816 bytes in 1 buffers
+	Current Language: en_us
+	Locale: en_ID
+	System encoding: Cp1252
+	File encoding: UTF-8
+	CPU: 8x Intel(R) Core(TM) i5-8300H CPU @ 2.30GHz
+	Server Running: true
+	Player Count: 1 / 8; [ServerPlayer['Dev'/1, l='ServerLevel[New World]', x=8.50, y=-60.00, z=10.50]]
+	Active Data Packs: vanilla, mod_data, mod/cloth_config (incompatible), mod/neoforge, mod/starhud (incompatible)
+	Available Data Packs: minecart_improvements, redstone_experiments, trade_rebalance, vanilla, mod/cloth_config (incompatible), mod/neoforge, mod/starhud (incompatible), mod_data
+	Enabled Feature Flags: minecraft:vanilla
+	World Generation: Stable
+	World Seed: 2366898404956739127
+	Suppressed Exceptions: ~~NONE~~
+	Type: Integrated Server
+	Is Modded: Definitely; Client brand changed to 'neoforge'; Server brand changed to 'neoforge'
+	Launched Version: 26.2.0.1-beta
+	Class Processors: 
+		00,00%: neoforge:neoforge_dev_dist_cleaner
+		00,00%: neoforge:computing_frames (marker)
+		00,00%: neoforge:runtime_enum_extender
+		04,25%: neoforge:access_transformer
+		00,04%: neoforge:mixin
+		00,00%: neoforge:simple_processors_default (marker)
+		00,01%: neoforge.coremods:field_to_getter.net.minecraft.world.level.biome.biome
+		00,01%: neoforge.coremods:field_to_getter.net.minecraft.world.level.block.flowerpotblock
+		00,01%: neoforge.coremods:field_to_getter.net.minecraft.world.level.levelgen.structure.structure
+		00,26%: neoforge.coremods:method_redirector
+	Mod List: 
+		cloth-config-neoforge-26.2.155.jar                |Cloth Config v26.2 API        |cloth_config                  |26.2.155            |Manifest: 650cdc79fcb3332dd08d75634443b93b012dba49b748359a4a97f0975bc55c31
+		minecraft-patched-26.2.0.1-beta.jar               |Minecraft                     |minecraft                     |26.2                |Manifest: NOSIGNATURE
+		neoforge-26.2.0.1-beta-universal.jar              |NeoForge                      |neoforge                      |26.2.0.1-beta       |Manifest: NOSIGNATURE
+		main                                              |StarHUD                       |starhud                       |26.2.0.0            |Manifest: NOSIGNATURE
+	Crash Report UUID: f61310f6-abdc-4787-a674-c3c11c9fa9fc
+	FML: 11.0.13
+	NeoForge: 26.2.0.1-beta
+	Class Processors: 
+		00,00%: neoforge:neoforge_dev_dist_cleaner
+		00,00%: neoforge:computing_frames (marker)
+		00,00%: neoforge:runtime_enum_extender
+		04,25%: neoforge:access_transformer
+		00,04%: neoforge:mixin
+		00,00%: neoforge:simple_processors_default (marker)
+		00,01%: neoforge.coremods:field_to_getter.net.minecraft.world.level.biome.biome
+		00,01%: neoforge.coremods:field_to_getter.net.minecraft.world.level.block.flowerpotblock
+		00,01%: neoforge.coremods:field_to_getter.net.minecraft.world.level.levelgen.structure.structure
+		00,26%: neoforge.coremods:method_redirector
+	Mod List: 
+		cloth-config-neoforge-26.2.155.jar                |Cloth Config v26.2 API        |cloth_config                  |26.2.155            |Manifest: 650cdc79fcb3332dd08d75634443b93b012dba49b748359a4a97f0975bc55c31
+		minecraft-patched-26.2.0.1-beta.jar               |Minecraft                     |minecraft                     |26.2                |Manifest: NOSIGNATURE
+		neoforge-26.2.0.1-beta-universal.jar              |NeoForge                      |neoforge                      |26.2.0.1-beta       |Manifest: NOSIGNATURE
+		main                                              |StarHUD                       |starhud                       |26.2.0.0            |Manifest: NOSIGNATURE
+	Crash Report UUID: 7b9d376c-cc86-4475-8a10-e1102b038249
+	FML: 11.0.13
+	NeoForge: 26.2.0.1-beta
