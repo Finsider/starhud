@@ -1,2 +1,0 @@
-/weather rain
-/time set minecraft:day
