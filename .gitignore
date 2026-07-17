@@ -7,22 +7,27 @@ classes/
 
 # eclipse
 
+bin
 *.launch
+.settings
+.metadata
+.classpath
+.project
 
 # idea
 
-.idea/
-*.iml
+out
 *.ipr
 *.iws
+*.iml
+.idea/*
+!.idea/scopes
 
 # vscode
 
 .settings/
 .vscode/
 bin/
-.classpath
-.project
 
 # macos
 
@@ -31,6 +36,7 @@ bin/
 # fabric
 
 run/
+runs/
 
 # java
 
