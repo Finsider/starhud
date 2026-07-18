@@ -14,7 +14,7 @@ public class BossBarHUD {
     private static int cachedScreenHeight = -1;
 
     public static boolean isShown(String ignored) {
-        return !((AccessorBossBarHud) CLIENT.gui.hud.getBossOverlay()).getBossBars().isEmpty();
+        return !((AccessorBossBarHud) CLIENT.gui.getBossOverlay()).getBossBars().isEmpty();
     }
 
     public static int getWidth() {
@@ -26,7 +26,7 @@ public class BossBarHUD {
     }
 
     public static int getVisibleBossBarCount() {
-        Collection<LerpingBossEvent> bars = ((AccessorBossBarHud) CLIENT.gui.hud.getBossOverlay()).getBossBars().values();
+        Collection<LerpingBossEvent> bars = ((AccessorBossBarHud) CLIENT.gui.getBossOverlay()).getBossBars().values();
         int currentBossBarAmount = bars.size();
         int currentScreenHeight = CLIENT.getWindow().getGuiScaledHeight();
 

@@ -48,15 +48,15 @@ public class AttackTracker {
         }
     }
 
-    public static void onAttack(Player player, Level world, Entity entity) {
-        if (!world.isClientSide()) return;
+    public static InteractionResult onAttack(Player player, Level world, Entity entity) {
+        if (!world.isClientSide()) return InteractionResult.PASS;
 
         long now = world.getGameTime(); // ticks
 
         boolean sameTarget = entity.getUUID().equals(entityUuid);
         boolean cooldownExpired = now - lastHitTime >= 10;
 
-        if (sameTarget && !cooldownExpired) return;
+        if (sameTarget && !cooldownExpired) return InteractionResult.PASS;
 
         HitResult target = Minecraft.getInstance().hitResult;
 
@@ -73,5 +73,7 @@ public class AttackTracker {
             entityUuid = entity.getUUID();
         }
         lastHitTime = now;
+
+        return InteractionResult.PASS;
     }
 }

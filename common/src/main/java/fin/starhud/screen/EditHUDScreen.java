@@ -209,7 +209,7 @@ public class EditHUDScreen extends Screen {
                             isMoreOptionActivated = false;
                             selectedHUDs.clear();
 
-                            this.minecraft.setScreenAndShow(AutoConfigClient.getConfigScreen(Settings.class, this).get());
+                            this.minecraft.setScreen(AutoConfigClient.getConfigScreen(Settings.class, this).get());
                         }
                 )
                 .tooltip(Tooltip.create(Component.translatable("starhud.screen.tooltip.config")))
@@ -1205,13 +1205,13 @@ public class EditHUDScreen extends Screen {
 
                 case GLFW.GLFW_KEY_R -> {
                     if (input.hasControlDown() && input.hasShiftDown()) {
-                        this.minecraft.setScreenAndShow(new ConfirmScreen(
+                        this.minecraft.setScreen(new ConfirmScreen(
                                 result -> {
                                     if (result) {
                                         AutoConfig.getConfigHolder(Settings.class).resetToDefault();
                                         actionBar.setText(Component.translatable("starhud.screen.action.reset"));
                                     }
-                                    this.minecraft.setScreenAndShow(this);
+                                    this.minecraft.setScreen(this);
                                 },
                                 Component.translatable("starhud.screen.dialog.reset_title"),
                                 Component.translatable("starhud.screen.dialog.reset_message")
@@ -1402,13 +1402,13 @@ public class EditHUDScreen extends Screen {
     @Override
     public void onClose() {
         if (isDirty()) {
-            this.minecraft.setScreenAndShow(new ConfirmScreen(
+            this.minecraft.setScreen(new ConfirmScreen(
                     result -> {
                         if (result) {
                             revertChanges();
                             onEditHUDClose();
                         } else {
-                            this.minecraft.setScreenAndShow(this);
+                            this.minecraft.setScreen(this);
                         }
                     },
                     Component.translatable("starhud.screen.dialog.discard_title"),
@@ -1427,7 +1427,7 @@ public class EditHUDScreen extends Screen {
     }
 
     public void onEditHUDClose() {
-        this.minecraft.setScreenAndShow(this.parent);
+        this.minecraft.setScreen(this.parent);
     }
 
     private void updateGroupFieldFromSelectedHUD() {

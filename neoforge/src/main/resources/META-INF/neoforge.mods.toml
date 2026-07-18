@@ -23,6 +23,6 @@ side="BOTH"
 [[dependencies.${mod_id}]]
 modId="minecraft"
 type="required"
-versionRange="[26.2,)"
+versionRange="[26.1,)"
 ordering="NONE"
 side="BOTH"

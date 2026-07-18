@@ -38,7 +38,7 @@ public class PlayerCountHUD extends AbstractHUD  {
         if (CLIENT.player == null) return false;
 
         int currentPlayer = -1, maxPlayer = -1;
-        if (CLIENT.isLocalServer()) {
+        if (CLIENT.isSingleplayer()) {
             IntegratedServer server = CLIENT.getSingleplayerServer();
             if (server == null) return false;
 

@@ -11,7 +11,7 @@ public class PlayerListHUD {
     public static final Box boundingBox = new Box(0,0, 0, 0);
 
     public static boolean isShown(String ignored) {
-        return ((AccessorPlayerListHud) CLIENT.gui.hud.getTabList()).isVisible();
+        return ((AccessorPlayerListHud) CLIENT.gui.getTabList()).isVisible();
     }
 
     public static int getWidth() {

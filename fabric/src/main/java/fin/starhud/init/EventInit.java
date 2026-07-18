@@ -46,7 +46,7 @@ public class EventInit {
 
     public static void onOpenEditHUDKeyPressed(Minecraft client) {
         while (Main.openEditHUDKey.consumeClick()) {
-            client.setScreenAndShow(new EditHUDScreen(Component.nullToEmpty("Edit HUD"), client.gui.screen()));
+            client.setScreenAndShow(new EditHUDScreen(Component.nullToEmpty("Edit HUD"), client.screen));
         }
     }
 
@@ -58,8 +58,8 @@ public class EventInit {
 
     public static void onHUDRender(GuiGraphicsExtractor context, DeltaTracker tickCounter) {
         if (SETTINGS.disableHUDRendering) return;
-        if (Minecraft.getInstance().gui.hud.isHidden()) return;
-        if (Minecraft.getInstance().gui.screen() instanceof EditHUDScreen) return;
+        if (Minecraft.getInstance().options.hideGui) return;
+        if (Minecraft.getInstance().screen instanceof EditHUDScreen) return;
 
         HUDComponent.getInstance().collectAll();
         HUDComponent.getInstance().renderAll(context);
