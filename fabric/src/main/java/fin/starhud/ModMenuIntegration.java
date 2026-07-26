@@ -3,7 +3,7 @@ package fin.starhud;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import fin.starhud.config.Settings;
-import me.shedaniel.autoconfig.AutoConfigClient;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -12,6 +12,6 @@ public class ModMenuIntegration implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> AutoConfigClient.getConfigScreen(Settings.class, parent).get();
+        return parent -> AutoConfig.getConfigScreen(Settings.class, parent).get();
     }
 }

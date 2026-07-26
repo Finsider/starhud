@@ -10,7 +10,7 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
@@ -23,13 +23,13 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
 
     private static final GeneralSettings.HUDSettings HUD_SETTINGS = Main.settings.generalSettings.hudSettings;
 
-    private static final Identifier BIG_DURABILITY_BACKGROUND_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/big_durability_background.png");
-    private static final Identifier BIG_DURABILITY_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/big_durability_bar.png");
+    private static final ResourceLocation BIG_DURABILITY_BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/big_durability_background.png");
+    private static final ResourceLocation BIG_DURABILITY_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/big_durability_bar.png");
     private static final int BIG_DURABILITY_TEXTURE_WIDTH = 70;
     private static final int BIG_DURABILITY_TEXTURE_HEIGHT = 14;
 
-    private static final Identifier DURABILITY_BACKGROUND_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/durability_background.png");
-    private static final Identifier DURABILITY_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/durability_bar.png");
+    private static final ResourceLocation DURABILITY_BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/durability_background.png");
+    private static final ResourceLocation DURABILITY_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/durability_bar.png");
     private static final int DURABILITY_TEXTURE_WIDTH = 40;
     private static final int DURABILITY_TEXTURE_HEIGHT = 7;
 
@@ -218,7 +218,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         return Mth.clamp(Math.round(maxStep - (float) stackDamage * maxStep / (float) stackMaxDamage), 0, maxStep);
     }
 
-    public boolean renderDurabilityHUD(GuiGraphics context, Identifier iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderDurabilityHUD(GuiGraphics context, ResourceLocation iconTexture, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, boolean drawTextShadow) {
         if (drawItem) {
             return renderDurabilityItem(context, x , y, drawBackground, drawTextShadow);
         } else {
@@ -294,7 +294,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean renderDurabilityIcon(GuiGraphics context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderDurabilityIcon(GuiGraphics context, ResourceLocation ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, boolean drawTextShadow) {
         if (displayMode == null) return false;
         return switch (displayMode) {
             case FRACTIONAL -> renderDurabilityIconFractional(context, ICON, x, y, u, v, textureWidth, textureHeight, iconWidth, iconHeight, drawBackground, drawTextShadow);
@@ -304,7 +304,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         };
     }
 
-    public boolean renderDurabilityIconBar(GuiGraphics context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public boolean renderDurabilityIconBar(GuiGraphics context, ResourceLocation ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
         if (ICON == null || hudDisplayMode == null)
             return false;
 
@@ -349,7 +349,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
     }
 
     // example render: ¹²³⁴/₅₆₇₈
-    public boolean renderDurabilityIconFractional(GuiGraphics context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderDurabilityIconFractional(GuiGraphics context, ResourceLocation ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, boolean drawTextShadow) {
         if (ICON == null || str == null || str2 == null || hudDisplayMode == null) return false;
         int w = getWidth();
         int h = getHeight();
@@ -389,7 +389,7 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean renderDurabilityIconCompact(GuiGraphics context, Identifier ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
+    public boolean renderDurabilityIconCompact(GuiGraphics context, ResourceLocation ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground) {
 
         if (ICON == null || hudDisplayMode == null) return false;
 

@@ -10,7 +10,7 @@ import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.PingDebugMonitor;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.debugchart.LocalSampleLogger;
 import net.minecraft.world.level.Level;
 
@@ -18,7 +18,7 @@ public class PingHUD extends AbstractHUD {
 
     private static final PingSettings SETTINGS = Main.settings.pingSettings;
 
-    private static final Identifier PING_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/ping.png");
+    private static final ResourceLocation PING_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/ping.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13 * 4;

@@ -14,7 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.level.Level;
@@ -26,7 +26,7 @@ public class  BiomeHUD extends AbstractHUD {
 
     private static final BiomeSettings BIOME_SETTINGS = Main.settings.biomeSettings;
 
-    private static final Identifier DIMENSION_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/dimension.png");
+    private static final ResourceLocation DIMENSION_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/dimension.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13 * 4;
@@ -63,7 +63,7 @@ public class  BiomeHUD extends AbstractHUD {
             Optional<ResourceKey<Biome>> biomeKey = currentBiome.unwrapKey();
 
             if (biomeKey.isPresent()) {
-                Identifier biomeId = biomeKey.get().identifier();
+                ResourceLocation biomeId = biomeKey.get().location();
                 String translatableKey = "biome." + biomeId.getNamespace() + '.' + biomeId.getPath();
 
                 // if it has translation we get the translation, else we just convert it to Pascal Case manually.

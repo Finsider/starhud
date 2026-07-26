@@ -8,7 +8,7 @@ import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +18,7 @@ public class ClockSystemHUD extends AbstractHUD {
     private static final ClockSystemSettings CLOCK_SYSTEM_SETTINGS = Main.settings.clockSettings.systemSetting;
     private static final Minecraft CLIENT = Minecraft.getInstance();
 
-    private static final Identifier CLOCK_SYSTEM_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/clock_system.png");
+    private static final ResourceLocation CLOCK_SYSTEM_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/clock_system.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;

@@ -8,14 +8,14 @@ import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
 public class SpeedHUD extends AbstractHUD {
 
     private static final Minecraft CLIENT = Minecraft.getInstance();
-    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/speed.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/speed.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
@@ -38,7 +38,7 @@ public class SpeedHUD extends AbstractHUD {
         if (CLIENT.player == null) return false;
 
         Entity entity = CLIENT.player.getVehicle() != null ? CLIENT.player.getVehicle() : CLIENT.player;
-        Vec3 vel = entity.getKnownSpeed();
+        Vec3 vel = entity.getDeltaMovement();
 
         double speed = SETTINGS.useFullSpeed ? vel.length() : vel.horizontalDistanceSqr();
         speed = (double) Math.round(speed * 20.0 * 10) / 10;

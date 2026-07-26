@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
 
@@ -18,14 +18,14 @@ public class RenderUtils {
     private static final int ITEM_HUD_ICON_WIDTH = 22;
     private static final int ITEM_HUD_ICON_HEIGHT = 22;
 
-    public static boolean drawSmallHUD(GuiGraphics context, String infoStr, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
+    public static boolean drawSmallHUD(GuiGraphics context, String infoStr, int x, int y, int width, int height, ResourceLocation iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (iconTexture == null || infoStr == null || displayMode == null) return false;
 
         FormattedCharSequence orderedText = FormattedCharSequence.forward(infoStr, Style.EMPTY);
         return drawSmallHUD(context, orderedText, x, y, width, height, iconTexture, u, v, textureWidth, textureHeight, iconWidth, iconHeight, color, iconColor, displayMode, drawBackground, drawTextShadow);
     }
 
-    public static boolean drawSmallHUD(GuiGraphics context, FormattedCharSequence infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
+    public static boolean drawSmallHUD(GuiGraphics context, FormattedCharSequence infoText, int x, int y, int width, int height, ResourceLocation iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (infoText == null || iconTexture == null || displayMode == null) return false;
 
         int padding = HUD_SETTINGS.textPadding;
@@ -59,14 +59,14 @@ public class RenderUtils {
         return true;
     }
 
-    public static boolean drawSmallHUD(GuiGraphics context, String infoStr, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
+    public static boolean drawSmallHUD(GuiGraphics context, String infoStr, int x, int y, int width, int height, ResourceLocation iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (infoStr == null || iconTexture == null || displayMode == null) return false;
 
         FormattedCharSequence orderedText = FormattedCharSequence.forward(infoStr, Style.EMPTY);
         return drawSmallHUD(context, orderedText, x, y, width, height, iconTexture, u, v, textureWidth, textureHeight, iconWidth, iconHeight, color, color, displayMode, drawBackground, drawTextShadow);
     }
 
-    public static boolean drawSmallHUD(GuiGraphics context, FormattedCharSequence infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
+    public static boolean drawSmallHUD(GuiGraphics context, FormattedCharSequence infoText, int x, int y, int width, int height, ResourceLocation iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (infoText == null || iconTexture == null || displayMode == null) return false;
 
         return drawSmallHUD(context, infoText, x, y, width, height, iconTexture, u, v, textureWidth, textureHeight, iconWidth, iconHeight, color, color, displayMode, drawBackground, drawTextShadow);
@@ -150,12 +150,12 @@ public class RenderUtils {
 
     // for easier version porting.
 
-    public static void drawTextureHUD(GuiGraphics context, Identifier identifier, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, int color) {
-        context.blit(RenderPipelines.GUI_TEXTURED, identifier, x, y, u, v, width, height, textureWidth, textureHeight, color);
+    public static void drawTextureHUD(GuiGraphics context, ResourceLocation ResourceLocation, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, int color) {
+        context.blit(RenderPipelines.GUI_TEXTURED, ResourceLocation, x, y, u, v, width, height, textureWidth, textureHeight, color);
     }
 
-    public static void drawTextureHUD(GuiGraphics context, Identifier identifier, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
-        context.blit(RenderPipelines.GUI_TEXTURED, identifier, x, y, u, v, width, height, textureWidth, textureHeight);
+    public static void drawTextureHUD(GuiGraphics context, ResourceLocation ResourceLocation, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
+        context.blit(RenderPipelines.GUI_TEXTURED, ResourceLocation, x, y, u, v, width, height, textureWidth, textureHeight);
     }
 
     public static void drawTextHUD(GuiGraphics context, String str, int x, int y, int color, boolean shadow) {

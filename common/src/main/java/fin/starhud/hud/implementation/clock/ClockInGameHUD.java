@@ -10,13 +10,13 @@ import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class ClockInGameHUD extends AbstractHUD {
 
     private static final ClockInGameSettings CLOCK_IN_GAME_SETTINGS = Main.settings.clockSettings.inGameSetting;
 
-    private static final Identifier CLOCK_IN_GAME_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/clock_ingame.png");
+    private static final ResourceLocation CLOCK_IN_GAME_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/clock_ingame.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13 * 4;

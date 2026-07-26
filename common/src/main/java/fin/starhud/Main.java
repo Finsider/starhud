@@ -12,7 +12,6 @@ public class Main {
 
     public static Settings settings;
 
-    public static KeyMapping.Category keyCategory;
     public static KeyMapping openEditHUDKey;
     public static KeyMapping toggleHUDKey;
 }

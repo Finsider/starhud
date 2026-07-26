@@ -6,7 +6,7 @@ import fin.starhud.config.hud.armor.ArmorSettings;
 import fin.starhud.hud.implementation.AbstractDurabilityHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
@@ -16,7 +16,7 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
     private static final DurabilitySettings DURABILITY_SETTINGS = Main.settings.armorSettings.durabilitySettings;
 
     private final ArmorSettings SETTINGS;
-    private final Identifier TEXTURE;
+    private final ResourceLocation TEXTURE;
     private EquipmentSlot slot;
 
     private static final int TEXTURE_WIDTH = 13;
@@ -24,7 +24,7 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
     private static final int ICON_WIDTH = 13;
     private static final int ICON_HEIGHT = 13;
 
-    public AbstractArmorHUD(ArmorSettings armorSettings, Identifier armorTexture, EquipmentSlot slot) {
+    public AbstractArmorHUD(ArmorSettings armorSettings, ResourceLocation armorTexture, EquipmentSlot slot) {
         super(armorSettings.base, DURABILITY_SETTINGS);
         this.SETTINGS = armorSettings;
         this.TEXTURE = armorTexture;

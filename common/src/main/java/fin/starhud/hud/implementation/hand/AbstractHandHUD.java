@@ -8,7 +8,7 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.implementation.AbstractDurabilityHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -30,9 +30,9 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
     private static final int ITEM_TEXTURE_HEIGHT = 3 + 16 + 3;
 
     private final HumanoidArm arm;
-    private final Identifier ICON_TEXTURE;
+    private final ResourceLocation ICON_TEXTURE;
 
-    public AbstractHandHUD(HandSettings handSettings, HumanoidArm arm, Identifier ICON_TEXTURE) {
+    public AbstractHandHUD(HandSettings handSettings, HumanoidArm arm, ResourceLocation ICON_TEXTURE) {
         super(handSettings.base, SETTINGS.durabilitySettings);
 
         this.arm = arm;

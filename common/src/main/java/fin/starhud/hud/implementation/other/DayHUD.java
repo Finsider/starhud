@@ -8,13 +8,13 @@ import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class DayHUD extends AbstractHUD {
 
     private static final DaySettings DAY_SETTINGS = Main.settings.daySettings;
 
-    private static final Identifier DAY_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/day.png");
+    private static final ResourceLocation DAY_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/day.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;

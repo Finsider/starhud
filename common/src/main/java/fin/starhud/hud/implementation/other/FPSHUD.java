@@ -8,13 +8,13 @@ import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class FPSHUD extends AbstractHUD {
 
     private static final FPSSettings FPS_SETTINGS = Main.settings.fpsSettings;
 
-    private static final Identifier FPS_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/fps.png");
+    private static final ResourceLocation FPS_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/fps.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;

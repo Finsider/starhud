@@ -8,13 +8,13 @@ import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public class InventorySpaceHUD extends AbstractHUD {
 
     private static final Minecraft CLIENT = Minecraft.getInstance();
-    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/inventory_space.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/inventory_space.png");
     private static final InventorySpaceSettings SETTINGS = Main.settings.inventorySpaceSettings;
 
     private static final int TEXTURE_WIDTH = 13;

@@ -9,13 +9,13 @@ import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class ComboHUD extends AbstractHUD {
 
     private static final ComboSettings SETTINGS = Main.settings.comboSettings;
 
-    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/combo.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/combo.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;

@@ -3,13 +3,13 @@ package fin.starhud.hud.implementation.hand;
 import fin.starhud.Main;
 import fin.starhud.config.hud.hand.HandSettings;
 import fin.starhud.hud.HUDId;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 
 public class RightHandHUD extends AbstractHandHUD {
 
     private static final HandSettings RIGHT_HAND_SETTINGS = Main.settings.handSettings.rightHandSettings;
-    private static final Identifier RIGHT_HAND_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/hand_right.png");
+    private static final ResourceLocation RIGHT_HAND_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/hand_right.png");
 
     public RightHandHUD() {
         super(RIGHT_HAND_SETTINGS, HumanoidArm.RIGHT, RIGHT_HAND_TEXTURE);

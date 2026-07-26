@@ -4,12 +4,12 @@ import fin.starhud.Main;
 import fin.starhud.config.hud.coordinate.CoordSettings;
 import fin.starhud.hud.HUDId;
 import fin.starhud.hud.implementation.coordinate.AbstractCoordinateHUD;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class YCoordinateHUD extends AbstractCoordinateHUD {
 
     private static final CoordSettings SETTINGS = Main.settings.coordSettings.Y;
-    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/coordinate_y.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/coordinate_y.png");
 
     public YCoordinateHUD() {
         super(SETTINGS, TEXTURE);

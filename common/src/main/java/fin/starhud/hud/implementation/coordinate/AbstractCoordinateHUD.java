@@ -6,21 +6,21 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public abstract class AbstractCoordinateHUD extends AbstractHUD {
 
     protected static final Minecraft CLIENT = Minecraft.getInstance();
 
     public final CoordSettings SETTINGS;
-    public final Identifier TEXTURE;
+    public final ResourceLocation TEXTURE;
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;
     private static final int ICON_WIDTH = 13;
     private static final int ICON_HEIGHT = 13;
 
-    public AbstractCoordinateHUD(CoordSettings coordSettings, Identifier TEXTURE) {
+    public AbstractCoordinateHUD(CoordSettings coordSettings, ResourceLocation TEXTURE) {
         super(coordSettings.base);
 
         this.SETTINGS = coordSettings;

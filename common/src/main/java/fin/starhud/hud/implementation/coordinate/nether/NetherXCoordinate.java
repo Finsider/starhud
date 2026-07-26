@@ -5,7 +5,7 @@ import fin.starhud.config.hud.coordinate.CoordSettings;
 import fin.starhud.hud.HUDId;
 import fin.starhud.hud.implementation.coordinate.AbstractCoordinateHUD;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -13,7 +13,7 @@ public class NetherXCoordinate extends AbstractCoordinateHUD {
 
     private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final CoordSettings SETTINGS = Main.settings.coordSettings.netherX;
-    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/coordinate_x.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/coordinate_x.png");
 
     public NetherXCoordinate() {
         super(SETTINGS, TEXTURE);

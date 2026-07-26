@@ -4,14 +4,14 @@ import fin.starhud.Main;
 import fin.starhud.config.hud.coordinate.CoordSettings;
 import fin.starhud.hud.HUDId;
 import fin.starhud.hud.implementation.coordinate.AbstractCoordinateHUD;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class NetherZCoordinate extends AbstractCoordinateHUD {
 
     private static final CoordSettings SETTINGS = Main.settings.coordSettings.netherZ;
-    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/coordinate_z.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/coordinate_z.png");
 
     public NetherZCoordinate() {
         super(SETTINGS, TEXTURE);

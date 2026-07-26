@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.server.IntegratedServer;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collection;
 
@@ -19,7 +19,7 @@ public class PlayerCountHUD extends AbstractHUD  {
 
     private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final PlayerCountSettings SETTINGS = Main.settings.playerCountSettings;
-    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/player_count.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/player_count.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;

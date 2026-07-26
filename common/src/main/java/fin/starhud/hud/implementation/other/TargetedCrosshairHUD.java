@@ -13,14 +13,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.animal.allay.Allay;
-import net.minecraft.world.entity.animal.fish.WaterAnimal;
-import net.minecraft.world.entity.animal.golem.SnowGolem;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -39,7 +39,7 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     private static final TargetedCrosshairSettings SETTINGS = Main.settings.targetedCrosshairSettings;
     private static final GeneralSettings.HUDSettings HUD_SETTINGS = Main.settings.generalSettings.hudSettings;
 
-    private static final Identifier ENTITY_ICON_TEXTURE = Identifier.fromNamespaceAndPath("starhud", "hud/targeted_icon_entity.png");
+    private static final ResourceLocation ENTITY_ICON_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/targeted_icon_entity.png");
 
     // left padding + texture + right padding
     private static final int ICON_WIDTH = 3 + 16 + 3;

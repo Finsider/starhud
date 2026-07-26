@@ -16,7 +16,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -41,12 +41,12 @@ public class EventInit {
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> AutoConfig.getConfigHolder(Settings.class).save());
 
         // register hud element into before hotbar. I hope this was safe enough.
-        HudElementRegistry.attachElementBefore(VanillaHudElements.HOTBAR, Identifier.withDefaultNamespace("starhud"), EventInit::onHUDRender);
+        HudElementRegistry.attachElementBefore(VanillaHudElements.HOTBAR, ResourceLocation.withDefaultNamespace("starhud"), EventInit::onHUDRender);
     }
 
     public static void onOpenEditHUDKeyPressed(Minecraft client) {
         while (Main.openEditHUDKey.consumeClick()) {
-            client.setScreenAndShow(new EditHUDScreen(Component.nullToEmpty("Edit HUD"), client.screen));
+            client.setScreen(new EditHUDScreen(Component.nullToEmpty("Edit HUD"), client.screen));
         }
     }
 
