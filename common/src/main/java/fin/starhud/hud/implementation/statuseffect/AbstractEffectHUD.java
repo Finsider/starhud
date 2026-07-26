@@ -10,7 +10,7 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.helper.StatusEffectAttribute;
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
@@ -200,7 +200,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         if (CLIENT.player == null) return false;
         if (size == 0) return false;
 
@@ -215,7 +215,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
             return renderBarHUD(context, x, y, drawBackground);
     }
 
-    public boolean renderBarHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground) {
+    public boolean renderBarHUD(GuiGraphics context, int x, int y, boolean drawBackground) {
 
         for (int i = 0 ; i < size; ++i) {
 
@@ -241,7 +241,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean renderTimerHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderTimerHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         for (int i = 0; i < size; ++i) {
             drawMobEffectTimerHUD(
@@ -266,7 +266,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
-    public boolean drawMobEffectBarHUD(GuiGraphicsExtractor context, int x, int y, Identifier effectTexture, int color, float alpha, int step, String amplifier, boolean isAmbient, boolean drawBackground) {
+    public boolean drawMobEffectBarHUD(GuiGraphics context, int x, int y, Identifier effectTexture, int color, float alpha, int step, String amplifier, boolean isAmbient, boolean drawBackground) {
         int gap = iconInfoGap;
 
         if (drawBackground) {
@@ -345,7 +345,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return true;
     }
 
-    public void drawMobEffectTimerHUD(GuiGraphicsExtractor context, int x, int y, Identifier effectTexture, String timeStr, int width, int height, int textColor, int iconColor, boolean drawBackground, boolean drawTextShadow) {
+    public void drawMobEffectTimerHUD(GuiGraphics context, int x, int y, Identifier effectTexture, String timeStr, int width, int height, int textColor, int iconColor, boolean drawBackground, boolean drawTextShadow) {
 
         // shrink the texture from 18x18 to 9x9.
         int from = 18;
@@ -368,7 +368,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         );
     }
 
-    public static boolean drawSmallHUD(GuiGraphicsExtractor context, String infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
+    public static boolean drawSmallHUD(GuiGraphics context, String infoText, int x, int y, int width, int height, Identifier iconTexture, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, int color, int iconColor, HUDDisplayMode displayMode, boolean drawBackground, boolean drawTextShadow) {
         if (infoText == null || iconTexture == null || displayMode == null) return false;
 
         int padding = HUD_SETTINGS.textPadding;

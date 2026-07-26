@@ -4,7 +4,7 @@ import fin.starhud.config.BaseHUDSettings;
 import fin.starhud.config.ConditionalSettings;
 import fin.starhud.helper.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 
 public abstract class AbstractHUD implements HUDInterface {
 
@@ -48,7 +48,7 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     @Override
-    public boolean render(GuiGraphicsExtractor context) {
+    public boolean render(GuiGraphics context) {
         if (!isScaled())
             return renderHUD(context, getX(), getY(), shouldDrawBackground(), shouldDrawTextShadow());
 
@@ -83,11 +83,11 @@ public abstract class AbstractHUD implements HUDInterface {
     // this is where the hud is rendered. Where we put the rendering logic.
     // it is highly discouraged to put information collecting in this function.
     // for information collecting please refer to collectHUDInformation()
-    public abstract boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow);
+    public abstract boolean renderHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow);
 
     public abstract String getName();
 
-    public void scaleHUD(GuiGraphicsExtractor context) {
+    public void scaleHUD(GuiGraphics context) {
         float scaleFactor = getScale();
         context.pose().translate(getX(), getY());
         context.pose().scale(scaleFactor, scaleFactor);

@@ -7,7 +7,7 @@ import fin.starhud.helper.HUDDisplayMode;
 import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.implementation.AbstractDurabilityHUD;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Inventory;
@@ -95,11 +95,11 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
     }
 
     @Override
-    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return renderHandHUD(context, x, y, drawBackground, drawTextShadow);
     }
 
-    public boolean renderHandHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHandHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         // either draw the durability or the amount of item in the inventory.
         if (showDurability && isItemDamagable) {
             return renderDurabilityHUD(
@@ -119,7 +119,7 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         return false;
     }
 
-    private boolean renderStackCountHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    private boolean renderStackCountHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         if (drawItem) {
             return renderStackCountItemHUD(context, x, y, drawBackground, drawTextShadow);
@@ -128,7 +128,7 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         }
     }
 
-    private boolean renderStackCountItemHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    private boolean renderStackCountItemHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return RenderUtils.drawItemHUD(
                 context,
                 amountStr,
@@ -142,7 +142,7 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
         );
     }
 
-    private boolean renderStackCountIconHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    private boolean renderStackCountIconHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return RenderUtils.drawSmallHUD(
                 context,
                 amountStr,

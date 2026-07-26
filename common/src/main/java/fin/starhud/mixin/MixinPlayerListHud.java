@@ -2,7 +2,7 @@ package fin.starhud.mixin;
 
 import fin.starhud.condition.PlayerListHUD;
 import fin.starhud.helper.Box;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Scoreboard;
@@ -20,22 +20,22 @@ public class MixinPlayerListHud {
     private static final Box tempBox = new Box(0,0);
 
     @Inject(
-            method = "extractRenderState",
+            method = "render",
             at = @At("HEAD")
     )
-    private void resetBoundingBox(GuiGraphicsExtractor graphics, int screenWidth, Scoreboard scoreboard, Objective displayObjective, CallbackInfo ci) {
+    private void resetBoundingBox(GuiGraphics graphics, int screenWidth, Scoreboard scoreboard, Objective displayObjective, CallbackInfo ci) {
         PlayerListHUD.boundingBox.setEmpty(true);
     }
 
     @Redirect(
-            method = "extractRenderState",
+            method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V"
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"
             ),
             require = 0
     )
-    private void captureFillBounds(GuiGraphicsExtractor instance, int x1, int y1, int x2, int y2, int color) {
+    private void captureFillBounds(GuiGraphics instance, int x1, int y1, int x2, int y2, int color) {
         tempBox.setBoundingBox(x1, y1, x2 - x1, y2 - y1);
         if (PlayerListHUD.boundingBox.isEmpty()) {
             PlayerListHUD.boundingBox.copyFrom(tempBox);

@@ -7,7 +7,7 @@ import fin.starhud.helper.PixelPlacement;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDComponent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class SnapResult {
         this.snapDeltaY = snapDeltaY;
     }
 
-    public void render(GuiGraphicsExtractor context) {
+    public void render(GuiGraphics context) {
 
         PixelPlacement.start(context);
 

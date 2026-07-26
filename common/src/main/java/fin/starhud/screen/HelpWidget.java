@@ -2,7 +2,7 @@ package fin.starhud.screen;
 
 import fin.starhud.hud.AbstractHUD;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 public class HelpWidget {
@@ -49,7 +49,7 @@ public class HelpWidget {
         HELP_INFO_MAX_WIDTH = maxInfo;
     }
 
-    public void render(GuiGraphicsExtractor context, AbstractHUD hud, int x, int y) {
+    public void render(GuiGraphics context, AbstractHUD hud, int x, int y) {
         int padding = 5;
 
         int lineHeight = CLIENT.font.lineHeight;
@@ -69,8 +69,8 @@ public class HelpWidget {
             Component key = h.key;
             Component info = h.info;
 
-            context.text(CLIENT.font, key, helpX + padding, helpY + padding, 0xFFFFFFFF, false);
-            context.text(CLIENT.font, info, helpX + padding + maxKeyWidth + padding + 1 + padding, helpY + padding, 0xFFFFFFFF, false);
+            context.drawString(CLIENT.font, key, helpX + padding, helpY + padding, 0xFFFFFFFF, false);
+            context.drawString(CLIENT.font, info, helpX + padding + maxKeyWidth + padding + 1 + padding, helpY + padding, 0xFFFFFFFF, false);
 
             helpY += lineHeight;
         }
@@ -79,7 +79,7 @@ public class HelpWidget {
             renderHUDInformation(context, hud, x, y + HELP_HEIGHT + GAP);
     }
 
-    private void renderHUDInformation(GuiGraphicsExtractor context, AbstractHUD hud, int x, int y) {
+    private void renderHUDInformation(GuiGraphics context, AbstractHUD hud, int x, int y) {
         String text = hud.getName();
         int textWidth = CLIENT.font.width(text);
         int padding = 5;
@@ -87,7 +87,7 @@ public class HelpWidget {
         int infoX = x - (textWidth / 2);
 
         context.fill(infoX - padding, y - padding, infoX + textWidth + padding, y + CLIENT.font.lineHeight - 2 + padding, 0x80000000);
-        context.text(CLIENT.font, text, infoX, y, 0xFFFFFFFF, false);
+        context.drawString(CLIENT.font, text, infoX, y, 0xFFFFFFFF, false);
     }
 
     public void setActive(boolean active) {

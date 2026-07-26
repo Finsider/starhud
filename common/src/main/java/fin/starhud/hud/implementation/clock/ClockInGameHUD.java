@@ -8,7 +8,7 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.Identifier;
 
@@ -56,7 +56,7 @@ public class ClockInGameHUD extends AbstractHUD {
 
         if (world == null) return false;
 
-        long time = world.getDefaultClockTime() % 24000;
+        long time = world.getDayTime() % 24000;
 
         boolean use12Hour = CLOCK_IN_GAME_SETTINGS.use12Hour;
         displayMode = getSettings().getDisplayMode();
@@ -85,7 +85,7 @@ public class ClockInGameHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();

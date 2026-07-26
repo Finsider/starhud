@@ -14,7 +14,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
@@ -56,7 +56,7 @@ public class EventInit {
         }
     }
 
-    public static void onHUDRender(GuiGraphicsExtractor context, DeltaTracker tickCounter) {
+    public static void onHUDRender(GuiGraphics context, DeltaTracker tickCounter) {
         if (SETTINGS.disableHUDRendering) return;
         if (Minecraft.getInstance().options.hideGui) return;
         if (Minecraft.getInstance().screen instanceof EditHUDScreen) return;

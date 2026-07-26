@@ -7,7 +7,7 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
 
 public class DayHUD extends AbstractHUD {
@@ -56,7 +56,7 @@ public class DayHUD extends AbstractHUD {
     @Override
     public boolean collectHUDInformation() {
         if (CLIENT.level == null) return false;
-        long day = CLIENT.level.getDefaultClockTime() / 24000L;
+        long day = CLIENT.level.getDayTime() / 24000L;
 
         // I cached these because textRendered.getWidth() is expensive.
         // And since day count hardly updates at all, doing this is reasonable.
@@ -76,7 +76,7 @@ public class DayHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
 
         int w = getWidth();
         int h = getHeight();

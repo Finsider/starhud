@@ -1,7 +1,7 @@
 package fin.starhud.screen;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 
@@ -12,10 +12,10 @@ public class ActionBar {
     private Component text;
     private int remainingTime;
 
-    public void render(GuiGraphicsExtractor context, int centerX, int y) {
+    public void render(GuiGraphics context, int centerX, int y) {
         float alpha = Math.min((float) this.remainingTime / 10, 1.0F);
 
-        context.centeredText(
+        context.drawCenteredString(
                 CLIENT.font,
                 text,
                 centerX, y,

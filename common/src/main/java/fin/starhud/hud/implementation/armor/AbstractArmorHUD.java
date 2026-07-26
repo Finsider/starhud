@@ -5,7 +5,7 @@ import fin.starhud.config.hud.DurabilitySettings;
 import fin.starhud.config.hud.armor.ArmorSettings;
 import fin.starhud.hud.implementation.AbstractDurabilityHUD;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -44,7 +44,7 @@ public abstract class AbstractArmorHUD extends AbstractDurabilityHUD {
     }
 
     @Override
-    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         return renderDurabilityHUD(
                 context,
                 TEXTURE,

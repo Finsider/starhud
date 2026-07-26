@@ -7,7 +7,7 @@ import fin.starhud.helper.RenderUtils;
 import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -81,7 +81,7 @@ public class InventoryHUD extends AbstractHUD {
     }
 
     @Override
-    public boolean renderHUD(GuiGraphicsExtractor context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
+    public boolean renderHUD(GuiGraphics context, int x, int y, boolean drawBackground, boolean drawTextShadow) {
         if (drawVertical) {
             return drawInventoryVertical(context, x, y, drawBackground);
         } else {
@@ -97,7 +97,7 @@ public class InventoryHUD extends AbstractHUD {
         preComputeVertical();
     }
 
-    private boolean drawInventoryVertical(GuiGraphicsExtractor context, int x, int y, boolean drawBackground) {
+    private boolean drawInventoryVertical(GuiGraphics context, int x, int y, boolean drawBackground) {
         Inventory inventory = CLIENT.player.getInventory();
 
         int w = getWidth();
@@ -121,15 +121,15 @@ public class InventoryHUD extends AbstractHUD {
                 int x1 = x + SLOT_X_VERTICAL[itemIndex];
                 int y1 = y + SLOT_Y_VERTICAL[itemIndex];
 
-                context.item(stack, x1, y1);
-                context.itemDecorations(CLIENT.font, stack, x1, y1);
+                context.renderItem(stack, x1, y1);
+                context.renderItemDecorations(CLIENT.font, stack, x1, y1);
             }
         }
 
         return true;
     }
 
-    private boolean drawInventoryHorizontal(GuiGraphicsExtractor context, int x, int y, boolean drawBackground) {
+    private boolean drawInventoryHorizontal(GuiGraphics context, int x, int y, boolean drawBackground) {
         Inventory inventory = CLIENT.player.getInventory();
 
         int w = getWidth();
@@ -153,8 +153,8 @@ public class InventoryHUD extends AbstractHUD {
                 int x1 = x + SLOT_X_HORIZONTAL[itemIndex];
                 int y1 = y + SLOT_Y_HORIZONTAL[itemIndex];
 
-                context.item(stack, x1, y1);
-                context.itemDecorations(CLIENT.font, stack, x1, y1);
+                context.renderItem(stack, x1, y1);
+                context.renderItemDecorations(CLIENT.font, stack, x1, y1);
             }
         }
 

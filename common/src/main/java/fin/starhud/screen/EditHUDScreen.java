@@ -18,7 +18,7 @@ import fin.starhud.screen.history.ReversibleAction;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.AutoConfigClient;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
@@ -425,10 +425,10 @@ public class EditHUDScreen extends Screen {
         updateGroupFieldFromSelectedHUD();
     }
 
-    //public final void extractRenderStateWithTooltipAndSubtitles(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a)
+    //public final void extractRenderStateWithTooltipAndSubtitles(final GuiGraphics graphics, final int mouseX, final int mouseY, final float a)
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
 
         if (SETTINGS.drawDarkBackground) {
             final float alpha = (float) SETTINGS.getDarkOpacity() / 100;
@@ -446,7 +446,7 @@ public class EditHUDScreen extends Screen {
             snapResult.render(context);
         }
 
-        super.extractRenderState(context, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
 
         // draw help
         if (helpWidget.isActive()) {
@@ -462,12 +462,12 @@ public class EditHUDScreen extends Screen {
 
         // draw X and Y next to their textField.
         if (xField.isVisible() && yField.isVisible()) {
-            context.text(CLIENT.font, Component.translatable("starhud.screen.label.x"), xField.getX() - 5 - 2 - 3, xField.getY() + 6, 0xFFFFFFFF, true);
-            context.text(CLIENT.font, Component.translatable("starhud.screen.label.y"), yField.getX() - 5 - 2 - 3, yField.getY() + 6, 0xFFFFFFFF, true);
+            context.drawString(CLIENT.font, Component.translatable("starhud.screen.label.x"), xField.getX() - 5 - 2 - 3, xField.getY() + 6, 0xFFFFFFFF, true);
+            context.drawString(CLIENT.font, Component.translatable("starhud.screen.label.y"), yField.getX() - 5 - 2 - 3, yField.getY() + 6, 0xFFFFFFFF, true);
         }
 
         if (gapField.isVisible()) {
-            context.text(CLIENT.font, Component.translatable("starhud.screen.label.gap"), gapField.getX() - 20 - 3, gapField.getY() + 6, 0xFFFFFFFF, true);
+            context.drawString(CLIENT.font, Component.translatable("starhud.screen.label.gap"), gapField.getX() - 20 - 3, gapField.getY() + 6, 0xFFFFFFFF, true);
         }
 
         if (dragSelection && hasMovedSincePress) {
@@ -487,7 +487,7 @@ public class EditHUDScreen extends Screen {
         }
     }
 
-    public void renderGrid(GuiGraphicsExtractor context) {
+    public void renderGrid(GuiGraphics context) {
 
         final Window WINDOW = this.minecraft.getWindow();
         final int screenWidth = WINDOW.getWidth();
@@ -502,13 +502,13 @@ public class EditHUDScreen extends Screen {
 
         if (snapPadding > 0)
             RenderUtils.drawBorder(context, snapPadding, snapPadding, screenWidth - (snapPadding * 2), screenHeight - (snapPadding * 2), color);
-        context.horizontalLine((snapPadding + 1), screenWidth - (snapPadding + 2), CENTER_Y, color);
-        context.verticalLine(CENTER_X, (snapPadding), screenHeight - (snapPadding + 1), color);
+        context.hLine((snapPadding + 1), screenWidth - (snapPadding + 2), CENTER_Y, color);
+        context.vLine(CENTER_X, (snapPadding), screenHeight - (snapPadding + 1), color);
 
         PixelPlacement.end(context);
     }
 
-    private void renderSelectedHUDBox(GuiGraphicsExtractor context) {
+    private void renderSelectedHUDBox(GuiGraphics context) {
         int x = selectedHUDBox.getX();
         int y = selectedHUDBox.getY();
         int w = selectedHUDBox.getWidth();
@@ -523,7 +523,7 @@ public class EditHUDScreen extends Screen {
         PixelPlacement.end(context);
     }
 
-    private void renderDragBox(GuiGraphicsExtractor context) {
+    private void renderDragBox(GuiGraphics context) {
 
         float guiScale = this.minecraft.getWindow().getGuiScale();
 
@@ -548,7 +548,7 @@ public class EditHUDScreen extends Screen {
         }
     }
 
-    private void renderBoundingBoxes(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+    private void renderBoundingBoxes(GuiGraphics context, int mouseX, int mouseY) {
 
         PixelPlacement.start(context);
         for (AbstractHUD hud : HUDComponent.getInstance().getRenderedHUDs()) {
@@ -562,7 +562,7 @@ public class EditHUDScreen extends Screen {
         PixelPlacement.end(context);
     }
 
-    private void renderSelectedBox(GuiGraphicsExtractor context, AbstractHUD hud) {
+    private void renderSelectedBox(GuiGraphics context, AbstractHUD hud) {
         int x = hud.getX();
         int y = hud.getY();
         int width = hud.getTrueWidth();
@@ -576,7 +576,7 @@ public class EditHUDScreen extends Screen {
         }
     }
 
-    private void renderBoundingBox(GuiGraphicsExtractor context, AbstractHUD hud, int mouseX, int mouseY) {
+    private void renderBoundingBox(GuiGraphics context, AbstractHUD hud, int mouseX, int mouseY) {
         int x = hud.getX();
         int y = hud.getY();
         int width = hud.getTrueWidth();
