@@ -17,7 +17,7 @@ public class TPSHUD extends AbstractHUD {
     private static final TPSSettings SETTINGS = Main.settings.tpsSettings;
     private static final Minecraft CLIENT = Minecraft.getInstance();
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/tps.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.tryBuild("starhud", "hud/tps.png");
 
     private static final int ICON_HEIGHT = 13;
     private static final int ICON_WIDTH = 13;

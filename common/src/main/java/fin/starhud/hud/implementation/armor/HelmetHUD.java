@@ -9,7 +9,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 public class HelmetHUD extends AbstractArmorHUD {
 
     private static final ArmorSettings SETTINGS = Main.settings.armorSettings.helmet;
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/helmet.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.tryBuild("starhud", "hud/helmet.png");
 
     public HelmetHUD() {
         super(SETTINGS, TEXTURE, EquipmentSlot.HEAD);

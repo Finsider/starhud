@@ -2,10 +2,8 @@ package fin.starhud.mixin;
 
 import fin.starhud.condition.HeldItemTooltip;
 import fin.starhud.condition.ScoreboardHUD;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -14,16 +12,30 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MixinInGameHUD {
 
     @Redirect(
-            method = "renderSelectedItemName",
+            method = "displayScoreboardSidebar",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawStringWithBackdrop(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIII)I"
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V",
+                    ordinal = 1
             ),
             require = 0
     )
-    private int captureTooltipBox(GuiGraphics context, Font textRenderer, Component text, int x, int y, int width, int color) {
-        HeldItemTooltip.setBoundingBox(x, y, width, 2 + 9 + 2);
-        context.drawStringWithBackdrop(textRenderer, text, x, y, width, color);
-        return x;
+    private void captureScoreboardFill(GuiGraphics instance, int minX, int minY, int maxX, int maxY, int color) {
+        ScoreboardHUD.captureBoundingBox(minX, minY, maxX, maxY);
+        instance.fill(minX, minY, maxX, maxY, color);
+    }
+
+    @Redirect(
+            method = "renderSelectedItemName",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"
+            ),
+            require = 0
+    )
+    private void captureTooltipBox(GuiGraphics instance, int minX, int minY, int maxX, int maxY, int color) {
+        HeldItemTooltip.setBoundingBox(minX, minY, maxX - minX, maxY - minY);
+
+        instance.fill(minX, minY, maxX, maxY    , color);
     }
 }

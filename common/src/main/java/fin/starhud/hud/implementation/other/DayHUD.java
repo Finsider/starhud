@@ -14,7 +14,7 @@ public class DayHUD extends AbstractHUD {
 
     private static final DaySettings DAY_SETTINGS = Main.settings.daySettings;
 
-    private static final ResourceLocation DAY_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/day.png");
+    private static final ResourceLocation DAY_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/day.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;

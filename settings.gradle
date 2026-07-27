@@ -48,4 +48,4 @@ plugins {
 rootProject.name = 'objhud'
 include('common')
 include('fabric')
-include('neoforge')
+include('forge')

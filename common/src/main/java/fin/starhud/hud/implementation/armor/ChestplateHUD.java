@@ -8,7 +8,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 
 public class ChestplateHUD extends AbstractArmorHUD {
     private static final ArmorSettings SETTINGS = Main.settings.armorSettings.chestplate;
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/chestplate.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.tryBuild("starhud", "hud/chestplate.png");
 
     public ChestplateHUD() {
         super(SETTINGS, TEXTURE, EquipmentSlot.CHEST);

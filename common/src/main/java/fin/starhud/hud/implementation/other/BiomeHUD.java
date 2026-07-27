@@ -26,7 +26,7 @@ public class  BiomeHUD extends AbstractHUD {
 
     private static final BiomeSettings BIOME_SETTINGS = Main.settings.biomeSettings;
 
-    private static final ResourceLocation DIMENSION_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/dimension.png");
+    private static final ResourceLocation DIMENSION_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/dimension.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13 * 4;
@@ -70,7 +70,7 @@ public class  BiomeHUD extends AbstractHUD {
                 if (Language.getInstance().has(translatableKey))
                     cachedBiomeNameText = Component.translatable(translatableKey).getVisualOrderText();
                 else
-                    cachedBiomeNameText = Component.nullToEmpty(Helper.idNameFormatter(currentBiome.getRegisteredName())).getVisualOrderText();
+                    cachedBiomeNameText = Component.nullToEmpty(Helper.idNameFormatter(getBiomeIdAsString(currentBiome))).getVisualOrderText();
 
             } else {
                 cachedBiomeNameText = Component.nullToEmpty("Unregistered").getVisualOrderText();
@@ -135,5 +135,9 @@ public class  BiomeHUD extends AbstractHUD {
             case 2 -> BIOME_SETTINGS.color.end;
             default -> BIOME_SETTINGS.color.custom;
         };
+    }
+
+    private static String getBiomeIdAsString(Holder<Biome> biome) {
+        return biome.unwrap().map((biomeKey) -> biomeKey.location().toString(), (biome_) -> "[unregistered " + biome_ + "]");
     }
 }

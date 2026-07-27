@@ -13,7 +13,7 @@ public class NetherXCoordinate extends AbstractCoordinateHUD {
 
     private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final CoordSettings SETTINGS = Main.settings.coordSettings.netherX;
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/coordinate_x.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.tryBuild("starhud", "hud/coordinate_x.png");
 
     public NetherXCoordinate() {
         super(SETTINGS, TEXTURE);

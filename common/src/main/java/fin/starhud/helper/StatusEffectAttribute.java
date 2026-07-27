@@ -13,7 +13,7 @@ public record StatusEffectAttribute(int maxDuration, int amplifier, boolean isAm
     // this Implementation is inspired from @SoRadGaming Simple-HUD-Enhanced MobEffectTracker class
     // see: https://github.com/SoRadGaming/Simple-HUD-Enhanced/blob/main/src/main/java/com/soradgaming/simplehudenhanced/utli/MobEffectsTracker.java
 
-    private static final Map<Holder<MobEffect>, StatusEffectAttribute> STATUS_EFFECT_ATTRIBUTE_MAP = new HashMap<>();
+    private static final Map<MobEffect, StatusEffectAttribute> STATUS_EFFECT_ATTRIBUTE_MAP = new HashMap<>();
 
     // maxDuration for maxDuration, amplifier and isAmbient to help updating the map.
 
@@ -27,7 +27,7 @@ public record StatusEffectAttribute(int maxDuration, int amplifier, boolean isAm
         );
     }
 
-    public static void updateStatusEffectAttribute(Holder<MobEffect> effectRegistry, int maxDuration, int amplifier, boolean isAmbient) {
+    public static void updateStatusEffectAttribute(MobEffect effectRegistry, int maxDuration, int amplifier, boolean isAmbient) {
         StatusEffectAttribute newEffect = new StatusEffectAttribute(
                 maxDuration,
                 amplifier,
@@ -38,7 +38,7 @@ public record StatusEffectAttribute(int maxDuration, int amplifier, boolean isAm
     }
 
     // used when status effect no longer present in player's status effect list.
-    public static void removeStatusEffectAttribute(Holder<MobEffect> effectRegistry) {
+    public static void removeStatusEffectAttribute(MobEffect effectRegistry) {
         STATUS_EFFECT_ATTRIBUTE_MAP.remove(effectRegistry);
     }
 
@@ -48,7 +48,7 @@ public record StatusEffectAttribute(int maxDuration, int amplifier, boolean isAm
                 current.getDuration() > cached.maxDuration(); // higher Duration: update
     }
 
-    public static Map<Holder<MobEffect>, StatusEffectAttribute> getStatusEffectAttributeMap() {
+    public static Map<MobEffect, StatusEffectAttribute> getStatusEffectAttributeMap() {
         return STATUS_EFFECT_ATTRIBUTE_MAP;
     }
 }

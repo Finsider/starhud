@@ -23,13 +23,13 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
 
     private static final GeneralSettings.HUDSettings HUD_SETTINGS = Main.settings.generalSettings.hudSettings;
 
-    private static final ResourceLocation BIG_DURABILITY_BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/big_durability_background.png");
-    private static final ResourceLocation BIG_DURABILITY_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/big_durability_bar.png");
+    private static final ResourceLocation BIG_DURABILITY_BACKGROUND_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/big_durability_background.png");
+    private static final ResourceLocation BIG_DURABILITY_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/big_durability_bar.png");
     private static final int BIG_DURABILITY_TEXTURE_WIDTH = 70;
     private static final int BIG_DURABILITY_TEXTURE_HEIGHT = 14;
 
-    private static final ResourceLocation DURABILITY_BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/durability_background.png");
-    private static final ResourceLocation DURABILITY_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/durability_bar.png");
+    private static final ResourceLocation DURABILITY_BACKGROUND_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/durability_background.png");
+    private static final ResourceLocation DURABILITY_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/durability_bar.png");
     private static final int DURABILITY_TEXTURE_WIDTH = 40;
     private static final int DURABILITY_TEXTURE_HEIGHT = 7;
 

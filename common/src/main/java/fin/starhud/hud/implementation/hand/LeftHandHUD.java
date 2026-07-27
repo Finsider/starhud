@@ -9,7 +9,7 @@ import net.minecraft.world.entity.HumanoidArm;
 public class LeftHandHUD extends AbstractHandHUD {
 
     private static final HandSettings LEFT_HAND_SETTINGS = Main.settings.handSettings.leftHandSettings;
-    private static final ResourceLocation LEFT_HAND_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/hand_left.png");
+    private static final ResourceLocation LEFT_HAND_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/hand_left.png");
 
     public LeftHandHUD() {
         super(LEFT_HAND_SETTINGS, HumanoidArm.LEFT, LEFT_HAND_TEXTURE);

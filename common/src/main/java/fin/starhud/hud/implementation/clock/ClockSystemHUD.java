@@ -18,7 +18,7 @@ public class ClockSystemHUD extends AbstractHUD {
     private static final ClockSystemSettings CLOCK_SYSTEM_SETTINGS = Main.settings.clockSettings.systemSetting;
     private static final Minecraft CLIENT = Minecraft.getInstance();
 
-    private static final ResourceLocation CLOCK_SYSTEM_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/clock_system.png");
+    private static final ResourceLocation CLOCK_SYSTEM_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/clock_system.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;

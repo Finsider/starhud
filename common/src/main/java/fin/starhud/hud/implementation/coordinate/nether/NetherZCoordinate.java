@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 public class NetherZCoordinate extends AbstractCoordinateHUD {
 
     private static final CoordSettings SETTINGS = Main.settings.coordSettings.netherZ;
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/coordinate_z.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.tryBuild("starhud", "hud/coordinate_z.png");
 
     public NetherZCoordinate() {
         super(SETTINGS, TEXTURE);

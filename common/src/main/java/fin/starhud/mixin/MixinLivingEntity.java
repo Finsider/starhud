@@ -41,7 +41,7 @@ public class MixinLivingEntity {
 // using removeMobEffectInternal() instead of removeMobEffect() because the former worked and the latter didn't, I don't know why.
     // remove status effect from the player status effect list. Reason is just to delete unused effect from the map.
     @Inject(method = "removeEffectNoUpdate", at = @At("RETURN"))
-    private void onMobEffectRemoved(Holder<MobEffect> effect, CallbackInfoReturnable<MobEffectInstance> cir) {
+    private void onMobEffectRemoved(MobEffect effect, CallbackInfoReturnable<MobEffectInstance> cir) {
         StatusEffectAttribute.removeStatusEffectAttribute(effect);
     }
 }

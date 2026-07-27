@@ -9,25 +9,20 @@ import fin.starhud.hud.AbstractHUD;
 import fin.starhud.hud.HUDId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.multiplayer.PingDebugMonitor;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.debugchart.LocalSampleLogger;
-import net.minecraft.world.level.Level;
 
 public class PingHUD extends AbstractHUD {
 
     private static final PingSettings SETTINGS = Main.settings.pingSettings;
 
-    private static final ResourceLocation PING_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/ping.png");
+    private static final ResourceLocation PING_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/ping.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13 * 4;
     private static final int ICON_WIDTH = 13;
     private static final int ICON_HEIGHT = 13;
-
-    private static long LAST_PING_UPDATE = -1L;
-    private static Level LAST_WORLD = null;
-    private static PingDebugMonitor cachedPingMeasurer;
 
     private static final Minecraft CLIENT = Minecraft.getInstance();
 
@@ -56,31 +51,20 @@ public class PingHUD extends AbstractHUD {
     public boolean collectHUDInformation() {
         displayMode = getSettings().getDisplayMode();
 
-        LocalSampleLogger pingLog = CLIENT.getDebugOverlay().getPingLogger();
+        ClientPacketListener networkHandler = CLIENT.getConnection();
 
-        // different world and server checking for PingMeasurer renewal.
-        Level currentLevel = CLIENT.level;
-        if (currentLevel != LAST_WORLD) {
-            cachedPingMeasurer = new PingDebugMonitor(CLIENT.getConnection(), pingLog);
-            LAST_WORLD = currentLevel;
-        }
+        if (networkHandler == null) return false;
 
-        // update pingLog every n seconds. Because this is quite expensive.
-        long currentTimeMillis = System.currentTimeMillis();
-        if (currentTimeMillis - LAST_PING_UPDATE >= 1000 * SETTINGS.updateInterval) {
-            LAST_PING_UPDATE = currentTimeMillis;
-            cachedPingMeasurer.tick();
+        PlayerInfo playerListEntry = networkHandler.getPlayerInfo(CLIENT.player.getUUID());
 
-            // cache string calculations here since ping was just updated
-            int pingLogLen = pingLog.size();
-            if (pingLogLen > 0) {
-                long currentPing = pingLog.get(pingLogLen - 1);
-                pingStr = currentPing + SETTINGS.additionalString;
-                strWidth = CLIENT.font.width(pingStr) - 1;
+        if (playerListEntry == null) return false;
 
-                step = Math.min((int) currentPing / 150, 3);
-            }
-        }
+        int currentPing = playerListEntry.getLatency();
+
+        pingStr = currentPing + SETTINGS.additionalString;
+        strWidth = CLIENT.font.width(pingStr) - 1;
+
+        step = Math.min(currentPing / 150, 3);
 
         color = (SETTINGS.useDynamicColor ? Helper.getItemBarColor(3 - step, 3) : SETTINGS.color) | 0xFF000000;
         int width = displayMode.calculateWidth(ICON_WIDTH, strWidth);

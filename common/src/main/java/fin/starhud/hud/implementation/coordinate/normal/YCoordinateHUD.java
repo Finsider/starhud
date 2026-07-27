@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 public class YCoordinateHUD extends AbstractCoordinateHUD {
 
     private static final CoordSettings SETTINGS = Main.settings.coordSettings.Y;
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/coordinate_y.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.tryBuild("starhud", "hud/coordinate_y.png");
 
     public YCoordinateHUD() {
         super(SETTINGS, TEXTURE);

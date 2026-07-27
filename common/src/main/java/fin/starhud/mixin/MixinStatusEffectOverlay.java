@@ -5,7 +5,6 @@ import fin.starhud.hud.HUDComponent;
 import fin.starhud.hud.HUDId;
 import fin.starhud.hud.implementation.statuseffect.NegativeEffectHUD;
 import fin.starhud.hud.implementation.statuseffect.PositiveEffectHUD;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +17,7 @@ public class MixinStatusEffectOverlay {
 
     // Mixin used to override vanilla effect HUD, I'm not sure whether this can be done using HUDElementRegistry
     @Inject(at = @At("HEAD"), method = "renderEffects", cancellable = true)
-    private void renderMobEffectOverlay(GuiGraphics context, DeltaTracker tickCounter, CallbackInfo ci) {
+    private void renderMobEffectOverlay(GuiGraphics guiGraphics, CallbackInfo ci) {
         final PositiveEffectHUD POSITIVE_EFFECT_HUD = (PositiveEffectHUD) HUDComponent.getInstance().getHUD(HUDId.POSITIVE_EFFECT);
         final NegativeEffectHUD NEGATIVE_EFFECT_HUD = (NegativeEffectHUD) HUDComponent.getInstance().getHUD(HUDId.NEGATIVE_EFFECT);
 

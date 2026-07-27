@@ -1,10 +1,11 @@
 package fin.starhud.init;
 
+import fin.starhud.Helper;
 import fin.starhud.Main;
+import fin.starhud.compat.ImmediatelyFastCompat;
 import fin.starhud.config.GeneralSettings;
 import fin.starhud.hud.HUDComponent;
 import fin.starhud.screen.EditHUDScreen;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -25,13 +26,20 @@ public class EventInit {
         }
     }
 
-    public static void onHUDRender(GuiGraphics context, DeltaTracker tickCounter) {
+    public static void onHUDRender(GuiGraphics context, float tickCounter) {
         if (SETTINGS.disableHUDRendering) return;
         if (Minecraft.getInstance().options.hideGui) return;
         if (Minecraft.getInstance().screen instanceof EditHUDScreen) return;
 
         HUDComponent.getInstance().collectAll();
-        HUDComponent.getInstance().renderAll(context);
+
+        if (SETTINGS.shouldBatchHUDWithImmediatelyFast && Helper.isModLoaded("immediatelyfast")) {
+            ImmediatelyFastCompat.beginHudBatching();
+            HUDComponent.getInstance().renderAll(context);
+            ImmediatelyFastCompat.endHudBatching();
+        } else {
+            HUDComponent.getInstance().renderAll(context);
+        }
     }
 
 

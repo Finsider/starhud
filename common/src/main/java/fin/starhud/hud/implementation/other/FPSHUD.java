@@ -14,7 +14,7 @@ public class FPSHUD extends AbstractHUD {
 
     private static final FPSSettings FPS_SETTINGS = Main.settings.fpsSettings;
 
-    private static final ResourceLocation FPS_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/fps.png");
+    private static final ResourceLocation FPS_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/fps.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;

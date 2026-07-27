@@ -16,6 +16,9 @@ public class GeneralSettings {
 
     public static class EditHUDScreenSettings {
 
+        @Comment("Requires ImmediatelyFast mod, 3x Frametime improvement, at the cost of MANY rendering glitches.")
+        public boolean shouldBatchHUDWithImmediatelyFast = false;
+
         public boolean drawBorder = true;
         public boolean drawGrid = true;
         public boolean drawDarkBackground = true;
@@ -62,6 +65,9 @@ public class GeneralSettings {
     }
 
     public static class InGameHUDSettings {
+
+        @Comment("Requires ImmediatelyFast mod, 3x Frametime improvement, with hardly any rendering glitches.")
+        public boolean shouldBatchHUDWithImmediatelyFast = true;
 
         @Comment("Completely disable HUD Rendering.")
         public boolean disableHUDRendering = false;

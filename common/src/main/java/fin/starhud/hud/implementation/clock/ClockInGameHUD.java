@@ -16,7 +16,7 @@ public class ClockInGameHUD extends AbstractHUD {
 
     private static final ClockInGameSettings CLOCK_IN_GAME_SETTINGS = Main.settings.clockSettings.inGameSetting;
 
-    private static final ResourceLocation CLOCK_IN_GAME_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/clock_ingame.png");
+    private static final ResourceLocation CLOCK_IN_GAME_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/clock_ingame.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13 * 4;

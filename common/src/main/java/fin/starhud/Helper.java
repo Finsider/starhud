@@ -121,6 +121,10 @@ public class Helper {
         return (Math.round(alpha * 255) << 24) | 0xFFFFFF;
     }
 
+    public static int channelFromFloat(float value) {
+        return Math.clamp((int) (value * 255.0f + 0.5f), 0, 255);
+    }
+
     public static String getModName(String namespace) {
         return Services.PLATFORM.getModName(namespace);
     }

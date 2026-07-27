@@ -39,7 +39,7 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     private static final TargetedCrosshairSettings SETTINGS = Main.settings.targetedCrosshairSettings;
     private static final GeneralSettings.HUDSettings HUD_SETTINGS = Main.settings.generalSettings.hudSettings;
 
-    private static final ResourceLocation ENTITY_ICON_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/targeted_icon_entity.png");
+    private static final ResourceLocation ENTITY_ICON_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/targeted_icon_entity.png");
 
     // left padding + texture + right padding
     private static final int ICON_WIDTH = 3 + 16 + 3;

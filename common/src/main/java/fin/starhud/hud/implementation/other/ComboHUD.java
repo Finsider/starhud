@@ -15,7 +15,7 @@ public class ComboHUD extends AbstractHUD {
 
     private static final ComboSettings SETTINGS = Main.settings.comboSettings;
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/combo.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.tryBuild("starhud", "hud/combo.png");
 
     private static final int TEXTURE_WIDTH = 13;
     private static final int TEXTURE_HEIGHT = 13;

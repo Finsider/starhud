@@ -17,8 +17,8 @@ public class InventoryHUD extends AbstractHUD {
     private static final InventorySettings INVENTORY_SETTINGS = Main.settings.inventorySettings;
     private static final GeneralSettings.HUDSettings HUD_SETTINGS = Main.settings.generalSettings.hudSettings;
 
-    private static final ResourceLocation INVENTORY_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/inventory.png");
-    private static final ResourceLocation INVENTORY_TEXTURE_VERTICAL = ResourceLocation.fromNamespaceAndPath("starhud", "hud/inventory_vertical.png");
+    private static final ResourceLocation INVENTORY_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/inventory.png");
+    private static final ResourceLocation INVENTORY_TEXTURE_VERTICAL = ResourceLocation.tryBuild("starhud", "hud/inventory_vertical.png");
 
     private static final int[] SLOT_X_HORIZONTAL = new int[27];
     private static final int[] SLOT_Y_HORIZONTAL = new int[27];

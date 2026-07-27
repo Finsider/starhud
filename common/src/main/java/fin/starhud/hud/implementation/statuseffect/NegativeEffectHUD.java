@@ -15,8 +15,8 @@ public class NegativeEffectHUD extends AbstractEffectHUD {
     }
 
     @Override
-    public boolean isEffectAllowedToRender(Holder<MobEffect> registryEntry) {
-        return !registryEntry.value().isBeneficial();
+    public boolean isEffectAllowedToRender(MobEffect registryEntry) {
+        return !registryEntry.isBeneficial();
     }
 
     @Override

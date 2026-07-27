@@ -14,6 +14,8 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Objects;
+
 // i dont like this one.
 
 public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
@@ -165,10 +167,14 @@ public abstract class AbstractHandHUD extends AbstractDurabilityHUD {
 
         for (int i = 0; i < inventory.getContainerSize(); ++i) {
             ItemStack item = inventory.getItem(i);
-            if (!item.isEmpty() && ItemStack.isSameItemSameComponents(item, stack))
+            if (!item.isEmpty() && areItemsAndComponentsEqual(stack, item))
                 stackAmount += item.getCount();
         }
 
         return stackAmount;
+    }
+
+    private static boolean areItemsAndComponentsEqual(ItemStack x, ItemStack y) {
+        return x.is(y.getItem()) && Objects.equals(x.getTag(), y.getTag());
     }
 }

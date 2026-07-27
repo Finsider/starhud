@@ -2,12 +2,13 @@ package fin.starhud.condition;
 
 import fin.starhud.mixin.accessor.AccessorChatHud;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.ChatScreen;
 
 public class ChatHUD {
     private static final Minecraft CLIENT = Minecraft.getInstance();
 
     public static boolean isShown(String ignored) {
-        return CLIENT.gui.getChat().isChatFocused();
+        return CLIENT.screen instanceof ChatScreen;
     }
 
     public static int getWidth() {

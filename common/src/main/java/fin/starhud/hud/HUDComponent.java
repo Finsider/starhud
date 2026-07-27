@@ -273,7 +273,7 @@ public class HUDComponent {
         }
 
         // we should copy the settings from the first selected hud. so that the position doesn't reset to 0,0.
-        AbstractHUD firstHUD = huds.getFirst();
+        AbstractHUD firstHUD = huds.get(0);
         newSettings.base.copyFrom(firstHUD.getSettings());
         newSettings.base.drawBackground = false;
         newSettings.base.displayMode = HUDDisplayMode.BOTH;

@@ -3,11 +3,11 @@ package fin.starhud.init;
 import com.mojang.blaze3d.platform.InputConstants;
 import fin.starhud.Main;
 import net.minecraft.client.KeyMapping;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
 
-public class NeoforgeKeybindInit {
+public class ForgeKeybindInit {
 
     public static void init() {
         Main.openEditHUDKey = new KeyMapping(

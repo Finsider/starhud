@@ -34,8 +34,8 @@ public class TPSTracker {
         }
 
         if (CLIENT.getSingleplayerServer() != null) {
-            mspt = CLIENT.getSingleplayerServer().getAverageTickTimeNanos();
-            tps = Math.clamp(1_000_000_000 / mspt, 0.0F, 20.0F);
+            mspt = CLIENT.getSingleplayerServer().getAverageTickTime();
+            tps = Math.clamp(1000 / mspt, 0.0F, 20.0F);
             return;
         }
 

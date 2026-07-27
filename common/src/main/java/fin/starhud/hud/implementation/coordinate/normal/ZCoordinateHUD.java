@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ZCoordinateHUD extends AbstractCoordinateHUD {
     private static final CoordSettings SETTINGS = Main.settings.coordSettings.Z;
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/coordinate_z.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.tryBuild("starhud", "hud/coordinate_z.png");
 
     public ZCoordinateHUD() {
         super(SETTINGS, TEXTURE);

@@ -13,6 +13,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
@@ -30,12 +32,12 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     private static final GeneralSettings.HUDSettings HUD_SETTINGS = Main.settings.generalSettings.hudSettings;
     private static final Settings.Effect SETTINGS = Main.settings.effectSettings;
 
-    private static final ResourceLocation STATUS_EFFECT_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/effect_bar.png");
-    private static final ResourceLocation STATUS_EFFECT_BAR_BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/effect_bar_background.png");
+    private static final ResourceLocation STATUS_EFFECT_BAR_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/effect_bar.png");
+    private static final ResourceLocation STATUS_EFFECT_BAR_BACKGROUND_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/effect_bar_background.png");
 
-    private static final ResourceLocation STATUS_EFFECT_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/effect.png");
-    private static final ResourceLocation STATUS_EFFECT_AMBIENT_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/effect_ambient.png");
-    private static final ResourceLocation STATUS_EFFECT_AMBIENT_COMBINED_TEXTURE = ResourceLocation.fromNamespaceAndPath("starhud", "hud/effect_ambient_combined.png");
+    private static final ResourceLocation STATUS_EFFECT_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/effect.png");
+    private static final ResourceLocation STATUS_EFFECT_AMBIENT_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/effect_ambient.png");
+    private static final ResourceLocation STATUS_EFFECT_AMBIENT_COMBINED_TEXTURE = ResourceLocation.tryBuild("starhud", "hud/effect_ambient_combined.png");
 
     private static final int ICON_WIDTH = 24;
     private static final int ICON_HEIGHT = 24;
@@ -48,7 +50,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
     private static final int STATUS_EFFECT_BAR_TEXTURE_WIDTH = 21;
     private static final int STATUS_EFFECT_BAR_TEXTURE_HEIGHT = 3;
 
-    private static final Map<Holder<MobEffect>, ResourceLocation> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
+    private static final Map<MobEffect, ResourceLocation> STATUS_EFFECT_TEXTURE_MAP = new HashMap<>();
 
     private final EffectSettings effectSettings;
     public int size;
@@ -76,7 +78,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         this.effectSettings = effectSettings;
     }
 
-    public abstract boolean isEffectAllowedToRender(Holder<MobEffect> registryEntry);
+    public abstract boolean isEffectAllowedToRender(MobEffect registryEntry);
 
     @Override
     public boolean shouldRender() {
@@ -433,7 +435,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         else {
             return switch (SETTINGS.getColorMode()) {
                 case CUSTOM -> effectSettings.customColor;
-                case EFFECT -> instance.getEffect().value().getColor();
+                case EFFECT -> instance.getEffect().getColor();
                 case DYNAMIC -> Helper.getItemBarColor(instance.getDuration(), attribute.maxDuration());
             };
         }
@@ -485,13 +487,10 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
         return l + ':' + r;
     }
 
-    public static ResourceLocation getMobEffectTexture(Holder<MobEffect> effect) {
-        return STATUS_EFFECT_TEXTURE_MAP.computeIfAbsent(
-                effect,
-                e -> e.unwrapKey()
-                        .map(ResourceKey::location)
-                        .map(id -> ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "textures/mob_effect/" + id.getPath() + ".png"))
-                        .orElseGet(MissingTextureAtlasSprite::getLocation)
-        );
+    public static ResourceLocation getMobEffectTexture(MobEffect effect) {
+        return STATUS_EFFECT_TEXTURE_MAP.computeIfAbsent(effect, e -> {
+            ResourceLocation id = BuiltInRegistries.MOB_EFFECT.getKey(e);
+            return new ResourceLocation(id.getNamespace(), "textures/mob_effect/" + id.getPath() + ".png");
+        });
     }
 }
