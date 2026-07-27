@@ -7,7 +7,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.glfw.GLFW;
 
-public class KeybindInit {
+public class FabricKeybindInit {
 
     public static void init() {
         Main.openEditHUDKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(

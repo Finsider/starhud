@@ -24,7 +24,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.ARGB;
+import net.minecraft.util.FastColor;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
@@ -429,7 +429,7 @@ public class EditHUDScreen extends Screen {
 
         if (SETTINGS.drawDarkBackground) {
             final float alpha = (float) SETTINGS.getDarkOpacity() / 100;
-            final int color = ARGB.as8BitChannel(alpha) << 24;
+            final int color = FastColor.as8BitChannel(alpha) << 24;
             context.fill(0, 0, this.width, this.height, color);
         }
 
@@ -522,7 +522,7 @@ public class EditHUDScreen extends Screen {
 
     private void renderDragBox(GuiGraphics context) {
 
-        float guiScale = this.minecraft.getWindow().getGuiScale();
+        float guiScale = (float) this.minecraft.getWindow().getGuiScale();
 
         int x1 = (int) (Math.min(dragStartX, dragCurrentX) * guiScale);
         int y1 = (int) (Math.min(dragStartY, dragCurrentY) * guiScale);
@@ -912,7 +912,7 @@ public class EditHUDScreen extends Screen {
     private void dragSelectedHUDs(double mouseX, double mouseY, double deltaX, double deltaY) {
         if (selectedHUDs.isEmpty()) return;
 
-        final float guiScale = this.minecraft.getWindow().getGuiScale();
+        final float guiScale = (float) this.minecraft.getWindow().getGuiScale();
 
         final int totalDeltaX = (int) ((dragCurrentX - dragStartX) * guiScale);
         final int totalDeltaY = (int) ((dragCurrentY - dragStartY) * guiScale);

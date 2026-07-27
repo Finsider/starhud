@@ -1,8 +1,6 @@
 package fin.starhud;
 
-import fin.starhud.init.ConfigInit;
-import fin.starhud.init.EventInit;
-import fin.starhud.init.KeybindInit;
+import fin.starhud.init.*;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -14,12 +12,12 @@ public class ForgeMain {
     public ForgeMain(IEventBus eventBus, ModContainer container) {
 
         ConfigInit.init();
-        KeybindInit.init();
-        EventInit.init();
+        NeoforgeKeybindInit.init();
+        NeoforgeEventInit.init();
 
         ModListIntegration.registerModScreen(container);
 
-        eventBus.addListener(KeybindInit::register);
+        eventBus.addListener(NeoforgeKeybindInit::register);
 
     }
 }

@@ -79,7 +79,7 @@ public class Box {
 
     public void setScale(float scale) {
         if (scale == 0)
-            scale = CLIENT.getWindow().getGuiScale();
+            scale = (float) CLIENT.getWindow().getGuiScale();
         this.scale = scale;
     }
 

@@ -17,6 +17,7 @@ neoForge {
 }
 
 repositories {
+    maven {url "https://api.modrinth.com/maven"}
     maven { url "https://maven.shedaniel.me/" }
 }
 
@@ -27,6 +28,8 @@ dependencies {
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
 
     api("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+
+    api ("maven.modrinth:immediatelyfast:1.6.11+1.21.1-neoforge")
 }
 
 configurations {
@@ -43,23 +46,4 @@ configurations {
 artifacts {
     commonJava sourceSets.main.java.sourceDirectories.singleFile
     commonResources sourceSets.main.resources.sourceDirectories.singleFile
-}
-
-// Implement mcgradleconventions loader attribute
-def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
-['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
-    configurations.named("$variant") {
-        attributes {
-            attribute(loaderAttribute, 'common')
-        }
-    }
-}
-sourceSets.configureEach {
-    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant->
-        configurations.named("$variant") {
-            attributes {
-                attribute(loaderAttribute, 'common')
-            }
-        }
-    }
 }

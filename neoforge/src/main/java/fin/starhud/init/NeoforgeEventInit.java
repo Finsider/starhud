@@ -20,27 +20,27 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 
-public class EventInit {
+public class NeoforgeEventInit {
 
     private static final GeneralSettings.InGameHUDSettings SETTINGS = Main.settings.generalSettings.inGameSettings;
 
     public static void init() {
 
         // register AttackTracker events, for combo and reach.
-        NeoForge.EVENT_BUS.addListener(EventInit::onAttack);
-        NeoForge.EVENT_BUS.addListener(EventInit::onAttackEndTick);
+        NeoForge.EVENT_BUS.addListener(NeoforgeEventInit::onAttack);
+        NeoForge.EVENT_BUS.addListener(NeoforgeEventInit::onAttackEndTick);
 
         // register keybinding event, on openEditHUDKey pressed -> move screen to edit hud screen.
-        NeoForge.EVENT_BUS.addListener(EventInit::onOpenEditHUDKeyPressed);
-        NeoForge.EVENT_BUS.addListener(EventInit::onToggleHUDKeyPressed);
+        NeoForge.EVENT_BUS.addListener(NeoforgeEventInit::onOpenEditHUDKeyPressed);
+        NeoForge.EVENT_BUS.addListener(NeoforgeEventInit::onToggleHUDKeyPressed);
 
-        NeoForge.EVENT_BUS.addListener(EventInit::onClientStopping);
+        NeoForge.EVENT_BUS.addListener(NeoforgeEventInit::onClientStopping);
 
         // register hud element into before hotbar. I hope this was safe enough.
-        NeoForge.EVENT_BUS.addListener(EventInit::onHUDRender);
+        NeoForge.EVENT_BUS.addListener(NeoforgeEventInit::onHUDRender);
 
         // extra on login to wait until Minecraft.instace() is valid
-        NeoForge.EVENT_BUS.addListener(EventInit::onLogin);
+        NeoForge.EVENT_BUS.addListener(NeoforgeEventInit::onLogin);
     }
 
     public static void onClientStopping(GameShuttingDownEvent event) {
@@ -48,29 +48,15 @@ public class EventInit {
     }
 
     public static void onOpenEditHUDKeyPressed(ClientTickEvent.Post event) {
-
-        Minecraft client = Minecraft.getInstance();
-
-        while (Main.openEditHUDKey.consumeClick()) {
-            client.setScreen(new EditHUDScreen(Component.nullToEmpty("Edit HUD"), client.screen));
-        }
+        EventInit.onOpenEditHUDKeyPressed(Minecraft.getInstance());
     }
 
     public static void onToggleHUDKeyPressed(ClientTickEvent.Post event) {
-
-        while (Main.toggleHUDKey.consumeClick()) {
-            Main.settings.generalSettings.inGameSettings.disableHUDRendering = !Main.settings.generalSettings.inGameSettings.disableHUDRendering;
-        }
+        EventInit.onToggleHUDKeyPressed(Minecraft.getInstance());
     }
 
     public static void onHUDRender(RenderGuiEvent.Post event) {
-
-        if (SETTINGS.disableHUDRendering) return;
-        if (Minecraft.getInstance().options.hideGui) return;
-        if (Minecraft.getInstance().screen instanceof EditHUDScreen) return;
-
-        HUDComponent.getInstance().collectAll();
-        HUDComponent.getInstance().renderAll(event.getGuiGraphics());
+        EventInit.onHUDRender(event.getGuiGraphics(), event.getPartialTick());
     }
 
 

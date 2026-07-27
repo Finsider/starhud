@@ -7,7 +7,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
 
-public class KeybindInit {
+public class NeoforgeKeybindInit {
 
     public static void init() {
         Main.openEditHUDKey = new KeyMapping(

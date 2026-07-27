@@ -14,29 +14,16 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MixinInGameHUD {
 
     @Redirect(
-            method = "displayScoreboardSidebar",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V",
-                    ordinal = 1
-            ),
-            require = 0
-    )
-    private void captureScoreboardFill(GuiGraphics instance, int x1, int y1, int x2, int y2, int color) {
-        ScoreboardHUD.captureBoundingBox(x1, y1 - 9, x2, y2); // -9 due to the first fill call is for header, which has 9 additional offset
-        instance.fill(x1, y1, x2 ,y2 , color);
-    }
-
-    @Redirect(
             method = "renderSelectedItemName",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawStringWithBackdrop(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIII)V"
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;drawStringWithBackdrop(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIII)I"
             ),
             require = 0
     )
-    private void captureTooltipBox(GuiGraphics context, Font textRenderer, Component text, int x, int y, int width, int color) {
+    private int captureTooltipBox(GuiGraphics context, Font textRenderer, Component text, int x, int y, int width, int color) {
         HeldItemTooltip.setBoundingBox(x, y, width, 2 + 9 + 2);
         context.drawStringWithBackdrop(textRenderer, text, x, y, width, color);
+        return x;
     }
 }

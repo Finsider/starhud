@@ -1,10 +1,10 @@
 package fin.starhud.helper;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import fin.starhud.Main;
 import fin.starhud.config.GeneralSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -148,14 +148,45 @@ public class RenderUtils {
         context.fill(x + w - 1, y, x + w, y + h, color);
     }
 
+    public static void drawTextureAlphaColor(GuiGraphics context, ResourceLocation identifier, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, int color) {
+
+        float alpha = (color >> 24 & 0xFF) / 255.0F;
+        float red = (color >> 16 & 0xFF) / 255.0F;
+        float green = (color >> 8 & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderColor(red, green, blue, alpha);
+        context.blit(identifier, x, y, u, v, width, height, textureWidth, textureHeight);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+    }
+
+    public static void drawTextureAlpha(GuiGraphics context, ResourceLocation identifier, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
+        RenderSystem.enableBlend();
+        context.blit(identifier, x, y, u, v, width, height, textureWidth, textureHeight);
+        RenderSystem.disableBlend();
+    }
+
+    public static void drawTextureColor(GuiGraphics context, ResourceLocation identifier, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, int color) {
+        float alpha = (color >> 24 & 0xFF) / 255.0F;
+        float red = (color >> 16 & 0xFF) / 255.0F;
+        float green = (color >> 8 & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+
+        RenderSystem.setShaderColor(red, green, blue, alpha);
+        context.blit(identifier, x, y, u, v, width, height, textureWidth, textureHeight);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
     // for easier version porting.
 
     public static void drawTextureHUD(GuiGraphics context, ResourceLocation ResourceLocation, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, int color) {
-        context.blit(RenderPipelines.GUI_TEXTURED, ResourceLocation, x, y, u, v, width, height, textureWidth, textureHeight, color);
+        drawTextureAlphaColor(context, ResourceLocation, x, y, u, v, width, height, textureWidth, textureHeight, color);
     }
 
     public static void drawTextureHUD(GuiGraphics context, ResourceLocation ResourceLocation, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
-        context.blit(RenderPipelines.GUI_TEXTURED, ResourceLocation, x, y, u, v, width, height, textureWidth, textureHeight);
+        drawTextureAlpha(context, ResourceLocation, x, y, u, v, width, height, textureWidth, textureHeight);
     }
 
     public static void drawTextHUD(GuiGraphics context, String str, int x, int y, int color, boolean shadow) {

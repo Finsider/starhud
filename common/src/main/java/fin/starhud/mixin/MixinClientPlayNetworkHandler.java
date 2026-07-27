@@ -13,6 +13,6 @@ public class MixinClientPlayNetworkHandler {
 
     @Inject(method = "handleSetTime", at = @At("HEAD"))
     private void onLevelTimeUpdate(ClientboundSetTimePacket packet, CallbackInfo ci) {
-        TPSTracker.onLevelTimeUpdate(packet.gameTime());
+        TPSTracker.onLevelTimeUpdate(packet.getGameTime());
     }
 }

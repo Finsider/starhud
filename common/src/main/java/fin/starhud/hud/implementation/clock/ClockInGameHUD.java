@@ -119,7 +119,7 @@ public class ClockInGameHUD extends AbstractHUD {
     private static int getWeatherOrTime(ClientLevel clientLevel) {
         if (clientLevel.isThundering()) return 3;
         else if (clientLevel.isRaining()) return 2;
-        else if (clientLevel.isDarkOutside()) return 1;
+        else if (clientLevel.isNight()) return 1;
         else return 0;
     }
 

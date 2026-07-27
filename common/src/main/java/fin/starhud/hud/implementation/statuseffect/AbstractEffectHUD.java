@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -251,7 +250,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                     effectDurationStrings.get(i),
                     effectWidths.get(i), 13,
                     effectColors.get(i),
-                    ARGB.white(effectAlphas.get(i)),
+                    Helper.getWhite(effectAlphas.get(i)),
                     drawBackground,
                     drawTextShadow
             );
@@ -329,7 +328,7 @@ public abstract class AbstractEffectHUD extends AbstractHUD {
                 0,0,
                 18, 18,
                 18,18,
-                ARGB.white(alpha)
+                Helper.getWhite(alpha)
         );
 
         if (amplifier.isEmpty()) return true;

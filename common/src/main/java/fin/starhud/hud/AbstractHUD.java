@@ -53,11 +53,11 @@ public abstract class AbstractHUD implements HUDInterface {
             return renderHUD(context, getX(), getY(), shouldDrawBackground(), shouldDrawTextShadow());
 
         // this is so we can change the scale for one hud but not the others.
-        context.pose().pushMatrix();
+        context.pose().pushPose();
         scaleHUD(context);
 
         boolean result = renderHUD(context, getX(), getY(), shouldDrawBackground(), shouldDrawTextShadow());
-        context.pose().popMatrix();
+        context.pose().popPose();
 
         return result;
     }
@@ -89,9 +89,9 @@ public abstract class AbstractHUD implements HUDInterface {
 
     public void scaleHUD(GuiGraphics context) {
         float scaleFactor = getScale();
-        context.pose().translate(getX(), getY());
-        context.pose().scale(scaleFactor, scaleFactor);
-        context.pose().translate(-getX(), -getY());
+        context.pose().translate(getX(), getY(), 0);
+        context.pose().scale(scaleFactor, scaleFactor, 1.0f);
+        context.pose().translate(-getX(), -getY(), 0);
     }
 
     public void updatePos() {
@@ -102,7 +102,7 @@ public abstract class AbstractHUD implements HUDInterface {
     public void modifyXY() {
         int xOffset = 0, yOffset = 0;
 
-        float guiScale = Minecraft.getInstance().getWindow().getGuiScale();
+        float guiScale = (float) Minecraft.getInstance().getWindow().getGuiScale();
         for (ConditionalSettings condition : baseHUDSettings.getConditions()) {
             if (condition.renderMode != ConditionalSettings.RenderMode.HIDE && condition.isConditionMet()) {
                 xOffset += condition.getXOffset(guiScale);
@@ -277,7 +277,7 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     public boolean isHovered(double mouseX, double mouseY) {
-        final float scale = Minecraft.getInstance().getWindow().getGuiScale();
+        final float scale = (float) Minecraft.getInstance().getWindow().getGuiScale();
 
         mouseX = (int) (mouseX * scale);
         mouseY = (int) (mouseY * scale);
@@ -293,7 +293,7 @@ public abstract class AbstractHUD implements HUDInterface {
     }
 
     public boolean intersects(int x1, int y1, int x2, int y2) {
-        final float scale = Minecraft.getInstance().getWindow().getGuiScale();
+        final float scale = (float) Minecraft.getInstance().getWindow().getGuiScale();
 
         x1 = (int) (x1 * scale);
         y1 = (int) (y1 * scale);
