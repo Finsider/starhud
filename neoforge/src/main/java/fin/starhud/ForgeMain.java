@@ -17,7 +17,6 @@ public class ForgeMain {
         ConfigInit.init();
         KeybindInit.init();
         EventInit.init();
-        HUDComponent.getInstance().init();
 
         ModListIntegration.registerModScreen(container);
 
