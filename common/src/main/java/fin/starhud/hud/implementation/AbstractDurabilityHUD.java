@@ -348,7 +348,6 @@ public abstract class AbstractDurabilityHUD extends AbstractHUD {
         return true;
     }
 
-    // example render: ¹²³⁴/₅₆₇₈
     public boolean renderDurabilityIconFractional(GuiGraphics context, ResourceLocation ICON, int x, int y, float u, float v, int textureWidth, int textureHeight, int iconWidth, int iconHeight, boolean drawBackground, boolean drawTextShadow) {
         if (ICON == null || str == null || str2 == null || hudDisplayMode == null) return false;
         int w = getWidth();

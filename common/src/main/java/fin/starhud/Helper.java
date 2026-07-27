@@ -11,8 +11,8 @@ public class Helper {
     private static final Minecraft CLIENT = Minecraft.getInstance();
     private static final GeneralSettings.HUDSettings HUD_SETTINGS = Main.settings.generalSettings.hudSettings;
 
-    private static final char[] superscripts = "⁰¹²³⁴⁵⁶⁷⁸⁹".toCharArray();
-    private static final char[] subscripts = "₀₁₂₃₄₅₆₇₈₉".toCharArray();
+    private static final char[] superscripts = "\\u2070\\u00B9\\u00B2\\u00B3\\u2074\\u2075\\u2076\\u2077\\u2078\\u2079  ".toCharArray();
+    private static final char[] subscripts = "\\u2080\\u2081\\u2082\\u2083\\u2084\\u2085\\u2086\\u2087\\u2088\\u2089".toCharArray();
 
     // only convert numbers.
     public static String toSuperscript(String str) {
@@ -114,7 +114,7 @@ public class Helper {
     }
 
     public static int getStep(int curr, int max, int maxStep) {
-        return Math.clamp(Math.round((float) curr * maxStep / (float) max), 0, maxStep);
+        return Math.min(Math.max(Math.round((float) curr * maxStep / (float) max), 0), maxStep);
     }
 
     public static int getWhite(float alpha) {
@@ -122,7 +122,7 @@ public class Helper {
     }
 
     public static int channelFromFloat(float value) {
-        return Math.clamp((int) (value * 255.0f + 0.5f), 0, 255);
+        return Math.min(255, Math.max(0, (int)(value * 255.0f + 0.5f)));
     }
 
     public static String getModName(String namespace) {

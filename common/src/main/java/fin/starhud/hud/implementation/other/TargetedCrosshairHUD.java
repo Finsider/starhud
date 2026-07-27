@@ -368,13 +368,10 @@ public class TargetedCrosshairHUD extends AbstractHUD {
     }
 
     private static boolean isPassiveMob(Entity e) {
-        return switch (e) {
-            case Animal ignored -> true;
-            case WaterAnimal ignored -> true;
-            case Allay ignored -> true;
-            case SnowGolem ignored -> true;
-            default -> false;
-        };
+        return (e instanceof Animal)
+                || (e instanceof WaterAnimal)
+                || (e instanceof  Allay)
+                || (e instanceof SnowGolem);
     }
 
     private static boolean isPlayerEntity(Entity e) {

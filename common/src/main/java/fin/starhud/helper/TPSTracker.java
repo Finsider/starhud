@@ -35,7 +35,7 @@ public class TPSTracker {
 
         if (CLIENT.getSingleplayerServer() != null) {
             mspt = CLIENT.getSingleplayerServer().getAverageTickTime();
-            tps = Math.clamp(1000 / mspt, 0.0F, 20.0F);
+            tps = Math.max(Math.min(1000 / mspt, 20.0f), 0.0F);
             return;
         }
 
