@@ -12,10 +12,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.GameShuttingDownEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 public class ForgeEventInit {
 
-    public static void init() {
+    public static void init(IEventBus eventBus) {
 
         // register AttackTracker events, for combo and reach.
         MinecraftForge.EVENT_BUS.addListener(ForgeEventInit::onAttack);
@@ -31,7 +33,7 @@ public class ForgeEventInit {
         MinecraftForge.EVENT_BUS.addListener(ForgeEventInit::onHUDRender);
 
         // extra on login to wait until Minecraft.instace() is valid
-        MinecraftForge.EVENT_BUS.addListener(ForgeEventInit::onLogin);
+        eventBus.addListener(ForgeEventInit::onLogin);
     }
 
     public static void onClientStopping(GameShuttingDownEvent event) {
@@ -59,7 +61,7 @@ public class ForgeEventInit {
         AttackTracker.onEndTick(Minecraft.getInstance());
     }
 
-    public static void onLogin(ClientPlayerNetworkEvent.LoggingIn event) {
+    public static void onLogin(FMLLoadCompleteEvent event) {
         HUDComponent.getInstance().init();
     }
 }
