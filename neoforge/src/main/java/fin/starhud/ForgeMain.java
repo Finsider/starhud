@@ -1,5 +1,6 @@
 package fin.starhud;
 
+import fin.starhud.hud.HUDComponent;
 import fin.starhud.init.*;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -14,6 +15,7 @@ public class ForgeMain {
         ConfigInit.init();
         NeoforgeKeybindInit.init();
         NeoforgeEventInit.init();
+        HUDComponent.getInstance().init();
 
         ModListIntegration.registerModScreen(container);
 
