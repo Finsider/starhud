@@ -14,8 +14,7 @@ public class ForgeMain {
 
         ConfigInit.init();
         NeoforgeKeybindInit.init();
-        NeoforgeEventInit.init();
-        HUDComponent.getInstance().init();
+        NeoforgeEventInit.init(eventBus);
 
         ModListIntegration.registerModScreen(container);
 
