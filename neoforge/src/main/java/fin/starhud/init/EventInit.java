@@ -11,6 +11,8 @@ import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
@@ -24,7 +26,7 @@ public class EventInit {
 
     private static final GeneralSettings.InGameHUDSettings SETTINGS = Main.settings.generalSettings.inGameSettings;
 
-    public static void init() {
+    public static void init(IEventBus eventBus) {
 
         // register AttackTracker events, for combo and reach.
         NeoForge.EVENT_BUS.addListener(EventInit::onAttack);
@@ -40,7 +42,7 @@ public class EventInit {
         NeoForge.EVENT_BUS.addListener(EventInit::onHUDRender);
 
         // extra on login to wait until Minecraft.instace() is valid
-        NeoForge.EVENT_BUS.addListener(EventInit::onLogin);
+        eventBus.addListener(EventInit::onLogin);
     }
 
     public static void onClientStopping(GameShuttingDownEvent event) {
@@ -52,7 +54,7 @@ public class EventInit {
         Minecraft client = Minecraft.getInstance();
 
         while (Main.openEditHUDKey.consumeClick()) {
-            client.setScreenAndShow(new EditHUDScreen(Component.nullToEmpty("Edit HUD"), client.screen));
+            client.setScreen(new EditHUDScreen(Component.nullToEmpty("Edit HUD"), client.screen));
         }
     }
 
@@ -82,7 +84,7 @@ public class EventInit {
         AttackTracker.onEndTick(Minecraft.getInstance());
     }
 
-    public static void onLogin(ClientPlayerNetworkEvent.LoggingIn event) {
+    public static void onLogin(FMLLoadCompleteEvent event) {
         HUDComponent.getInstance().init();
     }
 }
