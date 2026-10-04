@@ -46,7 +46,7 @@ public class EventInit {
 
     public static void onOpenEditHUDKeyPressed(Minecraft client) {
         while (Main.openEditHUDKey.consumeClick()) {
-            client.setScreenAndShow(new EditHUDScreen(Component.nullToEmpty("Edit HUD"), client.screen));
+            client.setScreen(new EditHUDScreen(Component.nullToEmpty("Edit HUD"), client.screen));
         }
     }
 
