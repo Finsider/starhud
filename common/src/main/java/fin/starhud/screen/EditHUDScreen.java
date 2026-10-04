@@ -1,5 +1,6 @@
 package fin.starhud.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import fin.starhud.Main;
 import fin.starhud.config.BaseHUDSettings;
@@ -28,7 +29,6 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -604,7 +604,7 @@ public class EditHUDScreen extends Screen {
         if (super.mouseClicked(click, doubled))
             return true;
 
-        if (click.button() == 0) {
+        if (click.button() == InputConstants.MOUSE_BUTTON_LEFT) {
             hasMovedSincePress = false;
             dragStartX = click.x();
             dragStartY = click.y();
@@ -717,7 +717,7 @@ public class EditHUDScreen extends Screen {
 
     @Override
     public boolean mouseReleased(MouseButtonEvent click) {
-        if (click.button() == 0) {
+        if (click.button() == InputConstants.MOUSE_BUTTON_LEFT) {
             if (!hasMovedSincePress) {
                 // if mouse hasn't moved since clicked to release, we handle non mouse moved operation
                 dragging = false;
@@ -801,7 +801,7 @@ public class EditHUDScreen extends Screen {
 
     @Override
     public boolean mouseDragged(MouseButtonEvent click, double deltaX, double deltaY) {
-        if (click.button() != 0) {
+        if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) {
             return super.mouseDragged(click, deltaX, deltaY);
         }
 
@@ -1150,7 +1150,7 @@ public class EditHUDScreen extends Screen {
             }
 
             switch (input.key()) {
-                case GLFW.GLFW_KEY_G -> {
+                case InputConstants.KEY_G -> {
                     if (selectedHUDs.isEmpty()) break;
                     if (selectedHUDs.size() > 1) {
                         if (canSelectedHUDsGroup) {
@@ -1169,7 +1169,7 @@ public class EditHUDScreen extends Screen {
                     }
                 }
 
-                case GLFW.GLFW_KEY_C -> {
+                case InputConstants.KEY_C -> {
                     if (input.hasShiftDown()) {
                         int clampCount = HUDComponent.getInstance().clampAll();
                         if (clampCount > 0)
@@ -1180,7 +1180,7 @@ public class EditHUDScreen extends Screen {
                     }
                 }
 
-                case GLFW.GLFW_KEY_Z -> {
+                case InputConstants.KEY_Z -> {
                     if (input.hasControlDown() && history.canUndo()) {
                         history.undo();
                         selectedHUDs.clear();
@@ -1188,7 +1188,7 @@ public class EditHUDScreen extends Screen {
                     }
                 }
 
-                case GLFW.GLFW_KEY_Y -> {
+                case InputConstants.KEY_Y -> {
                     if (input.hasControlDown() && history.canRedo()) {
                         history.redo();
                         selectedHUDs.clear();
@@ -1196,14 +1196,14 @@ public class EditHUDScreen extends Screen {
                     }
                 }
 
-                case GLFW.GLFW_KEY_S -> {
+                case InputConstants.KEY_S -> {
                     if (input.hasControlDown()) {
                         saveCurrentState();
                         actionBar.setText(Component.translatable("starhud.screen.action.save"));
                     }
                 }
 
-                case GLFW.GLFW_KEY_R -> {
+                case InputConstants.KEY_R -> {
                     if (input.hasControlDown() && input.hasShiftDown()) {
                         this.minecraft.setScreenAndShow(new ConfirmScreen(
                                 result -> {
@@ -1237,39 +1237,39 @@ public class EditHUDScreen extends Screen {
         HUDAction act = null;
 
         boolean isCtrl = isMac
-                ? (modifiers & GLFW.GLFW_MOD_SUPER) != 0
-                : (modifiers & GLFW.GLFW_MOD_CONTROL) != 0;
-        boolean isShift = (modifiers & GLFW.GLFW_MOD_SHIFT) != 0;
-        boolean isAlt = (modifiers & GLFW.GLFW_MOD_ALT) != 0;
+                ? (modifiers & InputConstants.MOD_SUPER) != 0
+                : (modifiers & InputConstants.MOD_CONTROL) != 0;
+        boolean isShift = (modifiers & InputConstants.MOD_SHIFT) != 0;
+        boolean isAlt = (modifiers & InputConstants.MOD_ALT) != 0;
 
         int step = isShift ? 5 : 1;
 
         switch (keyCode) {
-            case GLFW.GLFW_KEY_LEFT -> {
+            case InputConstants.KEY_LEFT -> {
                 if (isCtrl) act = onAlignmentXChangedWithRecommendation(hud, settings.getOriginX().prev());
                 else if (isAlt) act = onDirectionXChanged(hud, settings.getGrowthDirectionX(), settings.getGrowthDirectionX().prev());
                 else act = onXFieldChanged(hud, settings.x, settings.x - step);
             }
 
-            case GLFW.GLFW_KEY_RIGHT -> {
+            case InputConstants.KEY_RIGHT -> {
                 if (isCtrl) act = onAlignmentXChangedWithRecommendation(hud, settings.getOriginX().next());
                 else if (isAlt) act = onDirectionXChanged(hud, settings.getGrowthDirectionX(), settings.getGrowthDirectionX().next());
                 else act = onXFieldChanged(hud, settings.x, settings.x + step);
             }
 
-            case GLFW.GLFW_KEY_UP -> {
+            case InputConstants.KEY_UP -> {
                 if (isCtrl) act = onAlignmentYChangedWithRecommendation(hud, settings.getOriginY().prev());
                 else if (isAlt) act = onDirectionYChanged(hud, settings.getGrowthDirectionY(), settings.getGrowthDirectionY().prev());
                 else act = onYFieldChanged(hud, settings.y, settings.y - step);
             }
 
-            case GLFW.GLFW_KEY_DOWN -> {
+            case InputConstants.KEY_DOWN -> {
                 if (isCtrl) act = onAlignmentYChangedWithRecommendation(hud, settings.getOriginY().next());
                 else if (isAlt) act = onDirectionYChanged(hud, settings.getGrowthDirectionY(), settings.getGrowthDirectionY().next());
                 else act = onYFieldChanged(hud, settings.y, settings.y + step);
             }
 
-            case GLFW.GLFW_KEY_MINUS ->  {
+            case InputConstants.KEY_MINUS ->  {
                 if (!isShift) {
                     if (settings.scale <= 0) break;
 
@@ -1277,7 +1277,7 @@ public class EditHUDScreen extends Screen {
                 }
             }
 
-            case GLFW.GLFW_KEY_EQUAL ->  {
+            case InputConstants.KEY_EQUALS ->  {
                 if (isShift) {
                     act = onScaleFieldChanged(hud, settings.scale, settings.scale + 1);
                 }

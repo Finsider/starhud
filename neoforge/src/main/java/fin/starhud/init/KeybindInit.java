@@ -6,7 +6,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import org.lwjgl.glfw.GLFW;
 
 public class KeybindInit {
 
@@ -15,15 +14,15 @@ public class KeybindInit {
 
         Main.openEditHUDKey = new KeyMapping(
                 "key.starhud.open_edithud",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT_SHIFT,
+                InputConstants.Type.KEYBOARD,
+                InputConstants.KEY_RSHIFT,
                 Main.keyCategory
         );
 
         Main.toggleHUDKey = new KeyMapping(
                 "key.starhud.toggle_hud",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.Type.KEYBOARD,
+                InputConstants.UNKNOWN.getValue(),
                 Main.keyCategory
         );
     }

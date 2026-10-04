@@ -5,7 +5,6 @@ import fin.starhud.Main;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
-import org.lwjgl.glfw.GLFW;
 
 public class KeybindInit {
 
@@ -14,15 +13,15 @@ public class KeybindInit {
 
         Main.openEditHUDKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.starhud.open_edithud",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT_SHIFT,
+                InputConstants.Type.KEYBOARD,
+                InputConstants.KEY_RSHIFT,
                 Main.keyCategory
         ));
 
         Main.toggleHUDKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.starhud.toggle_hud",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.Type.KEYBOARD,
+                InputConstants.UNKNOWN.getValue(),
                 Main.keyCategory
         ));
     }

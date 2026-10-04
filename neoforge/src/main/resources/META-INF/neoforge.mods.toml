@@ -8,7 +8,7 @@ version="${version}"
 displayName="StarHUD"
 description= "a mod that provides fancy and fresh HUDs"
 authors="Finside"
-logoFile="icon.png"
+iconFile="icon.png"
 
 [[mixins]]
 config = "starhud.mixins.json"
@@ -23,6 +23,6 @@ side="BOTH"
 [[dependencies.${mod_id}]]
 modId="minecraft"
 type="required"
-versionRange="[26.2,)"
+versionRange="[26.3,)"
 ordering="NONE"
 side="BOTH"
